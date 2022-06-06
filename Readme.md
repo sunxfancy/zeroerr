@@ -2,7 +2,7 @@
 
 Hope you get 0 errors and 0 warnings everyday!
 
-![](./zeroerr.jpg)
+![](./doc/zeroerr.jpg)
 
 
 
