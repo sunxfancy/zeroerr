@@ -1,11 +1,7 @@
 #include "zeroerr/print.h"
 #include <iostream>
 
-namespace zeroerr
-{
-
-
-Printer::Printer(std::ostream& os) : os(os) {}
+namespace zeroerr {
 
 
 extern Printer& getStdoutPrinter() {
@@ -18,4 +14,4 @@ extern Printer& getStderrPrinter() {
     return printer;
 }
 
-} // namespace zeroerr
+}  // namespace zeroerr

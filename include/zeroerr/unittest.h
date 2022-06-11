@@ -5,41 +5,34 @@
 #include <set>
 #include <string>
 
-#define ZEROERR_CAT(x, s) x##s
-#define ZEROERR_NAMEGEN(x) ZEROERR_CAT(x, __LINE__)
 
-#define ZEROERR_CREATE_TEST_FUNC(f, name) \
-    static void f();  \
+#define ZEROERR_CREATE_TEST_FUNC(f, name)                                                         \
+    static void                     f();                                                          \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)({name, __FILE__, __LINE__, f}); \
-    static void f() 
+    static void                     f()
 
-#define TEST_CASE(name) \
-    ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
-    
+#define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
 
-namespace zeroerr
-{
 
-class UnitTest
-{
+namespace zeroerr {
+
+class UnitTest {
 public:
     UnitTest& parseArgs(int argc, char** argv);
-    int run();
+    int       run();
 };
 
 
-struct TestCase
-{
+struct TestCase {
     std::string name;
     std::string file;
-    unsigned line;
+    unsigned    line;
     void (*func)();
-    bool operator< (const TestCase& rhs) const;
+    bool operator<(const TestCase& rhs) const;
 };
 
-namespace detail
-{
-    
+namespace detail {
+
 extern std::set<TestCase>& getRegisteredTests();
 struct regTest {
     regTest(const TestCase& tc) {
@@ -48,6 +41,6 @@ struct regTest {
     }
 };
 
-}
+}  // namespace detail
 
-} // namespace zeroerr
+}  // namespace zeroerr

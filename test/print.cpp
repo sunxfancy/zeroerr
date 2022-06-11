@@ -1,25 +1,27 @@
 
-#include "zeroerr/unittest.h"
 #include "zeroerr/print.h"
 #include <iostream>
-#include <vector>
 #include <map>
+#include <vector>
+#include "zeroerr/assert.h"
+#include "zeroerr/dbg.h"
+#include "zeroerr/unittest.h"
 
 using namespace zeroerr;
 
-TEST_CASE("print_test")
-{
+
+TEST_CASE("print_test") {
     if (detail::is_streamable<std::ostream, int>::value) {
         std::cout << "int is streamable" << std::endl;
     } else {
         std::cout << "int is not streamable" << std::endl;
     }
 
-    std::cout << "Print Test Start!" << std::endl;   
+    std::cout << "Print Test Start!" << std::endl;
 
     auto print = getStderrPrinter();
     print(1, 2, 3);
-    int a = 1;
+    int  a = 1;
     int& b = a;
     int* c = &a;
     print(a, b, c);
@@ -36,7 +38,7 @@ TEST_CASE("print_test")
         if (id == 2) return std::make_tuple(1.7, 'D', "Ralph Wiggum");
         throw std::invalid_argument("id");
     };
-    print({ get_student(0), get_student(1), get_student(2) });
+    print({get_student(0), get_student(1), get_student(2)});
 
     std::shared_ptr<int> p(new int(42));
     print(p);
@@ -44,15 +46,19 @@ TEST_CASE("print_test")
     std::unique_ptr<int> up(new int(42));
     print(std::move(up));
 
-    std::vector<std::map<std::string, int>> foo {{{"a", 1}, {"b", 2}}, {{"c", 3}, {"d", 4}}};
+    std::vector<std::map<std::string, int>> foo{{{"a", 1}, {"b", 2}}, {{"c", 3}, {"d", 4}}};
     print(foo);
 
-    std::map<std::string, int> bar {{"a", 1}, {"b", 2}};
-    
+    std::map<std::string, int> bar{{"a", 1}, {"b", 2}};
+
     if (zeroerr::detail::ele_type_is_pair<decltype(bar)>::value) {
         std::cout << "bar is a pair" << std::endl;
     } else {
         std::cout << "bar is not a pair" << std::endl;
     }
-}
 
+    CHECK(a == 2);
+
+    int k = dbg(1, 2);
+    CHECK(k == 2);
+}

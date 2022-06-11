@@ -1,0 +1,39 @@
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 100
+
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: true
+AccessModifierOffset: -4
+
+BraceWrapping:
+    AfterEnum: false
+    AfterStruct: false
+    AfterClass: false
+    AfterFunction: false
+    AfterNamespace: false
+    AfterUnion: false
+    BeforeCatch: false
+    BeforeElse: false
+    
+
+CompactNamespaces: false
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignConsecutiveMacros: true
+AlignConsecutiveBitFields: true
+AlignEscapedNewlines: true
+AlignTrailingComments: true
+AlignAfterOpenBracket: true
+
+AlwaysBreakTemplateDeclarations: true
+BreakBeforeConceptDeclarations: true
+Cpp11BracedListStyle: true
+FixNamespaceComments: true
+IndentRequires: true
+IncludeBlocks: Preserve
+PointerAlignment: Left
+MaxEmptyLinesToKeep: 2
+
+SortIncludes: true
+SortUsingDeclarations: true

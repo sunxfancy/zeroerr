@@ -32,5 +32,11 @@ You can have default colorful output to terminal and no color for file
 
 7. Print struct/stl/special library data structure
 
-8. Doctest
+8. Doctest like assertion and unit test feature
 You can use your unit test as a documentation of function behavior. The output of unittest can be a documented report.
+
+9. Lazy logging for assertion
+After assertion failed, the logging result will print automatically even if you didn't redirect to your error stream
+
+10. Logging Category 
+Logging information can have customized category and only display one categroy based on your assertion or configuration
