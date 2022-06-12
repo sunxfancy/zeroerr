@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(ZeroErr)
+project(ZeroErr LANGUAGES CXX)
 
 
 set(CMAKE_CXX_STANDARD 17)
@@ -15,24 +15,45 @@ add_library(zeroerr STATIC ${source_files})
 find_package(LLVM CONFIG)
 
 if (LLVM_FOUND)
-message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
-message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+    message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+    message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 
-add_definitions(-DHAVE_LLVM)
+    add_definitions(-DHAVE_LLVM)
 
-# Find the libraries that correspond to the LLVM components
-# that we wish to use
-llvm_map_components_to_libnames(llvm_libs support core)
+    # Find the libraries that correspond to the LLVM components
+    # that we wish to use
+    llvm_map_components_to_libnames(llvm_libs support core)
 
-# Link against LLVM libraries
-message(STATUS "Linking against LLVM libraries: ${llvm_libs}")
+    # Link against LLVM libraries
+    message(STATUS "Linking against LLVM libraries: ${llvm_libs}")
 else()
-set(llvm_libs "")
+    set(llvm_libs "")
 endif()
+
+
+
+include(CheckLanguage)
+check_language(CUDA)
+
+if (CMAKE_CUDA_COMPILER) 
+    enable_language(CUDA)
+    message(STATUS "CUDA ${CMAKE_CUDA_COMPILER_ID} ${CMAKE_CUDA_COMPILER_VERSION} enabled")
+
+    set(CMAKE_CUDA_STANDARD 17)
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+    set(CMAKE_CUDA_ARCHITECTURES 80)
+    set(CMAKE_CUDA_FLAGS "-ccbin=/usr/bin/gcc-10")
+
+    file(GLOB_RECURSE cuda_files ${CMAKE_SOURCE_DIR}/test/*.cu)
+else()
+    set(cuda_files "")
+endif()
+
 
 
 file(GLOB_RECURSE test_files ${CMAKE_SOURCE_DIR}/test/*.cpp)
 
-add_executable(unittest ${test_files})
+add_executable(unittest ${test_files} ${cuda_files})
 target_link_libraries(unittest zeroerr ${llvm_libs})
 

@@ -220,9 +220,9 @@ struct AssertionData : std::exception {
         if (passed) return false;
 
         if (info.level == assert_level::require) {
-            std::cerr << "FATAL ERROR: ";
+            std::cerr << "REQUIRE: ";
         } else {
-            std::cerr << "ERROR: ";
+            std::cerr << "CHECK: ";
         }
 
         std::cerr << "Assertion Failed " << cond << ": " << message << " (" << file << ":" << line

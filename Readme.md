@@ -1,5 +1,8 @@
 # ZeroErr
 
+[![Standard](https://img.shields.io/badge/C%2B%2B%2FCUDA-11%2F14%2F17%2F20-blue)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization)
+
+
 Hope you get 0 errors and 0 warnings everyday!
 
 ![](./doc/zeroerr.jpg)
