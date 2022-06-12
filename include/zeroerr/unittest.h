@@ -22,7 +22,6 @@ public:
     int       run();
 };
 
-
 struct TestCase {
     std::string name;
     std::string file;

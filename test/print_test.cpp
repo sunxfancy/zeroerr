@@ -1,14 +1,14 @@
-
+#define ZEROERR_ENABLE_PFR
 #include "zeroerr/print.h"
-#include <iostream>
-#include <map>
-#include <vector>
 #include "zeroerr/assert.h"
 #include "zeroerr/dbg.h"
 #include "zeroerr/unittest.h"
 
-using namespace zeroerr;
+#include <iostream>
+#include <map>
+#include <vector>
 
+using namespace zeroerr;
 
 TEST_CASE("print_test") {
     if (detail::is_streamable<std::ostream, int>::value) {
@@ -27,7 +27,7 @@ TEST_CASE("print_test") {
     print(a, b, c);
 
     std::vector<int> vec = {1, 5, 2};
-    print(vec, "hello", std::complex<float>(1, 2.54));
+    print(vec, "hello", dbg(std::complex<float>(1, 2.54)));
 
     auto& myvec = vec;
     print(myvec);
@@ -61,4 +61,20 @@ TEST_CASE("print_test") {
 
     int k = dbg(1, 2);
     CHECK(k == 2);
+}
+
+
+struct A {
+    std::string name;
+    int         age;
+};
+
+
+TEST_CASE("print test with PFR library") {
+    A    a{"John", 20};
+    auto print = getStderrPrinter();
+
+    std::cerr << "Is trivial:" << std::is_trivial<A>::value << std::endl;
+    std::cerr << "Is standard layout:" << std::is_standard_layout<A>::value << std::endl;
+    dbg(a);
 }

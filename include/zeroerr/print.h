@@ -13,12 +13,32 @@
 #include <cxxabi.h>
 #endif
 
+#if defined(ZEROERR_ENABLE_PFR) && (ZEROERR_CXX_STANDARD >= 14)
+#include "pfr.hpp"
+#endif
+
+#if defined(ZEROERR_ENABLE_MAGIC_ENUM) && (ZEROERR_CXX_STANDARD >= 17)
+#include "magic_enum.hpp"
+#endif
+
 namespace zeroerr {
 
 #pragma region type traits
 
-namespace detail {
+struct Printer;
 
+template <unsigned N>
+struct rank : rank<N - 1> {};
+template <>
+struct rank<0> {};
+constexpr unsigned max_rank = 5;
+
+
+template <typename T>
+void PrinterExt(Printer&, T, unsigned, const char*, rank<0>);
+
+
+namespace detail {
 
 // C++11 void_t
 template <typename... Ts>
@@ -39,7 +59,7 @@ template <typename S, typename T, typename = void>
 struct is_streamable : std::false_type {};
 
 template <typename S, typename T>
-struct is_streamable<S, T, void_t<decltype(std::declval<S&>() << std::declval<T>())> >
+struct is_streamable<S, T, void_t<decltype(std::declval<S&>() << std::declval<T>())>>
     : std::true_type {};
 
 
@@ -50,7 +70,7 @@ struct is_container : std::false_type {};
 
 template <typename T>
 struct is_container<T, void_t<decltype(std::declval<T>().begin()),
-                              decltype(std::declval<T>().end()), typename T::value_type> >
+                              decltype(std::declval<T>().end()), typename T::value_type>>
     : std::true_type {};
 
 #if ZEROERR_CXX_STANDARD >= 17
@@ -76,14 +96,14 @@ struct is_complex<volatile T> : is_complex<T> {};
 template <class T>
 struct is_complex<volatile const T> : is_complex<T> {};
 template <class T>
-struct is_complex<std::complex<T> > : std::true_type {};
+struct is_complex<std::complex<T>> : std::true_type {};
 
 // Check if a type can use arr[0] like an array
 template <typename T, typename = void>
 struct is_array : std::false_type {};
 
 template <typename T>
-struct is_array<T, void_t<decltype(std::declval<T>()[0])> > : std::true_type {};
+struct is_array<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
 
 
 // Check if a type has the element type as std::pair
@@ -93,13 +113,17 @@ struct ele_type_is_pair : std::false_type {};
 template <typename T>
 struct ele_type_is_pair<
     T, void_t<typename T::value_type, decltype(std::declval<typename T::value_type>().first),
-              decltype(std::declval<typename T::value_type>().second)> > : std::true_type {};
+              decltype(std::declval<typename T::value_type>().second)>> : std::true_type {};
 
+template <typename T, typename = void>
+struct has_extension : std::false_type {};
 
-template <unsigned N>
-struct rank : rank<N - 1> {};
-template <>
-struct rank<0> {};
+template <typename T>
+struct has_extension<
+    T, void_t<decltype(zeroerr::PrinterExt(std::declval<zeroerr::Printer&>(), std::declval<T&>(), 0,
+                                           nullptr, zeroerr::rank<zeroerr::max_rank>()))>>
+    : std::true_type {};
+
 
 // Generate sequence of integers from 0 to N-1
 // Usage: detail::gen_seq<N>  then use <size_t... I> to match it
@@ -133,59 +157,61 @@ struct gen_seq<0, Is...> : seq<Is...> {};
      detail::is_specialization<T, std::shared_ptr>::value || \
      detail::is_specialization<T, std::weak_ptr>::value)
 #define ZEROERR_IS_MAP detail::ele_type_is_pair<T>::value
-
+#define ZEROERR_IS_POD std::is_standard_layout<T>::value
+#define ZEROERR_IS_EXT detail::has_extension<T>::value
 
 }  // namespace detail
 #pragma endregion
 
 
+/**
+ * @brief A functor class Printer for printing a value of any type.
+ *
+ * This class can print values with all basic types, pointers, STL containers, tuple, optional, and
+ * variant values. Any class that is streamable can be printed. POD structs can be supported using
+ * third-party library Boost.PFR and enum can be supported using magic_enum.
+ */
 struct Printer {
-    static const unsigned max_rank = 3;
-
     template <typename T, typename... V>
     void operator()(T value, V... others) {
-        print(std::forward<T>(value), 0, " ", detail::rank<max_rank>{});
+        PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
         (*this)(std::forward<V>(others)...);
     }
 
     template <typename T>
     void operator()(T value) {
-        print(std::forward<T>(value), 0, " ", detail::rank<max_rank>{});
+        PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
         os << line_break;
         os.flush();
     }
 
     template <typename T>
     void operator()(std::initializer_list<T> value) {
-        print(value, 0, " ", detail::rank<max_rank>{});
+        PrinterExt(*this, value, 0, " ", rank<max_rank>{});
         os << line_break;
         os.flush();
     }
 
     Printer(std::ostream& os) : os(os) {}
 
-    bool        isColorful = true;   // colorful output
-    bool        isCompact  = false;  // compact mode
-    bool        isQuoted   = true;   // string is quoted
-    int         indent     = 2;
-    const char* line_break = "\n";
+    bool          isColorful = true;   // colorful output
+    bool          isCompact  = false;  // compact mode
+    bool          isQuoted   = true;   // string is quoted
+    int           indent     = 2;
+    const char*   line_break = "\n";
+    std::ostream& os;
 
     template <class T>
     static std::string type(const T& t) {
         return demangle(typeid(t).name());
     }
 
-protected:
-    std::ostream& os;
-
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_INT || ZEROERR_IS_FLOAT)
-    print(T value, unsigned level, const char* lb, detail::rank<0> r) {
-        os << tab(level) << value << lb;
-    }
+    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_POINTER)
-    print(T value, unsigned level, const char* lb, detail::rank<0> r) {
+    print(T value, unsigned level, const char* lb, rank<0>) {
         if (value == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
@@ -194,80 +220,93 @@ protected:
 
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS)
-    print(T value, unsigned level, const char* lb, detail::rank<0> r) {
+    print(T value, unsigned level, const char* lb, rank<0>) {
         os << tab(level) << "Object " << type(value) << lb;
     }
 
 
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CHAR || ZEROERR_IS_WCHAR)
+    print(T value, unsigned level, const char* lb, rank<1>) {
+        os << tab(level) << '\'' << value << '\'' << lb;
+    }
+
+#if defined(ZEROERR_ENABLE_PFR) && (ZEROERR_CXX_STANDARD >= 14)
+    template <class StructType, size_t... I>
+    void print_struct(const StructType& s, unsigned level, const char* lb, detail::seq<I...>) {
+        int a[] = {(os << (I == 0 ? "" : ", ") << pfr::get<I>(s), 0)...};
+    }
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS&& ZEROERR_IS_POD)
+    print(const T& value, unsigned level, const char* lb, rank<1>) {
+        os << tab(level) << "{";
+        print_struct(value, level, isCompact ? " " : line_break,
+                     detail::gen_seq<pfr::tuple_size<T>::value>{});
+        os << tab(level) << "}" << lb;
+    }
+#endif
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_BOOL)
+    print(T value, unsigned level, const char* lb, rank<2>) {
+        os << tab(level) << (value ? "true" : "false") << lb;
+    }
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS&& ZEROERR_IS_STREAMABLE)
+    print(T value, unsigned level, const char* lb, rank<2>) { os << tab(level) << value << lb; }
+
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER)
+    print(const T& value, unsigned level, const char* lb, rank<2>) {
+        os << tab(level) << "{" << (isCompact ? "" : line_break);
+        bool last = false;
+        for (auto iter = value.begin(); iter != value.end(); ++iter) {
+            if (std::next(iter) == value.end()) last = true;
+            print(*iter, level + 1, isCompact ? (last ? "" : ", ") : line_break, rank<max_rank>{});
+        }
+        os << tab(level) << "}" << lb;
+    }
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER&& ZEROERR_IS_ARRAY)
+    print(const T& value, unsigned level, const char* lb, rank<3>) {
+        os << tab(level) << "[";
+        bool last = false;
+        for (auto iter = value.begin(); iter != value.end(); ++iter) {
+            if (std::next(iter) == value.end()) last = true;
+            print(*iter, 0, last ? "" : ", ", rank<max_rank>{});
+        }
+        os << tab(level) << "]" << lb;
+    }
+
+
     ZEROERR_ENABLE_IF(ZEROERR_IS_AUTOPTR)
-    print(T value, unsigned level, const char* lb, detail::rank<2> r) {
+    print(T value, unsigned level, const char* lb, rank<3> r) {
         if (value.get() == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
             os << tab(level) << "<" << type(value) << " at " << value.get() << ">" << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER)
-    print(const T& value, unsigned level, const char* lb, detail::rank<1> r) {
-        os << tab(level) << "{" << (isCompact ? "" : line_break);
-        bool last = false;
-        for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            if (std::next(iter) == value.end()) last = true;
-            print(*iter, level + 1, isCompact ? (last ? "" : ", ") : line_break,
-                  detail::rank<max_rank>{});
-        }
-        os << tab(level) << "}" << lb;
-    }
-
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CHAR || ZEROERR_IS_WCHAR)
-    print(T value, unsigned level, const char* lb, detail::rank<1> r) {
-        os << tab(level) << '\'' << value << '\'' << lb;
-    }
-
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS&& ZEROERR_IS_STREAMABLE)
-    print(T value, unsigned level, const char* lb, detail::rank<1> r) {
-        os << tab(level) << value << lb;
-    }
-
-    ZEROERR_ENABLE_IF(ZEROERR_IS_STRING)
-    print(T value, unsigned level, const char* lb, detail::rank<3> r) {
-        os << tab(level) << quote() << value << quote() << lb;
-    }
-
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER&& ZEROERR_IS_ARRAY)
-    print(const T& value, unsigned level, const char* lb, detail::rank<2> r) {
-        os << tab(level) << "[";
-        bool last = false;
-        for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            if (std::next(iter) == value.end()) last = true;
-            print(*iter, 0, last ? "" : ", ", detail::rank<max_rank>{});
-        }
-        os << tab(level) << "]" << lb;
-    }
-
     ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER&& ZEROERR_IS_MAP)
-    print(const T& value, unsigned level, const char* lb, detail::rank<3> r) {
+    print(const T& value, unsigned level, const char* lb, rank<4>) {
         os << tab(level) << "{" << (isCompact ? "" : line_break);
         bool last = false;
         for (auto iter = value.begin(); iter != value.end(); ++iter) {
             if (std::next(iter) == value.end()) last = true;
-            print(iter->first, level + 1, " : ", detail::rank<max_rank>{});
+            print(iter->first, level + 1, " : ", rank<max_rank>{});
             print(iter->second, level + 1, isCompact ? (last ? "" : ", ") : line_break,
-                  detail::rank<max_rank>{});
+                  rank<max_rank>{});
         }
         os << tab(level) << "}" << lb;
     }
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_COMPLEX)
-    print(T value, unsigned level, const char* lb, detail::rank<2> r) {
+    print(T value, unsigned level, const char* lb, rank<4>) {
         os << tab(level) << "(" << value.real() << "+" << value.imag() << "i)" << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_BOOL)
-    print(T value, unsigned level, const char* lb, detail::rank<2> r) {
-        os << tab(level) << (value ? "true" : "false") << lb;
+    ZEROERR_ENABLE_IF(ZEROERR_IS_STRING)
+    print(T value, unsigned level, const char* lb, rank<4>) {
+        os << tab(level) << quote() << value << quote() << lb;
     }
-
 
     template <class TupType, size_t... I>
     void print_tuple(const TupType& _tup, unsigned level, const char* lb, detail::seq<I...>) {
@@ -275,8 +314,7 @@ protected:
     }
 
     template <class... Args>
-    void print(const std::tuple<Args...>& value, unsigned level, const char* lb,
-               detail::rank<2> r) {
+    void print(const std::tuple<Args...>& value, unsigned level, const char* lb, rank<3> r) {
         os << tab(level) << "(";
         print_tuple(value, level, isCompact ? " " : line_break, detail::gen_seq<sizeof...(Args)>{});
         os << ")" << lb;
@@ -297,6 +335,11 @@ protected:
 #endif
     }
 };
+
+template <class T>
+void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0> r) {
+    P.print(std::forward<T>(v), level, lb, rank<max_rank>{});
+}
 
 extern Printer& getStdoutPrinter();
 extern Printer& getStderrPrinter();

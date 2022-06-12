@@ -2,6 +2,8 @@
 
 #include <cstdint>
 #include <exception>
+#include <iostream>
+
 #include "zeroerr/config.h"
 #include "zeroerr/debugbreak.h"
 #include "zeroerr/print.h"
@@ -9,13 +11,15 @@
 #pragma region define macros
 
 
-#define ZEROERR_ASSERT(cond, level, throws, is_false, ...)                       \
-    do {                                                                         \
-        assert_info   info{assert_level::level, assert_throw::throws, is_false}; \
-        AssertionData data(__FILE__, __LINE__, #cond);                           \
-        data.setResult(std::move(ExpressionDecomposer(info) << cond));           \
-        if (data.log()) debug_break();                                           \
-        data();                                                                  \
+#define ZEROERR_ASSERT(cond, level, throws, is_false, ...)                                     \
+    do {                                                                                       \
+        zeroerr::assert_info info{zeroerr::assert_level::level, zeroerr::assert_throw::throws, \
+                                  is_false};                                                   \
+                                                                                               \
+        zeroerr::AssertionData data(__FILE__, __LINE__, #cond);                                \
+        data.setResult(std::move(zeroerr::ExpressionDecomposer(info) << cond));                \
+        if (data.log()) debug_break();                                                         \
+        data();                                                                                \
     } while (0)
 
 

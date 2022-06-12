@@ -47,5 +47,11 @@
 #endif
 
 // This is used for generating a unique name based on the file name and line number
-#define ZEROERR_CAT(x, s)  x##s
+#define ZEROERR_CAT_IMPL(s1, s2) s1##s2
+#define ZEROERR_CAT(x, s)        ZEROERR_CAT_IMPL(x, s)
+
+#ifdef __COUNTER__
+#define ZEROERR_NAMEGEN(x) ZEROERR_CAT(x, __COUNTER__)
+#else  // __COUNTER__
 #define ZEROERR_NAMEGEN(x) ZEROERR_CAT(x, __LINE__)
+#endif  // __COUNTER__
