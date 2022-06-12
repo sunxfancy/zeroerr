@@ -11,12 +11,12 @@ jobs:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    name: Build on ${{ matrix.os }} with ${{ matrix.std }}
+    name: Build on ${{ matrix.os }} with C++${{ matrix.std }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         std: ['11', '14', '17', '20']
-        type: [Release, Debug]
+        type: [Debug]
         os: [ubuntu-latest, windows-latest, macOS-latest]
 
     steps:
