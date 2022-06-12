@@ -2,9 +2,10 @@ cmake_minimum_required(VERSION 3.15)
 
 project(ZeroErr LANGUAGES CXX)
 
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_EXTENSIONS OFF)
+if (NOT DEFINED CMAKE_CXX_STANDARD)
+    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+endif()
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/third_party)
 
 file(GLOB_RECURSE source_files ${CMAKE_SOURCE_DIR}/src/*.cpp)
@@ -29,7 +30,6 @@ if (LLVM_FOUND)
 else()
     set(llvm_libs "")
 endif()
-
 
 
 include(CheckLanguage)
@@ -57,3 +57,5 @@ file(GLOB_RECURSE test_files ${CMAKE_SOURCE_DIR}/test/*.cpp)
 add_executable(unittest ${test_files} ${cuda_files})
 target_link_libraries(unittest zeroerr ${llvm_libs})
 
+enable_testing()
+add_test(NAME RunUnitTest COMMAND unittest)

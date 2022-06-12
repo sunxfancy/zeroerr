@@ -10,6 +10,11 @@
 
 #pragma region define macros
 
+// This symbol must be in the global namespace
+// used for checking the assert is inside testing or not
+namespace {
+constexpr bool _ZEROERR_TEST_CONTEXT = false;
+}  // namespace
 
 #define ZEROERR_ASSERT(cond, level, throws, is_false, ...)                                     \
     do {                                                                                       \
@@ -18,6 +23,10 @@
                                                                                                \
         zeroerr::AssertionData data(__FILE__, __LINE__, #cond);                                \
         data.setResult(std::move(zeroerr::ExpressionDecomposer(info) << cond));                \
+        zeroerr::detail::context_helper<                                                       \
+            decltype(_ZEROERR_TEST_CONTEXT),                                                   \
+            std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                      \
+                         const bool>::value>::setContext(data, _ZEROERR_TEST_CONTEXT);         \
         if (data.log()) debug_break();                                                         \
         data();                                                                                \
     } while (0)
@@ -239,6 +248,32 @@ struct AssertionData : std::exception {
 
     bool shouldThrow() { return info.level == assert_level::require; }
 };
+
+namespace detail {
+// This struct is used for handle constexpr if in C++11
+// https://stackoverflow.com/questions/43587405/constexpr-if-alternative
+template <typename T, bool>
+struct context_helper;
+
+template <typename T>
+struct context_helper<T, true> {
+    static void setContext(AssertionData&, T) {}
+};
+
+template <typename T>
+struct context_helper<T, false> {
+    static void setContext(AssertionData& data, T ctx) {
+        if (data.passed)
+            ctx->passed_as++;
+        else
+            switch (data.info.level) {
+                case assert_level::require:
+                case assert_level::check: ctx->failed_as++;
+                case assert_level::warn: ctx->warning_as++;
+            }
+    }
+};
+}  // namespace detail
 
 #pragma endregion
 

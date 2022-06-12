@@ -78,3 +78,15 @@ TEST_CASE("print test with PFR library") {
     std::cerr << "Is standard layout:" << std::is_standard_layout<A>::value << std::endl;
     dbg(a);
 }
+
+void outside_of_test() {
+    int k = 0;
+    CHECK(k != 0);
+}
+
+constexpr zeroerr::TestContext* test_expr = nullptr;
+
+TEST_CASE("outside of the test") {
+    auto print = getStderrPrinter();
+    outside_of_test();
+}

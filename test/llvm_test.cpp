@@ -8,7 +8,6 @@
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Module.h"
 #include "llvm/Support/raw_os_ostream.h"
-#endif
 
 namespace zeroerr {
 
@@ -58,8 +57,6 @@ TEST_CASE("first check the PrinterExt function support") {
     print(zeroerr::A{1, 2});
 }
 
-
-#ifdef HAVE_LLVM
 
 TEST_CASE("customize printing of LLVM pointers") {
     llvm::LLVMContext        context;
