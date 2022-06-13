@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 project(ZeroErr LANGUAGES CXX)
 
 if (NOT DEFINED CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 17)
+    set(CMAKE_CXX_STANDARD 11)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/third_party)
@@ -16,19 +16,21 @@ add_library(zeroerr STATIC ${source_files})
 find_package(LLVM CONFIG)
 
 if (LLVM_FOUND)
-    message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
-    message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
-    include_directories(${LLVM_INCLUDE_DIRS})
-    link_directories(${LLVM_LIBRARY_DIRS})
+    if (CMAKE_CXX_STANDARD GREATER_EQUAL 14)
+        message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
+        message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
+        include_directories(${LLVM_INCLUDE_DIRS})
+        link_directories(${LLVM_LIBRARY_DIRS})
 
-    add_definitions(-DHAVE_LLVM)
+        add_definitions(-DHAVE_LLVM)
 
-    # Find the libraries that correspond to the LLVM components
-    # that we wish to use
-    llvm_map_components_to_libnames(llvm_libs support core)
+        # Find the libraries that correspond to the LLVM components
+        # that we wish to use
+        llvm_map_components_to_libnames(llvm_libs support core)
 
-    # Link against LLVM libraries
-    message(STATUS "Linking against LLVM libraries: ${llvm_libs}")
+        # Link against LLVM libraries
+        message(STATUS "Linking against LLVM libraries: ${llvm_libs}")
+    endif()
 else()
     set(llvm_libs "")
 endif()
