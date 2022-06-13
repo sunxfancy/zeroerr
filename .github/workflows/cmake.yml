@@ -15,9 +15,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        std: ['11', '14', '17', '20']
         type: [Debug]
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest]
+        # os: [ubuntu-latest, windows-latest, macOS-latest]
+        # std: ['11', '14', '17', '20']
 
     steps:
     - uses: actions/checkout@v3
@@ -25,15 +26,32 @@ jobs:
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.type}} -DCMAKE_CXX_STANDARD=${{matrix.std}}
+      run: |
+        cmake -B ${{github.workspace}}/build/cpp11 -DCMAKE_BUILD_TYPE=${{matrix.type}} -DCMAKE_CXX_STANDARD=11
+        cmake -B ${{github.workspace}}/build/cpp14 -DCMAKE_BUILD_TYPE=${{matrix.type}} -DCMAKE_CXX_STANDARD=14
+        cmake -B ${{github.workspace}}/build/cpp17 -DCMAKE_BUILD_TYPE=${{matrix.type}} -DCMAKE_CXX_STANDARD=17
+        cmake -B ${{github.workspace}}/build/cpp20 -DCMAKE_BUILD_TYPE=${{matrix.type}} -DCMAKE_CXX_STANDARD=20
 
     - name: Build
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{matrix.type}}
+      run: |
+        cmake --build ${{github.workspace}}/build/cpp11 --config ${{matrix.type}}
+        cmake --build ${{github.workspace}}/build/cpp14 --config ${{matrix.type}}
+        cmake --build ${{github.workspace}}/build/cpp17 --config ${{matrix.type}}
+        cmake --build ${{github.workspace}}/build/cpp20 --config ${{matrix.type}}
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+    - name: Test11
+      working-directory: ${{github.workspace}}/build/cpp11
+      run: ctest --verbose -C ${{matrix.type}}
+    - name: Test14
+      working-directory: ${{github.workspace}}/build/cpp14
+      run: ctest --verbose -C ${{matrix.type}}
+    - name: Test17
+      working-directory: ${{github.workspace}}/build/cpp17
+      run: ctest --verbose -C ${{matrix.type}}
+    - name: Test20
+      working-directory: ${{github.workspace}}/build/cpp20
       run: ctest --verbose -C ${{matrix.type}}
       
