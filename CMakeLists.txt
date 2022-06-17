@@ -2,21 +2,21 @@ cmake_minimum_required(VERSION 3.15)
 
 project(ZeroErr LANGUAGES CXX)
 
-if (NOT DEFINED CMAKE_CXX_STANDARD)
+if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 11)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
+
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/third_party)
 
 file(GLOB_RECURSE source_files ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 add_library(zeroerr STATIC ${source_files})
 
-
 find_package(LLVM CONFIG)
 
-if (LLVM_FOUND)
-    if (CMAKE_CXX_STANDARD GREATER_EQUAL 14)
+if(LLVM_FOUND)
+    if(CMAKE_CXX_STANDARD GREATER_EQUAL 14)
         message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
         message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
         include_directories(${LLVM_INCLUDE_DIRS})
@@ -35,11 +35,10 @@ else()
     set(llvm_libs "")
 endif()
 
-
 include(CheckLanguage)
 check_language(CUDA)
 
-if (CMAKE_CUDA_COMPILER) 
+if(CMAKE_CUDA_COMPILER)
     enable_language(CUDA)
     message(STATUS "CUDA ${CMAKE_CUDA_COMPILER_ID} ${CMAKE_CUDA_COMPILER_VERSION} enabled")
 
@@ -53,8 +52,6 @@ if (CMAKE_CUDA_COMPILER)
 else()
     set(cuda_files "")
 endif()
-
-
 
 file(GLOB_RECURSE test_files ${CMAKE_SOURCE_DIR}/test/*.cpp)
 

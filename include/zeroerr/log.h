@@ -1,19 +1,25 @@
 #pragma once
-
 #include "zeroerr/config.h"
 
+#include <ostream>
+#include <streambuf>
+#include <string>
 
 namespace zeroerr {
 
-#define ZEROERR_LOG_INFO
-#define ZEROERR_LOG_WARN
-#define ZEROERR_LOG_ERROR
-#define ZEROERR_LOG_FATAL
+#define ZEROERR_LOG(severity) \
+    zeroerr::LogMessage(__FILE__, __LINE__, zeroerr::LogSeverity::severity)
 
+#define LOG(severity) ZEROERR_LOG(severity).stream()
 
-#define LOG(severity)  ZEROERR_LOG(severity).stream()
-#define DLOG(severity) ZEROERR_DLOG(severity).stream()
-#define VLOG(level)    ZEROERR_VLOG(level).stream()
+#ifdef _DEBUG
+#define DLOG(severity) ZEROERR_LOG(severity).stream()
+#else
+#define DLOG(severity)
+#endif
+
+#define VLOG(v) \
+    if (v <= LogMessage::GetVlogLevel()) ZEROERR_LOG(vlog).stream()
 
 #define LOG_IF(severity, condition)
 #define DLOG_IF(severity, condition)
@@ -40,17 +46,71 @@ namespace zeroerr {
     })
 
 
+enum LogSeverity {
+    INFO,
+    WARN,
+    ERROR,
+    FATAL,
+};
+
 struct LogTime {};
 
 struct LogInfo {
-    const char* severity;
+    LogSeverity severity;
     const char* filename;
     unsigned    line;
     unsigned    thread_id;
-    LogTime     time;
 };
 
 typedef void (*LogCustomCallback)(LogInfo);
+
+class LogStreamBuf : public std::streambuf {
+public:
+    // REQUIREMENTS: "len" must be >= 2 to account for the '\n' and '\0'.
+    LogStreamBuf(char* buf, size_t len) { setp(buf, buf + len - 2); }
+
+    // This effectively ignores overflow.
+    int_type overflow(int_type ch) { return ch; }
+
+    // Legacy public ostrstream method.
+    size_t pcount() const { return static_cast<size_t>(pptr() - pbase()); }
+    char*  pbase() const { return std::streambuf::pbase(); }
+};
+
+class LogStream : public std::ostream {
+public:
+    LogStream(char* buf, size_t len, size_t ctr)
+        : std::ostream(NULL), streambuf(buf, len), ctr_(ctr), self_(this) {
+        rdbuf(&streambuf);
+    }
+
+    size_t     ctr() const { return ctr_; }
+    void       set_ctr(size_t ctr) { ctr_ = ctr; }
+    LogStream* self() const { return self_; }
+
+    // Legacy std::streambuf methods.
+    size_t pcount() const { return streambuf.pcount(); }
+    char*  pbase() const { return streambuf.pbase(); }
+    char*  str() const { return pbase(); }
+
+private:
+    LogStream(const LogStream&)              = delete;
+    LogStream&   operator=(const LogStream&) = delete;
+    LogStreamBuf streambuf;
+    size_t       ctr_;   // Counter hack (for the LOG_EVERY_X() macro)
+    LogStream*   self_;  // Consistency check hack
+};
+
+
+struct LogMessage {
+    LogMessage(const char* file, unsigned line, LogSeverity severity);
+    ~LogMessage();
+    std::ostream& stream() { return m_stream; }
+    void          flush();
+
+protected:
+    LogStream m_stream;
+};
 
 
 }  // namespace zeroerr
