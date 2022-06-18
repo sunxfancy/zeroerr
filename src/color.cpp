@@ -1,8 +1,5 @@
 #include "zeroerr/color.h"
-
-#ifndef ZEROERR_NO_THREAD_SAFE
-#include <mutex>
-#endif
+#include "zeroerr/threadsafe.h"
 
 #ifdef ZEROERR_OS_UNIX
 #include <unistd.h>

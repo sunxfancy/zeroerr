@@ -1,10 +1,12 @@
 #pragma once
 #include "zeroerr/config.h"
+#include "zeroerr/print.h"
 
 #include <ostream>
+#include <sstream>
 #include <streambuf>
 #include <string>
-
+#include <vector>
 namespace zeroerr {
 
 #define ZEROERR_LOG(severity) \
@@ -33,17 +35,27 @@ namespace zeroerr {
 #define DLOG_IF_EVERY_N(severity, n, condition)
 #define VLOG_IF_EVERY_N(level, n, condition)
 
+#define INFO(...) ZEROERR_INFO(__VA_ARGS__)
+#define ZEROERR_INFO(...) \
+    ZEROERR_INFO_IMPL(ZEROERR_NAMEGEN(_capture_), ZEROERR_NAMEGEN(_capture_), __VA_ARGS__)
 
-#define ZEROERR_INFO(...)                                                     \
-    ZEROERR_INFO_IMPL(ZEROERR_NAMEGEN(_capture_), ZEROERR_NAMEGEN(_capture_), \
-                      ZEROERR_NAMEGEN(_capture_name_), __VA_ARGS__)
-
-#define ZEROERR_INFO_IMPL(mb_name, v_name, s_name, ...)                 \
-    auto v_name = zeroerr::MakeContextScope([&](std::ostream* s_name) { \
-        zeroerr::MessageBuilder mb_name(__FILE__, __LINE__);            \
-        mb_name.m_stream = s_name;                                      \
-        mb_name* __VA_ARGS__;                                           \
+#define ZEROERR_INFO_IMPL(mb_name, v_name, ...)                                \
+    auto v_name = zeroerr::MakeContextScope([&](std::ostream& _capture_name) { \
+        Printer print(_capture_name);                                          \
+        print.isQuoted = false;                                                \
+        print(__VA_ARGS__);                                                    \
     })
+
+#ifdef ZEROERR_G_CONTEXT_SCOPE
+#undef ZEROERR_G_CONTEXT_SCOPE
+#endif
+
+#define ZEROERR_G_CONTEXT_SCOPE(x)                        \
+    if (x.passed == false) {                              \
+        for (auto* i : _ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
+            i->str(std::cerr);                            \
+        }                                                 \
+    }
 
 
 enum LogSeverity {
@@ -111,6 +123,26 @@ struct LogMessage {
 protected:
     LogStream m_stream;
 };
+
+
+extern thread_local std::vector<IContextScope*> _ZEROERR_G_CONTEXT_SCOPE_VECTOR;
+
+template <typename F>
+class ContextScope : public IContextScope {
+public:
+    ContextScope(F f) : f_(f) { _ZEROERR_G_CONTEXT_SCOPE_VECTOR.push_back(this); }
+    ~ContextScope() { _ZEROERR_G_CONTEXT_SCOPE_VECTOR.pop_back(); }
+
+    virtual void str(std::ostream& os) const override { return f_(os); }
+
+protected:
+    F f_;
+};
+
+template <typename F>
+ContextScope<F> MakeContextScope(const F& f) {
+    return ContextScope<F>(f);
+}
 
 
 }  // namespace zeroerr

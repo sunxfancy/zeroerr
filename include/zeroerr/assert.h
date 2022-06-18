@@ -1,12 +1,12 @@
 #pragma once
 
-#include <cstdint>
-#include <exception>
-#include <iostream>
-
 #include "zeroerr/config.h"
 #include "zeroerr/debugbreak.h"
 #include "zeroerr/print.h"
+
+#include <cstdint>
+#include <exception>
+#include <iostream>
 
 #pragma region define macros
 
@@ -15,6 +15,10 @@
 namespace {
 constexpr bool _ZEROERR_TEST_CONTEXT = false;
 }  // namespace
+
+#ifndef ZEROERR_G_CONTEXT_SCOPE
+#define ZEROERR_G_CONTEXT_SCOPE(x)
+#endif
 
 #define ZEROERR_ASSERT(cond, level, throws, is_false, ...)                                     \
     do {                                                                                       \
@@ -27,6 +31,7 @@ constexpr bool _ZEROERR_TEST_CONTEXT = false;
             decltype(_ZEROERR_TEST_CONTEXT),                                                   \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                      \
                          const bool>::value>::setContext(data, _ZEROERR_TEST_CONTEXT);         \
+        ZEROERR_G_CONTEXT_SCOPE(data);                                                         \
         if (data.log()) debug_break();                                                         \
         data();                                                                                \
     } while (0)
@@ -257,20 +262,23 @@ struct context_helper;
 
 template <typename T>
 struct context_helper<T, true> {
-    static void setContext(AssertionData&, T) {}
+    static void setContext(AssertionData& data, T) {
+        if (data.passed) return;
+    }
 };
 
 template <typename T>
 struct context_helper<T, false> {
     static void setContext(AssertionData& data, T ctx) {
-        if (data.passed)
+        if (data.passed) {
             ctx->passed_as++;
-        else
-            switch (data.info.level) {
-                case assert_level::require:
-                case assert_level::check: ctx->failed_as++;
-                case assert_level::warn: ctx->warning_as++;
-            }
+            return;
+        }
+        switch (data.info.level) {
+            case assert_level::require:
+            case assert_level::check: ctx->failed_as++;
+            case assert_level::warn: ctx->warning_as++;
+        }
     }
 };
 }  // namespace detail

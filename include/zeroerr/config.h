@@ -24,14 +24,6 @@
 #define ZEROERR_CXX_STANDARD 11
 #endif
 
-// Thread safety support
-#ifdef ZEROERR_NO_THREAD_SAFE
-#define ZEROERR_MUTEX(x)
-#define ZEROERR_LOCK(x)
-#else
-#define ZEROERR_MUTEX(x) static std::mutex x;
-#define ZEROERR_LOCK(x)  std::lock_guard<std::mutex> lock(x);
-#endif
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #define ZEROERR_OS_UNIX

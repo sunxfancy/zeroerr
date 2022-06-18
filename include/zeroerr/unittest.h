@@ -14,6 +14,7 @@
 
 #define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
 
+#define SUB_CASE(name)
 
 namespace zeroerr {
 

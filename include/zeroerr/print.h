@@ -344,5 +344,10 @@ void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0> r) {
 extern Printer& getStdoutPrinter();
 extern Printer& getStderrPrinter();
 
+class IContextScope {
+public:
+    virtual void str(std::ostream& os) const = 0;
+};
+
 
 }  // namespace zeroerr
