@@ -6,6 +6,8 @@
 #include <set>
 #include <string>
 
+#pragma region unittest
+
 #define ZEROERR_CREATE_TEST_FUNC(function, name)                     \
     static void                     function(zeroerr::TestContext*); \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \
@@ -49,5 +51,30 @@ struct regTest {
 };
 
 }  // namespace detail
+
+
+#pragma endregion
+
+#pragma region reporter
+
+class IReporter {
+public:
+    virtual std::string getName() const = 0;
+
+    virtual void reportQuery() = 0;
+
+    virtual void reportResult(const TestContext& tc) = 0;
+
+    // There are a list of events
+    virtual void testStart() = 0;
+    virtual void testEnd()   = 0;
+
+    virtual void testCaseStart(const TestCase& tc) = 0;
+    virtual void testCaseEnd(const TestCase& tc)   = 0;
+};
+
+
+#pragma endregion
+
 
 }  // namespace zeroerr

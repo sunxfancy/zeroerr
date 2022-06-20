@@ -7,15 +7,13 @@
 #include <cstdint>
 #include <exception>
 #include <iostream>
+#include <sstream>
 
 #pragma region define macros
 
-// This symbol must be in the global namespace
-// used for checking the assert is inside testing or not
-namespace {
-constexpr bool _ZEROERR_TEST_CONTEXT = false;
-}  // namespace
-
+// This macro will be redefined in the log.h header, so the global context variable could be
+// envolved only when we use log.h at the same time. If you didn't use log.h, this is still a
+// header-only library.
 #ifndef ZEROERR_G_CONTEXT_SCOPE
 #define ZEROERR_G_CONTEXT_SCOPE(x)
 #endif
@@ -58,6 +56,13 @@ constexpr bool _ZEROERR_TEST_CONTEXT = false;
 #endif
 
 #pragma endregion
+
+
+// This symbol must be in the global namespace
+// used for checking the assert is inside testing or not
+namespace {
+constexpr bool _ZEROERR_TEST_CONTEXT = false;
+}  // namespace
 
 
 namespace zeroerr {
@@ -282,6 +287,52 @@ struct context_helper<T, false> {
     }
 };
 }  // namespace detail
+
+#pragma endregion
+
+
+#pragma region matcher
+
+class CombinedMatcher;
+
+class IMatcher {
+public:
+    virtual ~IMatcher() = default;
+    // virtual operator bool() = 0;
+
+    std::string toString();
+
+    IMatcher&& operator&&(IMatcher&& other) const;
+    IMatcher&& operator||(const IMatcher&& other) const;
+    IMatcher&& operator!() const;
+
+protected:
+    // virtual std::string describe() const = 0;
+};
+
+class CombinedMatcher : public IMatcher {
+public:
+    CombinedMatcher(const IMatcher&& lhs, const IMatcher&& rhs)
+        : lhs(std::move(lhs)), rhs(std::move(rhs)) {}
+
+    const IMatcher&& lhs;
+    const IMatcher&& rhs;
+};
+
+class NotMatcher : public IMatcher {
+public:
+    NotMatcher(IMatcher& matcher) : matcher(std::move(matcher)) {}
+    const IMatcher&& matcher;
+};
+
+
+inline IMatcher&& IMatcher::operator&&(IMatcher&& other) const {
+    return std::move(CombinedMatcher(std::move(*this), std::move(other)));
+}
+
+template <typename T>
+struct Matcher {};
+
 
 #pragma endregion
 

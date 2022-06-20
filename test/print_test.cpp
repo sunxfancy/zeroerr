@@ -1,12 +1,18 @@
 #define ZEROERR_ENABLE_PFR
+
+
 #include "zeroerr/print.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/dbg.h"
 #include "zeroerr/unittest.h"
 
+#include <complex>
 #include <iostream>
 #include <map>
+#include <memory>
+#include <tuple>
 #include <vector>
+
 
 using namespace zeroerr;
 

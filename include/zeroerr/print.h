@@ -1,14 +1,13 @@
 #pragma once
 
-#include "zeroerr/color.h"
 #include "zeroerr/config.h"
 
-#include <complex>
-#include <memory>
+#include "zeroerr/color.h"
+
 #include <ostream>
 #include <string>
+#include <tuple>  // this should be removed
 #include <type_traits>
-
 #ifdef __GNUG__
 #include <cxxabi.h>
 #endif
@@ -20,6 +19,22 @@
 #if defined(ZEROERR_ENABLE_MAGIC_ENUM) && (ZEROERR_CXX_STANDARD >= 17)
 #include "magic_enum.hpp"
 #endif
+
+// those predefines can help to avoid include too many headers
+namespace std {
+template <typename T>
+class complex;
+
+template <class T, class Deleter>
+class unique_ptr;
+
+template <class T>
+class shared_ptr;
+
+template <class T>
+class weak_ptr;
+
+}  // namespace std
 
 namespace zeroerr {
 
@@ -86,17 +101,6 @@ struct is_string
                                        std::is_same<T, const char*>::value || ZEROERR_STRING_VIEW> {
 };
 
-// Check if a type is a complex type
-template <class T>
-struct is_complex : std::false_type {};
-template <class T>
-struct is_complex<const T> : is_complex<T> {};
-template <class T>
-struct is_complex<volatile T> : is_complex<T> {};
-template <class T>
-struct is_complex<volatile const T> : is_complex<T> {};
-template <class T>
-struct is_complex<std::complex<T>> : std::true_type {};
 
 // Check if a type can use arr[0] like an array
 template <typename T, typename = void>
@@ -150,7 +154,7 @@ struct gen_seq<0, Is...> : seq<Is...> {};
 #define ZEROERR_IS_CLASS      std::is_class<T>::value
 #define ZEROERR_IS_STREAMABLE detail::is_streamable<std::ostream, T>::value
 #define ZEROERR_IS_ARRAY      detail::is_array<T>::value
-#define ZEROERR_IS_COMPLEX    detail::is_complex<T>::value
+#define ZEROERR_IS_COMPLEX    detail::is_specialization<T, std::complex>::value
 #define ZEROERR_IS_BOOL       std::is_same<T, bool>::value
 #define ZEROERR_IS_AUTOPTR                                   \
     (detail::is_specialization<T, std::unique_ptr>::value || \
@@ -309,7 +313,8 @@ struct Printer {
     }
 
     template <class TupType, size_t... I>
-    void print_tuple(const TupType& _tup, unsigned level, const char* lb, detail::seq<I...>) {
+    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb,
+                            detail::seq<I...>) {
         int a[] = {(os << (I == 0 ? "" : ", ") << std::get<I>(_tup), 0)...};
     }
 
@@ -325,11 +330,11 @@ struct Printer {
 
     static std::string demangle(const char* name) {
 #ifdef __GNUG__
-        int status = -4;
-
-        std::unique_ptr<char, void (*)(void*)> res{abi::__cxa_demangle(name, NULL, NULL, &status),
-                                                   std::free};
-        return (status == 0) ? res.get() : name;
+        int         status = -4;
+        char*       res    = abi::__cxa_demangle(name, NULL, NULL, &status);
+        std::string ret    = (status == 0) ? res : name;
+        std::free(res);
+        return ret;
 #else
         return name;
 #endif
