@@ -24,7 +24,7 @@
                                   is_false};                                                   \
                                                                                                \
         zeroerr::AssertionData data(__FILE__, __LINE__, #cond);                                \
-        data.setResult(std::move(zeroerr::ExpressionDecomposer(info) << cond));                \
+        data.ExprsetResult(std::move(zeroerr::ExpressionDecomposer(info) << cond));            \
         zeroerr::detail::context_helper<                                                       \
             decltype(_ZEROERR_TEST_CONTEXT),                                                   \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                      \
@@ -91,22 +91,22 @@ struct deferred_false {
     static const bool value = false;
 };
 
-#define ZEROERR_EXPRESSION_COMPARISON(op, op_name)    \
-    template <typename R>                             \
-    ZEROERR_SFINAE_OP(Result, op)                     \
-    operator op(R&& rhs) {                            \
-        bool res = (lhs op rhs);                      \
-        info.cmp = assert_cmp::op_name;               \
-        if (info.is_false) res = !res;                \
-        std::stringstream ss;                         \
-        Printer           print(ss);                  \
-        print.isCompact  = true;                      \
-        print.line_break = "";                        \
-        print(lhs);                                   \
-        ss << #op " ";                                \
-        print(rhs);                                   \
-        if (!res) return Result(res, info, ss.str()); \
-        return Result(res, info);                     \
+#define ZEROERR_EXPRESSION_COMPARISON(op, op_name)        \
+    template <typename R>                                 \
+    ZEROERR_SFINAE_OP(ExprResult, op)                     \
+    operator op(R&& rhs) {                                \
+        bool res = (lhs op rhs);                          \
+        info.cmp = assert_cmp::op_name;                   \
+        if (info.is_false) res = !res;                    \
+        std::stringstream ss;                             \
+        Printer           print(ss);                      \
+        print.isCompact  = true;                          \
+        print.line_break = "";                            \
+        print(lhs);                                       \
+        ss << #op " ";                                    \
+        print(rhs);                                       \
+        if (!res) return ExprResult(res, info, ss.str()); \
+        return ExprResult(res, info);                     \
     }
 
 #define ZEROERR_FORBIT_EXPRESSION(rt, op)                                 \
@@ -117,35 +117,35 @@ struct deferred_false {
         return *this;                                                     \
     }
 
-struct Result {
+struct ExprResult {
     bool        passed;
     std::string decomp;
     assert_info info;
 
-    Result(bool passed, assert_info info, std::string decomposition = "")
+    ExprResult(bool passed, assert_info info, std::string decomposition = "")
         : passed(passed), info(info), decomp(decomposition) {}
 
-    ZEROERR_FORBIT_EXPRESSION(Result, &)
-    ZEROERR_FORBIT_EXPRESSION(Result, ^)
-    ZEROERR_FORBIT_EXPRESSION(Result, |)
-    ZEROERR_FORBIT_EXPRESSION(Result, &&)
-    ZEROERR_FORBIT_EXPRESSION(Result, ||)
-    ZEROERR_FORBIT_EXPRESSION(Result, ==)
-    ZEROERR_FORBIT_EXPRESSION(Result, !=)
-    ZEROERR_FORBIT_EXPRESSION(Result, <)
-    ZEROERR_FORBIT_EXPRESSION(Result, >)
-    ZEROERR_FORBIT_EXPRESSION(Result, <=)
-    ZEROERR_FORBIT_EXPRESSION(Result, >=)
-    ZEROERR_FORBIT_EXPRESSION(Result, +=)
-    ZEROERR_FORBIT_EXPRESSION(Result, -=)
-    ZEROERR_FORBIT_EXPRESSION(Result, *=)
-    ZEROERR_FORBIT_EXPRESSION(Result, /=)
-    ZEROERR_FORBIT_EXPRESSION(Result, %=)
-    ZEROERR_FORBIT_EXPRESSION(Result, <<=)
-    ZEROERR_FORBIT_EXPRESSION(Result, >>=)
-    ZEROERR_FORBIT_EXPRESSION(Result, &=)
-    ZEROERR_FORBIT_EXPRESSION(Result, ^=)
-    ZEROERR_FORBIT_EXPRESSION(Result, |=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, &)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, ^)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, |)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, &&)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, ||)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, ==)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, !=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, <)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, >)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, <=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, >=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, +=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, -=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, *=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, /=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, %=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, <<=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, >>=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, &=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, ^=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, |=)
 };
 
 template <typename L>
@@ -155,15 +155,15 @@ struct Expression_lhs {
 
     explicit Expression_lhs(L&& in, assert_info info) : lhs(std::forward<L>(in)), info(info) {}
 
-    operator Result() {
+    operator ExprResult() {
         bool res = static_cast<bool>(lhs);
         if (info.is_false) res = !res;
         std::stringstream ss;
 
         Printer print(ss);
         print(lhs);
-        if (!res) return Result(res, info, ss.str());
-        return Result(res, info);
+        if (!res) return ExprResult(res, info, ss.str());
+        return ExprResult(res, info);
     }
 
     operator L() const { return lhs; }
@@ -228,8 +228,8 @@ struct AssertionData : std::exception {
     AssertionData(const char* file, unsigned line, const char* cond)
         : file(file), line(line), cond(cond) {}
 
-    void setResult(Result&& result) {
-        Result r(std::move(result));
+    void ExprsetResult(ExprResult&& result) {
+        ExprResult r(std::move(result));
         passed  = r.passed;
         info    = r.info;
         message = r.decomp;

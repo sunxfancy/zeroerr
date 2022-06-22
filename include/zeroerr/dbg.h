@@ -4,7 +4,7 @@
 #include "zeroerr/color.h"
 #include "zeroerr/print.h"
 
-#include <tuple>
+#include <tuple>  // for std::get and std::tie
 
 #ifndef ZEROERR_DISABLE_DBG_MARCO
 #define dbg(...) zeroerr::DebugExpr(__FILE__, __LINE__, __func__, #__VA_ARGS__, __VA_ARGS__)
@@ -33,8 +33,7 @@ template <typename... T>
 auto DebugExpr(const char* file, unsigned line, const char* func, const char* exprs, T... t) ->
     typename last<T...>::type {
     std::string fileName(file);
-
-    auto p = fileName.find_last_of('/');
+    auto        p = fileName.find_last_of('/');
     if (p != std::string::npos) fileName = fileName.substr(p + 1);
 
     std::cerr << Dim << "[" << fileName << ":" << line << " " << func << "] " << Reset;

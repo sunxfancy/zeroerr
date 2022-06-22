@@ -2,8 +2,6 @@
 
 #include "zeroerr/config.h"
 
-#include <iostream>
-#include <set>
 #include <string>
 
 #pragma region unittest
@@ -40,18 +38,6 @@ struct TestCase {
     bool operator<(const TestCase& rhs) const;
 };
 
-namespace detail {
-
-extern std::set<TestCase>& getRegisteredTests();
-struct regTest {
-    regTest(const TestCase& tc) {
-        // sort by filename and line number
-        getRegisteredTests().insert(tc);
-    }
-};
-
-}  // namespace detail
-
 
 #pragma endregion
 
@@ -72,6 +58,18 @@ public:
     virtual void testCaseStart(const TestCase& tc) = 0;
     virtual void testCaseEnd(const TestCase& tc)   = 0;
 };
+
+
+namespace detail {
+
+struct regTest {
+    regTest(const TestCase& tc);
+};
+
+struct regReporter {
+    regReporter(IReporter*);
+};
+}  // namespace detail
 
 
 #pragma endregion

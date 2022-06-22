@@ -5,11 +5,15 @@
 #include <iomanip>
 #include <iostream>
 #include <ostream>
+#include <set>
 #include <string>
 #include <vector>
 
 namespace zeroerr {
 
+namespace detail {
+static std::set<TestCase>& getRegisteredTests();
+}
 
 UnitTest& UnitTest::parseArgs(int argc, char** argv) { return *this; }
 
@@ -43,17 +47,26 @@ int UnitTest::run() {
     return 0;
 }
 
-
+// sorted by file names and line numbers
 bool TestCase::operator<(const TestCase& rhs) const {
     return (file < rhs.file) || (file == rhs.file && line < rhs.line);
 }
 
 namespace detail {
 
-std::set<TestCase>& getRegisteredTests() {
+static std::set<TestCase>& getRegisteredTests() {
     static std::set<TestCase> data;
     return data;
 }
+
+regTest::regTest(const TestCase& tc) { getRegisteredTests().insert(tc); }
+
+static std::set<IReporter*>& getRegisteredReporters() {
+    static std::set<IReporter*> data;
+    return data;
+}
+
+regReporter::regReporter(IReporter* reporter) { getRegisteredReporters().insert(reporter); }
 
 }  // namespace detail
 

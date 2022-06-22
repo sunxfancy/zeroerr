@@ -21,9 +21,14 @@ namespace zeroerr {
 #endif
 
 #define VLOG(v) \
-    if (v <= LogMessage::GetVlogLevel()) ZEROERR_LOG(vlog).stream()
+    if (v <= zeroerr::LogLevel) ZEROERR_LOG(vlog).stream()
 
-#define LOG_IF(severity, condition)
+#define CLOG(severity, category) \
+    if (category & zeroerr::LogCategory) ZEROERR_LOG(severity).stream()
+
+#define LOG_IF(severity, condition) \
+    if (condition) ZEROERR_LOG(severity).stream()
+
 #define DLOG_IF(severity, condition)
 #define VLOG_IF(level, condition)
 
@@ -57,6 +62,8 @@ namespace zeroerr {
         }                                                 \
     }
 
+extern size_t LogLevel;
+extern size_t LogCategory;
 
 enum LogSeverity {
     INFO,
