@@ -2,8 +2,8 @@
 
 #include "zeroerr/log.h"
 #include "zeroerr/assert.h"
+#include "zeroerr/benchmark.h"
 #include "zeroerr/unittest.h"
-
 using namespace zeroerr;
 
 TEST_CASE("log_test") {
@@ -21,4 +21,24 @@ TEST_CASE("lazy evaluation") {
         INFO("i+1 =", i + 1);
         REQUIRE(sum < 50);
     }
+}
+
+
+TEST_CASE("speed test") {
+    std::stringstream ss;
+
+    Benchmark bench("log speed test");
+    bench
+        .run("stringstream",
+             [&] {
+                 ss << "hello world"
+                    << "\n";
+                 doNotOptimizeAway(ss);
+             })
+        .run("log",
+             [&] {
+                 LOG(INFO) << "hello world"
+                           << "\n";
+             })
+        .report();
 }

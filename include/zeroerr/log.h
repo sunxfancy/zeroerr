@@ -132,6 +132,16 @@ protected:
 };
 
 
+/**
+ * @brief ContextScope is a helper class created in each basic block where you use INFO().
+ * The context scope can has lazy evaluated function F(std::ostream&) that is called when the
+ * assertation is failed
+ */
+class IContextScope {
+public:
+    virtual void str(std::ostream& os) const = 0;
+};
+
 extern thread_local std::vector<IContextScope*> _ZEROERR_G_CONTEXT_SCOPE_VECTOR;
 
 template <typename F>

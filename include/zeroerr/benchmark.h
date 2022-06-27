@@ -10,33 +10,11 @@ namespace zeroerr {
 
 #pragma region Benchmark
 
-struct Benchmark {
-    std::string title     = "benchmark";
-    std::string name      = "";
-    const char* op_unit   = "op";
-    const char* time_unit = "ms";
-    uint64_t    epochs    = 10;
-    uint64_t    warmup    = 1;
-
-    using ns   = std::chrono::nanoseconds;
-    using ms   = std::chrono::milliseconds;
-    using time = ns;
-
-    time mMaxEpochTime = ms(100);
-    time mMinEpochTime = ms(1);
-
-    template <typename Op>
-    Benchmark& run(Op&& op);
-
-    template <typename Op>
-    Benchmark& run(std::string name, Op&& op) {
-        this->name = name;
-        return run(std::forward<Op>(op));
-    }
-};
 
 template <typename T>
 struct PerfCountSet {
+    T timeElapsed;
+    T iterations;
     T pageFaults;
     T cpuCycles;
     T contextSwitches;
@@ -45,6 +23,12 @@ struct PerfCountSet {
     T branchMisses;
 };
 
+using Clock = std::conditional<std::chrono::high_resolution_clock::is_steady,
+                               std::chrono::high_resolution_clock, std::chrono::steady_clock>::type;
+
+namespace detail {
+struct LinuxPerformanceCounter;
+}
 
 struct PerformanceCounter {
     void beginMeasure();
@@ -57,13 +41,31 @@ struct PerformanceCounter {
     static PerformanceCounter& inst();
 
 protected:
+    Clock::time_point      _start;
     PerfCountSet<uint64_t> _val;
     PerfCountSet<bool>     _has;
+
+    detail::LinuxPerformanceCounter* _perf = nullptr;
 };
 
 
-struct BenchResult {};
+struct BenchResult {
+    enum Measure {
+        time_elapsed        = 1 << 0,
+        iterations          = 1 << 1,
+        page_faults         = 1 << 2,
+        cpu_cycles          = 1 << 3,
+        context_switches    = 1 << 4,
+        instructions        = 1 << 5,
+        branch_instructions = 1 << 6,
+        branch_misses       = 1 << 7,
+        all                 = (1 << 8) - 1,
+    };
+    std::vector<std::string>          names;
+    std::vector<PerfCountSet<double>> results;
+};
 
+struct Benchmark;
 struct BenchState;
 BenchState* createBenchState(Benchmark& benchmark);
 void        destroyBenchState(BenchState* state);
@@ -72,37 +74,58 @@ size_t getNumIter(BenchState* state);
 void   runIteration(BenchState* state, PerformanceCounter& counter);
 void   moveResult(BenchState* state);
 
-using Clock = std::conditional<std::chrono::high_resolution_clock::is_steady,
-                               std::chrono::high_resolution_clock, std::chrono::steady_clock>::type;
 
-template <typename Op>
-Benchmark& Benchmark::run(Op&& op) {
-    auto* s  = createBenchState(*this);
-    auto& pc = PerformanceCounter::inst();
-    while (auto n = getNumIter(s)) {
-        pc.beginMeasure();
-        Clock::time_point before = Clock::now();
-        while (n-- > 0) op();
-        Clock::time_point after = Clock::now();
-        pc.endMeasure();
-        runIteration(s, pc);
+/**
+ * @brief Benchmark create a core object for configuration of a benchmark.
+ * This class is a driver to run multiple times of a benchmark. Each time of a run will generate a
+ * row of data. Report will print the data in console.
+ */
+struct Benchmark {
+    std::string title     = "benchmark";
+    const char* op_unit   = "op";
+    const char* time_unit = "ms";
+    uint64_t    epochs    = 10;
+    uint64_t    warmup    = 1;
+
+    using ns   = std::chrono::nanoseconds;
+    using ms   = std::chrono::milliseconds;
+    using time = ns;
+
+    time mMaxEpochTime = ms(100);
+    time mMinEpochTime = ms(1);
+
+    Benchmark(std::string title) { this->title = title; }
+
+
+    template <typename Op>
+    Benchmark& run(std::string name, Op&& op) {
+        result.names.push_back(name);
+        auto* s  = createBenchState(*this);
+        auto& pc = PerformanceCounter::inst();
+        while (auto n = getNumIter(s)) {
+            pc.beginMeasure();
+            while (n-- > 0) op();
+            pc.endMeasure();
+            runIteration(s, pc);
+        }
+        moveResult(s);
+        return *this;
     }
-    moveResult(s);
-    return *this;
-}
+
+    template <typename Op>
+    Benchmark& run(Op&& op) {
+        return run("", std::forward<Op>(op));
+    }
+
+    BenchResult result;
+    void        report();
+};
+
 
 #pragma endregion
 
 #pragma region details
 
-/**
- * @brief Makes sure none of the given arguments are optimized away by the compiler.
- *
- * @tparam Arg Type of the argument that shouldn't be optimized away.
- * @param arg The input that we mark as being used, even though we don't do anything with it.
- */
-template <typename Arg>
-void doNotOptimizeAway(Arg&& arg) {}
 
 namespace detail {
 
@@ -287,6 +310,18 @@ private:
 };
 
 }  // namespace detail
+
+
+/**
+ * @brief Makes sure none of the given arguments are optimized away by the compiler.
+ *
+ * @tparam Arg Type of the argument that shouldn't be optimized away.
+ * @param arg The input that we mark as being used, even though we don't do anything with it.
+ */
+template <typename Arg>
+void doNotOptimizeAway(Arg&& arg) {
+    detail::doNotOptimizeAway(std::forward<Arg>(arg));
+}
 
 
 #pragma endregion

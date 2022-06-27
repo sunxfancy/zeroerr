@@ -1,10 +1,10 @@
 #pragma once
-
 #include "zeroerr/config.h"
 
 #include "zeroerr/color.h"
 
 #include <ostream>
+#include <sstream>
 #include <string>
 #include <tuple>  // this should be removed
 #include <type_traits>
@@ -177,26 +177,33 @@ struct gen_seq<0, Is...> : seq<Is...> {};
  */
 struct Printer {
     template <typename T, typename... V>
-    void operator()(T value, V... others) {
+    Printer& operator()(T value, V... others) {
         PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
         (*this)(std::forward<V>(others)...);
+        return *this;
     }
 
     template <typename T>
-    void operator()(T value) {
+    Printer& operator()(T value) {
         PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
         os << line_break;
         os.flush();
+        return *this;
     }
 
     template <typename T>
-    void operator()(std::initializer_list<T> value) {
+    Printer& operator()(std::initializer_list<T> value) {
         PrinterExt(*this, value, 0, " ", rank<max_rank>{});
         os << line_break;
         os.flush();
+        return *this;
     }
 
     Printer(std::ostream& os) : os(os) {}
+    Printer() : os(*new std::stringstream()) { use_stringstream = true; }
+    ~Printer() {
+        if (use_stringstream) delete &os;
+    }
 
     bool          isColorful = true;   // colorful output
     bool          isCompact  = false;  // compact mode
@@ -204,6 +211,7 @@ struct Printer {
     int           indent     = 2;
     const char*   line_break = "\n";
     std::ostream& os;
+    bool          use_stringstream = false;
 
     template <class T>
     static std::string type(const T& t) {
@@ -325,7 +333,7 @@ struct Printer {
         os << ")" << lb;
     }
 
-    std::string tab(unsigned level) { return std::string(level * indent, ' '); }
+    std::string tab(unsigned level) { return std::string((isCompact ? 0 : level * indent), ' '); }
     const char* quote() { return isQuoted ? "\"" : ""; }
 
     static std::string demangle(const char* name) {
@@ -339,8 +347,27 @@ struct Printer {
         return name;
 #endif
     }
+
+    friend std::ostream& operator<<(std::ostream& os, const Printer& P) {
+        if (P.use_stringstream) os << static_cast<std::stringstream&>(P.os).str();
+        return os;
+    }
 };
 
+/**
+ * @brief PrinterExt is an extension of Printer that allows user to write custom rules for printing.
+ * User can use SFINAE to extend PrinterExt, e.g.:
+ * template <typename T>
+ * typename std::enable_if<std::is_base_of<llvm::Function, T>::value, void>::type
+ * PrinterExt(Printer& P, T* s, unsigned level, const char* lb, rank<3>);
+ *
+ * @tparam T the type of the object to be printed.
+ * @param P Printer class
+ * @param v the object to be printed.
+ * @param level the indentation level.
+ * @param lb  the line break.
+ * @param r  the rank of the rule. 0 is lowest priority.
+ */
 template <class T>
 void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0> r) {
     P.print(std::forward<T>(v), level, lb, rank<max_rank>{});
@@ -348,11 +375,6 @@ void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0> r) {
 
 extern Printer& getStdoutPrinter();
 extern Printer& getStderrPrinter();
-
-class IContextScope {
-public:
-    virtual void str(std::ostream& os) const = 0;
-};
 
 
 }  // namespace zeroerr

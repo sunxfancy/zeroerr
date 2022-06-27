@@ -3,6 +3,7 @@
 #include "zeroerr/config.h"
 
 #include <string>
+#include <vector>
 
 #pragma region unittest
 
@@ -36,6 +37,13 @@ struct TestCase {
     unsigned    line;
     void (*func)(TestContext*);
     bool operator<(const TestCase& rhs) const;
+};
+
+
+template <typename T>
+struct TestedObjects {
+    void           add(T&& obj) { objects.push_back(std::forward<T>(obj)); }
+    std::vector<T> objects;
 };
 
 

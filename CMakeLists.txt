@@ -13,6 +13,12 @@ file(GLOB_RECURSE source_files ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 add_library(zeroerr STATIC ${source_files})
 
+find_program(HAS_MOLD "mold")
+
+if(HAS_MOLD)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fuse-ld=mold")
+endif()
+
 find_package(LLVM CONFIG)
 
 if(LLVM_FOUND)
