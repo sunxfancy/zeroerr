@@ -238,7 +238,7 @@ public:
      * Creates a copy of the Rng, thus the copy provides exactly the same random sequence as the
      * original.
      */
-    [[nodiscard]] Rng copy() const noexcept;
+    Rng copy() const noexcept;
 
     /**
      * @brief Produces a 64bit random value. This should be very fast, thus it is marked as
