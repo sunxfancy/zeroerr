@@ -201,9 +201,14 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() {
     // We're being debugged if the P_TRACED flag is set.
     return ((info.kp_proc.p_flag & P_TRACED) != 0);
 }
-#elif defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__)
+#elif defined(__MINGW32__) || defined(__MINGW64__)
 extern "C" __declspec(dllimport) int __stdcall IsDebuggerPresent();
-__attribute__((always_inline)) __inline__ static bool isDebuggerActive() {
+__attribute__((always_inline)) __inline__  static bool isDebuggerActive() {
+    return ::IsDebuggerPresent() != 0;
+}
+#elif defined(_MSC_VER)
+extern "C" __declspec(dllimport) int __stdcall IsDebuggerPresent();
+inline __forceinline static bool isDebuggerActive() {
     return ::IsDebuggerPresent() != 0;
 }
 #else
