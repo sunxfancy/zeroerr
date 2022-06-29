@@ -1,4 +1,5 @@
 #pragma once
+#include "zeroerr/config.h"
 
 #include <chrono>
 #include <cstdint>
@@ -40,6 +41,8 @@ struct PerformanceCounter {
 
     static PerformanceCounter& inst();
 
+    Clock::duration elapsed;
+
 protected:
     Clock::time_point      _start;
     PerfCountSet<uint64_t> _val;
@@ -71,7 +74,7 @@ BenchState* createBenchState(Benchmark& benchmark);
 void        destroyBenchState(BenchState* state);
 
 size_t getNumIter(BenchState* state);
-void   runIteration(BenchState* state, PerformanceCounter& counter);
+void   runIteration(BenchState* state);
 void   moveResult(BenchState* state);
 
 
@@ -81,11 +84,12 @@ void   moveResult(BenchState* state);
  * row of data. Report will print the data in console.
  */
 struct Benchmark {
-    std::string title     = "benchmark";
-    const char* op_unit   = "op";
-    const char* time_unit = "ms";
-    uint64_t    epochs    = 10;
-    uint64_t    warmup    = 1;
+    std::string title          = "benchmark";
+    const char* op_unit        = "op";
+    const char* time_unit      = "ms";
+    uint64_t    epochs         = 10;
+    uint64_t    warmup         = 0;
+    uint64_t    iter_per_epoch = 0;
 
     using ns   = std::chrono::nanoseconds;
     using ms   = std::chrono::milliseconds;
@@ -93,6 +97,8 @@ struct Benchmark {
 
     time mMaxEpochTime = ms(100);
     time mMinEpochTime = ms(1);
+
+    uint64_t minimalResolutionMutipler = 1000;
 
     Benchmark(std::string title) { this->title = title; }
 
@@ -106,7 +112,7 @@ struct Benchmark {
             pc.beginMeasure();
             while (n-- > 0) op();
             pc.endMeasure();
-            runIteration(s, pc);
+            runIteration(s);
         }
         moveResult(s);
         return *this;

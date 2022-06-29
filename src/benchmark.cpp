@@ -4,12 +4,23 @@
 #include <iostream>
 #include <random>
 #include <stdexcept>
+
+#ifdef ZEROERR_PERF
+#include <linux/perf_event.h>
+#include <sys/ioctl.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+#endif
+
 namespace zeroerr {
 
 #ifdef ZEROERR_PERF
 namespace detail {
-struct LinuxPerformanceCounter;
-}
+struct LinuxPerformanceCounter {
+    void beginMeasure() {}
+    void endMeasure() {}
+};
+}  // namespace detail
 #endif
 
 #pragma region PerformanceCounter
@@ -29,28 +40,167 @@ void PerformanceCounter::beginMeasure() {
     _start = Clock::now();
 }
 void PerformanceCounter::endMeasure() {
-    Clock::time_point _end = Clock::now();
-
+    elapsed = Clock::now() - _start;
 #ifdef ZEROERR_PERF
     _perf->endMeasure();
 #endif
-
-    Clock::duration elapsed = _end - _start;
-    _val.timeElapsed += elapsed.count();
 }
 void PerformanceCounter::updateResults(uint64_t numIters) {}
 
 #pragma endregion
 
+// determines resolution of the given clock. This is done by measuring multiple times and returning
+// the minimum time difference.
+Clock::duration calcClockResolution(size_t numEvaluations) noexcept {
+    auto              bestDuration = Clock::duration::max();
+    Clock::time_point tBegin;
+    Clock::time_point tEnd;
+    for (size_t i = 0; i < numEvaluations; ++i) {
+        tBegin = Clock::now();
+        do {
+            tEnd = Clock::now();
+        } while (tBegin == tEnd);
+        bestDuration = (std::min)(bestDuration, tEnd - tBegin);
+    }
+    return bestDuration;
+}
+
+// Calculates clock resolution once, and remembers the result
+Clock::duration clockResolution() noexcept {
+    static Clock::duration sResolution = calcClockResolution(20);
+    return sResolution;
+}
+
+// helpers to get double values
+template <typename T>
+static inline double d(T t) noexcept {
+    return static_cast<double>(t);
+}
+static inline double d(Clock::duration duration) noexcept {
+    return std::chrono::duration_cast<std::chrono::duration<double>>(duration).count();
+}
 
 #pragma region BenchState
-struct BenchState {};
-BenchState* createBenchState(Benchmark& benchmark) { return new BenchState(); }
+struct BenchState {
+    BenchState(Benchmark& bench) : bench(bench), stage(UnInit) {
+        targetEpochTime = clockResolution() * bench.minimalResolutionMutipler;
+        targetEpochTime = std::max(targetEpochTime, bench.mMinEpochTime);
+        targetEpochTime = std::min(targetEpochTime, bench.mMaxEpochTime);
+        numEpoch        = bench.epochs;
+    }
+
+    Benchmark& bench;
+
+    enum { UnInit, WarmUp, UpScaling, Measurement } stage;
+
+    Clock::duration elapsed;
+    Clock::duration targetEpochTime;
+    uint64_t        numIteration, numEpoch;
+
+    detail::Rng mRng{1024};
+
+    bool isCloseEnoughForMeasurements() const noexcept {
+        return elapsed * 3 >= targetEpochTime * 2;
+    }
+
+
+    uint64_t calcBestNumIters() noexcept {
+        double Elapsed               = d(elapsed);
+        double TargetRuntimePerEpoch = d(targetEpochTime);
+        double NewIters              = TargetRuntimePerEpoch / Elapsed * d(numIteration);
+
+        NewIters *= 1.0 + 0.2 * mRng.uniform01();
+
+        // +0.5 for correct rounding when casting
+        return static_cast<uint64_t>(NewIters + 0.5);
+    }
+
+    void upscale() {
+        if (elapsed * 10 < targetEpochTime) {
+            // we are far below the target runtime. Multiply iterations by 10 (with overflow check)
+            if (numIteration * 10 < numIteration) {
+                // overflow :-(
+                printf("iterations overflow. Maybe your code got optimized away?");
+                numIteration = 0;
+                return;
+            }
+            if (elapsed * 100 < targetEpochTime)
+                numIteration *= 100;
+            else
+                numIteration *= 10;
+        } else {
+            numIteration = calcBestNumIters();
+        }
+    }
+
+    void nextStage() noexcept {
+        switch (stage) {
+            case UnInit:
+                if (bench.warmup != 0) {
+                    stage        = WarmUp;
+                    numIteration = bench.warmup;
+                } else if (bench.iter_per_epoch != 0) {
+                    stage        = Measurement;
+                    numIteration = bench.iter_per_epoch;
+                } else {
+                    stage        = UpScaling;
+                    numIteration = 1;
+                    nextStage();
+                }
+                break;
+            case WarmUp:
+                if (bench.iter_per_epoch != 0) {
+                    stage        = Measurement;
+                    numIteration = bench.iter_per_epoch;
+                } else if (isCloseEnoughForMeasurements()) {
+                    stage        = Measurement;
+                    numIteration = calcBestNumIters();
+                } else {
+                    stage = UpScaling;
+                    nextStage();
+                }
+                break;
+            case UpScaling:
+                if (isCloseEnoughForMeasurements()) {
+                    stage        = Measurement;
+                    numIteration = calcBestNumIters();
+                } else {
+                    stage = UpScaling;
+                    upscale();
+                }
+                break;
+            case Measurement:
+                if (numEpoch) {
+                    numEpoch--;
+                } else {
+                    numIteration = 0;
+                }
+                break;
+        }
+    }
+};
+BenchState* createBenchState(Benchmark& benchmark) { return new BenchState(benchmark); }
 void        destroyBenchState(BenchState* state) { delete state; }
 
-size_t getNumIter(BenchState* state) { return 0; }
-void   runIteration(BenchState* state, PerformanceCounter& counter) {}
-void   moveResult(BenchState* state) { destroyBenchState(state); }
+size_t getNumIter(BenchState* state) {
+    state->nextStage();
+    printf("%lu  %s %lu\n", state->numIteration,
+           state->stage == BenchState::WarmUp      ? "warmup"
+           : state->stage == BenchState::UpScaling ? "upscale"
+                                                   : "measurement",
+           state->numEpoch);
+    return state->numIteration;
+}
+
+void runIteration(BenchState* state) { state->elapsed = PerformanceCounter::inst().elapsed; }
+
+void moveResult(BenchState* state) {
+    auto& pc = PerformanceCounter::inst();
+
+    PerfCountSet<double> pcset;
+    state->bench.result.results.push_back(pcset);
+    destroyBenchState(state);
+}
 
 #pragma endregion
 
@@ -73,14 +223,6 @@ namespace detail {
 #pragma optimize("", off)
 void doNotOptimizeAwaySink(void const*) {}
 #pragma optimize("", on)
-#endif
-
-#ifdef ZEROERR_PERF
-struct LinuxPerformanceCounter {
-    void beginMeasure() { _start = Clock::now(); }
-    void endMeasure() { _end = Clock::now(); }
-};
-};
 #endif
 
 #pragma region Rng random number generator

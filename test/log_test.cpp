@@ -25,12 +25,11 @@ TEST_CASE("lazy evaluation") {
 
 
 TEST_CASE("speed test") {
-    std::stringstream ss;
-
     Benchmark bench("log speed test");
     bench
         .run("stringstream",
              [&] {
+                 std::stringstream ss;
                  ss << "hello world"
                     << "\n";
                  doNotOptimizeAway(ss);
