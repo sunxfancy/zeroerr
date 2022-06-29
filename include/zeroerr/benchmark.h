@@ -32,6 +32,9 @@ struct LinuxPerformanceCounter;
 }
 
 struct PerformanceCounter {
+    PerformanceCounter();
+    ~PerformanceCounter();
+
     void beginMeasure();
     void endMeasure();
     void updateResults(uint64_t numIters);

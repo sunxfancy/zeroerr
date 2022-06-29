@@ -10,6 +10,7 @@
 #include <sys/ioctl.h>
 #include <sys/syscall.h>
 #include <unistd.h>
+#include <map>
 #endif
 
 namespace zeroerr {
@@ -17,19 +18,229 @@ namespace zeroerr {
 #ifdef ZEROERR_PERF
 namespace detail {
 struct LinuxPerformanceCounter {
-    void beginMeasure() {}
-    void endMeasure() {}
+    inline void beginMeasure() {
+        if (mHasError) return;
+
+        mHasError = -1 == ioctl(mFd, PERF_EVENT_IOC_RESET, PERF_IOC_FLAG_GROUP);
+        if (mHasError) return;
+
+        mHasError = -1 == ioctl(mFd, PERF_EVENT_IOC_ENABLE, PERF_IOC_FLAG_GROUP);
+    }
+    inline void endMeasure() {
+        if (mHasError) return;
+
+        mHasError = (-1 == ioctl(mFd, PERF_EVENT_IOC_DISABLE, PERF_IOC_FLAG_GROUP));
+        if (mHasError) return;
+
+        auto const numBytes = sizeof(uint64_t) * mCounters.size();
+        auto       ret      = read(mFd, mCounters.data(), numBytes);
+        mHasError           = ret != static_cast<ssize_t>(numBytes);
+    }
+
+
+    // rounded integer division
+    template <typename T>
+    static inline T divRounded(T a, T divisor) {
+        return (a + divisor / 2) / divisor;
+    }
+
+    static inline uint32_t mix(uint32_t x) noexcept {
+        x ^= x << 13;
+        x ^= x >> 17;
+        x ^= x << 5;
+        return x;
+    }
+
+    template <typename Op>
+    void calibrate(Op&& op) {
+        // clear current calibration data,
+        for (auto& v : mCalibratedOverhead) {
+            v = UINT64_C(0);
+        }
+
+        // create new calibration data
+        auto newCalibration = mCalibratedOverhead;
+        for (auto& v : newCalibration) {
+            v = (std::numeric_limits<uint64_t>::max)();
+        }
+        for (size_t iter = 0; iter < 100; ++iter) {
+            beginMeasure();
+            op();
+            endMeasure();
+            if (mHasError) return;
+
+            for (size_t i = 0; i < newCalibration.size(); ++i) {
+                auto diff = mCounters[i];
+                if (newCalibration[i] > diff) {
+                    newCalibration[i] = diff;
+                }
+            }
+        }
+
+        mCalibratedOverhead = std::move(newCalibration);
+
+        {
+            // calibrate loop overhead. For branches & instructions this makes sense, not so much
+            // for everything else like cycles. marsaglia's xorshift: mov, sal/shr, xor. Times 3.
+            // This has the nice property that the compiler doesn't seem to be able to optimize
+            // multiple calls any further. see https://godbolt.org/z/49RVQ5
+            uint64_t const numIters = 100000U + (std::random_device{}() & 3);
+            uint64_t       n        = numIters;
+            uint32_t       x        = 1234567;
+
+            beginMeasure();
+            while (n-- > 0) {
+                x = mix(x);
+            }
+            endMeasure();
+            detail::doNotOptimizeAway(x);
+            auto measure1 = mCounters;
+
+            n = numIters;
+            beginMeasure();
+            while (n-- > 0) {
+                // we now run *twice* so we can easily calculate the overhead
+                x = mix(x);
+                x = mix(x);
+            }
+            endMeasure();
+            detail::doNotOptimizeAway(x);
+            auto measure2 = mCounters;
+
+            for (size_t i = 0; i < mCounters.size(); ++i) {
+                // factor 2 because we have two instructions per loop
+                auto m1 =
+                    measure1[i] > mCalibratedOverhead[i] ? measure1[i] - mCalibratedOverhead[i] : 0;
+                auto m2 =
+                    measure2[i] > mCalibratedOverhead[i] ? measure2[i] - mCalibratedOverhead[i] : 0;
+                auto overhead = m1 * 2 > m2 ? m1 * 2 - m2 : 0;
+
+                mLoopOverhead[i] = divRounded(overhead, numIters);
+            }
+        }
+    }
+
+
+    struct Target {
+        uint64_t* targetValue;
+        bool      correctMeasuringOverhead;
+        bool      correctLoopOverhead;
+    };
+
+    std::map<uint64_t, Target> mIdToTarget{};
+
+    // start with minimum size of 3 for read_format
+    std::vector<uint64_t> mCounters{3};
+    std::vector<uint64_t> mCalibratedOverhead{3};
+    std::vector<uint64_t> mLoopOverhead{3};
+
+    uint64_t mTimeEnabledNanos = 0;
+    uint64_t mTimeRunningNanos = 0;
+
+    int  mFd       = -1;
+    bool mHasError = false;
+
+    ~LinuxPerformanceCounter() {
+        if (mFd != -1) close(mFd);
+    }
+
+    bool monitor(perf_sw_ids swId, Target target) {
+        return monitor(PERF_TYPE_SOFTWARE, swId, target);
+    }
+
+    bool monitor(perf_hw_id hwId, Target target) {
+        return monitor(PERF_TYPE_HARDWARE, hwId, target);
+    }
+
+    bool monitor(uint32_t type, uint64_t eventid, Target target) {
+        *target.targetValue = (std::numeric_limits<uint64_t>::max)();
+        if (mHasError) return false;
+
+        auto pea = perf_event_attr();
+        std::memset(&pea, 0, sizeof(perf_event_attr));
+        pea.type           = type;
+        pea.size           = sizeof(perf_event_attr);
+        pea.config         = eventid;
+        pea.disabled       = 1;  // start counter as disabled
+        pea.exclude_kernel = 1;
+        pea.exclude_hv     = 1;
+
+        // NOLINTNEXTLINE(hicpp-signed-bitwise)
+        pea.read_format = PERF_FORMAT_GROUP | PERF_FORMAT_ID | PERF_FORMAT_TOTAL_TIME_ENABLED |
+                          PERF_FORMAT_TOTAL_TIME_RUNNING;
+
+        const int pid = 0;         // the current process
+        const int cpu = -1;        // all CPUs
+#if defined(PERF_FLAG_FD_CLOEXEC)  // since Linux 3.14
+        const unsigned long flags = PERF_FLAG_FD_CLOEXEC;
+#else
+        const unsigned long flags = 0;
+#endif
+
+        auto fd = static_cast<int>(syscall(__NR_perf_event_open, &pea, pid, cpu, mFd, flags));
+        if (-1 == fd) return false;
+        // first call: set to fd, and use this from now on
+        if (-1 == mFd) mFd = fd;
+
+        uint64_t id = 0;
+        if (-1 == ioctl(fd, PERF_EVENT_IOC_ID, &id)) return false;
+
+        // insert into map, rely on the fact that map's references are constant.
+        mIdToTarget.emplace(id, target);
+
+        // prepare readformat with the correct size (after the insert)
+        auto size = 3 + 2 * mIdToTarget.size();
+        mCounters.resize(size);
+        mCalibratedOverhead.resize(size);
+        mLoopOverhead.resize(size);
+
+        return true;
+    }
 };
 }  // namespace detail
 #endif
 
 #pragma region PerformanceCounter
 
+PerformanceCounter::PerformanceCounter() {
+#ifdef ZEROERR_PERF
+    _perf        = new detail::LinuxPerformanceCounter();
+    using Target = detail::LinuxPerformanceCounter::Target;
+    _has.pageFaults =
+        _perf->monitor(PERF_COUNT_SW_PAGE_FAULTS, Target{&_val.pageFaults, true, false});
+    _has.cpuCycles =
+        _perf->monitor(PERF_COUNT_HW_REF_CPU_CYCLES, Target{&_val.cpuCycles, true, false});
+    _has.contextSwitches =
+        _perf->monitor(PERF_COUNT_SW_CONTEXT_SWITCHES, Target{&_val.contextSwitches, true, false});
+    _has.instructions =
+        _perf->monitor(PERF_COUNT_HW_INSTRUCTIONS, Target{&_val.instructions, true, true});
+    _has.branchInstructions = _perf->monitor(PERF_COUNT_HW_BRANCH_INSTRUCTIONS,
+                                             Target{&_val.branchInstructions, true, false});
+    _has.branchMisses =
+        _perf->monitor(PERF_COUNT_HW_BRANCH_MISSES, Target{&_val.branchMisses, true, false});
+    // _has.branchMisses = false;
+
+    _perf->calibrate([] {
+        auto before = Clock::now();
+        auto after  = Clock::now();
+        (void)before;
+        (void)after;
+    });
+
+    if (_perf->mHasError) {
+        // something failed, don't monitor anything.
+        _has = PerfCountSet<bool>{};
+    }
+#endif
+}
+PerformanceCounter::~PerformanceCounter() {
+#ifdef ZEROERR_PERF
+    delete _perf;
+#endif
+}
+
 PerformanceCounter& PerformanceCounter::inst() {
     static PerformanceCounter counter;
-#ifdef ZEROERR_PERF
-    counter._perf = new detail::LinuxPerformanceCounter();
-#endif
     return counter;
 }
 
