@@ -61,7 +61,7 @@ struct LinuxPerformanceCounter {
         // create new calibration data
         auto newCalibration = mCalibratedOverhead;
         for (auto& v : newCalibration) {
-            v = (std::numeric_limits<uint64_t>::max)();
+            v = std::numeric_limits<uint64_t>::max();
         }
         for (size_t iter = 0; iter < 100; ++iter) {
             beginMeasure();
@@ -165,7 +165,6 @@ struct LinuxPerformanceCounter {
         pea.exclude_kernel = 1;
         pea.exclude_hv     = 1;
 
-        // NOLINTNEXTLINE(hicpp-signed-bitwise)
         pea.read_format = PERF_FORMAT_GROUP | PERF_FORMAT_ID | PERF_FORMAT_TOTAL_TIME_ENABLED |
                           PERF_FORMAT_TOTAL_TIME_RUNNING;
 
@@ -196,6 +195,44 @@ struct LinuxPerformanceCounter {
 
         return true;
     }
+
+    void updateResults(uint64_t numIters) {
+        // clear old data
+        for (auto& id_value : mIdToTarget) {
+            *id_value.second.targetValue = UINT64_C(0);
+        }
+
+        if (mHasError) return;
+
+        mTimeEnabledNanos = mCounters[1] - mCalibratedOverhead[1];
+        mTimeRunningNanos = mCounters[2] - mCalibratedOverhead[2];
+
+        for (uint64_t i = 0; i < mCounters[0]; ++i) {
+            auto idx = static_cast<size_t>(3 + i * 2 + 0);
+            auto id  = mCounters[idx + 1U];
+
+            auto it = mIdToTarget.find(id);
+            if (it != mIdToTarget.end()) {
+                auto& tgt        = it->second;
+                *tgt.targetValue = mCounters[idx];
+                if (tgt.correctMeasuringOverhead) {
+                    if (*tgt.targetValue >= mCalibratedOverhead[idx]) {
+                        *tgt.targetValue -= mCalibratedOverhead[idx];
+                    } else {
+                        *tgt.targetValue = 0U;
+                    }
+                }
+                if (tgt.correctLoopOverhead) {
+                    auto correctionVal = mLoopOverhead[idx] * numIters;
+                    if (*tgt.targetValue >= correctionVal) {
+                        *tgt.targetValue -= correctionVal;
+                    } else {
+                        *tgt.targetValue = 0U;
+                    }
+                }
+            }
+        }
+    }
 };
 }  // namespace detail
 #endif
@@ -206,19 +243,20 @@ PerformanceCounter::PerformanceCounter() {
 #ifdef ZEROERR_PERF
     _perf        = new detail::LinuxPerformanceCounter();
     using Target = detail::LinuxPerformanceCounter::Target;
-    _has.pageFaults =
-        _perf->monitor(PERF_COUNT_SW_PAGE_FAULTS, Target{&_val.pageFaults, true, false});
-    _has.cpuCycles =
-        _perf->monitor(PERF_COUNT_HW_REF_CPU_CYCLES, Target{&_val.cpuCycles, true, false});
-    _has.contextSwitches =
-        _perf->monitor(PERF_COUNT_SW_CONTEXT_SWITCHES, Target{&_val.contextSwitches, true, false});
-    _has.instructions =
-        _perf->monitor(PERF_COUNT_HW_INSTRUCTIONS, Target{&_val.instructions, true, true});
-    _has.branchInstructions = _perf->monitor(PERF_COUNT_HW_BRANCH_INSTRUCTIONS,
-                                             Target{&_val.branchInstructions, true, false});
-    _has.branchMisses =
-        _perf->monitor(PERF_COUNT_HW_BRANCH_MISSES, Target{&_val.branchMisses, true, false});
-    // _has.branchMisses = false;
+
+    _has.timeElapsed() = true;
+    _has.pageFaults() =
+        _perf->monitor(PERF_COUNT_SW_PAGE_FAULTS, Target{&_val.pageFaults(), true, false});
+    _has.cpuCycles() =
+        _perf->monitor(PERF_COUNT_HW_REF_CPU_CYCLES, Target{&_val.cpuCycles(), true, false});
+    _has.contextSwitches() = _perf->monitor(PERF_COUNT_SW_CONTEXT_SWITCHES,
+                                            Target{&_val.contextSwitches(), true, false});
+    _has.instructions() =
+        _perf->monitor(PERF_COUNT_HW_INSTRUCTIONS, Target{&_val.instructions(), true, true});
+    _has.branchInstructions() = _perf->monitor(PERF_COUNT_HW_BRANCH_INSTRUCTIONS,
+                                               Target{&_val.branchInstructions(), true, false});
+    _has.branchMisses() =
+        _perf->monitor(PERF_COUNT_HW_BRANCH_MISSES, Target{&_val.branchMisses(), true, false});
 
     _perf->calibrate([] {
         auto before = Clock::now();
@@ -256,7 +294,11 @@ void PerformanceCounter::endMeasure() {
     _perf->endMeasure();
 #endif
 }
-void PerformanceCounter::updateResults(uint64_t numIters) {}
+void PerformanceCounter::updateResults(uint64_t numIters) {
+#ifdef ZEROERR_PERF
+    _perf->updateResults(numIters);
+#endif
+}
 
 #pragma endregion
 
@@ -298,6 +340,8 @@ struct BenchState {
         targetEpochTime = std::max(targetEpochTime, bench.mMinEpochTime);
         targetEpochTime = std::min(targetEpochTime, bench.mMaxEpochTime);
         numEpoch        = bench.epochs;
+        numIteration    = 0;
+        elapsed         = Clock::duration(0);
     }
 
     Benchmark& bench;
@@ -389,6 +433,8 @@ struct BenchState {
                 break;
         }
     }
+
+    BenchResult result;
 };
 BenchState* createBenchState(Benchmark& benchmark) { return new BenchState(benchmark); }
 void        destroyBenchState(BenchState* state) { delete state; }
@@ -403,23 +449,104 @@ size_t getNumIter(BenchState* state) {
     return state->numIteration;
 }
 
-void runIteration(BenchState* state) { state->elapsed = PerformanceCounter::inst().elapsed; }
+void runIteration(BenchState* state) {
+    auto& pc       = PerformanceCounter::inst();
+    state->elapsed = pc.elapsed;
+    pc.updateResults(state->numIteration);
 
-void moveResult(BenchState* state) {
-    auto& pc = PerformanceCounter::inst();
+    if (state->stage == BenchState::Measurement) {
+        PerfCountSet<double> pcset;
+        pcset.iterations    = d(state->numIteration);
+        pcset.timeElapsed() = d(state->elapsed) / pcset.iterations;
 
-    PerfCountSet<double> pcset;
-    state->bench.result.results.push_back(pcset);
+        for (int i = 1; i < 7; ++i) {
+            if (pc.has().data[i]) {
+                pcset.data[i] = d(pc.val().data[i]) / pcset.iterations;
+            }
+        }
+
+        state->result.epoch_details.push_back(pcset);
+    }
+}
+
+void moveResult(BenchState* state, std::string name) {
+    auto& pc           = PerformanceCounter::inst();
+    state->result.name = name;
+    state->result.has  = pc.has();
+
+    state->bench.result.push_back(state->result);
     destroyBenchState(state);
 }
 
 #pragma endregion
 
+PerfCountSet<double> BenchResult::average() const {
+    PerfCountSet<double> avg;
+    for (int i = 0; i < 7; ++i) {
+        if (has.data[i]) {
+            double sum = 0;
+            for (auto& pcset : epoch_details) {
+                sum += pcset.data[i];
+            }
+            sum /= epoch_details.size();
+            avg.data[i] = sum;
+        }
+    }
+    return avg;
+}
+PerfCountSet<double> BenchResult::min() const {
+    PerfCountSet<double> min;
+    for (int i = 0; i < 7; ++i) {
+        if (has.data[i]) {
+            double min_val = std::numeric_limits<double>::max();
+            for (auto& pcset : epoch_details) {
+                min_val = std::min(min_val, pcset.data[i]);
+            }
+            min.data[i] = min_val;
+        }
+    }
+    return min;
+}
+PerfCountSet<double> BenchResult::max() const {
+    PerfCountSet<double> max;
+    for (int i = 0; i < 7; ++i) {
+        if (has.data[i]) {
+            double max_val = std::numeric_limits<double>::min();
+            for (auto& pcset : epoch_details) {
+                max_val = std::max(max_val, pcset.data[i]);
+            }
+            max.data[i] = max_val;
+        }
+    }
+    return max;
+}
+PerfCountSet<double> BenchResult::mean() const {
+    PerfCountSet<double> mean;
+
+    return mean;
+}
+
 void Benchmark::report() {
+    static const char* names[] = {
+        "time_elaspsed", "page_faults",         "cpu_cycles",    "context_switches",
+        "instructions",  "branch_instructions", "branch_misses",
+    };
     std::cout << "======< " << title << " >======" << std::endl;
+    std::cout << "                 ";
+    for (int i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
+        if (result[0].has.data[i]) std::cout << (i ? "| " : "") << names[i];
+    }
+    std::cout << std::endl;
     int i = 0;
-    for (auto& row : result.results) {
-        std::cerr << result.names[i] << " | " << row.timeElapsed << std::endl;
+    for (auto& row : result) {
+        auto result = row.average();
+        std::cerr << row.name << " | " << result.timeElapsed();
+        for (int j = 1; j < 7; ++j) {
+            if (row.has.data[j]) {
+                std::cerr << " | " << result.data[j];
+            }
+        }
+        std::cout << std::endl;
         ++i;
     }
 }

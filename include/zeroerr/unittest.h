@@ -71,11 +71,11 @@ public:
 namespace detail {
 
 struct regTest {
-    regTest(const TestCase& tc);
+    explicit regTest(const TestCase& tc);
 };
 
 struct regReporter {
-    regReporter(IReporter*);
+    explicit regReporter(IReporter*);
 };
 }  // namespace detail
 

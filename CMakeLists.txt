@@ -7,6 +7,7 @@ if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/third_party)
 
 file(GLOB_RECURSE source_files ${CMAKE_SOURCE_DIR}/src/*.cpp)
@@ -16,7 +17,16 @@ add_library(zeroerr STATIC ${source_files})
 find_program(HAS_MOLD "mold")
 
 if(HAS_MOLD)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fuse-ld=mold")
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fuse-ld=mold")
+    endif()
+
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 12.1)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fuse-ld=mold")
+        else()
+        endif()
+    endif()
 endif()
 
 find_package(LLVM CONFIG)

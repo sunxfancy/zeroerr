@@ -14,14 +14,16 @@ namespace zeroerr {
 
 template <typename T>
 struct PerfCountSet {
-    T timeElapsed;
     T iterations;
-    T pageFaults;
-    T cpuCycles;
-    T contextSwitches;
-    T instructions;
-    T branchInstructions;
-    T branchMisses;
+    T data[7];
+
+    T& timeElapsed() { return data[0]; }
+    T& pageFaults() { return data[1]; }
+    T& cpuCycles() { return data[2]; }
+    T& contextSwitches() { return data[3]; }
+    T& instructions() { return data[4]; }
+    T& branchInstructions() { return data[5]; }
+    T& branchMisses() { return data[6]; }
 };
 
 using Clock = std::conditional<std::chrono::high_resolution_clock::is_steady,
@@ -67,8 +69,14 @@ struct BenchResult {
         branch_misses       = 1 << 7,
         all                 = (1 << 8) - 1,
     };
-    std::vector<std::string>          names;
-    std::vector<PerfCountSet<double>> results;
+    std::string                       name;
+    std::vector<PerfCountSet<double>> epoch_details;
+    PerfCountSet<bool>                has;
+
+    PerfCountSet<double> average() const;
+    PerfCountSet<double> min() const;
+    PerfCountSet<double> max() const;
+    PerfCountSet<double> mean() const;
 };
 
 struct Benchmark;
@@ -78,7 +86,7 @@ void        destroyBenchState(BenchState* state);
 
 size_t getNumIter(BenchState* state);
 void   runIteration(BenchState* state);
-void   moveResult(BenchState* state);
+void   moveResult(BenchState* state, std::string name);
 
 
 /**
@@ -108,7 +116,6 @@ struct Benchmark {
 
     template <typename Op>
     Benchmark& run(std::string name, Op&& op) {
-        result.names.push_back(name);
         auto* s  = createBenchState(*this);
         auto& pc = PerformanceCounter::inst();
         while (auto n = getNumIter(s)) {
@@ -117,7 +124,7 @@ struct Benchmark {
             pc.endMeasure();
             runIteration(s);
         }
-        moveResult(s);
+        moveResult(s, name);
         return *this;
     }
 
@@ -126,8 +133,8 @@ struct Benchmark {
         return run("", std::forward<Op>(op));
     }
 
-    BenchResult result;
-    void        report();
+    std::vector<BenchResult> result;
+    void                     report();
 };
 
 
