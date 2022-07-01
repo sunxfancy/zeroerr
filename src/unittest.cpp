@@ -42,7 +42,9 @@ int UnitTest::run() {
     std::cout << "             " << FgGreen << "PASSED" << Reset << "   |   " << FgYellow
               << "WARNING" << Reset << "   |   " << FgRed << "FAILED" << Reset << "   |   " << Dim
               << "SKIPPED" << Reset << std::endl;
-    std::cout << "TEST CASE: " << std::endl;
+    std::cout << "TEST CASE:   " << std::setw(6) << passed << "       " << std::setw(7) << warning
+              << "       " << std::setw(6) << failed << "       " << std::setw(7) << skipped
+              << std::endl;
     std::cout << "ASSERTION: " << std::endl;
     return 0;
 }
