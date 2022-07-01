@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <exception>
 #include <iostream>
-#include <sstream>
 
 #pragma region define macros
 
@@ -158,11 +157,10 @@ struct Expression_lhs {
     operator ExprResult() {
         bool res = static_cast<bool>(lhs);
         if (info.is_false) res = !res;
-        std::stringstream ss;
 
-        Printer print(ss);
+        Printer print;
         print(lhs);
-        if (!res) return ExprResult(res, info, ss.str());
+        if (!res) return ExprResult(res, info, print.str());
         return ExprResult(res, info);
     }
 

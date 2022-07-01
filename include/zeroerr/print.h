@@ -348,8 +348,10 @@ struct Printer {
 #endif
     }
 
+    std::string str() const { return static_cast<std::stringstream&>(os).str(); }
+
     friend std::ostream& operator<<(std::ostream& os, const Printer& P) {
-        if (P.use_stringstream) os << static_cast<std::stringstream&>(P.os).str();
+        if (P.use_stringstream) os << P.str();
         return os;
     }
 };

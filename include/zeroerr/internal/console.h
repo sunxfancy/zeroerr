@@ -14,5 +14,4 @@ struct TerminalSize {
 };
 TerminalSize getTerminalSize();
 
-
 }  // namespace zeroerr
