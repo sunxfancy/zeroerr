@@ -87,10 +87,6 @@ extern const char* BgWhite;
 extern void disableColorOutput();
 extern void enableColorOutput();
 
-enum OutputStream { STDOUT, STDERR };
-extern bool isTerminalOutput(OutputStream stream);
-
-
 #endif
 
 }  // namespace zeroerr
