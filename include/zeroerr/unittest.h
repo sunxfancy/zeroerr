@@ -1,10 +1,11 @@
 #pragma once
 
-#include "zeroerr/config.h"
+#include "zeroerr/internal/config.h"
 
-#include <iostream>
-#include <set>
 #include <string>
+#include <vector>
+
+#pragma region unittest
 
 #define ZEROERR_CREATE_TEST_FUNC(function, name)                     \
     static void                     function(zeroerr::TestContext*); \
@@ -14,6 +15,7 @@
 
 #define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
 
+#define SUB_CASE(name)
 
 namespace zeroerr {
 
@@ -37,16 +39,48 @@ struct TestCase {
     bool operator<(const TestCase& rhs) const;
 };
 
-namespace detail {
 
-extern std::set<TestCase>& getRegisteredTests();
-struct regTest {
-    regTest(const TestCase& tc) {
-        // sort by filename and line number
-        getRegisteredTests().insert(tc);
-    }
+template <typename T>
+struct TestedObjects {
+    void           add(T&& obj) { objects.push_back(std::forward<T>(obj)); }
+    std::vector<T> objects;
 };
 
+
+#pragma endregion
+
+#pragma region reporter
+
+class IReporter {
+public:
+    virtual std::string getName() const = 0;
+
+    virtual void reportQuery() = 0;
+
+    virtual void reportResult(const TestContext& tc) = 0;
+
+    // There are a list of events
+    virtual void testStart() = 0;
+    virtual void testEnd()   = 0;
+
+    virtual void testCaseStart(const TestCase& tc) = 0;
+    virtual void testCaseEnd(const TestCase& tc)   = 0;
+};
+
+
+namespace detail {
+
+struct regTest {
+    explicit regTest(const TestCase& tc);
+};
+
+struct regReporter {
+    explicit regReporter(IReporter*);
+};
 }  // namespace detail
+
+
+#pragma endregion
+
 
 }  // namespace zeroerr

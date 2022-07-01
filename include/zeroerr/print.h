@@ -1,14 +1,13 @@
 #pragma once
+#include "zeroerr/internal/config.h"
 
 #include "zeroerr/color.h"
-#include "zeroerr/config.h"
 
-#include <complex>
-#include <memory>
 #include <ostream>
+#include <sstream>
 #include <string>
+#include <tuple>  // this should be removed
 #include <type_traits>
-
 #ifdef __GNUG__
 #include <cxxabi.h>
 #endif
@@ -20,6 +19,22 @@
 #if defined(ZEROERR_ENABLE_MAGIC_ENUM) && (ZEROERR_CXX_STANDARD >= 17)
 #include "magic_enum.hpp"
 #endif
+
+// those predefines can help to avoid include too many headers
+namespace std {
+template <typename T>
+class complex;
+
+template <class T, class Deleter>
+class unique_ptr;
+
+template <class T>
+class shared_ptr;
+
+template <class T>
+class weak_ptr;
+
+}  // namespace std
 
 namespace zeroerr {
 
@@ -86,17 +101,6 @@ struct is_string
                                        std::is_same<T, const char*>::value || ZEROERR_STRING_VIEW> {
 };
 
-// Check if a type is a complex type
-template <class T>
-struct is_complex : std::false_type {};
-template <class T>
-struct is_complex<const T> : is_complex<T> {};
-template <class T>
-struct is_complex<volatile T> : is_complex<T> {};
-template <class T>
-struct is_complex<volatile const T> : is_complex<T> {};
-template <class T>
-struct is_complex<std::complex<T>> : std::true_type {};
 
 // Check if a type can use arr[0] like an array
 template <typename T, typename = void>
@@ -150,7 +154,7 @@ struct gen_seq<0, Is...> : seq<Is...> {};
 #define ZEROERR_IS_CLASS      std::is_class<T>::value
 #define ZEROERR_IS_STREAMABLE detail::is_streamable<std::ostream, T>::value
 #define ZEROERR_IS_ARRAY      detail::is_array<T>::value
-#define ZEROERR_IS_COMPLEX    detail::is_complex<T>::value
+#define ZEROERR_IS_COMPLEX    detail::is_specialization<T, std::complex>::value
 #define ZEROERR_IS_BOOL       std::is_same<T, bool>::value
 #define ZEROERR_IS_AUTOPTR                                   \
     (detail::is_specialization<T, std::unique_ptr>::value || \
@@ -173,26 +177,33 @@ struct gen_seq<0, Is...> : seq<Is...> {};
  */
 struct Printer {
     template <typename T, typename... V>
-    void operator()(T value, V... others) {
+    Printer& operator()(T value, V... others) {
         PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
         (*this)(std::forward<V>(others)...);
+        return *this;
     }
 
     template <typename T>
-    void operator()(T value) {
+    Printer& operator()(T value) {
         PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
         os << line_break;
         os.flush();
+        return *this;
     }
 
     template <typename T>
-    void operator()(std::initializer_list<T> value) {
+    Printer& operator()(std::initializer_list<T> value) {
         PrinterExt(*this, value, 0, " ", rank<max_rank>{});
         os << line_break;
         os.flush();
+        return *this;
     }
 
     Printer(std::ostream& os) : os(os) {}
+    Printer() : os(*new std::stringstream()) { use_stringstream = true; }
+    ~Printer() {
+        if (use_stringstream) delete &os;
+    }
 
     bool          isColorful = true;   // colorful output
     bool          isCompact  = false;  // compact mode
@@ -200,6 +211,7 @@ struct Printer {
     int           indent     = 2;
     const char*   line_break = "\n";
     std::ostream& os;
+    bool          use_stringstream = false;
 
     template <class T>
     static std::string type(const T& t) {
@@ -309,7 +321,8 @@ struct Printer {
     }
 
     template <class TupType, size_t... I>
-    void print_tuple(const TupType& _tup, unsigned level, const char* lb, detail::seq<I...>) {
+    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb,
+                            detail::seq<I...>) {
         int a[] = {(os << (I == 0 ? "" : ", ") << std::get<I>(_tup), 0)...};
     }
 
@@ -320,22 +333,41 @@ struct Printer {
         os << ")" << lb;
     }
 
-    std::string tab(unsigned level) { return std::string(level * indent, ' '); }
+    std::string tab(unsigned level) { return std::string((isCompact ? 0 : level * indent), ' '); }
     const char* quote() { return isQuoted ? "\"" : ""; }
 
     static std::string demangle(const char* name) {
 #ifdef __GNUG__
-        int status = -4;
-
-        std::unique_ptr<char, void (*)(void*)> res{abi::__cxa_demangle(name, NULL, NULL, &status),
-                                                   std::free};
-        return (status == 0) ? res.get() : name;
+        int         status = -4;
+        char*       res    = abi::__cxa_demangle(name, NULL, NULL, &status);
+        std::string ret    = (status == 0) ? res : name;
+        std::free(res);
+        return ret;
 #else
         return name;
 #endif
     }
+
+    friend std::ostream& operator<<(std::ostream& os, const Printer& P) {
+        if (P.use_stringstream) os << static_cast<std::stringstream&>(P.os).str();
+        return os;
+    }
 };
 
+/**
+ * @brief PrinterExt is an extension of Printer that allows user to write custom rules for printing.
+ * User can use SFINAE to extend PrinterExt, e.g.:
+ * template <typename T>
+ * typename std::enable_if<std::is_base_of<llvm::Function, T>::value, void>::type
+ * PrinterExt(Printer& P, T* s, unsigned level, const char* lb, rank<3>);
+ *
+ * @tparam T the type of the object to be printed.
+ * @param P Printer class
+ * @param v the object to be printed.
+ * @param level the indentation level.
+ * @param lb  the line break.
+ * @param r  the rank of the rule. 0 is lowest priority.
+ */
 template <class T>
 void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0> r) {
     P.print(std::forward<T>(v), level, lb, rank<max_rank>{});

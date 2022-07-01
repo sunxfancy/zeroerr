@@ -1,20 +1,22 @@
 #pragma once
 
+#include "zeroerr/internal/config.h"
+#include "zeroerr/internal/debugbreak.h"
+#include "zeroerr/print.h"
+
 #include <cstdint>
 #include <exception>
 #include <iostream>
-
-#include "zeroerr/config.h"
-#include "zeroerr/debugbreak.h"
-#include "zeroerr/print.h"
+#include <sstream>
 
 #pragma region define macros
 
-// This symbol must be in the global namespace
-// used for checking the assert is inside testing or not
-namespace {
-constexpr bool _ZEROERR_TEST_CONTEXT = false;
-}  // namespace
+// This macro will be redefined in the log.h header, so the global context variable could be
+// envolved only when we use log.h at the same time. If you didn't use log.h, this is still a
+// header-only library.
+#ifndef ZEROERR_G_CONTEXT_SCOPE
+#define ZEROERR_G_CONTEXT_SCOPE(x)
+#endif
 
 #define ZEROERR_ASSERT(cond, level, throws, is_false, ...)                                     \
     do {                                                                                       \
@@ -22,11 +24,12 @@ constexpr bool _ZEROERR_TEST_CONTEXT = false;
                                   is_false};                                                   \
                                                                                                \
         zeroerr::AssertionData data(__FILE__, __LINE__, #cond);                                \
-        data.setResult(std::move(zeroerr::ExpressionDecomposer(info) << cond));                \
+        data.ExprsetResult(std::move(zeroerr::ExpressionDecomposer(info) << cond));            \
         zeroerr::detail::context_helper<                                                       \
             decltype(_ZEROERR_TEST_CONTEXT),                                                   \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                      \
                          const bool>::value>::setContext(data, _ZEROERR_TEST_CONTEXT);         \
+        ZEROERR_G_CONTEXT_SCOPE(data);                                                         \
         if (data.log()) debug_break();                                                         \
         data();                                                                                \
     } while (0)
@@ -55,6 +58,13 @@ constexpr bool _ZEROERR_TEST_CONTEXT = false;
 #pragma endregion
 
 
+// This symbol must be in the global namespace
+// used for checking the assert is inside testing or not
+namespace {
+constexpr bool _ZEROERR_TEST_CONTEXT = false;
+}  // namespace
+
+
 namespace zeroerr {
 
 enum class assert_level : uint8_t { warn, check, require };
@@ -81,22 +91,22 @@ struct deferred_false {
     static const bool value = false;
 };
 
-#define ZEROERR_EXPRESSION_COMPARISON(op, op_name)    \
-    template <typename R>                             \
-    ZEROERR_SFINAE_OP(Result, op)                     \
-    operator op(R&& rhs) {                            \
-        bool res = (lhs op rhs);                      \
-        info.cmp = assert_cmp::op_name;               \
-        if (info.is_false) res = !res;                \
-        std::stringstream ss;                         \
-        Printer           print(ss);                  \
-        print.isCompact  = true;                      \
-        print.line_break = "";                        \
-        print(lhs);                                   \
-        ss << #op " ";                                \
-        print(rhs);                                   \
-        if (!res) return Result(res, info, ss.str()); \
-        return Result(res, info);                     \
+#define ZEROERR_EXPRESSION_COMPARISON(op, op_name)        \
+    template <typename R>                                 \
+    ZEROERR_SFINAE_OP(ExprResult, op)                     \
+    operator op(R&& rhs) {                                \
+        bool res = (lhs op rhs);                          \
+        info.cmp = assert_cmp::op_name;                   \
+        if (info.is_false) res = !res;                    \
+        std::stringstream ss;                             \
+        Printer           print(ss);                      \
+        print.isCompact  = true;                          \
+        print.line_break = "";                            \
+        print(lhs);                                       \
+        ss << #op " ";                                    \
+        print(rhs);                                       \
+        if (!res) return ExprResult(res, info, ss.str()); \
+        return ExprResult(res, info);                     \
     }
 
 #define ZEROERR_FORBIT_EXPRESSION(rt, op)                                 \
@@ -107,35 +117,35 @@ struct deferred_false {
         return *this;                                                     \
     }
 
-struct Result {
+struct ExprResult {
     bool        passed;
     std::string decomp;
     assert_info info;
 
-    Result(bool passed, assert_info info, std::string decomposition = "")
+    ExprResult(bool passed, assert_info info, std::string decomposition = "")
         : passed(passed), info(info), decomp(decomposition) {}
 
-    ZEROERR_FORBIT_EXPRESSION(Result, &)
-    ZEROERR_FORBIT_EXPRESSION(Result, ^)
-    ZEROERR_FORBIT_EXPRESSION(Result, |)
-    ZEROERR_FORBIT_EXPRESSION(Result, &&)
-    ZEROERR_FORBIT_EXPRESSION(Result, ||)
-    ZEROERR_FORBIT_EXPRESSION(Result, ==)
-    ZEROERR_FORBIT_EXPRESSION(Result, !=)
-    ZEROERR_FORBIT_EXPRESSION(Result, <)
-    ZEROERR_FORBIT_EXPRESSION(Result, >)
-    ZEROERR_FORBIT_EXPRESSION(Result, <=)
-    ZEROERR_FORBIT_EXPRESSION(Result, >=)
-    ZEROERR_FORBIT_EXPRESSION(Result, +=)
-    ZEROERR_FORBIT_EXPRESSION(Result, -=)
-    ZEROERR_FORBIT_EXPRESSION(Result, *=)
-    ZEROERR_FORBIT_EXPRESSION(Result, /=)
-    ZEROERR_FORBIT_EXPRESSION(Result, %=)
-    ZEROERR_FORBIT_EXPRESSION(Result, <<=)
-    ZEROERR_FORBIT_EXPRESSION(Result, >>=)
-    ZEROERR_FORBIT_EXPRESSION(Result, &=)
-    ZEROERR_FORBIT_EXPRESSION(Result, ^=)
-    ZEROERR_FORBIT_EXPRESSION(Result, |=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, &)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, ^)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, |)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, &&)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, ||)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, ==)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, !=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, <)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, >)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, <=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, >=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, +=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, -=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, *=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, /=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, %=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, <<=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, >>=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, &=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, ^=)
+    ZEROERR_FORBIT_EXPRESSION(ExprResult, |=)
 };
 
 template <typename L>
@@ -145,15 +155,15 @@ struct Expression_lhs {
 
     explicit Expression_lhs(L&& in, assert_info info) : lhs(std::forward<L>(in)), info(info) {}
 
-    operator Result() {
+    operator ExprResult() {
         bool res = static_cast<bool>(lhs);
         if (info.is_false) res = !res;
         std::stringstream ss;
 
         Printer print(ss);
         print(lhs);
-        if (!res) return Result(res, info, ss.str());
-        return Result(res, info);
+        if (!res) return ExprResult(res, info, ss.str());
+        return ExprResult(res, info);
     }
 
     operator L() const { return lhs; }
@@ -218,8 +228,8 @@ struct AssertionData : std::exception {
     AssertionData(const char* file, unsigned line, const char* cond)
         : file(file), line(line), cond(cond) {}
 
-    void setResult(Result&& result) {
-        Result r(std::move(result));
+    void ExprsetResult(ExprResult&& result) {
+        ExprResult r(std::move(result));
         passed  = r.passed;
         info    = r.info;
         message = r.decomp;
@@ -257,23 +267,72 @@ struct context_helper;
 
 template <typename T>
 struct context_helper<T, true> {
-    static void setContext(AssertionData&, T) {}
+    static void setContext(AssertionData& data, T) {
+        if (data.passed) return;
+    }
 };
 
 template <typename T>
 struct context_helper<T, false> {
     static void setContext(AssertionData& data, T ctx) {
-        if (data.passed)
+        if (data.passed) {
             ctx->passed_as++;
-        else
-            switch (data.info.level) {
-                case assert_level::require:
-                case assert_level::check: ctx->failed_as++;
-                case assert_level::warn: ctx->warning_as++;
-            }
+            return;
+        }
+        switch (data.info.level) {
+            case assert_level::require:
+            case assert_level::check: ctx->failed_as++;
+            case assert_level::warn: ctx->warning_as++;
+        }
     }
 };
 }  // namespace detail
+
+#pragma endregion
+
+
+#pragma region matcher
+
+class CombinedMatcher;
+
+class IMatcher {
+public:
+    virtual ~IMatcher() = default;
+    // virtual operator bool() = 0;
+
+    std::string toString();
+
+    IMatcher&& operator&&(IMatcher&& other) const;
+    IMatcher&& operator||(const IMatcher&& other) const;
+    IMatcher&& operator!() const;
+
+protected:
+    // virtual std::string describe() const = 0;
+};
+
+class CombinedMatcher : public IMatcher {
+public:
+    CombinedMatcher(const IMatcher&& lhs, const IMatcher&& rhs)
+        : lhs(std::move(lhs)), rhs(std::move(rhs)) {}
+
+    const IMatcher&& lhs;
+    const IMatcher&& rhs;
+};
+
+class NotMatcher : public IMatcher {
+public:
+    NotMatcher(IMatcher& matcher) : matcher(std::move(matcher)) {}
+    const IMatcher&& matcher;
+};
+
+
+inline IMatcher&& IMatcher::operator&&(IMatcher&& other) const {
+    return std::move(CombinedMatcher(std::move(*this), std::move(other)));
+}
+
+template <typename T>
+struct Matcher {};
+
 
 #pragma endregion
 

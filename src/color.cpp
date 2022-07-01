@@ -1,17 +1,6 @@
 #include "zeroerr/color.h"
-
-#ifndef ZEROERR_NO_THREAD_SAFE
-#include <mutex>
-#endif
-
-#ifdef ZEROERR_OS_UNIX
-#include <unistd.h>
-#endif
-
-#ifdef ZEROERR_OS_WINDOWS
-#include <Windows.h>
-#endif
-
+#include "zeroerr/internal/console.h"
+#include "zeroerr/internal/threadsafe.h"
 
 #if !defined(ZEROERR_ALWAYS_COLORFUL) && !defined(ZEROERR_DISABLE_COLORFUL)
 namespace zeroerr {
@@ -127,31 +116,14 @@ void enableColorOutput() {
     BgWhite   = _BgWhite;
 }
 
-#ifdef ZEROERR_OS_UNIX
-bool isTerminalOutput(OutputStream stream) {
-    switch (stream) {
-        case STDOUT: return isatty(fileno(stdout)) != 0;
-        case STDERR: return isatty(fileno(stderr)) != 0;
-        default: return false;
-    }
-}
-#endif
-
-#ifdef ZEROERR_OS_WINDOWS
-bool isTerminalOutput(OutputStream stream) {
-    switch (stream) {
-        case STDOUT: return GetFileType(GetStdHandle(STD_OUTPUT_HANDLE)) == FILE_TYPE_CHAR;
-        case STDERR: return GetFileType(GetStdHandle(STD_ERROR_HANDLE)) == FILE_TYPE_CHAR;
-        default: return false;
-    }
-}
-#endif
 
 #ifndef ZEROERR_DISABLE_AUTO_INIT
 static struct ColorInit {
     ColorInit() {
         if (isTerminalOutput(STDERR)) {
             enableColorOutput();
+        } else {
+            disableColorOutput();
         }
     }
 } colorInit;

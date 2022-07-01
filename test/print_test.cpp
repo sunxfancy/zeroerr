@@ -1,12 +1,18 @@
 #define ZEROERR_ENABLE_PFR
+
+
 #include "zeroerr/print.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/dbg.h"
 #include "zeroerr/unittest.h"
 
+#include <complex>
 #include <iostream>
 #include <map>
+#include <memory>
+#include <tuple>
 #include <vector>
+
 
 using namespace zeroerr;
 
@@ -89,4 +95,12 @@ constexpr zeroerr::TestContext* test_expr = nullptr;
 TEST_CASE("outside of the test") {
     auto print = getStderrPrinter();
     outside_of_test();
+}
+
+TEST_CASE("print in stream") {
+    std::map<std::string, int> bar{{"a", 1}, {"b", 2}};
+
+    Printer print;
+    print.isCompact = true;
+    std::cerr << "map: " << print(bar) << std::endl;
 }

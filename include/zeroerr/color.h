@@ -1,6 +1,6 @@
 #pragma once
 
-#include "zeroerr/config.h"
+#include "zeroerr/internal/config.h"
 
 namespace zeroerr {
 
@@ -86,10 +86,6 @@ extern const char* BgWhite;
 
 extern void disableColorOutput();
 extern void enableColorOutput();
-
-enum OutputStream { STDOUT, STDERR };
-extern bool isTerminalOutput(OutputStream stream);
-
 
 #endif
 
