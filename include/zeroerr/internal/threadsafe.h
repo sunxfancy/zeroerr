@@ -1,5 +1,5 @@
 #pragma once
-#include "zeroerr/config.h"
+#include "zeroerr/internal/config.h"
 
 // Thread safety support
 #ifdef ZEROERR_NO_THREAD_SAFE

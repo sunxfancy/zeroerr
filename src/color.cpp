@@ -1,5 +1,5 @@
 #include "zeroerr/color.h"
-#include "zeroerr/threadsafe.h"
+#include "zeroerr/internal/threadsafe.h"
 
 #ifdef ZEROERR_OS_UNIX
 #include <unistd.h>

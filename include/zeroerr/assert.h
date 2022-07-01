@@ -1,7 +1,7 @@
 #pragma once
 
-#include "zeroerr/config.h"
-#include "zeroerr/debugbreak.h"
+#include "zeroerr/internal/config.h"
+#include "zeroerr/internal/debugbreak.h"
 #include "zeroerr/print.h"
 
 #include <cstdint>

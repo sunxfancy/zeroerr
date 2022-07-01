@@ -1,6 +1,6 @@
 #pragma once
 
-#include "zeroerr/config.h"
+#include "zeroerr/internal/config.h"
 
 #include <string>
 #include <vector>
