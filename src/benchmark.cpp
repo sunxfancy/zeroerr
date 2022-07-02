@@ -331,7 +331,7 @@ static inline double d(T t) noexcept {
     return static_cast<double>(t);
 }
 static inline double d(Clock::duration duration) noexcept {
-    return std::chrono::duration_cast<std::chrono::duration<double>>(duration).count();
+    return std::chrono::duration_cast<std::chrono::duration<double, std::nano>>(duration).count();
 }
 
 #pragma region BenchState
@@ -524,8 +524,7 @@ PerfCountSet<double> BenchResult::mean() const {
 
 void Benchmark::report() {
     static const char* names[] = {
-        "time_elaspsed", "page_faults",         "cpu_cycles",    "context_switches",
-        "instructions",  "branch_instructions", "branch_misses",
+        "elapsed(ns)", "page faults", "cpu_cycles", "ctx switch", "inst", "branch", "branch misses",
     };
     std::cerr << "" << title << ":" << std::endl;
 

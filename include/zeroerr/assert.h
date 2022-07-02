@@ -243,7 +243,7 @@ struct AssertionData : std::exception {
         }
 
         std::cerr << "Assertion Failed: " << std::endl;
-        std::cerr << "    " << cond << "  expends to  " << message << std::endl;
+        std::cerr << "    " << cond << "  expands to  " << message << std::endl;
         std::cerr << Dim << " (" << file << ":" << line << ")" << Reset << std::endl;
         return false;
     }

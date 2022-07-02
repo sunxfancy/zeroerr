@@ -97,7 +97,7 @@ void   moveResult(BenchState* state, std::string name);
 struct Benchmark {
     std::string title          = "benchmark";
     const char* op_unit        = "op";
-    const char* time_unit      = "ms";
+    const char* time_unit      = "ns";
     uint64_t    epochs         = 10;
     uint64_t    warmup         = 0;
     uint64_t    iter_per_epoch = 0;
