@@ -176,27 +176,38 @@ struct gen_seq<0, Is...> : seq<Is...> {};
  * third-party library Boost.PFR and enum can be supported using magic_enum.
  */
 struct Printer {
-    template <typename T, typename... V>
-    Printer& operator()(T value, V... others) {
-        PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
-        (*this)(std::forward<V>(others)...);
+    template <typename... Args>
+    Printer& operator()(Args&&... args) {
+        check_stream();
+        call(std::forward<Args>(args)...);
+        return *this;
+    }
+    template <typename T>
+    Printer& operator()(std::initializer_list<T>&& value) {
+        check_stream();
+        call(std::forward<decltype(value)>(value));
         return *this;
     }
 
+    void check_stream() {
+        if (use_stringstream && clear_stream_before_printing) {
+            auto& ss = static_cast<std::stringstream&>(os);
+            ss.str(std::string());
+            ss.clear();
+        }
+    }
+
+    template <typename T, typename... V>
+    void call(T value, V... others) {
+        PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
+        call(std::forward<V>(others)...);
+    }
+
     template <typename T>
-    Printer& operator()(T value) {
+    void call(T value) {
         PrinterExt(*this, std::forward<T>(value), 0, "", rank<max_rank>{});
         os << line_break;
         os.flush();
-        return *this;
-    }
-
-    template <typename T>
-    Printer& operator()(std::initializer_list<T> value) {
-        PrinterExt(*this, value, 0, " ", rank<max_rank>{});
-        os << line_break;
-        os.flush();
-        return *this;
     }
 
     Printer(std::ostream& os) : os(os) {}
@@ -211,7 +222,8 @@ struct Printer {
     int           indent     = 2;
     const char*   line_break = "\n";
     std::ostream& os;
-    bool          use_stringstream = false;
+    bool          use_stringstream             = false;
+    bool          clear_stream_before_printing = true;
 
     template <class T>
     static std::string type(const T& t) {
