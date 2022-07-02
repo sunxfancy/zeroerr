@@ -1,6 +1,9 @@
 #pragma once
 
+#include <zeroerr/dbg.h>
 #include <zeroerr/internal/config.h>
+#include <zeroerr/print.h>
+
 #include <ostream>
 #include <string>
 #include <vector>
@@ -58,7 +61,64 @@ public:
     std::string str(Config config = Config(), Style style = Table::getStyle("square_double_head"));
 
     void set_header(std::vector<std::string> _header) { header = _header; }
-    void add_row(std::vector<std::string> row) { cells.push_back(row); }
+    void add_row(std::initializer_list<std::string> _row) { cells.push_back(_row); }
+
+    template <typename T, typename... Args>
+    void push_back(std::vector<std::string>& row, T&& t, Args&&... args) {
+        _push_back(rank<2>{}, row, std::forward<T>(t));
+        push_back(row, std::forward<Args>(args)...);
+    }
+
+    template <typename T>
+    void push_back(std::vector<std::string>& row, T&& t) {
+        _push_back(rank<2>{}, row, std::forward<T>(t));
+    }
+
+
+    ZEROERR_ENABLE_IF(!ZEROERR_IS_CONTAINER)
+    _push_back(rank<0>, std::vector<std::string>& row, T&& t) {
+        Printer print;
+        print.isCompact  = true;
+        print.isQuoted   = false;
+        print.line_break = "";
+        print(std::forward<T>(t));
+        row.push_back(print.str());
+    }
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_STRING)
+    _push_back(rank<2>, std::vector<std::string>& row, T t) {
+        row.push_back(std::forward<std::string>(t));
+    }
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER)
+    _push_back(rank<1>, std::vector<std::string>& row, const T& t) {
+        for (auto& ele : t) {
+            Printer print;
+            print.isCompact  = true;
+            print.isQuoted   = false;
+            print.line_break = "";
+            print(ele);
+            row.push_back(print.str());
+        }
+    }
+
+    template <typename... Args>
+    void add_row(Args&&... args) {
+        std::vector<std::string> row;
+        push_back(row, std::forward<Args>(args)...);
+        cells.push_back(row);
+    }
+
+    template <typename T, typename... Args>
+    void add_rows(T&& t, Args&&... args) {
+        add_row(std::forward<T>(t));
+        add_rows(std::forward<Args>(args)...);
+    }
+
+    template <typename T>
+    void add_rows(T&& t) {
+        add_row(std::forward<T>(t));
+    }
 
 protected:
     std::string title;

@@ -53,3 +53,7 @@ Logging information can have customized category and only display one categroy b
 * color (if always enable)
   
 
+## The logo generation
+
+Thanks to the `tiv` tool:
+https://github.com/stefanhaustein/TerminalImageViewer

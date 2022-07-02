@@ -84,8 +84,8 @@ template <typename T, typename = void>
 struct is_container : std::false_type {};
 
 template <typename T>
-struct is_container<T, void_t<decltype(std::declval<T>().begin()),
-                              decltype(std::declval<T>().end()), typename T::value_type>>
+struct is_container<T,
+                    void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end())>>
     : std::true_type {};
 
 #if ZEROERR_CXX_STANDARD >= 17
@@ -185,7 +185,7 @@ struct Printer {
 
     template <typename T>
     Printer& operator()(T value) {
-        PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
+        PrinterExt(*this, std::forward<T>(value), 0, "", rank<max_rank>{});
         os << line_break;
         os.flush();
         return *this;

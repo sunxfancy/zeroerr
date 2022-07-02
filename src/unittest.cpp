@@ -17,6 +17,13 @@ static std::set<TestCase>& getRegisteredTests();
 
 UnitTest& UnitTest::parseArgs(int argc, char** argv) { return *this; }
 
+static inline std::string getFileName(std::string file) {
+    std::string fileName(file);
+    auto        p = fileName.find_last_of('/');
+    if (p != std::string::npos) fileName = fileName.substr(p + 1);
+    return fileName;
+}
+
 int UnitTest::run() {
     std::cout << "ZeroErr Unit Test";
     TestContext context;
@@ -24,8 +31,8 @@ int UnitTest::run() {
 
     for (auto& tc : detail::getRegisteredTests()) {
         std::cout << std::endl
-                  << "TEST CASE " << FgCyan << tc.name << Reset << Dim << " [" << tc.file << ":"
-                  << tc.line << "]" << Reset << std::endl
+                  << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
+                  << Reset << FgCyan << tc.name << Reset << std::endl
                   << std::endl;
         try {
             tc.func(&context);  // run the test case

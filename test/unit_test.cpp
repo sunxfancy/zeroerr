@@ -36,7 +36,6 @@ TEST_CASE("test function B") {
     std::cerr << "sizeof(A): " << collectA.objects.size() << std::endl;
     for (auto& a : collectA.objects) {
         for (int b : {1, 2, 5}) {
-            std::cerr << "check" << std::endl;
             A a_copy = a;
             B(&a_copy, b);
             CHECK(a_copy.k == b);

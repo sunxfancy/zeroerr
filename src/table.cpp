@@ -1,4 +1,6 @@
 #include "zeroerr/table.h"
+#include "zeroerr/assert.h"
+
 #include <algorithm>
 #include <map>
 #include <sstream>
@@ -272,12 +274,17 @@ inline std::string _rept(unsigned k, std::string j, Table::Style& s) {
 std::string Table::str(Config c, Table::Style s) {
     std::stringstream ss;
 
+    for (auto& row : cells) {
+        REQUIRE(row.size() == header.size());
+    }
+
     if (col_width.size() == 0) {
         for (int i = 0; i < header.size(); ++i) {
             unsigned max_width = 0;
             for (auto& row : cells) {
                 max_width = std::max<unsigned>(row[i].size(), max_width);
             }
+            max_width = std::max<unsigned>(max_width, header[i].size());
             col_width.push_back(max_width);
         }
     }
@@ -292,6 +299,7 @@ std::string Table::str(Config c, Table::Style s) {
 
     p = 4;
     for_row {
+        REQUIRE(col_width[i] >= header[i].size());
         ss << space << rep(remain(header[i]), space) << header[i] << space << (last ? right : bar);
     }
 
@@ -311,6 +319,7 @@ std::string Table::str(Config c, Table::Style s) {
         } else
             first = false;
         for_row {
+            REQUIRE(col_width[i] >= row[i].size());
             ss << space << rep(remain(row[i]), space) << row[i] << space << (last ? right : bar);
         }
     }

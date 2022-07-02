@@ -102,7 +102,7 @@ struct deferred_false {
         print.isCompact  = true;                          \
         print.line_break = "";                            \
         print(lhs);                                       \
-        ss << #op " ";                                    \
+        ss << " " #op " ";                                \
         print(rhs);                                       \
         if (!res) return ExprResult(res, info, ss.str()); \
         return ExprResult(res, info);                     \
@@ -237,13 +237,14 @@ struct AssertionData : std::exception {
         if (passed) return false;
 
         if (info.level == assert_level::require) {
-            std::cerr << "REQUIRE: ";
+            std::cerr << FgRed << "REQUIRE " << Reset;
         } else {
-            std::cerr << "CHECK: ";
+            std::cerr << FgYellow << "CHECK " << Reset;
         }
 
-        std::cerr << "Assertion Failed " << cond << ": " << message << " (" << file << ":" << line
-                  << ")" << std::endl;
+        std::cerr << "Assertion Failed: " << std::endl;
+        std::cerr << "    " << cond << "  expends to  " << message << std::endl;
+        std::cerr << Dim << " (" << file << ":" << line << ")" << Reset << std::endl;
         return false;
     }
 
