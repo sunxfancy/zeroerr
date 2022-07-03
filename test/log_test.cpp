@@ -28,14 +28,14 @@ TEST_CASE("speed test") {
     Benchmark bench("log speed test");
     bench
         .run("stringstream",
-             [&] {
+             [] {
                  std::stringstream ss;
                  ss << "hello world"
                     << "\n";
                  doNotOptimizeAway(ss);
              })
         .run("log",
-             [&] {
+             [] {
                  LOG(INFO) << "hello world"
                            << "\n";
              })

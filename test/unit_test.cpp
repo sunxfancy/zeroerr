@@ -36,10 +36,23 @@ TEST_CASE("test function B") {
     std::cerr << "sizeof(A): " << collectA.objects.size() << std::endl;
     for (auto& a : collectA.objects) {
         for (int b : {1, 2, 5}) {
-            std::cerr << "check" << std::endl;
             A a_copy = a;
             B(&a_copy, b);
             CHECK(a_copy.k == b);
         }
     }
+}
+
+
+TEST_CASE("assert match") {
+    auto p = start_with("test");
+    std::cerr << "🏁 p: " << p->match("test your string") << std::endl;
+    CHECK(start_with("test")->match("test your string"));
+}
+
+TEST_CASE("assert combine matcher") {
+    auto p = start_with("test") || start_with("check");
+
+    dbg(p->match("test your string"));
+    dbg(p->match("check your string"));
 }

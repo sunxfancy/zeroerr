@@ -1,4 +1,5 @@
 #include "zeroerr/benchmark.h"
+#include "zeroerr/table.h"
 
 #include <cstring>
 #include <iostream>
@@ -330,7 +331,7 @@ static inline double d(T t) noexcept {
     return static_cast<double>(t);
 }
 static inline double d(Clock::duration duration) noexcept {
-    return std::chrono::duration_cast<std::chrono::duration<double>>(duration).count();
+    return std::chrono::duration_cast<std::chrono::duration<double, std::nano>>(duration).count();
 }
 
 #pragma region BenchState
@@ -441,11 +442,6 @@ void        destroyBenchState(BenchState* state) { delete state; }
 
 size_t getNumIter(BenchState* state) {
     state->nextStage();
-    printf("%lu  %s %lu\n", state->numIteration,
-           state->stage == BenchState::WarmUp      ? "warmup"
-           : state->stage == BenchState::UpScaling ? "upscale"
-                                                   : "measurement",
-           state->numEpoch);
     return state->numIteration;
 }
 
@@ -528,27 +524,24 @@ PerfCountSet<double> BenchResult::mean() const {
 
 void Benchmark::report() {
     static const char* names[] = {
-        "time_elaspsed", "page_faults",         "cpu_cycles",    "context_switches",
-        "instructions",  "branch_instructions", "branch_misses",
+        "elapsed(ns)", "page faults", "cpu_cycles", "ctx switch", "inst", "branch", "branch misses",
     };
-    std::cout << "======< " << title << " >======" << std::endl;
-    std::cout << "                 ";
+    std::cerr << "" << title << ":" << std::endl;
+
+    std::vector<std::string> headers{""};
     for (int i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
-        if (result[0].has.data[i]) std::cout << (i ? "| " : "") << names[i];
+        if (result[0].has.data[i]) headers.push_back(names[i]);
     }
-    std::cout << std::endl;
-    int i = 0;
+    Table output;
+    output.set_header(headers);
     for (auto& row : result) {
-        auto result = row.average();
-        std::cerr << row.name << " | " << result.timeElapsed();
-        for (int j = 1; j < 7; ++j) {
-            if (row.has.data[j]) {
-                std::cerr << " | " << result.data[j];
-            }
-        }
-        std::cout << std::endl;
-        ++i;
+        auto                result = row.average();
+        std::vector<double> values;
+        for (int j = 0; j < 7; ++j)
+            if (row.has.data[j]) values.push_back(result.data[j]);
+        output.add_row(row.name, values);
     }
+    std::cerr << output.str() << std::endl;
 }
 
 

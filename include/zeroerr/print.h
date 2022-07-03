@@ -84,8 +84,8 @@ template <typename T, typename = void>
 struct is_container : std::false_type {};
 
 template <typename T>
-struct is_container<T, void_t<decltype(std::declval<T>().begin()),
-                              decltype(std::declval<T>().end()), typename T::value_type>>
+struct is_container<T,
+                    void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end())>>
     : std::true_type {};
 
 #if ZEROERR_CXX_STANDARD >= 17
@@ -176,27 +176,38 @@ struct gen_seq<0, Is...> : seq<Is...> {};
  * third-party library Boost.PFR and enum can be supported using magic_enum.
  */
 struct Printer {
+    template <typename... Args>
+    Printer& operator()(Args&&... args) {
+        check_stream();
+        call(std::forward<Args>(args)...);
+        return *this;
+    }
+    template <typename T>
+    Printer& operator()(std::initializer_list<T>&& value) {
+        check_stream();
+        call(std::forward<decltype(value)>(value));
+        return *this;
+    }
+
+    void check_stream() {
+        if (use_stringstream && clear_stream_before_printing) {
+            auto& ss = static_cast<std::stringstream&>(os);
+            ss.str(std::string());
+            ss.clear();
+        }
+    }
+
     template <typename T, typename... V>
-    Printer& operator()(T value, V... others) {
+    void call(T value, V... others) {
         PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
-        (*this)(std::forward<V>(others)...);
-        return *this;
+        call(std::forward<V>(others)...);
     }
 
     template <typename T>
-    Printer& operator()(T value) {
-        PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
+    void call(T value) {
+        PrinterExt(*this, std::forward<T>(value), 0, "", rank<max_rank>{});
         os << line_break;
         os.flush();
-        return *this;
-    }
-
-    template <typename T>
-    Printer& operator()(std::initializer_list<T> value) {
-        PrinterExt(*this, value, 0, " ", rank<max_rank>{});
-        os << line_break;
-        os.flush();
-        return *this;
     }
 
     Printer(std::ostream& os) : os(os) {}
@@ -211,7 +222,8 @@ struct Printer {
     int           indent     = 2;
     const char*   line_break = "\n";
     std::ostream& os;
-    bool          use_stringstream = false;
+    bool          use_stringstream             = false;
+    bool          clear_stream_before_printing = true;
 
     template <class T>
     static std::string type(const T& t) {
@@ -348,8 +360,10 @@ struct Printer {
 #endif
     }
 
+    std::string str() const { return static_cast<std::stringstream&>(os).str(); }
+
     friend std::ostream& operator<<(std::ostream& os, const Printer& P) {
-        if (P.use_stringstream) os << static_cast<std::stringstream&>(P.os).str();
+        if (P.use_stringstream) os << P.str();
         return os;
     }
 };

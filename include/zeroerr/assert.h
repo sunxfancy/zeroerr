@@ -7,7 +7,6 @@
 #include <cstdint>
 #include <exception>
 #include <iostream>
-#include <sstream>
 
 #pragma region define macros
 
@@ -24,7 +23,7 @@
                                   is_false};                                                   \
                                                                                                \
         zeroerr::AssertionData data(__FILE__, __LINE__, #cond);                                \
-        data.ExprsetResult(std::move(zeroerr::ExpressionDecomposer(info) << cond));            \
+        data.setResult(std::move(zeroerr::ExpressionDecomposer(info) << cond));                \
         zeroerr::detail::context_helper<                                                       \
             decltype(_ZEROERR_TEST_CONTEXT),                                                   \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                      \
@@ -103,7 +102,7 @@ struct deferred_false {
         print.isCompact  = true;                          \
         print.line_break = "";                            \
         print(lhs);                                       \
-        ss << #op " ";                                    \
+        ss << " " #op " ";                                \
         print(rhs);                                       \
         if (!res) return ExprResult(res, info, ss.str()); \
         return ExprResult(res, info);                     \
@@ -158,11 +157,9 @@ struct Expression_lhs {
     operator ExprResult() {
         bool res = static_cast<bool>(lhs);
         if (info.is_false) res = !res;
-        std::stringstream ss;
 
-        Printer print(ss);
-        print(lhs);
-        if (!res) return ExprResult(res, info, ss.str());
+        Printer print;
+        if (!res) return ExprResult(res, info, print(lhs).str());
         return ExprResult(res, info);
     }
 
@@ -228,7 +225,7 @@ struct AssertionData : std::exception {
     AssertionData(const char* file, unsigned line, const char* cond)
         : file(file), line(line), cond(cond) {}
 
-    void ExprsetResult(ExprResult&& result) {
+    void setResult(ExprResult&& result) {
         ExprResult r(std::move(result));
         passed  = r.passed;
         info    = r.info;
@@ -239,13 +236,14 @@ struct AssertionData : std::exception {
         if (passed) return false;
 
         if (info.level == assert_level::require) {
-            std::cerr << "REQUIRE: ";
+            std::cerr << FgRed << "REQUIRE " << Reset;
         } else {
-            std::cerr << "CHECK: ";
+            std::cerr << FgYellow << "CHECK " << Reset;
         }
 
-        std::cerr << "Assertion Failed " << cond << ": " << message << " (" << file << ":" << line
-                  << ")" << std::endl;
+        std::cerr << "Assertion Failed: " << std::endl;
+        std::cerr << "    " << cond << "  expands to  " << message << std::endl;
+        std::cerr << Dim << " (" << file << ":" << line << ")" << Reset << std::endl;
         return false;
     }
 
@@ -281,8 +279,8 @@ struct context_helper<T, false> {
         }
         switch (data.info.level) {
             case assert_level::require:
-            case assert_level::check: ctx->failed_as++;
-            case assert_level::warn: ctx->warning_as++;
+            case assert_level::check: ctx->failed_as++; break;
+            case assert_level::warn: ctx->warning_as++; break;
         }
     }
 };
@@ -293,45 +291,114 @@ struct context_helper<T, false> {
 
 #pragma region matcher
 
-class CombinedMatcher;
 
+template <typename T>
 class IMatcher {
 public:
     virtual ~IMatcher() = default;
-    // virtual operator bool() = 0;
 
-    std::string toString();
 
-    IMatcher&& operator&&(IMatcher&& other) const;
-    IMatcher&& operator||(const IMatcher&& other) const;
-    IMatcher&& operator!() const;
+    virtual bool match(const T&) const = 0;
+};
+
+template <typename T>
+class IMatcherRef {
+public:
+    IMatcherRef(const IMatcher<T>* ptr) : p(ptr) {}
+    IMatcherRef(const IMatcherRef&) = delete;
+
+    IMatcherRef(IMatcherRef&& other) {
+        p       = std::move(other.p);
+        other.p = nullptr;
+    }
+    void operator=(IMatcherRef&& other) {
+        p       = std::move(other.p);
+        other.p = nullptr;
+    }
+    IMatcherRef& operator=(const IMatcherRef&) = delete;
+    ~IMatcherRef() {
+        if (p) delete p;
+    }
+
+
+    IMatcherRef operator&&(IMatcherRef&& other);
+    IMatcherRef operator||(IMatcherRef&& other);
+    IMatcherRef operator!();
+
+    const IMatcher<T>* operator->() const { return p; }
 
 protected:
-    // virtual std::string describe() const = 0;
+    const IMatcher<T>* p = nullptr;
 };
 
-class CombinedMatcher : public IMatcher {
+
+template <typename T>
+class CombinedMatcher : public IMatcher<T> {
 public:
-    CombinedMatcher(const IMatcher&& lhs, const IMatcher&& rhs)
-        : lhs(std::move(lhs)), rhs(std::move(rhs)) {}
+    CombinedMatcher(IMatcherRef<T>&& lhs, IMatcherRef<T>&& rhs, bool is_and)
+        : lhs(std::move(lhs)), rhs(std::move(rhs)), is_and(is_and) {}
 
-    const IMatcher&& lhs;
-    const IMatcher&& rhs;
+    IMatcherRef<T> lhs;
+    IMatcherRef<T> rhs;
+    bool           is_and;
+
+    virtual bool match(const T& t) const override {
+        if (is_and) {
+            return lhs->match(t) && rhs->match(t);
+        } else {
+            return lhs->match(t) || rhs->match(t);
+        }
+    }
 };
 
-class NotMatcher : public IMatcher {
+template <typename T>
+class NotMatcher : public IMatcher<T> {
 public:
-    NotMatcher(IMatcher& matcher) : matcher(std::move(matcher)) {}
-    const IMatcher&& matcher;
+    NotMatcher(IMatcherRef<T>&& matcher) : matcher(std::move(matcher)) {}
+    IMatcherRef<T> matcher;
+
+    virtual bool match(const T& t) const override { return !matcher->match(t); }
 };
 
-
-inline IMatcher&& IMatcher::operator&&(IMatcher&& other) const {
-    return std::move(CombinedMatcher(std::move(*this), std::move(other)));
+template <typename T>
+inline IMatcherRef<T> IMatcherRef<T>::operator&&(IMatcherRef<T>&& other) {
+    return new CombinedMatcher<T>(std::move(*this), std::move(other), true);
 }
 
 template <typename T>
-struct Matcher {};
+inline IMatcherRef<T> IMatcherRef<T>::operator||(IMatcherRef<T>&& other) {
+    return new CombinedMatcher<T>(std::move(*this), std::move(other), false);
+}
+
+template <typename T>
+inline IMatcherRef<T> IMatcherRef<T>::operator!() {
+    return new NotMatcher<T>(std::move(*this));
+}
+
+
+template <typename T>
+struct StartWithMatcher : public IMatcher<T> {
+    StartWithMatcher(const T& s) : start(s) {}
+    T start;
+
+    virtual bool match(const T& t) const override {
+        bool result = true;
+        for (auto i = start.begin(), j = t.begin(); i != start.end(); ++i, ++j) {
+            if (j == t.end() || *i != *j) {
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+};
+
+template <typename T>
+typename std::enable_if<std::is_constructible<std::string, T>::value,
+                        IMatcherRef<std::string>>::type
+start_with(T&& s) {
+    return new StartWithMatcher<std::string>(std::string(s));
+}
 
 
 #pragma endregion

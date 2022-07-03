@@ -43,3 +43,17 @@ After assertion failed, the logging result will print automatically even if you 
 
 10. Logging Category 
 Logging information can have customized category and only display one categroy based on your assertion or configuration
+
+
+## Header-only libraries
+
+* dbg
+* print (without use extern functions)
+* assert
+* color (if always enable)
+  
+
+## The logo generation
+
+Thanks to the `tiv` tool:
+https://github.com/stefanhaustein/TerminalImageViewer
