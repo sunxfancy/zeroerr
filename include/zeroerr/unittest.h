@@ -25,19 +25,23 @@ public:
     unsigned passed = 0, warning = 0, failed = 0, skipped = 0;
     unsigned passed_as = 0, warning_as = 0, failed_as = 0, skipped_as = 0;
 
-    void add(TestContext&& local) {
+    int add(TestContext&& local) {
+        int type = 0;
         if (local.failed_as == 0 && local.warning_as == 0) {
             passed += 1;
         } else if (local.failed_as == 0) {
             warning += 1;
+            type = 1;
         } else {
             failed += 1;
+            type = 2;
         }
         passed_as += local.passed_as;
         warning_as += local.warning_as;
         failed_as += local.failed_as;
 
         memset(&local, 0, sizeof(local));
+        return type;
     }
 };
 
@@ -45,6 +49,7 @@ class UnitTest {
 public:
     UnitTest& parseArgs(int argc, char** argv);
     int       run();
+    bool      silent = true;
 };
 
 struct TestCase {
