@@ -279,8 +279,8 @@ struct context_helper<T, false> {
         }
         switch (data.info.level) {
             case assert_level::require:
-            case assert_level::check: ctx->failed_as++;
-            case assert_level::warn: ctx->warning_as++;
+            case assert_level::check: ctx->failed_as++; break;
+            case assert_level::warn: ctx->warning_as++; break;
         }
     }
 };

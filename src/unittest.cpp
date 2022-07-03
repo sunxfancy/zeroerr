@@ -26,8 +26,7 @@ static inline std::string getFileName(std::string file) {
 
 int UnitTest::run() {
     std::cout << "ZeroErr Unit Test";
-    TestContext context;
-    unsigned    passed = 0, warning = 0, failed = 0, skipped = 0;
+    TestContext context, sum;
 
     for (auto& tc : detail::getRegisteredTests()) {
         std::cout << std::endl
@@ -37,22 +36,25 @@ int UnitTest::run() {
         try {
             tc.func(&context);  // run the test case
         } catch (const AssertionData& e) {
-            failed++;
             continue;
         } catch (const std::exception& e) {
-            failed++;
+            if (context.failed_as == 0) {
+                context.failed_as = 1;
+            }
             continue;
         }
-        passed++;
+        sum.add(std::move(context));
     }
     std::cout << "----------------------------------------------------------------" << std::endl;
     std::cout << "             " << FgGreen << "PASSED" << Reset << "   |   " << FgYellow
               << "WARNING" << Reset << "   |   " << FgRed << "FAILED" << Reset << "   |   " << Dim
               << "SKIPPED" << Reset << std::endl;
-    std::cout << "TEST CASE:   " << std::setw(6) << passed << "       " << std::setw(7) << warning
-              << "       " << std::setw(6) << failed << "       " << std::setw(7) << skipped
-              << std::endl;
-    std::cout << "ASSERTION: " << std::endl;
+    std::cout << "TEST CASE:   " << std::setw(6) << sum.passed << "       " << std::setw(7)
+              << sum.warning << "       " << std::setw(6) << sum.failed << "       " << std::setw(7)
+              << sum.skipped << std::endl;
+    std::cout << "ASSERTION:   " << std::setw(6) << sum.passed_as << "       " << std::setw(7)
+              << sum.warning_as << "       " << std::setw(6) << sum.failed_as << "       "
+              << std::setw(7) << sum.skipped_as << std::endl;
     return 0;
 }
 
