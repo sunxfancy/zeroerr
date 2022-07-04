@@ -1,6 +1,7 @@
 #include "zeroerr/unittest.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/color.h"
+#include "zeroerr/internal/threadsafe.h"
 
 #include <iomanip>
 #include <iostream>
@@ -15,7 +16,25 @@ namespace detail {
 static std::set<TestCase>& getRegisteredTests();
 }
 
-UnitTest& UnitTest::parseArgs(int argc, char** argv) { return *this; }
+int TestContext::add(TestContext&& local) {
+    int type = 0;
+    if (local.failed_as == 0 && local.warning_as == 0) {
+        passed += 1;
+    } else if (local.failed_as == 0) {
+        warning += 1;
+        type = 1;
+    } else {
+        failed += 1;
+        type = 2;
+    }
+    passed_as += local.passed_as;
+    warning_as += local.warning_as;
+    failed_as += local.failed_as;
+
+    memset(&local, 0, sizeof(local));
+    return type;
+}
+
 
 static inline std::string getFileName(std::string file) {
     std::string fileName(file);
@@ -24,35 +43,72 @@ static inline std::string getFileName(std::string file) {
     return fileName;
 }
 
-int UnitTest::run() {
-    std::cout << "ZeroErr Unit Test";
-    TestContext context, sum;
+SubCaseReg::SubCaseReg(std::string name, std::string file, unsigned line, TestContext* context) {
+    std::cerr << "SUBCASE " << Dim << "[" << getFileName(file) << ":" << line << "] " << Reset
+              << FgCyan << name << Reset << std::endl;
+}
 
+void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
+    TestContext local;
+    try {
+        op(&local);
+    } catch (const AssertionData& e) {
+    } catch (const std::exception& e) {
+        if (local.failed_as == 0) {
+            local.failed_as = 1;
+        }
+    }
+    context->add(std::move(local));
+}
+
+UnitTest& UnitTest::parseArgs(int argc, char** argv) { return *this; }
+
+
+static std::string insertIndentation(std::string str) {
+    std::stringstream result;
+    std::stringstream ss(str);
+
+    std::string line;
+    while (std::getline(ss, line)) {
+        result << line << std::endl << "    ";
+    }
+
+    return result.str();
+}
+
+int UnitTest::run() {
+    std::cerr << "ZeroErr Unit Test" << std::endl;
+    TestContext     context, sum;
+    std::streambuf* orig_buf;
+    std::stringbuf* new_buf = new std::stringbuf();
     for (auto& tc : detail::getRegisteredTests()) {
-        std::cout << std::endl
-                  << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
+        orig_buf = std::cerr.rdbuf();
+        std::cerr.rdbuf(new_buf);
+        std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
                   << Reset << FgCyan << tc.name << Reset << std::endl
                   << std::endl;
         try {
             tc.func(&context);  // run the test case
         } catch (const AssertionData& e) {
-            continue;
         } catch (const std::exception& e) {
             if (context.failed_as == 0) {
                 context.failed_as = 1;
             }
-            continue;
         }
-        sum.add(std::move(context));
+        int type = sum.add(std::move(context));
+        std::cerr.rdbuf(orig_buf);
+        if (!(silent && type == 0)) std::cerr << insertIndentation(new_buf->str()) << std::endl;
+        new_buf->str("");
     }
-    std::cout << "----------------------------------------------------------------" << std::endl;
-    std::cout << "             " << FgGreen << "PASSED" << Reset << "   |   " << FgYellow
+    delete new_buf;
+    std::cerr << "----------------------------------------------------------------" << std::endl;
+    std::cerr << "             " << FgGreen << "PASSED" << Reset << "   |   " << FgYellow
               << "WARNING" << Reset << "   |   " << FgRed << "FAILED" << Reset << "   |   " << Dim
               << "SKIPPED" << Reset << std::endl;
-    std::cout << "TEST CASE:   " << std::setw(6) << sum.passed << "       " << std::setw(7)
+    std::cerr << "TEST CASE:   " << std::setw(6) << sum.passed << "       " << std::setw(7)
               << sum.warning << "       " << std::setw(6) << sum.failed << "       " << std::setw(7)
               << sum.skipped << std::endl;
-    std::cout << "ASSERTION:   " << std::setw(6) << sum.passed_as << "       " << std::setw(7)
+    std::cerr << "ASSERTION:   " << std::setw(6) << sum.passed_as << "       " << std::setw(7)
               << sum.warning_as << "       " << std::setw(6) << sum.failed_as << "       "
               << std::setw(7) << sum.skipped_as << std::endl;
     return 0;
@@ -140,7 +196,7 @@ public:
         mutable XmlWriter* m_writer = nullptr;
     };
 
-    XmlWriter(std::ostream& os = std::cout);
+    XmlWriter(std::ostream& os = std::cerr);
     ~XmlWriter();
 
     XmlWriter(XmlWriter const&)            = delete;

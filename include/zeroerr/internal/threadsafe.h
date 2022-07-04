@@ -6,12 +6,14 @@
 
 #define ZEROERR_MUTEX(x)
 #define ZEROERR_LOCK(x)
-
+#define ZEROERR_ATOMIC(x) x
 #else
 
-#define ZEROERR_MUTEX(x) static std::mutex x;
-#define ZEROERR_LOCK(x)  std::lock_guard<std::mutex> lock(x);
+#define ZEROERR_MUTEX(x)  static std::mutex x;
+#define ZEROERR_LOCK(x)   std::lock_guard<std::mutex> lock(x);
+#define ZEROERR_ATOMIC(x) std::atomic<x>
 
+#include <atomic>
 #include <mutex>
 
 #endif

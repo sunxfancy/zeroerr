@@ -18,7 +18,7 @@
 #endif
 
 #define ZEROERR_ASSERT(cond, level, throws, is_false, ...)                                     \
-    do {                                                                                       \
+    ZEROERR_FUNC_SCOPE_BEGIN {                                                                 \
         zeroerr::assert_info info{zeroerr::assert_level::level, zeroerr::assert_throw::throws, \
                                   is_false};                                                   \
                                                                                                \
@@ -31,7 +31,9 @@
         ZEROERR_G_CONTEXT_SCOPE(data);                                                         \
         if (data.log()) debug_break();                                                         \
         data();                                                                                \
-    } while (0)
+        ZEROERR_FUNC_SCOPE_RET(data.passed);                                                   \
+    }                                                                                          \
+    ZEROERR_FUNC_SCOPE_END
 
 
 #ifdef ZEROERR_NO_ASSERT

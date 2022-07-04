@@ -18,12 +18,12 @@ using namespace zeroerr;
 
 TEST_CASE("print_test") {
     if (detail::is_streamable<std::ostream, int>::value) {
-        std::cout << "int is streamable" << std::endl;
+        std::cerr << "int is streamable" << std::endl;
     } else {
-        std::cout << "int is not streamable" << std::endl;
+        std::cerr << "int is not streamable" << std::endl;
     }
 
-    std::cout << "Print Test Start!" << std::endl;
+    std::cerr << "Print Test Start!" << std::endl;
 
     auto print = getStderrPrinter();
     print(1, 2, 3);
@@ -58,9 +58,9 @@ TEST_CASE("print_test") {
     std::map<std::string, int> bar{{"a", 1}, {"b", 2}};
 
     if (zeroerr::detail::ele_type_is_pair<decltype(bar)>::value) {
-        std::cout << "bar is a pair" << std::endl;
+        std::cerr << "bar is a pair" << std::endl;
     } else {
-        std::cout << "bar is not a pair" << std::endl;
+        std::cerr << "bar is not a pair" << std::endl;
     }
 
     CHECK(a == 2);

@@ -54,3 +54,13 @@
 #ifdef ZEROERR_OS_LINUX
 #define ZEROERR_PERF
 #endif
+
+#ifdef ZEROERR_DISABLE_ASSERTS_RETURN_VALUES
+#define ZEROERR_FUNC_SCOPE_BEGIN  do
+#define ZEROERR_FUNC_SCOPE_END    while (0)
+#define ZEROERR_FUNC_SCOPE_RET(v) (void)0
+#else
+#define ZEROERR_FUNC_SCOPE_BEGIN  [&]
+#define ZEROERR_FUNC_SCOPE_END    ()
+#define ZEROERR_FUNC_SCOPE_RET(v) return v
+#endif

@@ -56,3 +56,28 @@ TEST_CASE("assert combine matcher") {
     dbg(p->match("test your string"));
     dbg(p->match("check your string"));
 }
+
+
+TEST_CASE("assert in if") {
+    int a = 0;
+    if (CHECK(a == 1)) {
+        std::cerr << "a == 1" << std::endl;
+    }
+}
+
+
+class test_fixture {
+public:
+    test_fixture() { std::cerr << "test_fixture()" << std::endl; }
+    ~test_fixture() { std::cerr << "~test_fixture()" << std::endl; }
+
+    int getK() { return 1; }
+};
+
+TEST_CASE_FIXTURE(test_fixture, "test fixture") { dbg(getK()); }
+
+
+TEST_CASE("test sub cases") {
+    SUB_CASE("sub case 1") { CHECK(1 == 1); };
+    SUB_CASE("sub case 2") { CHECK(1 == 2); };
+}
