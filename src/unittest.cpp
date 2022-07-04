@@ -1,6 +1,7 @@
 #include "zeroerr/unittest.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/color.h"
+#include "zeroerr/internal/threadsafe.h"
 
 #include <iomanip>
 #include <iostream>
@@ -15,7 +16,25 @@ namespace detail {
 static std::set<TestCase>& getRegisteredTests();
 }
 
-UnitTest& UnitTest::parseArgs(int argc, char** argv) { return *this; }
+int TestContext::add(TestContext&& local) {
+    int type = 0;
+    if (local.failed_as == 0 && local.warning_as == 0) {
+        passed += 1;
+    } else if (local.failed_as == 0) {
+        warning += 1;
+        type = 1;
+    } else {
+        failed += 1;
+        type = 2;
+    }
+    passed_as += local.passed_as;
+    warning_as += local.warning_as;
+    failed_as += local.failed_as;
+
+    memset(&local, 0, sizeof(local));
+    return type;
+}
+
 
 static inline std::string getFileName(std::string file) {
     std::string fileName(file);
@@ -23,6 +42,27 @@ static inline std::string getFileName(std::string file) {
     if (p != std::string::npos) fileName = fileName.substr(p + 1);
     return fileName;
 }
+
+SubCaseReg::SubCaseReg(std::string name, std::string file, unsigned line, TestContext* context) {
+    std::cerr << "SUBCASE " << Dim << "[" << getFileName(file) << ":" << line << "] " << Reset
+              << FgCyan << name << Reset << std::endl;
+}
+
+void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
+    TestContext local;
+    try {
+        op(&local);
+    } catch (const AssertionData& e) {
+    } catch (const std::exception& e) {
+        if (local.failed_as == 0) {
+            local.failed_as = 1;
+        }
+    }
+    context->add(std::move(local));
+}
+
+UnitTest& UnitTest::parseArgs(int argc, char** argv) { return *this; }
+
 
 static std::string insertIndentation(std::string str) {
     std::stringstream result;

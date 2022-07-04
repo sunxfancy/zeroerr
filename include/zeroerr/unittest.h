@@ -3,6 +3,7 @@
 #include "zeroerr/internal/config.h"
 
 #include <cstring>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -16,7 +17,27 @@
 
 #define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
 
-#define SUB_CASE(name)
+#define SUB_CASE(name)                                                   \
+    zeroerr::SubCaseReg(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
+        << [](zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)
+
+#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
+    class classname : public fixture {                                                       \
+    public:                                                                                  \
+        void funcname(zeroerr::TestContext*);                                                \
+    };                                                                                       \
+    static void ZEROERR_CAT(call_, funcname)(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT) { \
+        classname instance;                                                                  \
+        instance.funcname(_ZEROERR_TEST_CONTEXT);                                            \
+    }                                                                                        \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \
+        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname)});                           \
+    inline void classname::funcname(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT)
+
+#define TEST_CASE_FIXTURE(fixture, name)                                \
+    ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
+                              ZEROERR_NAMEGEN(_zeroerr_test_method), name)
+
 
 namespace zeroerr {
 
@@ -25,31 +46,14 @@ public:
     unsigned passed = 0, warning = 0, failed = 0, skipped = 0;
     unsigned passed_as = 0, warning_as = 0, failed_as = 0, skipped_as = 0;
 
-    int add(TestContext&& local) {
-        int type = 0;
-        if (local.failed_as == 0 && local.warning_as == 0) {
-            passed += 1;
-        } else if (local.failed_as == 0) {
-            warning += 1;
-            type = 1;
-        } else {
-            failed += 1;
-            type = 2;
-        }
-        passed_as += local.passed_as;
-        warning_as += local.warning_as;
-        failed_as += local.failed_as;
-
-        memset(&local, 0, sizeof(local));
-        return type;
-    }
+    int add(TestContext&& local);
 };
 
 class UnitTest {
 public:
     UnitTest& parseArgs(int argc, char** argv);
     int       run();
-    bool      silent = true;
+    bool      silent = false;
 };
 
 struct TestCase {
@@ -58,6 +62,14 @@ struct TestCase {
     unsigned    line;
     void (*func)(TestContext*);
     bool operator<(const TestCase& rhs) const;
+};
+
+struct SubCaseReg {
+    SubCaseReg(std::string name, std::string file, unsigned line, TestContext* context);
+    ~SubCaseReg() {}
+    TestContext* context;
+
+    void operator<<(std::function<void(TestContext*)> op);
 };
 
 
