@@ -7,27 +7,53 @@ if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
+option(COLORFUL_OUTPUT "Use colorful output(ON, OFF, AUTO)" "AUTO")
+
+if(COLORFUL_OUTPUT EQUAL "ON")
+    add_definitions(-DZEROERR_ALWAYS_COLORFUL)
+endif()
+
+if(COLORFUL_OUTPUT EQUAL "OFF")
+    add_definitions(-DZEROERR_DISABLE_COLORFUL)
+endif()
+
+option(ENABLE_THREAD_SAFE "Enable thread-safe(ON, OFF)" ON)
+
+if(NOT ENABLE_THREAD_SAFE)
+    add_definitions(-DZEROERR_NO_THREAD_SAFE)
+endif()
+
+option(ENABLE_AUTO_INIT "Enable auto-init(ON, OFF)" ON)
+
+if(NOT ENABLE_AUTO_INIT)
+    add_definitions(-DZEROERR_DISABLE_AUTO_INIT)
+endif()
+
+option(USE_MOLD "Use mold for linking" ON)
+
+if(USE_MOLD)
+    find_program(HAS_MOLD "mold")
+
+    if(HAS_MOLD)
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fuse-ld=mold")
+        endif()
+
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+            if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 12.1)
+                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fuse-ld=mold")
+            else()
+            endif()
+        endif()
+    endif()
+endif()
+
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/third_party)
 
 file(GLOB_RECURSE source_files ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 add_library(zeroerr STATIC ${source_files})
-
-find_program(HAS_MOLD "mold")
-
-if(HAS_MOLD)
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fuse-ld=mold")
-    endif()
-
-    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 12.1)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fuse-ld=mold")
-        else()
-        endif()
-    endif()
-endif()
 
 # if(ENABLE_SAN)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize-recover=all -fsanitize=address -fsanitize=undefined -fsanitize=float-divide-by-zero -fsanitize=float-cast-overflow -fno-sanitize=null -fno-sanitize=alignment")
