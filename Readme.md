@@ -44,6 +44,14 @@ After assertion failed, the logging result will print automatically even if you 
 10. Logging Category 
 Logging information can have customized category and only display one categroy based on your assertion or configuration
 
+11. Logging for Unit Testing
+You can use a correct logging result as your unit testing comparsion. So you just need to manually verify your log once and setup it as baseline comparsion. The unit testing framework will use that as the result to verify unit testing
+
+12. Structured Logging
+We can support output structured information directly into plain text, json, logfmt, or other custom format
+
+13. Automatic Tracing with logging
+While logging at the end, we can record the time consuming for this function.
 
 ## Header-only libraries
 

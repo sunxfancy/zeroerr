@@ -14,9 +14,12 @@ class FileLogger : public Logger {};
 
 class StderrLogger : public Logger {};
 
+constexpr unsigned logbuffer_size = 65536;
+
+static char data[logbuffer_size];
 
 LogMessage::LogMessage(const char* file, unsigned line, LogSeverity severity)
-    : m_stream(new char[1024], 1024, 0) {}
+    : m_stream(data, logbuffer_size, 0) {}
 
 LogMessage::~LogMessage() { flush(); }
 

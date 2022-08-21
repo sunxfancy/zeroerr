@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(ZeroErr LANGUAGES CXX)
+project(ZeroErr LANGUAGES C CXX)
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 11)

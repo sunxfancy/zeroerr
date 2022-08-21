@@ -4,6 +4,9 @@
 #include "zeroerr/assert.h"
 #include "zeroerr/benchmark.h"
 #include "zeroerr/unittest.h"
+
+#include "spdlog/spdlog.h"
+
 using namespace zeroerr;
 
 TEST_CASE("log_test") {
@@ -30,14 +33,10 @@ TEST_CASE("speed test") {
         .run("stringstream",
              [] {
                  std::stringstream ss;
-                 ss << "hello world"
-                    << "\n";
+                 ss << "hello world\n";
                  doNotOptimizeAway(ss);
              })
-        .run("log",
-             [] {
-                 LOG(INFO) << "hello world"
-                           << "\n";
-             })
+        .run("log", [] { LOG(INFO) << "hello world\n"; })
+        .run("spdlog", [] { spdlog::info("hello world\n"); })
         .report();
 }
