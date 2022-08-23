@@ -43,7 +43,8 @@ static inline std::string getFileName(std::string file) {
     return fileName;
 }
 
-SubCaseReg::SubCaseReg(std::string name, std::string file, unsigned line, TestContext* context) {
+SubCaseReg::SubCaseReg(std::string name, std::string file, unsigned line, TestContext* context)
+    : context(context) {
     std::cerr << "SUBCASE " << Dim << "[" << getFileName(file) << ":" << line << "] " << Reset
               << FgCyan << name << Reset << std::endl;
 }

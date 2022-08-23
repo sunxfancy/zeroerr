@@ -79,7 +79,7 @@ if(LLVM_FOUND)
         message(STATUS " Linking against LLVM libraries: ${llvm_libs} ")
     endif()
 else()
-    set(llvm_libs " ")
+    set(llvm_libs "")
 endif()
 
 include(CheckLanguage)
@@ -97,7 +97,7 @@ if(CMAKE_CUDA_COMPILER)
 
     file(GLOB_RECURSE cuda_files ${CMAKE_SOURCE_DIR}/test/*.cu)
 else()
-    set(cuda_files " ")
+    set(cuda_files "")
 endif()
 
 file(GLOB_RECURSE test_files ${CMAKE_SOURCE_DIR}/test/*.cpp)
