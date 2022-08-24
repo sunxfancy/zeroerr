@@ -39,6 +39,9 @@
                               ZEROERR_NAMEGEN(_zeroerr_test_method), name)
 
 
+#define ZEROERR_HAVE_SAME_OUTPUT 
+
+
 namespace zeroerr {
 
 class TestContext {
@@ -49,11 +52,14 @@ public:
     int add(TestContext&& local);
 };
 
+class IReporter;
 class UnitTest {
 public:
-    UnitTest& parseArgs(int argc, char** argv);
-    int       run();
-    bool      silent = false;
+    UnitTest&   parseArgs(int argc, char** argv);
+    int         run();
+    bool        silent   = false;
+    IReporter*  reporter = nullptr;
+    std::string correct_output_path;
 };
 
 struct TestCase {
