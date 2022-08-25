@@ -89,8 +89,7 @@ TEST_CASE("match ostream") {
     // 1. user mark the test case which are comparing output use 'have_same_output'
     // 2. If the output is not exist, the result has been used as a correct verifier.
     // 3. If the output is exist, compare with it and report error if output is not match.
-    int a = rand();
-    std::cerr << "a = " << a << std::endl;
+    std::cerr << "a = 100" << std::endl;
 
     ZEROERR_HAVE_SAME_OUTPUT;
 }

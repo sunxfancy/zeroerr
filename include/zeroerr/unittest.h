@@ -39,7 +39,7 @@
                               ZEROERR_NAMEGEN(_zeroerr_test_method), name)
 
 
-#define ZEROERR_HAVE_SAME_OUTPUT 
+#define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT->save_output();
 
 
 namespace zeroerr {
@@ -49,7 +49,8 @@ public:
     unsigned passed = 0, warning = 0, failed = 0, skipped = 0;
     unsigned passed_as = 0, warning_as = 0, failed_as = 0, skipped_as = 0;
 
-    int add(TestContext&& local);
+    int  add(TestContext&& local);
+    void save_output();
 };
 
 class IReporter;
