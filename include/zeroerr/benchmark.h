@@ -14,8 +14,8 @@ namespace zeroerr {
 
 template <typename T>
 struct PerfCountSet {
-    T iterations;
-    T data[7];
+    T iterations{};
+    T data[7]{};
 
     T& timeElapsed() { return data[0]; }
     T& pageFaults() { return data[1]; }

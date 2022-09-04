@@ -97,6 +97,7 @@ static std::string insertIndentation(std::string str) {
 }
 
 int UnitTest::run() {
+    setlocale(LC_ALL, "en_US.utf8");
     std::cerr << "ZeroErr Unit Test" << std::endl;
     TestContext     context, sum;
     std::stringbuf* new_buf = new std::stringbuf();

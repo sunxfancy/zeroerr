@@ -9,8 +9,8 @@ extern bool isTerminalOutput(OutputStream stream);
 
 
 struct TerminalSize {
-    unsigned width;
-    unsigned height;
+    int width;
+    int height;
 };
 TerminalSize getTerminalSize();
 
