@@ -16,6 +16,15 @@
 
 namespace zeroerr {
 
+#ifdef _WIN32
+namespace detail {
+struct WindowsPerformanceCounter {
+
+};
+}
+#endif
+
+
 #ifdef ZEROERR_PERF
 namespace detail {
 struct LinuxPerformanceCounter {
