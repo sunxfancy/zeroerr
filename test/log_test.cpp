@@ -40,3 +40,9 @@ TEST_CASE("speed test") {
         .run("spdlog", [] { spdlog::info("hello world\n"); })
         .report();
 }
+
+TEST_CASE("log group") {
+    
+    for ()
+
+}
