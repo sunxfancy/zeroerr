@@ -2,17 +2,69 @@
 #include "zeroerr/internal/config.h"
 #include "zeroerr/print.h"
 
-#include <ostream>
+#include <chrono>
+#include <deque>
+#include <iostream>
 #include <sstream>
-#include <streambuf>
 #include <string>
 #include <vector>
+
 namespace zeroerr {
 
-#define ZEROERR_LOG(severity) \
-    zeroerr::LogMessage(__FILE__, __LINE__, zeroerr::LogSeverity::severity)
 
-#define LOG(severity) ZEROERR_LOG(severity).stream()
+#define INFO(...)    ZEROERR_INFO(__VA_ARGS__)
+#define LOG(...)     ZEROERR_LOG(LOG, __VA_ARGS__)
+#define WARNING(...) ZEROERR_LOG(WARN, __VA_ARGS__)
+#define ERROR(...)   ZEROERR_LOG(ERROR, __VA_ARGS__)
+#define FATAL(...)   ZEROERR_LOG(FATAL, __VA_ARGS__)
+
+
+#define ZEROERR_LOG_IF(condition, ACTION, ...) \
+    do {                                       \
+        if (condition) ACTION(__VA_ARGS__);    \
+    } while (0)
+
+#define INFO_IF(cond, ...)  ZEROERR_LOG_IF(cond, INFO, __VA_ARGS__)
+#define LOG_IF(cond, ...)   ZEROERR_LOG_IF(cond, LOG, __VA_ARGS__)
+#define WARN_IF(cond, ...)  ZEROERR_LOG_IF(cond, WARN, __VA_ARGS__)
+#define ERROR_IF(cond, ...) ZEROERR_LOG_IF(cond, ERROR, __VA_ARGS__)
+#define FATAL_IF(cond, ...) ZEROERR_LOG_IF(cond, FATAL, __VA_ARGS__)
+
+
+#define ZEROERR_LOG_EVERY_(n, ACTION, ...) \
+    do {                                   \
+        unsigned counter = 0;              \
+        if (counter == 0) {                \
+            counter = n;                   \
+            ACTION(__VA_ARGS__);           \
+        }                                  \
+        --counter;                         \
+    } while (0)
+
+
+#define INFO_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, INFO, __VA_ARGS__)
+#define LOG_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, LOG, __VA_ARGS__)
+#define WARN_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, WARN, __VA_ARGS__)
+#define ERROR_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, ERROR, __VA_ARGS__)
+#define FATAL_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, FATAL, __VA_ARGS__)
+
+
+#define ZEROERR_LOG_IF_EVERY_(n, cond, ACTION, ...) \
+    do {                                            \
+        unsigned counter = 0;                       \
+        if (counter == 0 && (cond)) {               \
+            counter = n;                            \
+            ACTION(__VA_ARGS__);                    \
+        }                                           \
+        --counter;                                  \
+    } while (0)
+
+#define INFO_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, INFO, __VA_ARGS__)
+#define LOG_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, LOG, __VA_ARGS__)
+#define WARN_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, WARN, __VA_ARGS__)
+#define ERROR_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ERROR, __VA_ARGS__)
+#define FATAL_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, FATAL, __VA_ARGS__)
+
 
 #ifdef _DEBUG
 #define DLOG(severity) ZEROERR_LOG(severity).stream()
@@ -20,27 +72,14 @@ namespace zeroerr {
 #define DLOG(severity)
 #endif
 
-#define VLOG(v) \
-    if (v <= zeroerr::LogLevel) ZEROERR_LOG(vlog).stream()
 
-#define CLOG(severity, category) \
-    if (category & zeroerr::LogCategory) ZEROERR_LOG(severity).stream()
+#define ZEROERR_LOG(severity, message, ...)                                                  \
+    do {                                                                                     \
+        static zeroerr::LogInfo log_info{__FILE__, __LINE__, zeroerr::LogSeverity::severity, \
+                                         message};                                           \
+        zeroerr::LogStream::getDefault().push(log_info, ##__VA_ARGS__);                      \
+    } while (0)
 
-#define LOG_IF(severity, condition) \
-    if (condition) ZEROERR_LOG(severity).stream()
-
-#define DLOG_IF(severity, condition)
-#define VLOG_IF(level, condition)
-
-#define LOG_EVERY_N(severity, n)
-#define DLOG_EVERY_N(severity, n)
-#define VLOG_EVERY_N(level, n)
-
-#define LOG_IF_EVERY_N(severity, n, condition)
-#define DLOG_IF_EVERY_N(severity, n, condition)
-#define VLOG_IF_EVERY_N(level, n, condition)
-
-#define INFO(...) ZEROERR_INFO(__VA_ARGS__)
 #define ZEROERR_INFO(...) \
     ZEROERR_INFO_IMPL(ZEROERR_NAMEGEN(_capture_), ZEROERR_NAMEGEN(_capture_), __VA_ARGS__)
 
@@ -66,69 +105,85 @@ extern size_t LogLevel;
 extern size_t LogCategory;
 
 enum LogSeverity {
-    INFO,
+    INFO,  // it will not write to file if no other log related
+    LOG,
     WARN,
     ERROR,
-    FATAL,
+    FATAL,  // it will terminate the program
 };
 
 struct LogTime {};
 
 struct LogInfo {
-    LogSeverity severity;
     const char* filename;
     unsigned    line;
-    unsigned    thread_id;
+    LogSeverity severity;
+    const char* message;
 };
 
 typedef void (*LogCustomCallback)(LogInfo);
 
-class LogStreamBuf : public std::streambuf {
-public:
-    // REQUIREMENTS: "len" must be >= 2 to account for the '\n' and '\0'.
-    LogStreamBuf(char* buf, size_t len) { setp(buf, buf + len - 2); }
-
-    // This effectively ignores overflow.
-    int_type overflow(int_type ch) { return ch; }
-
-    // Legacy public ostrstream method.
-    size_t pcount() const { return static_cast<size_t>(pptr() - pbase()); }
-    char*  pbase() const { return std::streambuf::pbase(); }
-};
-
-class LogStream : public std::ostream {
-public:
-    LogStream(char* buf, size_t len, size_t ctr)
-        : std::ostream(NULL), streambuf(buf, len), ctr_(ctr), self_(this) {
-        rdbuf(&streambuf);
-    }
-
-    size_t     ctr() const { return ctr_; }
-    void       set_ctr(size_t ctr) { ctr_ = ctr; }
-    LogStream* self() const { return self_; }
-
-    // Legacy std::streambuf methods.
-    size_t pcount() const { return streambuf.pcount(); }
-    char*  pbase() const { return streambuf.pbase(); }
-    char*  str() const { return pbase(); }
-
-private:
-    LogStream(const LogStream&)              = delete;
-    LogStream&   operator=(const LogStream&) = delete;
-    LogStreamBuf streambuf;
-    size_t       ctr_;   // Counter hack (for the LOG_EVERY_X() macro)
-    LogStream*   self_;  // Consistency check hack
-};
-
 
 struct LogMessage {
-    LogMessage(const char* file, unsigned line, LogSeverity severity);
-    ~LogMessage();
-    std::ostream& stream() { return m_stream; }
-    void          flush();
+    LogMessage(LogInfo& info) : info(info) { time = std::chrono::system_clock::now(); }
 
-protected:
-    LogStream m_stream;
+    virtual std::string str() = 0;
+
+    // meta data of this log message
+    LogInfo& info;
+
+    // recorded wall time
+    std::chrono::system_clock::time_point time;
+};
+
+template <typename... T>
+struct LogMessageImpl : LogMessage {
+    LogMessageImpl(LogInfo& info, T... args) : LogMessage(info), args(args...) {}
+
+    std::string str() override {
+        std::ostringstream oss;
+        Printer            print(oss);
+        print(info.message, args);
+        return oss.str();
+    }
+
+    std::tuple<T...> args;
+};
+
+
+constexpr size_t LogStreamMaxSize = 1024 * 1024;
+
+class LogStream {
+public:
+    LogStream() { first = last = new DataBlock(); }
+
+    struct DataBlock {
+        char       data[LogStreamMaxSize];
+        size_t     size = 0;
+        DataBlock* next = nullptr;
+    };
+
+    template <typename... T>
+    void push(LogInfo& info, T&&... args) {
+        size_t size = sizeof(LogMessageImpl<T...>);
+        if (size > LogStreamMaxSize) {
+            throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
+        }
+        if (last->size + size > LogStreamMaxSize) {
+            last->next = new DataBlock();
+            last       = last->next;
+        }
+        void* p = last->data + last->size;
+        last->size += size;
+        auto msg = new (p) LogMessageImpl<T...>(info, std::forward<T>(args)...);
+        printf("%s", msg->str().c_str());
+    }
+
+    static LogStream& getDefault();
+
+private:
+    DataBlock* first;
+    DataBlock* last;
 };
 
 

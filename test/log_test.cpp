@@ -10,8 +10,8 @@
 using namespace zeroerr;
 
 TEST_CASE("log_test") {
-    LOG(INFO) << "Hello";
-    LOG(WARN) << "Test Warning";
+    LOG("Hello {i}", 1);
+    WARNING("Test Warning {print}", "print data");
 }
 
 
@@ -28,6 +28,11 @@ TEST_CASE("lazy evaluation") {
 
 
 TEST_CASE("speed test") {
+    uint64_t* data      = new uint64_t[1000000];
+    FILE*     file      = fmemopen(data, 1000000 * sizeof(uint64_t), "w");
+    FILE*     oldstdout = stdout;
+    stdout              = file;
+
     Benchmark bench("log speed test");
     bench
         .run("stringstream",
@@ -36,13 +41,13 @@ TEST_CASE("speed test") {
                  ss << "hello world\n";
                  doNotOptimizeAway(ss);
              })
-        .run("log", [] { LOG(INFO) << "hello world\n"; })
+        .run("log", [] { LOG("hello world\n"); })
         .run("spdlog", [] { spdlog::info("hello world\n"); })
         .report();
+
+    stdout = oldstdout;
+    fclose(file);
+    delete[] data;
 }
 
-TEST_CASE("log group") {
-    
-    for ()
-
-}
+TEST_CASE("log group") {}

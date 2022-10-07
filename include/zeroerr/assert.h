@@ -68,7 +68,7 @@ constexpr bool _ZEROERR_TEST_CONTEXT = false;
 
 namespace zeroerr {
 
-enum class assert_level : uint8_t { warn, check, require };
+enum class assert_level : uint8_t { warning, check, require };
 enum class assert_throw : uint8_t { no_throw, throws, throws_as };
 enum class assert_cmp : uint8_t { eq, ne, gt, ge, lt, le };
 
@@ -282,7 +282,7 @@ struct context_helper<T, false> {
         switch (data.info.level) {
             case assert_level::require:
             case assert_level::check: ctx->failed_as++; break;
-            case assert_level::warn: ctx->warning_as++; break;
+            case assert_level::warning: ctx->warning_as++; break;
         }
     }
 };
