@@ -65,6 +65,35 @@ namespace zeroerr {
 #define ERROR_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ERROR, __VA_ARGS__)
 #define FATAL_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, FATAL, __VA_ARGS__)
 
+#define ZEROERR_LOG_FIRST(cond, ACTION, ...) \
+    do {                                     \
+        bool first = true;                   \
+        if (first && (cond)) {               \
+            first = false;                   \
+            ACTION(__VA_ARGS__);             \
+        }                                    \
+    } while (0)
+
+#define INFO_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, INFO, __VA_ARGS__)
+#define LOG_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, LOG, __VA_ARGS__)
+#define WARN_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, WARN, __VA_ARGS__)
+#define ERROR_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, ERROR, __VA_ARGS__)
+#define FATAL_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, FATAL, __VA_ARGS__)
+
+#define ZEROERR_LOG_FIRST_(n, cond, ACTION, ...) \
+    do {                                         \
+        unsigned counter = n;                    \
+        if (n-- && (cond)) {                     \
+            ACTION(__VA_ARGS__);                 \
+        }                                        \
+    } while (0)
+
+#define INFO_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, INFO, __VA_ARGS__)
+#define LOG_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, LOG, __VA_ARGS__)
+#define WARN_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, WARN, __VA_ARGS__)
+#define ERROR_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ERROR, __VA_ARGS__)
+#define FATAL_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, FATAL, __VA_ARGS__)
+
 
 #ifdef _DEBUG
 #define DLOG(severity) ZEROERR_LOG(severity).stream()
@@ -75,6 +104,7 @@ namespace zeroerr {
 
 #define ZEROERR_LOG(severity, message, ...)                                                  \
     do {                                                                                     \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                                       \
         static zeroerr::LogInfo log_info{__FILE__, __LINE__, zeroerr::LogSeverity::severity, \
                                          message};                                           \
         zeroerr::LogStream::getDefault().push(log_info, ##__VA_ARGS__);                      \
@@ -95,7 +125,7 @@ namespace zeroerr {
 #endif
 
 #define ZEROERR_G_CONTEXT_SCOPE(x)                        \
-    if (x.passed == false) {                              \
+    if (x) {                                              \
         for (auto* i : _ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
             i->str(std::cerr);                            \
         }                                                 \

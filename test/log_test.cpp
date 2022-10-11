@@ -50,4 +50,13 @@ TEST_CASE("speed test") {
     delete[] data;
 }
 
-TEST_CASE("log group") {}
+TEST_CASE("log group") {
+    int sum = 0;
+    for (int i = 0; i < 10; ++i) {
+        sum += i;
+        INFO("i = {i}", i);
+        if (sum > 20) {
+            LOG("sum = {sum}", sum);
+        }
+    }
+}

@@ -28,7 +28,7 @@
             decltype(_ZEROERR_TEST_CONTEXT),                                                   \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                      \
                          const bool>::value>::setContext(data, _ZEROERR_TEST_CONTEXT);         \
-        ZEROERR_G_CONTEXT_SCOPE(data);                                                         \
+        ZEROERR_G_CONTEXT_SCOPE(data.passed == false);                                         \
         if (data.log()) debug_break();                                                         \
         data();                                                                                \
         ZEROERR_FUNC_SCOPE_RET(data.passed);                                                   \
