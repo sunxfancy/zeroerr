@@ -22,7 +22,7 @@ TEST_CASE("lazy evaluation") {
         sum += i;
         INFO("i =", i);
         INFO("i+1 =", i + 1);
-        REQUIRE(sum < 50);
+        REQUIRE(0 <= sum < 50);
     }
 }
 
@@ -59,4 +59,11 @@ TEST_CASE("log group") {
             LOG("sum = {sum}", sum);
         }
     }
+}
+
+
+TEST_CASE("debug log") {
+    int sum = 0;
+    DLOG(LOG_FIRST, "debug log i = {i}", 1);
+    DLOG(WARNING_IF, sum < 5, "debug log i = {i}, sum = {sum}", 2, sum);
 }

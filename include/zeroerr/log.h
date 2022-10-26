@@ -11,10 +11,11 @@
 
 namespace zeroerr {
 
+#pragma region log macros
 
 #define INFO(...)    ZEROERR_INFO(__VA_ARGS__)
 #define LOG(...)     ZEROERR_LOG(LOG, __VA_ARGS__)
-#define WARNING(...) ZEROERR_LOG(WARN, __VA_ARGS__)
+#define WARNING(...) ZEROERR_LOG(WARNING, __VA_ARGS__)
 #define ERROR(...)   ZEROERR_LOG(ERROR, __VA_ARGS__)
 #define FATAL(...)   ZEROERR_LOG(FATAL, __VA_ARGS__)
 
@@ -24,11 +25,11 @@ namespace zeroerr {
         if (condition) ACTION(__VA_ARGS__);    \
     } while (0)
 
-#define INFO_IF(cond, ...)  ZEROERR_LOG_IF(cond, INFO, __VA_ARGS__)
-#define LOG_IF(cond, ...)   ZEROERR_LOG_IF(cond, LOG, __VA_ARGS__)
-#define WARN_IF(cond, ...)  ZEROERR_LOG_IF(cond, WARN, __VA_ARGS__)
-#define ERROR_IF(cond, ...) ZEROERR_LOG_IF(cond, ERROR, __VA_ARGS__)
-#define FATAL_IF(cond, ...) ZEROERR_LOG_IF(cond, FATAL, __VA_ARGS__)
+#define INFO_IF(cond, ...)    ZEROERR_LOG_IF(cond, INFO, __VA_ARGS__)
+#define LOG_IF(cond, ...)     ZEROERR_LOG_IF(cond, LOG, __VA_ARGS__)
+#define WARNING_IF(cond, ...) ZEROERR_LOG_IF(cond, WARNING, __VA_ARGS__)
+#define ERROR_IF(cond, ...)   ZEROERR_LOG_IF(cond, ERROR, __VA_ARGS__)
+#define FATAL_IF(cond, ...)   ZEROERR_LOG_IF(cond, FATAL, __VA_ARGS__)
 
 
 #define ZEROERR_LOG_EVERY_(n, ACTION, ...) \
@@ -42,11 +43,11 @@ namespace zeroerr {
     } while (0)
 
 
-#define INFO_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, INFO, __VA_ARGS__)
-#define LOG_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, LOG, __VA_ARGS__)
-#define WARN_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, WARN, __VA_ARGS__)
-#define ERROR_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, ERROR, __VA_ARGS__)
-#define FATAL_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, FATAL, __VA_ARGS__)
+#define INFO_EVERY_(cond, ...)    ZEROERR_LOG_EVERY_(cond, INFO, __VA_ARGS__)
+#define LOG_EVERY_(cond, ...)     ZEROERR_LOG_EVERY_(cond, LOG, __VA_ARGS__)
+#define WARNING_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, WARNING, __VA_ARGS__)
+#define ERROR_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, ERROR, __VA_ARGS__)
+#define FATAL_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, FATAL, __VA_ARGS__)
 
 
 #define ZEROERR_LOG_IF_EVERY_(n, cond, ACTION, ...) \
@@ -59,11 +60,11 @@ namespace zeroerr {
         --counter;                                  \
     } while (0)
 
-#define INFO_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, INFO, __VA_ARGS__)
-#define LOG_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, LOG, __VA_ARGS__)
-#define WARN_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, WARN, __VA_ARGS__)
-#define ERROR_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ERROR, __VA_ARGS__)
-#define FATAL_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, FATAL, __VA_ARGS__)
+#define INFO_IF_EVERY_(n, cond, ...)    ZEROERR_LOG_IF_EVERY_(n, cond, INFO, __VA_ARGS__)
+#define LOG_IF_EVERY_(n, cond, ...)     ZEROERR_LOG_IF_EVERY_(n, cond, LOG, __VA_ARGS__)
+#define WARNING_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, WARNING, __VA_ARGS__)
+#define ERROR_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, ERROR, __VA_ARGS__)
+#define FATAL_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, FATAL, __VA_ARGS__)
 
 #define ZEROERR_LOG_FIRST(cond, ACTION, ...) \
     do {                                     \
@@ -74,11 +75,11 @@ namespace zeroerr {
         }                                    \
     } while (0)
 
-#define INFO_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, INFO, __VA_ARGS__)
-#define LOG_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, LOG, __VA_ARGS__)
-#define WARN_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, WARN, __VA_ARGS__)
-#define ERROR_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, ERROR, __VA_ARGS__)
-#define FATAL_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, FATAL, __VA_ARGS__)
+#define INFO_FIRST(cond, ...)    ZEROERR_LOG_FIRST(cond, INFO, __VA_ARGS__)
+#define LOG_FIRST(cond, ...)     ZEROERR_LOG_FIRST(cond, LOG, __VA_ARGS__)
+#define WARNING_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, WARNING, __VA_ARGS__)
+#define ERROR_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, ERROR, __VA_ARGS__)
+#define FATAL_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, FATAL, __VA_ARGS__)
 
 #define ZEROERR_LOG_FIRST_(n, cond, ACTION, ...) \
     do {                                         \
@@ -88,17 +89,17 @@ namespace zeroerr {
         }                                        \
     } while (0)
 
-#define INFO_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, INFO, __VA_ARGS__)
-#define LOG_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, LOG, __VA_ARGS__)
-#define WARN_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, WARN, __VA_ARGS__)
-#define ERROR_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ERROR, __VA_ARGS__)
-#define FATAL_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, FATAL, __VA_ARGS__)
+#define INFO_FIRST_(n, cond, ...)    ZEROERR_LOG_FIRST_(n, cond, INFO, __VA_ARGS__)
+#define LOG_FIRST_(n, cond, ...)     ZEROERR_LOG_FIRST_(n, cond, LOG, __VA_ARGS__)
+#define WARNING_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, WARNING, __VA_ARGS__)
+#define ERROR_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, ERROR, __VA_ARGS__)
+#define FATAL_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, FATAL, __VA_ARGS__)
 
 
 #ifdef _DEBUG
-#define DLOG(severity) ZEROERR_LOG(severity).stream()
+#define DLOG(ACTION, ...) ACTION(__VA_ARGS__)
 #else
-#define DLOG(severity)
+#define DLOG(ACTION, ...)
 #endif
 
 
@@ -131,13 +132,16 @@ namespace zeroerr {
         }                                                 \
     }
 
+
+#pragma endregion
+
 extern size_t LogLevel;
 extern size_t LogCategory;
 
 enum LogSeverity {
     INFO,  // it will not write to file if no other log related
     LOG,
-    WARN,
+    WARNING,
     ERROR,
     FATAL,  // it will terminate the program
 };

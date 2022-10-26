@@ -18,10 +18,8 @@ namespace zeroerr {
 
 #ifdef _WIN32
 namespace detail {
-struct WindowsPerformanceCounter {
-
-};
-}
+struct WindowsPerformanceCounter {};
+}  // namespace detail
 #endif
 
 
@@ -258,7 +256,7 @@ PerformanceCounter::PerformanceCounter() {
     _has.pageFaults() =
         _perf->monitor(PERF_COUNT_SW_PAGE_FAULTS, Target{&_val.pageFaults(), true, false});
     _has.cpuCycles() =
-        _perf->monitor(PERF_COUNT_HW_REF_CPU_CYCLES, Target{&_val.cpuCycles(), true, false});
+        _perf->monitor(PERF_COUNT_HW_CPU_CYCLES, Target{&_val.cpuCycles(), true, false});
     _has.contextSwitches() = _perf->monitor(PERF_COUNT_SW_CONTEXT_SWITCHES,
                                             Target{&_val.contextSwitches(), true, false});
     _has.instructions() =
