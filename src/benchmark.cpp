@@ -248,11 +248,11 @@ struct LinuxPerformanceCounter {
 #pragma region PerformanceCounter
 
 PerformanceCounter::PerformanceCounter() {
+    _has.timeElapsed() = true; // this should be always available
 #ifdef ZEROERR_PERF
     _perf        = new detail::LinuxPerformanceCounter();
     using Target = detail::LinuxPerformanceCounter::Target;
-
-    _has.timeElapsed() = true;
+    
     _has.pageFaults() =
         _perf->monitor(PERF_COUNT_SW_PAGE_FAULTS, Target{&_val.pageFaults(), true, false});
     _has.cpuCycles() =

@@ -13,11 +13,13 @@ namespace zeroerr {
 
 #pragma region log macros
 
-#define INFO(...)    ZEROERR_INFO(__VA_ARGS__)
-#define LOG(...)     ZEROERR_LOG(LOG, __VA_ARGS__)
-#define WARNING(...) ZEROERR_LOG(WARNING, __VA_ARGS__)
-#define ERROR(...)   ZEROERR_LOG(ERROR, __VA_ARGS__)
-#define FATAL(...)   ZEROERR_LOG(FATAL, __VA_ARGS__)
+
+#define EXPAND( x ) x
+#define INFO(...)    EXPAND(ZEROERR_INFO(__VA_ARGS__))
+#define LOG(...)     EXPAND(ZEROERR_LOG(LOG, __VA_ARGS__))
+#define WARNING(...) EXPAND(ZEROERR_LOG(WARNING, __VA_ARGS__))
+#define ERROR(...)   EXPAND(ZEROERR_LOG(ERROR, __VA_ARGS__))
+#define FATAL(...)   EXPAND(ZEROERR_LOG(FATAL, __VA_ARGS__))
 
 
 #define ZEROERR_LOG_IF(condition, ACTION, ...) \
@@ -97,7 +99,7 @@ namespace zeroerr {
 
 
 #ifdef _DEBUG
-#define DLOG(ACTION, ...) ACTION(__VA_ARGS__)
+#define DLOG(ACTION, ...) EXPAND(ACTION)(__VA_ARGS__)
 #else
 #define DLOG(ACTION, ...)
 #endif
@@ -106,9 +108,11 @@ namespace zeroerr {
 #define ZEROERR_LOG(severity, message, ...)                                                  \
     do {                                                                                     \
         ZEROERR_G_CONTEXT_SCOPE(true);                                                       \
-        static zeroerr::LogInfo log_info{__FILE__, __LINE__, zeroerr::LogSeverity::severity, \
-                                         message};                                           \
-        zeroerr::LogStream::getDefault().push(log_info, ##__VA_ARGS__);                      \
+        auto* msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);                      \
+        static zeroerr::LogInfo log_info{__FILE__, message, __LINE__, 0,                     \
+                                         zeroerr::LogSeverity::severity};                    \
+        msg->info = &log_info;                                                               \
+        std::cerr << msg->str().c_str();                                                     \
     } while (0)
 
 #define ZEROERR_INFO(...) \
@@ -150,21 +154,22 @@ struct LogTime {};
 
 struct LogInfo {
     const char* filename;
-    unsigned    line;
-    LogSeverity severity;
     const char* message;
+    unsigned    line;
+    unsigned    size;
+    LogSeverity severity;
 };
 
 typedef void (*LogCustomCallback)(LogInfo);
 
 
 struct LogMessage {
-    LogMessage(LogInfo& info) : info(info) { time = std::chrono::system_clock::now(); }
+    LogMessage() { time = std::chrono::system_clock::now(); }
 
     virtual std::string str() = 0;
 
     // meta data of this log message
-    LogInfo& info;
+    LogInfo* info;
 
     // recorded wall time
     std::chrono::system_clock::time_point time;
@@ -172,12 +177,12 @@ struct LogMessage {
 
 template <typename... T>
 struct LogMessageImpl : LogMessage {
-    LogMessageImpl(LogInfo& info, T... args) : LogMessage(info), args(args...) {}
+    LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
     std::string str() override {
         std::ostringstream oss;
         Printer            print(oss);
-        print(info.message, args);
+        print(info->message, args);
         return oss.str();
     }
 
@@ -198,7 +203,7 @@ public:
     };
 
     template <typename... T>
-    void push(LogInfo& info, T&&... args) {
+    LogMessage* push(T&&... args) {
         size_t size = sizeof(LogMessageImpl<T...>);
         if (size > LogStreamMaxSize) {
             throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
@@ -209,8 +214,8 @@ public:
         }
         void* p = last->data + last->size;
         last->size += size;
-        auto msg = new (p) LogMessageImpl<T...>(info, std::forward<T>(args)...);
-        printf("%s", msg->str().c_str());
+        LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
+        return msg;
     }
 
     static LogStream& getDefault();

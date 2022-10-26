@@ -332,6 +332,11 @@ struct Printer {
         os << tab(level) << quote() << value << quote() << lb;
     }
 
+    template <class TupType>
+    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb,
+                            detail::seq<>) {
+    }
+
     template <class TupType, size_t... I>
     inline void print_tuple(const TupType& _tup, unsigned level, const char* lb,
                             detail::seq<I...>) {

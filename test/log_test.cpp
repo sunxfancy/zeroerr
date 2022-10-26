@@ -29,24 +29,26 @@ TEST_CASE("lazy evaluation") {
 
 TEST_CASE("speed test") {
     uint64_t* data      = new uint64_t[1000000];
+#ifdef ZEROERR_OS_UNIX
     FILE*     file      = fmemopen(data, 1000000 * sizeof(uint64_t), "w");
     FILE*     oldstdout = stdout;
     stdout              = file;
-
+#endif
     Benchmark bench("log speed test");
     bench
         .run("stringstream",
              [] {
                  std::stringstream ss;
-                 ss << "hello world\n";
+                 ss << "hello world";
                  doNotOptimizeAway(ss);
              })
-        .run("log", [] { LOG("hello world\n"); })
-        .run("spdlog", [] { spdlog::info("hello world\n"); })
+        .run("log", [] { LOG("hello world"); })
+        .run("spdlog", [] { spdlog::info("hello world"); })
         .report();
-
+#ifdef ZEROERR_OS_UNIX
     stdout = oldstdout;
     fclose(file);
+#endif
     delete[] data;
 }
 
@@ -64,6 +66,6 @@ TEST_CASE("log group") {
 
 TEST_CASE("debug log") {
     int sum = 0;
-    DLOG(LOG_FIRST, "debug log i = {i}", 1);
-    DLOG(WARNING_IF, sum < 5, "debug log i = {i}, sum = {sum}", 2, sum);
+    // DLOG(LOG_FIRST, "debug log i = {i}", 1);
+    // DLOG(WARNING_IF, sum < 5, "debug log i = {i}, sum = {sum}", 2, sum);
 }
