@@ -16,6 +16,13 @@
 
 namespace zeroerr {
 
+#ifdef _WIN32
+namespace detail {
+struct WindowsPerformanceCounter {};
+}  // namespace detail
+#endif
+
+
 #ifdef ZEROERR_PERF
 namespace detail {
 struct LinuxPerformanceCounter {
@@ -241,15 +248,15 @@ struct LinuxPerformanceCounter {
 #pragma region PerformanceCounter
 
 PerformanceCounter::PerformanceCounter() {
+    _has.timeElapsed() = true; // this should be always available
 #ifdef ZEROERR_PERF
     _perf        = new detail::LinuxPerformanceCounter();
     using Target = detail::LinuxPerformanceCounter::Target;
-
-    _has.timeElapsed() = true;
+    
     _has.pageFaults() =
         _perf->monitor(PERF_COUNT_SW_PAGE_FAULTS, Target{&_val.pageFaults(), true, false});
     _has.cpuCycles() =
-        _perf->monitor(PERF_COUNT_HW_REF_CPU_CYCLES, Target{&_val.cpuCycles(), true, false});
+        _perf->monitor(PERF_COUNT_HW_CPU_CYCLES, Target{&_val.cpuCycles(), true, false});
     _has.contextSwitches() = _perf->monitor(PERF_COUNT_SW_CONTEXT_SWITCHES,
                                             Target{&_val.contextSwitches(), true, false});
     _has.instructions() =

@@ -38,7 +38,8 @@
 
 
 #if defined(NDEBUG) && !defined(ZEROERR_ALWAYS_ASSERT)
-#define ZEROERR_NO_ASSERT
+// FIXME: we should safely remove the assert in IF statement
+// #define ZEROERR_NO_ASSERT
 #endif
 
 // This is used for generating a unique name based on the file name and line number

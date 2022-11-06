@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(ZeroErr LANGUAGES CXX)
+project(ZeroErr LANGUAGES C CXX)
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
     set(CMAKE_CXX_STANDARD 11)
@@ -33,7 +33,7 @@ option(USE_MOLD "Use mold for linking" ON)
 
 if(USE_MOLD)
     find_program(HAS_MOLD "mold")
-
+    message(STATUS "Find Mold: ${HAS_MOLD}")
     if(HAS_MOLD)
         if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fuse-ld=mold")
@@ -48,9 +48,13 @@ if(USE_MOLD)
     endif()
 endif()
 
+add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/third_party)
 
+file(GLOB_RECURSE include_files ${CMAKE_SOURCE_DIR}/include/**/*.h)
 file(GLOB_RECURSE source_files ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 add_library(zeroerr STATIC ${source_files})
@@ -58,52 +62,79 @@ add_library(zeroerr STATIC ${source_files})
 # if(ENABLE_SAN)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize-recover=all -fsanitize=address -fsanitize=undefined -fsanitize=float-divide-by-zero -fsanitize=float-cast-overflow -fno-sanitize=null -fno-sanitize=alignment")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize-recover=address -fsanitize=address")
-
 # endif()
-find_package(LLVM CONFIG)
 
-if(LLVM_FOUND)
-    if(CMAKE_CXX_STANDARD GREATER_EQUAL 14)
-        message(STATUS " Found LLVM ${LLVM_PACKAGE_VERSION} ")
-        message(STATUS " Using LLVMConfig.cmake in: ${LLVM_DIR} ")
-        include_directories(${LLVM_INCLUDE_DIRS})
-        link_directories(${LLVM_LIBRARY_DIRS})
+# Determine if this project is built as a subproject (using add_subdirectory) or if it is the main project.
+set(MAIN_PROJECT OFF)
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(MAIN_PROJECT ON)
+endif()
 
-        add_definitions(-DHAVE_LLVM)
+if(MAIN_PROJECT)
 
-        # Find the libraries that correspond to the LLVM components
-        # that we wish to use
-        llvm_map_components_to_libnames(llvm_libs support core)
+    find_package(LLVM CONFIG)
 
-        # Link against LLVM libraries
-        message(STATUS " Linking against LLVM libraries: ${llvm_libs} ")
+    if(LLVM_FOUND)
+        if(CMAKE_CXX_STANDARD GREATER_EQUAL 14)
+            message(STATUS " Found LLVM ${LLVM_PACKAGE_VERSION} ")
+            message(STATUS " Using LLVMConfig.cmake in: ${LLVM_DIR} ")
+            include_directories(${LLVM_INCLUDE_DIRS})
+            link_directories(${LLVM_LIBRARY_DIRS})
+
+            add_definitions(-DHAVE_LLVM)
+
+            # Find the libraries that correspond to the LLVM components
+            # that we wish to use
+            llvm_map_components_to_libnames(llvm_libs support core)
+
+            # Link against LLVM libraries
+            message(STATUS " Linking against LLVM libraries: ${llvm_libs} ")
+        endif()
+    else()
+        set(llvm_libs "")
     endif()
-else()
-    set(llvm_libs " ")
+
+    include(CheckLanguage)
+    check_language(CUDA)
+
+    if(CMAKE_CUDA_COMPILER)
+        enable_language(CUDA)
+        message(STATUS " CUDA ${CMAKE_CUDA_COMPILER_ID} ${CMAKE_CUDA_COMPILER_VERSION} enabled ")
+
+        set(CMAKE_CUDA_STANDARD 17)
+        set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
+        set(CMAKE_CUDA_ARCHITECTURES 80)
+        set(CMAKE_CUDA_FLAGS " -ccbin=/usr/bin/gcc-10 ")
+
+        file(GLOB_RECURSE cuda_files ${CMAKE_SOURCE_DIR}/test/*.cu)
+    else()
+        set(cuda_files "")
+    endif()
+
+    file(GLOB_RECURSE test_files ${CMAKE_SOURCE_DIR}/test/*.cpp)
+
+    add_executable(unittest ${test_files} ${cuda_files})
+    target_link_libraries(unittest zeroerr ${llvm_libs})
+
+    enable_testing()
+    add_test(NAME RunUnitTest COMMAND unittest)
+
+    add_custom_command(
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/zeroerr.hpp
+        DEPENDS
+            ${include_files}
+            ${source_files}
+            ${CMAKE_CURRENT_SOURCE_DIR}/scripts/gen-single-file.cmake
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/scripts/gen-single-file.cmake
+        COMMENT "assembling the single header")
+
+    add_custom_target(assemble_single_header ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/zeroerr.hpp)
+
+    file(GLOB_RECURSE include_files ${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.h)
+
+    install(TARGETS zeroerr DESTINATION lib)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zeroerr.hpp DESTINATION include)
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include DESTINATION include/..)
+
 endif()
-
-include(CheckLanguage)
-check_language(CUDA)
-
-if(CMAKE_CUDA_COMPILER)
-    enable_language(CUDA)
-    message(STATUS " CUDA ${CMAKE_CUDA_COMPILER_ID} ${CMAKE_CUDA_COMPILER_VERSION} enabled ")
-
-    set(CMAKE_CUDA_STANDARD 17)
-    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
-
-    set(CMAKE_CUDA_ARCHITECTURES 80)
-    set(CMAKE_CUDA_FLAGS " -ccbin=/usr/bin/gcc-10 ")
-
-    file(GLOB_RECURSE cuda_files ${CMAKE_SOURCE_DIR}/test/*.cu)
-else()
-    set(cuda_files " ")
-endif()
-
-file(GLOB_RECURSE test_files ${CMAKE_SOURCE_DIR}/test/*.cpp)
-
-add_executable(unittest ${test_files} ${cuda_files})
-target_link_libraries(unittest zeroerr ${llvm_libs})
-
-enable_testing()
-add_test(NAME RunUnitTest COMMAND unittest)

@@ -35,6 +35,25 @@ int TestContext::add(TestContext&& local) {
     return type;
 }
 
+void TestContext::save_output() {
+    std::fstream file;
+    file.open("output.txt", std::ios::in);
+    std::stringbuf* outbuf = static_cast<std::stringbuf*>(std::cerr.rdbuf());
+    if (file.is_open()) {
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        if (buffer.str() != outbuf->str()) {
+            std::cerr << "Output mismatch" << std::endl;
+            throw std::runtime_error("Output mismatch");
+        } else {
+            std::cerr << "Output match" << std::endl;
+        }
+    } else {
+        file.open("output.txt", std::ios::out);
+        file << outbuf->str();
+    }
+    file.close();
+}
 
 static inline std::string getFileName(std::string file) {
     std::string fileName(file);
@@ -43,7 +62,8 @@ static inline std::string getFileName(std::string file) {
     return fileName;
 }
 
-SubCaseReg::SubCaseReg(std::string name, std::string file, unsigned line, TestContext* context) {
+SubCaseReg::SubCaseReg(std::string name, std::string file, unsigned line, TestContext* context)
+    : context(context) {
     std::cerr << "SUBCASE " << Dim << "[" << getFileName(file) << ":" << line << "] " << Reset
               << FgCyan << name << Reset << std::endl;
 }
@@ -77,16 +97,16 @@ static std::string insertIndentation(std::string str) {
 }
 
 int UnitTest::run() {
+    setlocale(LC_ALL, "en_US.utf8");
     std::cerr << "ZeroErr Unit Test" << std::endl;
     TestContext     context, sum;
-    std::streambuf* orig_buf;
     std::stringbuf* new_buf = new std::stringbuf();
     for (auto& tc : detail::getRegisteredTests()) {
-        orig_buf = std::cerr.rdbuf();
-        std::cerr.rdbuf(new_buf);
         std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
-                  << Reset << FgCyan << tc.name << Reset << std::endl
-                  << std::endl;
+                  << Reset << FgCyan << tc.name << Reset << std::endl;
+        std::streambuf* orig_buf = std::cerr.rdbuf();
+        std::cerr.rdbuf(new_buf);
+        std::cerr << std::endl;
         try {
             tc.func(&context);  // run the test case
         } catch (const AssertionData& e) {

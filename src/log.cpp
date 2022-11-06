@@ -1,6 +1,5 @@
 #include "zeroerr/log.h"
 
-
 namespace zeroerr {
 
 thread_local std::vector<IContextScope*> _ZEROERR_G_CONTEXT_SCOPE_VECTOR;
@@ -14,13 +13,36 @@ class FileLogger : public Logger {};
 
 class StderrLogger : public Logger {};
 
+constexpr unsigned logbuffer_size = 65536;
 
-LogMessage::LogMessage(const char* file, unsigned line, LogSeverity severity)
-    : m_stream(new char[1024], 1024, 0) {}
+struct LogSystem {
+    char*    temp_buf;
+    unsigned temp_buf_size;
 
-LogMessage::~LogMessage() { flush(); }
+    bool mix_class    = true;
+    bool mix_severity = true;
 
-void LogMessage::flush() {}
+    Logger* logger = nullptr;
+
+    LogSystem() {
+        temp_buf      = new char[logbuffer_size];
+        temp_buf_size = logbuffer_size;
+    }
+};
+
+
+LogSystem& getLogSystem() {
+    static LogSystem inst;
+    return inst;
+}
+
+Logger& getLogger() { return *(getLogSystem().logger); }
+
+
+LogStream& LogStream::getDefault() {
+    static LogStream stream;
+    return stream;
+}
 
 
 }  // namespace zeroerr

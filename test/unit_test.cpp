@@ -80,4 +80,16 @@ TEST_CASE_FIXTURE(test_fixture, "test fixture") { dbg(getK()); }
 TEST_CASE("test sub cases") {
     SUB_CASE("sub case 1") { CHECK(1 == 1); };
     SUB_CASE("sub case 2") { CHECK(1 == 2); };
+    SUB_CASE("sub case 3") { CHECK(2 == 2); };
+}
+
+
+TEST_CASE("match ostream") {
+    // match output can be done in the following workflow
+    // 1. user mark the test case which are comparing output use 'have_same_output'
+    // 2. If the output is not exist, the result has been used as a correct verifier.
+    // 3. If the output is exist, compare with it and report error if output is not match.
+    std::cerr << "a = 100" << std::endl;
+
+    ZEROERR_HAVE_SAME_OUTPUT;
 }
