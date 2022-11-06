@@ -14,7 +14,7 @@ namespace zeroerr {
 #pragma region log macros
 
 
-#define EXPAND( x ) x
+#define EXPAND(x)    x
 #define INFO(...)    EXPAND(ZEROERR_INFO(__VA_ARGS__))
 #define LOG(...)     EXPAND(ZEROERR_LOG(LOG, __VA_ARGS__))
 #define WARNING(...) EXPAND(ZEROERR_LOG(WARNING, __VA_ARGS__))
@@ -105,14 +105,14 @@ namespace zeroerr {
 #endif
 
 
-#define ZEROERR_LOG(severity, message, ...)                                                  \
-    do {                                                                                     \
-        ZEROERR_G_CONTEXT_SCOPE(true);                                                       \
-        auto* msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);                      \
-        static zeroerr::LogInfo log_info{__FILE__, message, __LINE__, 0,                     \
-                                         zeroerr::LogSeverity::severity};                    \
-        msg->info = &log_info;                                                               \
-        std::cerr << msg->str().c_str();                                                     \
+#define ZEROERR_LOG(severity, message, ...)                                               \
+    do {                                                                                  \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                                    \
+        auto*                   msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__); \
+        static zeroerr::LogInfo log_info{__FILE__, message, __LINE__, 0,                  \
+                                         zeroerr::LogSeverity::severity};                 \
+        msg->info = &log_info;                                                            \
+        std::cerr << msg->str().c_str();                                                  \
     } while (0)
 
 #define ZEROERR_INFO(...) \
@@ -129,11 +129,11 @@ namespace zeroerr {
 #undef ZEROERR_G_CONTEXT_SCOPE
 #endif
 
-#define ZEROERR_G_CONTEXT_SCOPE(x)                        \
-    if (x) {                                              \
-        for (auto* i : _ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
-            i->str(std::cerr);                            \
-        }                                                 \
+#define ZEROERR_G_CONTEXT_SCOPE(x)                                 \
+    if (x) {                                                       \
+        for (auto* i : zeroerr::_ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
+            i->str(std::cerr);                                     \
+        }                                                          \
     }
 
 
