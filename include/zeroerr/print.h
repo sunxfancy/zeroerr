@@ -20,6 +20,10 @@
 #include "magic_enum.hpp"
 #endif
 
+#if defined(ZEROERR_ENABLE_DSVIZ) 
+#include "dsviz.h"
+#endif
+
 // those predefines can help to avoid include too many headers
 namespace std {
 template <typename T>
@@ -366,6 +370,7 @@ struct Printer {
     }
 
     std::string str() const { return static_cast<std::stringstream&>(os).str(); }
+    operator std::string() const { return str(); }
 
     friend std::ostream& operator<<(std::ostream& os, const Printer& P) {
         if (P.use_stringstream) os << P.str();

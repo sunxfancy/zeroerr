@@ -1,8 +1,11 @@
 #pragma once
 #include "zeroerr/internal/config.h"
 #include "zeroerr/print.h"
+#include "zeroerr/format.h"
 
+#include <cstdlib>
 #include <chrono>
+#include <iomanip>
 #include <deque>
 #include <iostream>
 #include <sstream>
@@ -14,12 +17,12 @@ namespace zeroerr {
 #pragma region log macros
 
 
-#define EXPAND(x)    x
-#define INFO(...)    EXPAND(ZEROERR_INFO(__VA_ARGS__))
-#define LOG(...)     EXPAND(ZEROERR_LOG(LOG, __VA_ARGS__))
-#define WARNING(...) EXPAND(ZEROERR_LOG(WARNING, __VA_ARGS__))
-#define ERROR(...)   EXPAND(ZEROERR_LOG(ERROR, __VA_ARGS__))
-#define FATAL(...)   EXPAND(ZEROERR_LOG(FATAL, __VA_ARGS__))
+#define EXPAND(x)  x
+#define INFO(...)  EXPAND(ZEROERR_INFO(__VA_ARGS__))
+#define LOG(...)   EXPAND(ZEROERR_LOG(LOG, __VA_ARGS__))
+#define WARN(...)  EXPAND(ZEROERR_LOG(WARN, __VA_ARGS__))
+#define ERROR(...) EXPAND(ZEROERR_LOG(ERROR, __VA_ARGS__))
+#define FATAL(...) EXPAND(ZEROERR_LOG(FATAL, __VA_ARGS__))
 
 
 #define ZEROERR_LOG_IF(condition, ACTION, ...) \
@@ -27,11 +30,11 @@ namespace zeroerr {
         if (condition) ACTION(__VA_ARGS__);    \
     } while (0)
 
-#define INFO_IF(cond, ...)    ZEROERR_LOG_IF(cond, INFO, __VA_ARGS__)
-#define LOG_IF(cond, ...)     ZEROERR_LOG_IF(cond, LOG, __VA_ARGS__)
-#define WARNING_IF(cond, ...) ZEROERR_LOG_IF(cond, WARNING, __VA_ARGS__)
-#define ERROR_IF(cond, ...)   ZEROERR_LOG_IF(cond, ERROR, __VA_ARGS__)
-#define FATAL_IF(cond, ...)   ZEROERR_LOG_IF(cond, FATAL, __VA_ARGS__)
+#define INFO_IF(cond, ...)  ZEROERR_LOG_IF(cond, INFO, __VA_ARGS__)
+#define LOG_IF(cond, ...)   ZEROERR_LOG_IF(cond, LOG, __VA_ARGS__)
+#define WARN_IF(cond, ...)  ZEROERR_LOG_IF(cond, WARN, __VA_ARGS__)
+#define ERROR_IF(cond, ...) ZEROERR_LOG_IF(cond, ERROR, __VA_ARGS__)
+#define FATAL_IF(cond, ...) ZEROERR_LOG_IF(cond, FATAL, __VA_ARGS__)
 
 
 #define ZEROERR_LOG_EVERY_(n, ACTION, ...) \
@@ -45,11 +48,11 @@ namespace zeroerr {
     } while (0)
 
 
-#define INFO_EVERY_(cond, ...)    ZEROERR_LOG_EVERY_(cond, INFO, __VA_ARGS__)
-#define LOG_EVERY_(cond, ...)     ZEROERR_LOG_EVERY_(cond, LOG, __VA_ARGS__)
-#define WARNING_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, WARNING, __VA_ARGS__)
-#define ERROR_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, ERROR, __VA_ARGS__)
-#define FATAL_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, FATAL, __VA_ARGS__)
+#define INFO_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, INFO, __VA_ARGS__)
+#define LOG_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, LOG, __VA_ARGS__)
+#define WARN_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, WARN, __VA_ARGS__)
+#define ERROR_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, ERROR, __VA_ARGS__)
+#define FATAL_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, FATAL, __VA_ARGS__)
 
 
 #define ZEROERR_LOG_IF_EVERY_(n, cond, ACTION, ...) \
@@ -62,11 +65,11 @@ namespace zeroerr {
         --counter;                                  \
     } while (0)
 
-#define INFO_IF_EVERY_(n, cond, ...)    ZEROERR_LOG_IF_EVERY_(n, cond, INFO, __VA_ARGS__)
-#define LOG_IF_EVERY_(n, cond, ...)     ZEROERR_LOG_IF_EVERY_(n, cond, LOG, __VA_ARGS__)
-#define WARNING_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, WARNING, __VA_ARGS__)
-#define ERROR_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, ERROR, __VA_ARGS__)
-#define FATAL_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, FATAL, __VA_ARGS__)
+#define INFO_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, INFO, __VA_ARGS__)
+#define LOG_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, LOG, __VA_ARGS__)
+#define WARN_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, WARN, __VA_ARGS__)
+#define ERROR_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ERROR, __VA_ARGS__)
+#define FATAL_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, FATAL, __VA_ARGS__)
 
 #define ZEROERR_LOG_FIRST(cond, ACTION, ...) \
     do {                                     \
@@ -77,11 +80,11 @@ namespace zeroerr {
         }                                    \
     } while (0)
 
-#define INFO_FIRST(cond, ...)    ZEROERR_LOG_FIRST(cond, INFO, __VA_ARGS__)
-#define LOG_FIRST(cond, ...)     ZEROERR_LOG_FIRST(cond, LOG, __VA_ARGS__)
-#define WARNING_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, WARNING, __VA_ARGS__)
-#define ERROR_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, ERROR, __VA_ARGS__)
-#define FATAL_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, FATAL, __VA_ARGS__)
+#define INFO_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, INFO, __VA_ARGS__)
+#define LOG_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, LOG, __VA_ARGS__)
+#define WARN_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, WARN, __VA_ARGS__)
+#define ERROR_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, ERROR, __VA_ARGS__)
+#define FATAL_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, FATAL, __VA_ARGS__)
 
 #define ZEROERR_LOG_FIRST_(n, cond, ACTION, ...) \
     do {                                         \
@@ -91,11 +94,11 @@ namespace zeroerr {
         }                                        \
     } while (0)
 
-#define INFO_FIRST_(n, cond, ...)    ZEROERR_LOG_FIRST_(n, cond, INFO, __VA_ARGS__)
-#define LOG_FIRST_(n, cond, ...)     ZEROERR_LOG_FIRST_(n, cond, LOG, __VA_ARGS__)
-#define WARNING_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, WARNING, __VA_ARGS__)
-#define ERROR_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, ERROR, __VA_ARGS__)
-#define FATAL_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, FATAL, __VA_ARGS__)
+#define INFO_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, INFO, __VA_ARGS__)
+#define LOG_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, LOG, __VA_ARGS__)
+#define WARN_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, WARN, __VA_ARGS__)
+#define ERROR_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ERROR, __VA_ARGS__)
+#define FATAL_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, FATAL, __VA_ARGS__)
 
 
 #ifdef _DEBUG
@@ -112,7 +115,7 @@ namespace zeroerr {
         static zeroerr::LogInfo log_info{__FILE__, message, __LINE__, 0,                  \
                                          zeroerr::LogSeverity::severity};                 \
         msg->info = &log_info;                                                            \
-        std::cerr << msg->str().c_str();                                                  \
+        std::cerr << msg->str();                                                          \
     } while (0)
 
 #define ZEROERR_INFO(...) \
@@ -136,8 +139,29 @@ namespace zeroerr {
         }                                                          \
     }
 
+#ifdef ZEROERR_PRINT_ASSERT_0
+#undef ZEROERR_PRINT_ASSERT_0
+#endif
+
+#define ZEROERR_PRINT_ASSERT_0(cond, level, ...) ZEROERR_LOG_IF(cond, level, __VA_ARGS__)
 
 #pragma endregion
+
+namespace log_detail {
+
+// Generate sequence of integers from 0 to N-1
+// Usage: detail::gen_seq<N>  then use <size_t... I> to match it
+template <std::size_t...>
+struct seq {};
+
+template <std::size_t N, std::size_t... Is>
+struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
+
+template <std::size_t... Is>
+struct gen_seq<0, Is...> : seq<Is...> {};
+
+}
+
 
 extern size_t LogLevel;
 extern size_t LogCategory;
@@ -145,7 +169,7 @@ extern size_t LogCategory;
 enum LogSeverity {
     INFO,  // it will not write to file if no other log related
     LOG,
-    WARNING,
+    WARN,
     ERROR,
     FATAL,  // it will terminate the program
 };
@@ -175,15 +199,54 @@ struct LogMessage {
     std::chrono::system_clock::time_point time;
 };
 
+template<typename T, std::size_t... I>
+std::string gen_str(const char* msg, const T& args, log_detail::seq<I...>) {
+    return format(msg, std::get<I>(args)...);
+}
+
+template<typename T>
+std::string gen_str(const char* msg, const T& args, log_detail::seq<>) {
+    return msg;
+}
+
+
 template <typename... T>
 struct LogMessageImpl : LogMessage {
     LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
     std::string str() override {
-        std::ostringstream oss;
-        Printer            print(oss);
-        print(info->message, args);
-        return oss.str();
+        std::stringstream ss;
+        std::time_t t = std::chrono::system_clock::to_time_t(time);
+        std::tm tm = std::tm{0};
+        gmtime_r(&t, &tm);
+
+        ss << '[';
+        switch (info->severity) {
+            case INFO:
+                ss << Dim << "INFO" << Reset;
+                break;
+            case LOG:
+                ss << "LOG";
+                break;
+            case WARN:
+                ss << FgYellow << "WARN" << Reset;
+                break;
+            case ERROR:
+                ss << FgRed << "ERROR" << Reset;
+                break;
+            case FATAL:
+                ss << FgMagenta << "FATAL" << Reset;
+                break;
+        }
+        ss << " " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+
+        std::string fileName(info->filename);
+        auto        p = fileName.find_last_of('/');
+        if (p != std::string::npos) fileName = fileName.substr(p + 1);
+
+        ss << " " << fileName << ":" << info->line;
+        ss << "] " << gen_str(info->message, args, log_detail::gen_seq<sizeof...(T)>{});
+        return ss.str();
     }
 
     std::tuple<T...> args;

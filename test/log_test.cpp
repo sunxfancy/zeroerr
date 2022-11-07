@@ -11,7 +11,12 @@ using namespace zeroerr;
 
 TEST_CASE("log_test") {
     LOG("Hello {i}", 1);
-    WARNING("Test Warning {print}", "print data");
+    WARN("Test Warning {print}", "print data");
+}
+
+TEST_CASE("isempty") {
+    int k = ISEMPTY(test, 1);
+    REQUIRE(k == 0);
 }
 
 
@@ -28,28 +33,29 @@ TEST_CASE("lazy evaluation") {
 
 
 TEST_CASE("speed test") {
-    uint64_t* data      = new uint64_t[1000000];
 #ifdef ZEROERR_OS_UNIX
-    FILE*     file      = fmemopen(data, 1000000 * sizeof(uint64_t), "w");
-    FILE*     oldstdout = stdout;
-    stdout              = file;
+    // uint64_t* data      = new uint64_t[1000000];
+    // FILE*     file      = fmemopen(data, 1000000 * sizeof(uint64_t), "w");
+    // FILE*     oldstdout = stdout;
+    // FILE*     oldstderr = stderr;
+    // stdout = stderr = file;
 #endif
     Benchmark bench("log speed test");
     bench
         .run("stringstream",
              [] {
                  std::stringstream ss;
-                 ss << "hello world";
+                 ss << "hello world " << 1.1;
                  doNotOptimizeAway(ss);
              })
-        .run("log", [] { LOG("hello world"); })
-        .run("spdlog", [] { spdlog::info("hello world"); })
+        .run("log", [] { LOG("hello world {value}", 1.1); })
+        .run("spdlog", [] { spdlog::info("hello world {:03.2f}", 1.1); })
         .report();
 #ifdef ZEROERR_OS_UNIX
-    stdout = oldstdout;
-    fclose(file);
+    // stdout = oldstdout; stderr = oldstderr;
+    // fclose(file);
+    // delete[] data;
 #endif
-    delete[] data;
 }
 
 TEST_CASE("log group") {
