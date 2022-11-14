@@ -4,12 +4,12 @@
 namespace zeroerr {
 
 
-extern Printer& getStdoutPrinter() {
+Printer& getStdoutPrinter() {
     static Printer printer(std::cout);
     return printer;
 }
 
-extern Printer& getStderrPrinter() {
+Printer& getStderrPrinter() {
     static Printer printer(std::cerr);
     return printer;
 }

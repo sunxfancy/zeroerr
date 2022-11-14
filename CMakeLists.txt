@@ -52,7 +52,7 @@ add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/third_party)
+include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/third_party ${CMAKE_BINARY_DIR})
 
 file(GLOB_RECURSE include_files ${CMAKE_SOURCE_DIR}/include/**/*.h)
 file(GLOB_RECURSE source_files ${CMAKE_SOURCE_DIR}/src/*.cpp)
@@ -113,9 +113,12 @@ if(MAIN_PROJECT)
     endif()
 
     file(GLOB_RECURSE test_files ${CMAKE_SOURCE_DIR}/test/*.cpp)
+    list(REMOVE_ITEM test_files ${CMAKE_SOURCE_DIR}/test/single_file_test.cpp)
 
     add_executable(unittest ${test_files} ${cuda_files})
     target_link_libraries(unittest zeroerr ${llvm_libs})
+
+    add_executable(single_file_test ${CMAKE_SOURCE_DIR}/test/single_file_test.cpp)
 
     enable_testing()
     add_test(NAME RunUnitTest COMMAND unittest)
