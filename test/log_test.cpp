@@ -9,14 +9,18 @@
 
 using namespace zeroerr;
 
+
 TEST_CASE("log_test") {
     LOG("Hello {i}", 1);
     WARN("Test Warning {print}", "print data");
+
+    ERROR_IF(1 == 1, "1 == 1");
 }
+
 
 TEST_CASE("isempty") {
     int k = ISEMPTY(test, 1);
-    REQUIRE(k == 0);
+    // REQUIRE(k == 0);
 }
 
 
@@ -27,18 +31,18 @@ TEST_CASE("lazy evaluation") {
         sum += i;
         INFO("i =", i);
         INFO("i+1 =", i + 1);
-        REQUIRE(0 <= sum < 50);
+        // REQUIRE(0 <= sum < 50);
     }
 }
 
 
 TEST_CASE("speed test") {
 #ifdef ZEROERR_OS_UNIX
-    // uint64_t* data      = new uint64_t[1000000];
-    // FILE*     file      = fmemopen(data, 1000000 * sizeof(uint64_t), "w");
-    // FILE*     oldstdout = stdout;
-    // FILE*     oldstderr = stderr;
-    // stdout = stderr = file;
+    uint64_t* data      = new uint64_t[1000000];
+    FILE*     file      = fmemopen(data, 1000000 * sizeof(uint64_t), "w");
+    FILE*     oldstdout = stdout;
+    FILE*     oldstderr = stderr;
+    stdout = stderr = file;
 #endif
     Benchmark bench("log speed test");
     bench
@@ -52,9 +56,9 @@ TEST_CASE("speed test") {
         .run("spdlog", [] { spdlog::info("hello world {:03.2f}", 1.1); })
         .report();
 #ifdef ZEROERR_OS_UNIX
-    // stdout = oldstdout; stderr = oldstderr;
-    // fclose(file);
-    // delete[] data;
+    stdout = oldstdout; stderr = oldstderr;
+    fclose(file);
+    delete[] data;
 #endif
 }
 

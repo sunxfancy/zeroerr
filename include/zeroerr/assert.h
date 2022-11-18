@@ -19,30 +19,34 @@
 #define ZEROERR_G_CONTEXT_SCOPE(x)
 #endif
 
-#ifndef ZEROERR_PRINT_ASSERT_0
-#define ZEROERR_PRINT_ASSERT_0(cond, level, ...)                             \
-    do {                                                                     \
-        if (cond) {                                                          \
-            if (zeroerr::assert_level::level == zeroerr::assert_level::WARN) \
-                std::cerr << zeroerr::FgYellow << #level << zeroerr::Reset;  \
-            else                                                             \
-                std::cerr << zeroerr::FgRed << #level << zeroerr::Reset;     \
-            std::cerr << zeroerr::format(__VA_ARGS__) << std::endl;          \
-        }                                                                    \
+#ifndef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER
+#define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, ...)              \
+    do {                                                                    \
+        if (cond) {                                                         \
+            if (zeroerr::assert_level::ZEROERR_CAT(level, _l) ==            \
+                zeroerr::assert_level::ZEROERR_WARN_l)                      \
+                std::cerr << zeroerr::FgYellow << #level << zeroerr::Reset; \
+            else                                                            \
+                std::cerr << zeroerr::FgRed << #level << zeroerr::Reset;    \
+            std::cerr << zeroerr::format(__VA_ARGS__) << std::endl;         \
+        }                                                                   \
     } while (0)
 #endif
 
-#define ZEROERR_PRINT_ASSERT_1(cond, level, ...) \
-    ZEROERR_PRINT_ASSERT_0(cond, level, " Assertion Failed:\n{msg}", assertion_data.log())
-
-#define ZEROERR_PRINT_ASSERT(cond, level, ...) \
-    ZEROERR_CAT(ZEROERR_PRINT_ASSERT_, ISEMPTY(__VA_ARGS__))(cond, level, __VA_ARGS__)
-
+#ifdef ZEROERR_OS_WINDOWS
+#define ZEROERR_PRINT_ASSERT(cond, level, pattern, ...)                                    \
+    ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, " Assertion Failed:\n{msg}" pattern, \
+                                         assertion_data.log(), __VA_ARGS__)
+#else
+#define ZEROERR_PRINT_ASSERT(cond, level, pattern, ...)                                    \
+    ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, " Assertion Failed:\n{msg}" pattern, \
+                                         assertion_data.log(), ##__VA_ARGS__)
+#endif
 
 #define ZEROERR_ASSERT(cond, level, throws, is_false, ...)                                       \
     ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \
-        zeroerr::assert_info info{zeroerr::assert_level::level, zeroerr::assert_throw::throws,   \
-                                  is_false};                                                     \
+        zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
+                                  zeroerr::assert_throw::throws, is_false};                      \
                                                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #cond, info);                  \
         assertion_data.setResult(std::move(zeroerr::ExpressionDecomposer() << cond));            \
@@ -57,6 +61,8 @@
     }                                                                                            \
     ZEROERR_FUNC_SCOPE_END
 
+//         ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, __VA_ARGS__);                \
+
 
 #ifdef ZEROERR_NO_ASSERT
 
@@ -69,19 +75,19 @@
 
 #else
 
-#define CHECK(cond, ...)       ZEROERR_ASSERT(cond, WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_NOT(cond, ...)   ZEROERR_ASSERT(cond, WARN, no_throw, true, __VA_ARGS__)
-#define REQUIRE(cond, ...)     ZEROERR_ASSERT(cond, ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_NOT(cond, ...) ZEROERR_ASSERT(cond, ERROR, throws, true, __VA_ARGS__)
-#define ASSERT(cond, ...)      ZEROERR_ASSERT(cond, FATAL, fatal, false, __VA_ARGS__)
-#define ASSERT_NOT(cond, ...)  ZEROERR_ASSERT(cond, FATAL, fatal, true, __VA_ARGS__)
+#define CHECK(cond, ...)       ZEROERR_ASSERT(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define CHECK_NOT(cond, ...)   ZEROERR_ASSERT(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__)
+#define REQUIRE(cond, ...)     ZEROERR_ASSERT(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define REQUIRE_NOT(cond, ...) ZEROERR_ASSERT(cond, ZEROERR_ERROR, throws, true, __VA_ARGS__)
+#define ASSERT(cond, ...)      ZEROERR_ASSERT(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ASSERT_NOT(cond, ...)  ZEROERR_ASSERT(cond, ZEROERR_FATAL, throws, true, __VA_ARGS__)
 
 #endif
 
 #pragma endregion
 
 
-// This symbol must be in the global namespace
+// This symbol must be in the global namespace or anonymous namespace
 // used for checking the assert is inside testing or not
 namespace {
 constexpr bool _ZEROERR_TEST_CONTEXT = false;
@@ -90,8 +96,8 @@ constexpr bool _ZEROERR_TEST_CONTEXT = false;
 
 namespace zeroerr {
 
-enum class assert_level : uint8_t { WARN, ERROR, FATAL };
-enum class assert_throw : uint8_t { fatal, no_throw, throws, throws_as };
+enum class assert_level : uint8_t { ZEROERR_WARN_l, ZEROERR_ERROR_l, ZEROERR_FATAL_l };
+enum class assert_throw : uint8_t { no_throw, throws, throws_as };
 enum class assert_cmp : uint8_t { eq, ne, gt, ge, lt, le };
 
 // This is a one-byte assert info struct, which is used to collect the meta info of an assertion
@@ -139,9 +145,7 @@ struct AssertionData : std::exception {
         if (shouldThrow()) throw *this;
     }
 
-    bool shouldThrow() {
-        return info.throw_type == assert_throw::throws || info.throw_type == assert_throw::fatal;
-    }
+    bool shouldThrow() { return info.throw_type == assert_throw::throws; }
 };
 
 namespace detail {
@@ -165,9 +169,9 @@ struct context_helper<T, false> {
             return;
         }
         switch (data.info.level) {
-            case assert_level::FATAL:
-            case assert_level::ERROR: ctx->failed_as++; break;
-            case assert_level::WARN: ctx->warning_as++; break;
+            case assert_level::ZEROERR_FATAL_l:
+            case assert_level::ZEROERR_ERROR_l: ctx->failed_as++; break;
+            case assert_level::ZEROERR_WARN_l: ctx->warning_as++; break;
         }
     }
 };

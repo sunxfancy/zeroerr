@@ -133,17 +133,6 @@ struct has_extension<
     : std::true_type {};
 
 
-// Generate sequence of integers from 0 to N-1
-// Usage: detail::gen_seq<N>  then use <size_t... I> to match it
-template <std::size_t...>
-struct seq {};
-
-template <std::size_t N, std::size_t... Is>
-struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
-
-template <std::size_t... Is>
-struct gen_seq<0, Is...> : seq<Is...> {};
-
 
 #define ZEROERR_ENABLE_IF(x) \
     template <typename T>    \
@@ -259,7 +248,7 @@ struct Printer {
     }
 
 #if defined(ZEROERR_ENABLE_PFR) && (ZEROERR_CXX_STANDARD >= 14)
-    template <class StructType, size_t... I>
+    template <class StructType, unsigned... I>
     void print_struct(const StructType& s, unsigned level, const char* lb, detail::seq<I...>) {
         int a[] = {(os << (I == 0 ? "" : ", ") << pfr::get<I>(s), 0)...};
     }
@@ -341,7 +330,7 @@ struct Printer {
                             detail::seq<>) {
     }
 
-    template <class TupType, size_t... I>
+    template <class TupType, unsigned... I>
     inline void print_tuple(const TupType& _tup, unsigned level, const char* lb,
                             detail::seq<I...>) {
         int a[] = {(os << (I == 0 ? "" : ", ") << std::get<I>(_tup), 0)...};

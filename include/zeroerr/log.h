@@ -1,40 +1,72 @@
 #pragma once
+#include "zeroerr/format.h"
 #include "zeroerr/internal/config.h"
 #include "zeroerr/print.h"
-#include "zeroerr/format.h"
 
-#include <cstdlib>
 #include <chrono>
-#include <iomanip>
+#include <cstdlib>
 #include <deque>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <unordered_set>
 #include <vector>
+
+extern const char* ZEROERR_LOG_CATEGORY;
 
 namespace zeroerr {
 
 #pragma region log macros
 
 
-#define EXPAND(x)  x
-#define INFO(...)  EXPAND(ZEROERR_INFO(__VA_ARGS__))
-#define LOG(...)   EXPAND(ZEROERR_LOG(LOG, __VA_ARGS__))
-#define WARN(...)  EXPAND(ZEROERR_LOG(WARN, __VA_ARGS__))
-#define ERROR(...) EXPAND(ZEROERR_LOG(ERROR, __VA_ARGS__))
-#define FATAL(...) EXPAND(ZEROERR_LOG(FATAL, __VA_ARGS__))
+#define ZEROERR_INFO(...)  ZEROERR_EXPAND(ZEROERR_INFO_(__VA_ARGS__))
+#define ZEROERR_LOG(...)   ZEROERR_EXPAND(ZEROERR_LOG_(LOG_l, __VA_ARGS__))
+#define ZEROERR_WARN(...)  ZEROERR_EXPAND(ZEROERR_LOG_(WARN_l, __VA_ARGS__))
+#define ZEROERR_ERROR(...) ZEROERR_EXPAND(ZEROERR_LOG_(ERROR_l, __VA_ARGS__))
+#define ZEROERR_FATAL(...) ZEROERR_EXPAND(ZEROERR_LOG_(FATAL_l, __VA_ARGS__))
 
+#ifdef ZEROERR_USE_SHORT_LOG_MACRO
+
+#ifdef INFO
+#undef INFO
+#endif
+
+#ifdef LOG
+#undef LOG
+#endif
+
+#ifdef WARN
+#undef WARN
+#endif
+
+#ifdef ERROR
+#undef ERROR
+#endif
+
+#ifdef FATAL
+#undef FATAL
+#endif
+
+#define INFO(...)  ZEROERR_INFO(__VA_ARGS__)
+#define LOG(...)   ZEROERR_LOG(__VA_ARGS__)
+#define WARN(...)  ZEROERR_WARN(__VA_ARGS__)
+#define ERROR(...) ZEROERR_ERROR(__VA_ARGS__)
+#define FATAL(...) ZEROERR_FATAL(__VA_ARGS__)
+
+#endif
 
 #define ZEROERR_LOG_IF(condition, ACTION, ...) \
     do {                                       \
         if (condition) ACTION(__VA_ARGS__);    \
     } while (0)
 
-#define INFO_IF(cond, ...)  ZEROERR_LOG_IF(cond, INFO, __VA_ARGS__)
-#define LOG_IF(cond, ...)   ZEROERR_LOG_IF(cond, LOG, __VA_ARGS__)
-#define WARN_IF(cond, ...)  ZEROERR_LOG_IF(cond, WARN, __VA_ARGS__)
-#define ERROR_IF(cond, ...) ZEROERR_LOG_IF(cond, ERROR, __VA_ARGS__)
-#define FATAL_IF(cond, ...) ZEROERR_LOG_IF(cond, FATAL, __VA_ARGS__)
+
+#define INFO_IF(cond, ...)  ZEROERR_LOG_IF(cond, ZEROERR_INFO, __VA_ARGS__)
+#define LOG_IF(cond, ...)   ZEROERR_LOG_IF(cond, ZEROERR_LOG, __VA_ARGS__)
+#define WARN_IF(cond, ...)  ZEROERR_LOG_IF(cond, ZEROERR_WARN, __VA_ARGS__)
+#define ERROR_IF(cond, ...) ZEROERR_LOG_IF(cond, ZEROERR_ERROR, __VA_ARGS__)
+#define FATAL_IF(cond, ...) ZEROERR_LOG_IF(cond, ZEROERR_FATAL, __VA_ARGS__)
 
 
 #define ZEROERR_LOG_EVERY_(n, ACTION, ...) \
@@ -102,23 +134,23 @@ namespace zeroerr {
 
 
 #ifdef _DEBUG
-#define DLOG(ACTION, ...) EXPAND(ACTION)(__VA_ARGS__)
+#define DLOG(ACTION, ...) ACTION(__VA_ARGS__)
 #else
 #define DLOG(ACTION, ...)
 #endif
 
 
-#define ZEROERR_LOG(severity, message, ...)                                               \
-    do {                                                                                  \
-        ZEROERR_G_CONTEXT_SCOPE(true);                                                    \
-        auto*                   msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__); \
-        static zeroerr::LogInfo log_info{__FILE__, message, __LINE__, 0,                  \
-                                         zeroerr::LogSeverity::severity};                 \
-        msg->info = &log_info;                                                            \
-        std::cerr << msg->str();                                                          \
+#define ZEROERR_LOG_(severity, message, ...)                                                  \
+    do {                                                                                      \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                                        \
+        auto                    msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);     \
+        static zeroerr::LogInfo log_info{__FILE__, message,  ZEROERR_LOG_CATEGORY,            \
+                                         __LINE__, msg.size, zeroerr::LogSeverity::severity}; \
+        msg.log->info = &log_info;                                                            \
+        std::cerr << msg.log->str();                                                          \
     } while (0)
 
-#define ZEROERR_INFO(...) \
+#define ZEROERR_INFO_(...) \
     ZEROERR_INFO_IMPL(ZEROERR_NAMEGEN(_capture_), ZEROERR_NAMEGEN(_capture_), __VA_ARGS__)
 
 #define ZEROERR_INFO_IMPL(mb_name, v_name, ...)                                \
@@ -139,39 +171,36 @@ namespace zeroerr {
         }                                                          \
     }
 
-#ifdef ZEROERR_PRINT_ASSERT_0
-#undef ZEROERR_PRINT_ASSERT_0
+#ifdef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER
+#undef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER
 #endif
 
-#define ZEROERR_PRINT_ASSERT_0(cond, level, ...) ZEROERR_LOG_IF(cond, level, __VA_ARGS__)
+#define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, ...) \
+    ZEROERR_LOG_IF(cond, level, __VA_ARGS__)
 
 #pragma endregion
 
-namespace log_detail {
+namespace detail {
 
-// Generate sequence of integers from 0 to N-1
-// Usage: detail::gen_seq<N>  then use <size_t... I> to match it
-template <std::size_t...>
-struct seq {};
-
-template <std::size_t N, std::size_t... Is>
-struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
-
-template <std::size_t... Is>
-struct gen_seq<0, Is...> : seq<Is...> {};
-
+template <typename T, unsigned... I>
+std::string gen_str(const char* msg, const T& args, seq<I...>) {
+    return format(msg, std::get<I>(args)...);
 }
 
+template <typename T>
+std::string gen_str(const char* msg, const T& args, seq<>) {
+    return msg;
+}
 
-extern size_t LogLevel;
-extern size_t LogCategory;
+}  // namespace detail
+
 
 enum LogSeverity {
-    INFO,  // it will not write to file if no other log related
-    LOG,
-    WARN,
-    ERROR,
-    FATAL,  // it will terminate the program
+    INFO_l,  // it will not write to file if no other log related
+    LOG_l,
+    WARN_l,
+    ERROR_l,
+    FATAL_l,  // it will contain a stack trace
 };
 
 struct LogTime {};
@@ -179,6 +208,7 @@ struct LogTime {};
 struct LogInfo {
     const char* filename;
     const char* message;
+    const char* category;
     unsigned    line;
     unsigned    size;
     LogSeverity severity;
@@ -186,6 +216,8 @@ struct LogInfo {
 
 typedef void (*LogCustomCallback)(LogInfo);
 
+extern void setLogLevel(LogSeverity level);
+extern void setLogCategory(const char* categories);
 
 struct LogMessage {
     LogMessage() { time = std::chrono::system_clock::now(); }
@@ -199,44 +231,22 @@ struct LogMessage {
     std::chrono::system_clock::time_point time;
 };
 
-template<typename T, std::size_t... I>
-std::string gen_str(const char* msg, const T& args, log_detail::seq<I...>) {
-    return format(msg, std::get<I>(args)...);
-}
-
-template<typename T>
-std::string gen_str(const char* msg, const T& args, log_detail::seq<>) {
-    return msg;
-}
-
-
 template <typename... T>
 struct LogMessageImpl : LogMessage {
     LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
     std::string str() override {
         std::stringstream ss;
-        std::time_t t = std::chrono::system_clock::to_time_t(time);
-        std::tm tm = std::tm{0};
-        gmtime_r(&t, &tm);
+        std::time_t       t  = std::chrono::system_clock::to_time_t(time);
+        std::tm           tm = *std::localtime(&t);
 
-        ss << '[';
+        ss << Dim << '[' << Reset;
         switch (info->severity) {
-            case INFO:
-                ss << Dim << "INFO" << Reset;
-                break;
-            case LOG:
-                ss << "LOG";
-                break;
-            case WARN:
-                ss << FgYellow << "WARN" << Reset;
-                break;
-            case ERROR:
-                ss << FgRed << "ERROR" << Reset;
-                break;
-            case FATAL:
-                ss << FgMagenta << "FATAL" << Reset;
-                break;
+            case INFO_l: ss << "INFO"; break;
+            case LOG_l: ss << FgGreen << "LOG" << Reset; break;
+            case WARN_l: ss << FgYellow << "WARN" << Reset; break;
+            case ERROR_l: ss << FgRed << "ERROR" << Reset; break;
+            case FATAL_l: ss << FgMagenta << "FATAL" << Reset; break;
         }
         ss << " " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
 
@@ -245,7 +255,8 @@ struct LogMessageImpl : LogMessage {
         if (p != std::string::npos) fileName = fileName.substr(p + 1);
 
         ss << " " << fileName << ":" << info->line;
-        ss << "] " << gen_str(info->message, args, log_detail::gen_seq<sizeof...(T)>{});
+        ss << Dim << ']' << Reset << "  "
+           << gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
         return ss.str();
     }
 
@@ -255,37 +266,69 @@ struct LogMessageImpl : LogMessage {
 
 constexpr size_t LogStreamMaxSize = 1024 * 1024;
 
+struct DataBlock {
+    char       data[LogStreamMaxSize];
+    size_t     size = 0;
+    DataBlock* next = nullptr;
+};
+
+class Logger {
+public:
+    virtual void flush(DataBlock*) = 0;
+};
+
+struct PushResult {
+    LogMessage* log;
+    unsigned    size;
+};
+
 class LogStream {
 public:
-    LogStream() { first = last = new DataBlock(); }
+    LogStream() {
+        first = last = new DataBlock();
+        setStderrLogger();
+    }
+    ~LogStream() {
+        while (first) {
+            DataBlock* next = first->next;
+            delete first;
+            first = next;
+        }
+        if (logger) delete logger;
+    }
 
-    struct DataBlock {
-        char       data[LogStreamMaxSize];
-        size_t     size = 0;
-        DataBlock* next = nullptr;
-    };
 
     template <typename... T>
-    LogMessage* push(T&&... args) {
-        size_t size = sizeof(LogMessageImpl<T...>);
+    PushResult push(T&&... args) {
+        unsigned size = sizeof(LogMessageImpl<T...>);
         if (size > LogStreamMaxSize) {
             throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
         }
         if (last->size + size > LogStreamMaxSize) {
-            last->next = new DataBlock();
-            last       = last->next;
+            if (flush_when_full) {
+                logger->flush(last);
+            } else {
+                last->next = new DataBlock();
+                last       = last->next;
+            }
         }
         void* p = last->data + last->size;
         last->size += size;
         LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
-        return msg;
+        return {msg, size};
     }
+
+    void setBinFileLogger(std::string name);
+    void setFileLogger(std::string name);
+    void setStdoutLogger();
+    void setStderrLogger();
 
     static LogStream& getDefault();
 
 private:
-    DataBlock* first;
-    DataBlock* last;
+    DataBlock *first, *last;
+    Logger*    logger          = nullptr;
+    bool       flush_when_full = true;
 };
 
 

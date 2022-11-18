@@ -1,3 +1,8 @@
+/*
+ * This benchmark component is modified from nanobench by Martin Ankerl
+ * https://github.com/martinus/nanobench
+ */
+
 #pragma once
 #include "zeroerr/internal/config.h"
 
