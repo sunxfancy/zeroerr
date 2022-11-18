@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 project(ZeroErr LANGUAGES C CXX)
 
 if(NOT DEFINED CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 11)
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
@@ -48,14 +48,23 @@ if(USE_MOLD)
     endif()
 endif()
 
-add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
-add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
+
+# add_compile_options("$<$<C_COMPILER_ID:MSVC>:/P>" "$<$<CXX_COMPILER_ID:MSVC>:/P>")
+
+# add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>" "$<$<C_COMPILER_ID:MSVC>:/Zc:preprocessor>")
+# add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>" "$<$<CXX_COMPILER_ID:MSVC>:/Zc:preprocessor>")
+
+
+add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>" )
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>" )
+
+
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-include_directories(${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/third_party)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/third_party ${CMAKE_CURRENT_BINARY_DIR})
 
-file(GLOB_RECURSE include_files ${CMAKE_SOURCE_DIR}/include/**/*.h)
-file(GLOB_RECURSE source_files ${CMAKE_SOURCE_DIR}/src/*.cpp)
+file(GLOB_RECURSE include_files ${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.h)
+file(GLOB_RECURSE source_files ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 add_library(zeroerr STATIC ${source_files})
 
@@ -107,15 +116,19 @@ if(MAIN_PROJECT)
         set(CMAKE_CUDA_ARCHITECTURES 80)
         set(CMAKE_CUDA_FLAGS " -ccbin=/usr/bin/gcc-10 ")
 
-        file(GLOB_RECURSE cuda_files ${CMAKE_SOURCE_DIR}/test/*.cu)
+        file(GLOB_RECURSE cuda_files ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cu)
     else()
         set(cuda_files "")
     endif()
 
-    file(GLOB_RECURSE test_files ${CMAKE_SOURCE_DIR}/test/*.cpp)
+    file(GLOB_RECURSE test_files ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cpp)
+    list(REMOVE_ITEM test_files ${CMAKE_CURRENT_SOURCE_DIR}/test/single_file_test.cpp)
 
     add_executable(unittest ${test_files} ${cuda_files})
     target_link_libraries(unittest zeroerr ${llvm_libs})
+
+    add_executable(single_file_test ${CMAKE_CURRENT_SOURCE_DIR}/test/single_file_test.cpp)
+    add_dependencies(single_file_test assemble_single_header)
 
     enable_testing()
     add_test(NAME RunUnitTest COMMAND unittest)
@@ -130,8 +143,6 @@ if(MAIN_PROJECT)
         COMMENT "assembling the single header")
 
     add_custom_target(assemble_single_header ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/zeroerr.hpp)
-
-    file(GLOB_RECURSE include_files ${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.h)
 
     install(TARGETS zeroerr DESTINATION lib)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zeroerr.hpp DESTINATION include)
