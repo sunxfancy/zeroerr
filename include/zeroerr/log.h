@@ -15,6 +15,10 @@
 
 extern const char* ZEROERR_LOG_CATEGORY;
 
+namespace std {
+class mutex;
+}
+
 namespace zeroerr {
 
 #pragma region log macros
@@ -147,7 +151,9 @@ namespace zeroerr {
         static zeroerr::LogInfo log_info{__FILE__, message,  ZEROERR_LOG_CATEGORY,            \
                                          __LINE__, msg.size, zeroerr::LogSeverity::severity}; \
         msg.log->info = &log_info;                                                            \
-        std::cerr << msg.log->str();                                                          \
+        if (zeroerr::LogStream::getDefault().flush_mode ==                                    \
+            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)                                     \
+            zeroerr::LogStream::getDefault().flush();                                         \
     } while (0)
 
 #define ZEROERR_INFO_(...) \
@@ -222,7 +228,7 @@ extern void setLogCategory(const char* categories);
 struct LogMessage {
     LogMessage() { time = std::chrono::system_clock::now(); }
 
-    virtual std::string str() = 0;
+    virtual std::string str(bool colorful = true) = 0;
 
     // meta data of this log message
     LogInfo* info;
@@ -231,31 +237,36 @@ struct LogMessage {
     std::chrono::system_clock::time_point time;
 };
 
+#define zeroerr_color(x) (colorful ? x : "")
+
 template <typename... T>
 struct LogMessageImpl : LogMessage {
     LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
-    std::string str() override {
+    std::string str(bool colorful = true) override {
         std::stringstream ss;
         std::time_t       t  = std::chrono::system_clock::to_time_t(time);
         std::tm           tm = *std::localtime(&t);
 
-        ss << Dim << '[' << Reset;
+        ss << zeroerr_color(Dim) << '[' << zeroerr_color(Reset);
         switch (info->severity) {
-            case INFO_l: ss << "INFO"; break;
-            case LOG_l: ss << FgGreen << "LOG" << Reset; break;
-            case WARN_l: ss << FgYellow << "WARN" << Reset; break;
-            case ERROR_l: ss << FgRed << "ERROR" << Reset; break;
-            case FATAL_l: ss << FgMagenta << "FATAL" << Reset; break;
+            case INFO_l: ss << "INFO "; break;
+            case LOG_l: ss << zeroerr_color(FgGreen) << "LOG  " << zeroerr_color(Reset); break;
+            case WARN_l: ss << zeroerr_color(FgYellow) << "WARN " << zeroerr_color(Reset); break;
+            case ERROR_l: ss << zeroerr_color(FgRed) << "ERROR" << zeroerr_color(Reset); break;
+            case FATAL_l: ss << zeroerr_color(FgMagenta) << "FATAL" << zeroerr_color(Reset); break;
         }
         ss << " " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
 
         std::string fileName(info->filename);
-        auto        p = fileName.find_last_of('/');
+
+        auto p = fileName.find_last_of('/');
         if (p != std::string::npos) fileName = fileName.substr(p + 1);
+        auto q = fileName.find_last_of('\\');
+        if (q != std::string::npos) fileName = fileName.substr(q + 1);
 
         ss << " " << fileName << ":" << info->line;
-        ss << Dim << ']' << Reset << "  "
+        ss << zeroerr_color(Dim) << ']' << zeroerr_color(Reset) << "  "
            << gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
         return ss.str();
     }
@@ -277,46 +288,27 @@ public:
     virtual void flush(DataBlock*) = 0;
 };
 
-struct PushResult {
-    LogMessage* log;
-    unsigned    size;
-};
-
 class LogStream {
 public:
-    LogStream() {
-        first = last = new DataBlock();
-        setStderrLogger();
-    }
-    ~LogStream() {
-        while (first) {
-            DataBlock* next = first->next;
-            delete first;
-            first = next;
-        }
-        if (logger) delete logger;
-    }
+    LogStream();
+    virtual ~LogStream();
 
+    struct PushResult {
+        LogMessage* log;
+        unsigned    size;
+    };
+
+    enum FlushMode { FLUSH_AT_ONCE, FLUSH_WHEN_FULL, FLUSH_MANULLY };
 
     template <typename... T>
     PushResult push(T&&... args) {
-        unsigned size = sizeof(LogMessageImpl<T...>);
-        if (size > LogStreamMaxSize) {
-            throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
-        }
-        if (last->size + size > LogStreamMaxSize) {
-            if (flush_when_full) {
-                logger->flush(last);
-            } else {
-                last->next = new DataBlock();
-                last       = last->next;
-            }
-        }
-        void* p = last->data + last->size;
-        last->size += size;
-        LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
+        unsigned    size = sizeof(LogMessageImpl<T...>);
+        void*       p    = alloc_block(size);
+        LogMessage* msg  = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
         return {msg, size};
     }
+
+    void flush();
 
     void setBinFileLogger(std::string name);
     void setFileLogger(std::string name);
@@ -324,11 +316,15 @@ public:
     void setStderrLogger();
 
     static LogStream& getDefault();
+    FlushMode         flush_mode = FLUSH_AT_ONCE;
 
 private:
     DataBlock *first, *last;
-    Logger*    logger          = nullptr;
-    bool       flush_when_full = true;
+    Logger*    logger = nullptr;
+#ifndef ZEROERR_NO_THREAD_SAFE
+    std::mutex* mutex;
+#endif
+    void* alloc_block(unsigned size);
 };
 
 

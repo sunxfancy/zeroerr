@@ -20,16 +20,22 @@
 #endif
 
 #ifndef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER
-#define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, ...)              \
-    do {                                                                    \
-        if (cond) {                                                         \
-            if (zeroerr::assert_level::ZEROERR_CAT(level, _l) ==            \
-                zeroerr::assert_level::ZEROERR_WARN_l)                      \
-                std::cerr << zeroerr::FgYellow << #level << zeroerr::Reset; \
-            else                                                            \
-                std::cerr << zeroerr::FgRed << #level << zeroerr::Reset;    \
-            std::cerr << zeroerr::format(__VA_ARGS__) << std::endl;         \
-        }                                                                   \
+#define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, ...)                    \
+    do {                                                                          \
+        if (cond) {                                                               \
+            switch (zeroerr::assert_level::ZEROERR_CAT(level, _l)) {              \
+                case zeroerr::assert_level::ZEROERR_WARN_l:                       \
+                    std::cerr << zeroerr::FgYellow << "WARN" << zeroerr::Reset;   \
+                    break;                                                        \
+                case zeroerr::assert_level::ZEROERR_ERROR_l:                      \
+                    std::cerr << zeroerr::FgRed << "ERROR" << zeroerr::Reset;     \
+                    break;                                                        \
+                case zeroerr::assert_level::ZEROERR_FATAL_l:                      \
+                    std::cerr << zeroerr::FgMagenta << "FATAL" << zeroerr::Reset; \
+                    break;                                                        \
+            }                                                                     \
+            std::cerr << zeroerr::format(__VA_ARGS__) << std::endl;               \
+        }                                                                         \
     } while (0)
 #endif
 
