@@ -84,11 +84,11 @@ namespace zeroerr {
     } while (0)
 
 
-#define INFO_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, INFO, __VA_ARGS__)
-#define LOG_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, LOG, __VA_ARGS__)
-#define WARN_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, WARN, __VA_ARGS__)
-#define ERROR_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, ERROR, __VA_ARGS__)
-#define FATAL_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, FATAL, __VA_ARGS__)
+#define INFO_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, ZEROERR_INFO, __VA_ARGS__)
+#define LOG_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, ZEROERR_LOG, __VA_ARGS__)
+#define WARN_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, ZEROERR_WARN, __VA_ARGS__)
+#define ERROR_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, ZEROERR_ERROR, __VA_ARGS__)
+#define FATAL_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, ZEROERR_FATAL, __VA_ARGS__)
 
 
 #define ZEROERR_LOG_IF_EVERY_(n, cond, ACTION, ...) \
@@ -101,11 +101,11 @@ namespace zeroerr {
         --counter;                                  \
     } while (0)
 
-#define INFO_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, INFO, __VA_ARGS__)
-#define LOG_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, LOG, __VA_ARGS__)
-#define WARN_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, WARN, __VA_ARGS__)
-#define ERROR_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ERROR, __VA_ARGS__)
-#define FATAL_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, FATAL, __VA_ARGS__)
+#define INFO_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_INFO, __VA_ARGS__)
+#define LOG_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_LOG, __VA_ARGS__)
+#define WARN_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_WARN, __VA_ARGS__)
+#define ERROR_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_ERROR, __VA_ARGS__)
+#define FATAL_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_FATAL, __VA_ARGS__)
 
 #define ZEROERR_LOG_FIRST(cond, ACTION, ...) \
     do {                                     \
@@ -116,11 +116,11 @@ namespace zeroerr {
         }                                    \
     } while (0)
 
-#define INFO_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, INFO, __VA_ARGS__)
-#define LOG_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, LOG, __VA_ARGS__)
-#define WARN_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, WARN, __VA_ARGS__)
-#define ERROR_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, ERROR, __VA_ARGS__)
-#define FATAL_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, FATAL, __VA_ARGS__)
+#define INFO_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, ZEROERR_INFO, __VA_ARGS__)
+#define LOG_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, ZEROERR_LOG, __VA_ARGS__)
+#define WARN_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, ZEROERR_WARN, __VA_ARGS__)
+#define ERROR_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, ZEROERR_ERROR, __VA_ARGS__)
+#define FATAL_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, ZEROERR_FATAL, __VA_ARGS__)
 
 #define ZEROERR_LOG_FIRST_(n, cond, ACTION, ...) \
     do {                                         \
@@ -130,12 +130,11 @@ namespace zeroerr {
         }                                        \
     } while (0)
 
-#define INFO_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, INFO, __VA_ARGS__)
-#define LOG_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, LOG, __VA_ARGS__)
-#define WARN_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, WARN, __VA_ARGS__)
-#define ERROR_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ERROR, __VA_ARGS__)
-#define FATAL_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, FATAL, __VA_ARGS__)
-
+#define INFO_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, ZEROERR_INFO, __VA_ARGS__)
+#define LOG_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, ZEROERR_LOG, __VA_ARGS__)
+#define WARN_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, ZEROERR_WARN, __VA_ARGS__)
+#define ERROR_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ZEROERR_ERROR, __VA_ARGS__)
+#define FATAL_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ZEROERR_FATAL, __VA_ARGS__)
 
 #ifdef _DEBUG
 #define DLOG(ACTION, ...) ACTION(__VA_ARGS__)
