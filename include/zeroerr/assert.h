@@ -73,7 +73,7 @@
         zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
                                   zeroerr::assert_throw::throws, is_false};                      \
                                                                                                  \
-        Printer print;                                                                           \
+        zeroerr::Printer print;                                                                           \
         print.isQuoted = false;                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #lhs " " #op " " #rhs, info);  \
         assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                          \
