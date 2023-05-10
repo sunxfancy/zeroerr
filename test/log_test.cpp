@@ -83,4 +83,6 @@ TEST_CASE("debug log") {
 TEST_CASE("log to file") {
     zeroerr::LogStream::getDefault().setFileLogger("log.txt");
     LOG("log to file {i}", 1);
-}
+    LOG("log the data {i}", 2);
+
+} 

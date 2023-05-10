@@ -29,7 +29,7 @@ if(NOT ENABLE_AUTO_INIT)
     add_definitions(-DZEROERR_DISABLE_AUTO_INIT)
 endif()
 
-option(USE_MOLD "Use mold for linking" ON)
+option(USE_MOLD "Use mold for linking" OFF)
 
 if(USE_MOLD)
     find_program(HAS_MOLD "mold")
@@ -48,6 +48,7 @@ if(USE_MOLD)
     endif()
 endif()
 
+option(BUILD_EXAMPLES "Build examples(ON, OFF)" ON)
 
 # add_compile_options("$<$<C_COMPILER_ID:MSVC>:/P>" "$<$<CXX_COMPILER_ID:MSVC>:/P>")
 
@@ -61,7 +62,7 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>" )
 
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/third_party ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/extension ${CMAKE_CURRENT_SOURCE_DIR}/third_party ${CMAKE_CURRENT_BINARY_DIR})
 
 file(GLOB_RECURSE include_files ${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.h)
 file(GLOB_RECURSE source_files ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
@@ -80,6 +81,10 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 endif()
 
 if(MAIN_PROJECT)
+    # Build examples when this project is built by itself
+    if (BUILD_EXAMPLES)
+        add_subdirectory(examples)
+    endif()
 
     find_package(LLVM CONFIG)
 
@@ -94,7 +99,9 @@ if(MAIN_PROJECT)
 
             # Find the libraries that correspond to the LLVM components
             # that we wish to use
-            llvm_map_components_to_libnames(llvm_libs support core)
+            llvm_map_components_to_libnames(llvm_libs support)
+
+            set(llvm_libs ${llvm_libs} LLVM)
 
             # Link against LLVM libraries
             message(STATUS " Linking against LLVM libraries: ${llvm_libs} ")
