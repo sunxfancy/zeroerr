@@ -370,12 +370,12 @@ struct BenchState {
     uint64_t calcBestNumIters() noexcept {
         double Elapsed               = d(elapsed);
         double TargetRuntimePerEpoch = d(targetEpochTime);
-        double NewIters              = TargetRuntimePerEpoch / Elapsed * d(numIteration);
+        double NewIters              = TargetRuntimePerEpoch * d(numIteration) / Elapsed;
 
-        NewIters *= 1.0 + 0.2 * mRng.uniform01();
+        NewIters *= (1.0 + 0.2 * mRng.uniform01());
 
-        // +0.5 for correct rounding when casting
-        return static_cast<uint64_t>(NewIters + 0.5);
+        // +1 for correct rounding when casting and make sure there are at least 1 iteration
+        return static_cast<uint64_t>(NewIters + 1);
     }
 
     void upscale() {
@@ -383,7 +383,7 @@ struct BenchState {
             // we are far below the target runtime. Multiply iterations by 10 (with overflow check)
             if (numIteration * 10 < numIteration) {
                 // overflow :-(
-                printf("iterations overflow. Maybe your code got optimized away?");
+                printf("iterations overflow. Maybe your code got optimized away?\n");
                 numIteration = 0;
                 return;
             }
@@ -408,7 +408,6 @@ struct BenchState {
                 } else {
                     stage        = UpScaling;
                     numIteration = 1;
-                    nextStage();
                 }
                 break;
             case WarmUp:

@@ -93,3 +93,10 @@ TEST_CASE("match ostream") {
 
     ZEROERR_HAVE_SAME_OUTPUT;
 }
+
+
+TEST_CASE("traditional check macro") {
+    int a = 1;
+    int b = 2;
+    CHECK_EQ(a, b);
+}

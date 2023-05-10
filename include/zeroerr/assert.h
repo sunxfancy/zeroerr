@@ -67,7 +67,26 @@
     }                                                                                            \
     ZEROERR_FUNC_SCOPE_END
 
-//         ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, __VA_ARGS__);                \
+
+#define ZEROERR_ASSERT_CMP(lhs, op, rhs, level, throws, is_false, ...)                           \
+    ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \
+        zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
+                                  zeroerr::assert_throw::throws, is_false};                      \
+                                                                                                 \
+        zeroerr::Printer print;                                                                           \
+        print.isQuoted = false;                                                                  \
+        zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #lhs " " #op " " #rhs, info);  \
+        assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                          \
+        zeroerr::detail::context_helper<                                                         \
+            decltype(_ZEROERR_TEST_CONTEXT),                                                     \
+            std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
+                         const bool>::value>::setContext(assertion_data, _ZEROERR_TEST_CONTEXT); \
+        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, __VA_ARGS__);                \
+        if (false) debug_break();                                                                \
+        assertion_data();                                                                        \
+        ZEROERR_FUNC_SCOPE_RET(assertion_data.passed);                                           \
+    }                                                                                            \
+    ZEROERR_FUNC_SCOPE_END
 
 
 #ifdef ZEROERR_NO_ASSERT
@@ -79,6 +98,27 @@
 #define ASSERT(cond, ...)
 #define ASSERT_NOT(cond, ...)
 
+#define CHECK_EQ(lhs, rhs, ...)
+#define CHECK_NE(lhs, rhs, ...)
+#define CHECK_LT(lhs, rhs, ...)
+#define CHECK_LE(lhs, rhs, ...)
+#define CHECK_GT(lhs, rhs, ...)
+#define CHECK_GE(lhs, rhs, ...)
+
+#define REQUIRE_EQ(lhs, rhs, ...)
+#define REQUIRE_NE(lhs, rhs, ...)
+#define REQUIRE_LT(lhs, rhs, ...)
+#define REQUIRE_LE(lhs, rhs, ...)
+#define REQUIRE_GT(lhs, rhs, ...)
+#define REQUIRE_GE(lhs, rhs, ...)
+
+#define ASSERT_EQ(lhs, rhs, ...)
+#define ASSERT_NE(lhs, rhs, ...)
+#define ASSERT_LT(lhs, rhs, ...)
+#define ASSERT_LE(lhs, rhs, ...)
+#define ASSERT_GT(lhs, rhs, ...)
+#define ASSERT_GE(lhs, rhs, ...)
+
 #else
 
 #define CHECK(cond, ...)       ZEROERR_ASSERT(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
@@ -87,6 +127,45 @@
 #define REQUIRE_NOT(cond, ...) ZEROERR_ASSERT(cond, ZEROERR_ERROR, throws, true, __VA_ARGS__)
 #define ASSERT(cond, ...)      ZEROERR_ASSERT(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__)
 #define ASSERT_NOT(cond, ...)  ZEROERR_ASSERT(cond, ZEROERR_FATAL, throws, true, __VA_ARGS__)
+
+#define CHECK_EQ(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define CHECK_NE(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define CHECK_LT(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define CHECK_LE(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define CHECK_GT(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define CHECK_GE(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+
+#define REQUIRE_EQ(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define REQUIRE_NE(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define REQUIRE_LT(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define REQUIRE_LE(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define REQUIRE_GT(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define REQUIRE_GE(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+
+#define ASSERT_EQ(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ASSERT_NE(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ASSERT_LT(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ASSERT_LE(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ASSERT_GT(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ASSERT_GE(lhs, rhs, ...) \
+    ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
 
 #endif
 

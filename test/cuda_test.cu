@@ -3,6 +3,7 @@
 #include "zeroerr/dbg.h"
 #include "zeroerr/print.h"
 #include "zeroerr/unittest.h"
+#include "zeroerr/cuda.h"
 
 #include <assert.h>
 #include <cuda_runtime.h>
