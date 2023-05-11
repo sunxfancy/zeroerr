@@ -97,15 +97,15 @@ static std::string insertIndentation(std::string str) {
 }
 
 int UnitTest::run() {
-    setlocale(LC_ALL, "en_US.utf8");
-    std::cerr << "ZeroErr Unit Test" << std::endl;
-    TestContext     context, sum;
-    std::stringbuf* new_buf = new std::stringbuf();
+    TestContext context, sum;
+    IReporter*  reporter = IReporter::create(reporter_name, *this);
+    if (!reporter) reporter = IReporter::create("console", *this);
+    reporter->testStart();
+    std::stringbuf new_buf;
     for (auto& tc : detail::getRegisteredTests()) {
-        std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
-                  << Reset << FgCyan << tc.name << Reset << std::endl;
+        reporter->testCaseStart(tc, new_buf);
         std::streambuf* orig_buf = std::cerr.rdbuf();
-        std::cerr.rdbuf(new_buf);
+        std::cerr.rdbuf(&new_buf);
         std::cerr << std::endl;
         try {
             tc.func(&context);  // run the test case
@@ -117,20 +117,11 @@ int UnitTest::run() {
         }
         int type = sum.add(std::move(context));
         std::cerr.rdbuf(orig_buf);
-        if (!(silent && type == 0)) std::cerr << insertIndentation(new_buf->str()) << std::endl;
-        new_buf->str("");
+        reporter->testCaseEnd(tc, new_buf, type);
+        new_buf.str("");
     }
-    delete new_buf;
-    std::cerr << "----------------------------------------------------------------" << std::endl;
-    std::cerr << "             " << FgGreen << "PASSED" << Reset << "   |   " << FgYellow
-              << "WARNING" << Reset << "   |   " << FgRed << "FAILED" << Reset << "   |   " << Dim
-              << "SKIPPED" << Reset << std::endl;
-    std::cerr << "TEST CASE:   " << std::setw(6) << sum.passed << "       " << std::setw(7)
-              << sum.warning << "       " << std::setw(6) << sum.failed << "       " << std::setw(7)
-              << sum.skipped << std::endl;
-    std::cerr << "ASSERTION:   " << std::setw(6) << sum.passed_as << "       " << std::setw(7)
-              << sum.warning_as << "       " << std::setw(6) << sum.failed_as << "       "
-              << std::setw(7) << sum.skipped_as << std::endl;
+    reporter->testEnd(sum);
+    delete reporter;
     return 0;
 }
 
@@ -160,19 +151,39 @@ regReporter::regReporter(IReporter* reporter) { getRegisteredReporters().insert(
 
 class ConsoleReporter : public IReporter {
 public:
+    std::string getName() const override { return "console"; }
+
+    virtual void testStart() {
+        setlocale(LC_ALL, "en_US.utf8");
+        std::cerr << "ZeroErr Unit Test" << std::endl;
+    }
+
+    virtual void testEnd(const TestContext& sum) {
+        std::cerr << "----------------------------------------------------------------"
+                  << std::endl;
+        std::cerr << "             " << FgGreen << "PASSED" << Reset << "   |   " << FgYellow
+                  << "WARNING" << Reset << "   |   " << FgRed << "FAILED" << Reset << "   |   "
+                  << Dim << "SKIPPED" << Reset << std::endl;
+        std::cerr << "TEST CASE:   " << std::setw(6) << sum.passed << "       " << std::setw(7)
+                  << sum.warning << "       " << std::setw(6) << sum.failed << "       "
+                  << std::setw(7) << sum.skipped << std::endl;
+        std::cerr << "ASSERTION:   " << std::setw(6) << sum.passed_as << "       " << std::setw(7)
+                  << sum.warning_as << "       " << std::setw(6) << sum.failed_as << "       "
+                  << std::setw(7) << sum.skipped_as << std::endl;
+    }
+
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) {
+        std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
+                  << Reset << FgCyan << tc.name << Reset << std::endl;
+    }
+
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) {
+        if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
+    }
+
+    ConsoleReporter(UnitTest& ut) : IReporter(ut) {}
 };
 
-
-class XmlEncode;
-class XmlWriter;
-
-class XmlReporter : public IReporter {
-public:
-};
-
-class JUnitReporter : public IReporter {
-public:
-};
 
 
 // =================================================================================================
@@ -501,6 +512,90 @@ void XmlWriter::newlineIfNecessary() {
 // =================================================================================================
 // End of copy-pasted code from Catch
 // =================================================================================================
+
+
+
+
+class XmlReporter : public IReporter {
+public:
+    XmlWriter xml;
+
+    struct TestCaseData {
+        struct TestMessage {
+            std::string message, details, type;
+        };
+
+        struct TestCase {
+            std::string              classname, name;
+            double                   time;
+            std::vector<TestMessage> failures, errors;
+        };
+
+        std::vector<TestCase> testcases;
+        double                total_time;
+
+        void add_failure(const std::string& message, const std::string& type,
+                         const std::string& details) {
+            testcases.back().failures.push_back({message, details, type});
+        }
+
+        void add_error(const std::string& message, const std::string& details) {
+            testcases.back().errors.push_back({message, details});
+        }
+    } tc_data;
+
+    virtual std::string getName() const { return "xml"; }
+
+    // There are a list of events
+    virtual void testStart() { xml.writeDeclaration(); }
+
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) {
+        tc_data.testcases.push_back({tc.file, tc.name});
+    }
+
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) {
+    }
+
+    virtual void testEnd(const TestContext& tc) {
+        xml.startElement("testsuites");
+        xml.startElement("testsuite")
+            .writeAttribute("name", "ZeroErrTest")
+            .writeAttribute("errors", tc.failed_as)
+            .writeAttribute("failures", tc.failed)
+            .writeAttribute("tests", tc.passed + tc.failed + tc.warning);
+        for (const auto& testCase : tc_data.testcases) {
+            xml.startElement("testcase")
+                .writeAttribute("classname", testCase.classname)
+                .writeAttribute("name", testCase.name);
+            xml.writeAttribute("time", testCase.time);
+            xml.writeAttribute("status", "run");
+
+            for (const auto& failure : testCase.failures) {
+                xml.scopedElement("failure")
+                    .writeAttribute("message", failure.message)
+                    .writeAttribute("type", failure.type)
+                    .writeText(failure.details, false);
+            }
+
+            for (const auto& error : testCase.errors) {
+                xml.scopedElement("error")
+                    .writeAttribute("message", error.message)
+                    .writeText(error.details);
+            }
+            xml.endElement();
+        }
+        xml.endElement();
+        xml.endElement();
+    }
+
+    XmlReporter(UnitTest& ut) : IReporter(ut), xml(std::cerr) {}
+};
+
+IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
+    if (name == "console") return new ConsoleReporter(ut);
+    if (name == "xml") return new XmlReporter(ut);
+    return nullptr;
+}
 
 
 }  // namespace zeroerr

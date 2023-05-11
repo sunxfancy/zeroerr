@@ -84,11 +84,11 @@ namespace zeroerr {
     } while (0)
 
 
-#define INFO_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, ZEROERR_INFO, __VA_ARGS__)
-#define LOG_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, ZEROERR_LOG, __VA_ARGS__)
-#define WARN_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, ZEROERR_ERROR, __VA_ARGS__)
-#define FATAL_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, ZEROERR_FATAL, __VA_ARGS__)
+#define INFO_EVERY_(n, ...)  ZEROERR_LOG_EVERY_(n, ZEROERR_INFO, __VA_ARGS__)
+#define LOG_EVERY_(n, ...)   ZEROERR_LOG_EVERY_(n, ZEROERR_LOG, __VA_ARGS__)
+#define WARN_EVERY_(n, ...)  ZEROERR_LOG_EVERY_(n, ZEROERR_WARN, __VA_ARGS__)
+#define ERROR_EVERY_(n, ...) ZEROERR_LOG_EVERY_(n, ZEROERR_ERROR, __VA_ARGS__)
+#define FATAL_EVERY_(n, ...) ZEROERR_LOG_EVERY_(n, ZEROERR_FATAL, __VA_ARGS__)
 
 
 #define ZEROERR_LOG_IF_EVERY_(n, cond, ACTION, ...) \

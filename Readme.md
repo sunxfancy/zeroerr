@@ -1,6 +1,6 @@
 # ZeroErr 零误框架
 
-[![Standard](https://img.shields.io/badge/C%2B%2B%2FCUDA-11%2F14%2F17%2F20-blue)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![download](https://img.shields.io/badge/-Download-brightgreen)]() [![Eng-Readme](https://img.shields.io/badge/English-Readme-blue)](./Readme.en.md)
+[![Standard](https://img.shields.io/badge/C%2B%2B-11%2F14%2F17%2F20-blue)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![download](https://img.shields.io/badge/-Download-brightgreen)](https://raw.githubusercontent.com/sunxfancy/zeroerr/master/zeroerr.hpp) [![Eng-Readme](https://img.shields.io/badge/English-Readme-blue)](./Readme.en.md)
 
 
 Hope you get 0 errors and 0 warnings everyday!
@@ -9,6 +9,9 @@ Hope you get 0 errors and 0 warnings everyday!
 
 
 ZeroErr 零误框架是一款轻量级C++单元测试框架，同时也集成了断言库，日志库，打印调试等诸多功能，实现了以上功能的整合与协同工作。既可以选择整体使用，也可以单独使用其中的部分功能。
+
+[使用教程](./doc/tutorial.md)
+[print功能详细介绍](./doc/print.md)
 
 
 ## 为何要开发一款新的测试框架
@@ -27,7 +30,7 @@ TEST_CASE("Try logging") {
 }
 ```
 
-类似于其他C++单元测试框架，ZeroErr可以将这段宏注册的单元测试代码编译成自动运行的函数，执行后结构如下，这里我们无需定义任何规则，就可以打印`vector`模板：
+类似于其他C++单元测试框架，ZeroErr可以将这段宏注册的单元测试代码编译成自动运行的函数，执行后结果如下，这里我们无需定义任何规则，就可以使用LOG宏打印`vector`模板：
 
 
 ![case1](doc/fig/case1.png)
@@ -134,5 +137,28 @@ TEST_CASE("match ostream") {
 }
 ```
 通过设置 `ZEROERR_HAVE_SAME_OUTPUT` 宏，系统会自动检查该测试点的output stream输出，第一次执行时的结果会自动保存起来，而之后每次执行，都会将输出与第一次输出进行对比，相同则正确，否则该点错误。用户可以第一次手动观察输出是否符合预期，若是修改了实现后，想清除保存的结果，只需要将测试目录下的 `output.txt` 缓存文件删除即可。
+
+
+
+## 项目构建
+
+本项目使用CMake构建，您可以直接将整个目录引入为子项目，也可以选择下载我们提前打包好的整合文件 `zeroerr.hpp`。项目的构建可以在项目根目录下使用如下指令：
+
+```sh
+mkdir build
+cmake -DCMAKE_BUILD_TYPE=Release -B ./build -S .
+cmake --build ./build
+```
+
+可选的构建参数
+
+| 构建参数           | 选项              | 含义                                 |
+| ------------------ | ----------------- | ------------------------------------ |
+| COLORFUL_OUTPUT    | **AUTO**, ON, OFF | 采用彩色输出，此功能依赖特定操作系统 |
+| ENABLE_THREAD_SAFE | **ON**, OFF       | 启用线程安全支持                     |
+| ENABLE_AUTO_INIT   | **ON**, OFF       | 自动在进程启动时初始化一些环境检测   |
+| USE_MOLD           | ON, **OFF**       | 使用 mold linker 链接                |
+| BUILD_EXAMPLES     | **ON**, OFF       | 构建示例代码                         |
+
 
 
