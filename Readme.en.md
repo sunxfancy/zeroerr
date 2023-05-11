@@ -1,6 +1,6 @@
 # ZeroErr
 
-[![Standard](https://img.shields.io/badge/C%2B%2B%2FCUDA-11%2F14%2F17%2F20-blue)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![download](https://img.shields.io/badge/-Download-brightgreen)]() [![Chinese-Readme](https://img.shields.io/badge/%E4%B8%AD%E6%96%87-Readme-blue)](./Readme.md)
+[![Standard](https://img.shields.io/badge/C%2B%2B%2FCUDA-11%2F14%2F17%2F20-blue)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization) [![download](https://img.shields.io/badge/-Download-brightgreen)](https://raw.githubusercontent.com/sunxfancy/zeroerr/master/zeroerr.hpp) [![Chinese-Readme](https://img.shields.io/badge/%E4%B8%AD%E6%96%87-Readme-blue)](./Readme.md)
 
 
 Hope you get 0 errors and 0 warnings everyday!

@@ -59,8 +59,8 @@ public:
     UnitTest&   parseArgs(int argc, char** argv);
     int         run();
     bool        silent   = false;
-    IReporter*  reporter = nullptr;
     std::string correct_output_path;
+    std::string reporter_name = "console";
 };
 
 struct TestCase {
@@ -95,16 +95,17 @@ class IReporter {
 public:
     virtual std::string getName() const = 0;
 
-    virtual void reportQuery() = 0;
-
-    virtual void reportResult(const TestContext& tc) = 0;
-
     // There are a list of events
     virtual void testStart() = 0;
-    virtual void testEnd()   = 0;
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) = 0;
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) = 0;
+    virtual void testEnd(const TestContext& tc) = 0;
 
-    virtual void testCaseStart(const TestCase& tc) = 0;
-    virtual void testCaseEnd(const TestCase& tc)   = 0;
+    static IReporter* create(const std::string& name, UnitTest& ut);
+
+    IReporter(UnitTest& ut) : ut(ut) {}
+protected:
+    UnitTest& ut;
 };
 
 
