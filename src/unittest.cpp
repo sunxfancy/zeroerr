@@ -81,7 +81,44 @@ void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
     context->add(std::move(local));
 }
 
-UnitTest& UnitTest::parseArgs(int argc, char** argv) { return *this; }
+UnitTest& UnitTest::parseArgs(int argc, char** argv) { 
+    auto convert_to_vec = [=](int argc, char** argv) {
+        std::vector<std::string> result;
+        for (int i = 1; i < argc; i++) {
+            result.emplace_back(argv[i]);
+        }
+        return result;
+    };
+    
+    auto parse_char = [&](char arg) {
+        if (arg == 'v') { this->silent = false; return true; }
+        if (arg == 'q') { this->silent = true; return true; }
+        return false;
+    };
+
+    auto parse_token = [&](std::string arg) {
+        if (arg == "verbose") { this->silent = false; return true; }
+        if (arg == "quiet") { this->silent = true; return true; }
+        return false;
+    };
+
+    auto parse_pos = [&](const std::vector<std::string>& args, int pos) {
+        if (args[pos].size() == 2 && args[pos][0] == '-') {
+            return parse_char(args[pos][1]);
+        }
+        if (args[pos].size() > 2 && args[pos][0] == '-' && args[pos][1] == '-') {
+            return parse_token(args[pos].substr(2));
+        }
+        return false;
+    };
+
+    auto args = convert_to_vec(argc, argv);
+    for (int i = 0; i < args.size(); ++i) {
+        parse_pos(args, i);
+    }
+    
+    return *this; 
+}
 
 
 static std::string insertIndentation(std::string str) {
