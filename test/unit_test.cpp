@@ -100,3 +100,27 @@ TEST_CASE("traditional check macro") {
     int b = 2;
     CHECK_EQ(a, b);
 }
+
+TEST_CASE("parsing arguments") {
+    int argc = 3;
+    char** argvs[4] = {
+        {"test", "-v"},
+        {"test", "-q"},
+        {"test", "--verbose"},
+        {"test", "--quiet"},
+    };
+
+    zeroerr::UnitTest ut;
+
+    ut.parse_args(argc, argvs[0]);
+    CHECK(ut.slient == false);
+
+    ut.parse_args(argc, argvs[1]);
+    CHECK(ut.slient == true);
+
+    ut.parse_args(argc, argvs[2]);
+    CHECK(ut.slient == false);
+
+    ut.parse_args(argc, argvs[3]);
+    CHECK(ut.slient == true);
+}

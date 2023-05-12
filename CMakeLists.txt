@@ -62,7 +62,8 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>" )
 
 
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/extension ${CMAKE_CURRENT_SOURCE_DIR}/third_party ${CMAKE_CURRENT_BINARY_DIR})
+set(header_dirs ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/extension ${CMAKE_CURRENT_SOURCE_DIR}/third_party ${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${header_dirs})
 
 file(GLOB_RECURSE include_files ${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.h)
 file(GLOB_RECURSE source_files ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
@@ -154,5 +155,8 @@ if(MAIN_PROJECT)
     install(TARGETS zeroerr DESTINATION lib)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zeroerr.hpp DESTINATION include)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include DESTINATION include/..)
-
+else()
+    # Export Headerfiles 
+    set(ZEROERR_INCLUDE_DIR ${header_dirs} PARENT_SCOPE)
+    message(STATUS "ZEROERR_INCLUDE_DIR: ${header_dirs}")
 endif()
