@@ -81,8 +81,8 @@ void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
     context->add(std::move(local));
 }
 
-UnitTest& UnitTest::parseArgs(int argc, char** argv) { 
-    auto convert_to_vec = [=](int argc, char** argv) {
+UnitTest& UnitTest::parseArgs(int argc, const char** argv) { 
+    auto convert_to_vec = [=](int argc, const char** argv) {
         std::vector<std::string> result;
         for (int i = 1; i < argc; i++) {
             result.emplace_back(argv[i]);
@@ -638,4 +638,4 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
 }  // namespace zeroerr
 
 
-int main(int argc, char** argv) { return zeroerr::UnitTest().parseArgs(argc, argv).run(); }
+int main(int argc, const char** argv) { return zeroerr::UnitTest().parseArgs(argc, argv).run(); }
