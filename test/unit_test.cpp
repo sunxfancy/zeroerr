@@ -103,7 +103,7 @@ TEST_CASE("traditional check macro") {
 
 TEST_CASE("parsing arguments") {
     int argc = 3;
-    char** argvs[4] = {
+    const char* argvs[4][2] = {
         {"test", "-v"},
         {"test", "-q"},
         {"test", "--verbose"},
@@ -112,15 +112,15 @@ TEST_CASE("parsing arguments") {
 
     zeroerr::UnitTest ut;
 
-    ut.parse_args(argc, argvs[0]);
-    CHECK(ut.slient == false);
+    ut.parseArgs(argc, argvs[0]);
+    CHECK_EQ(ut.silent, false);
 
-    ut.parse_args(argc, argvs[1]);
-    CHECK(ut.slient == true);
+    ut.parseArgs(argc, argvs[1]);
+    CHECK_EQ(ut.silent, true);
 
-    ut.parse_args(argc, argvs[2]);
-    CHECK(ut.slient == false);
+    ut.parseArgs(argc, argvs[2]);
+    CHECK_EQ(ut.silent, false);
 
-    ut.parse_args(argc, argvs[3]);
-    CHECK(ut.slient == true);
+    ut.parseArgs(argc, argvs[3]);
+    CHECK_EQ(ut.silent, true);
 }

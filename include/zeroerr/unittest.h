@@ -56,7 +56,7 @@ public:
 class IReporter;
 class UnitTest {
 public:
-    UnitTest&   parseArgs(int argc, char** argv);
+    UnitTest&   parseArgs(int argc, const char** argv);
     int         run();
     bool        silent   = false;
     std::string correct_output_path;
