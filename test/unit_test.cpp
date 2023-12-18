@@ -124,3 +124,13 @@ TEST_CASE("parsing arguments") {
     ut.parseArgs(argc, argvs[3]);
     CHECK_EQ(ut.silent, true);
 }
+
+
+TEST_CASE("assertion") {
+    // reference 
+
+    int a = 1;
+    int &b = a;
+
+    CHECK(b == 1);
+}

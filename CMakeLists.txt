@@ -29,6 +29,8 @@ if(NOT ENABLE_AUTO_INIT)
     add_definitions(-DZEROERR_DISABLE_AUTO_INIT)
 endif()
 
+option(DISABLE_CUDA_BUILD "Disable CUDA build(ON, OFF)" ON)
+
 option(USE_MOLD "Use mold for linking" OFF)
 
 if(USE_MOLD)
@@ -114,15 +116,13 @@ if(MAIN_PROJECT)
     include(CheckLanguage)
     check_language(CUDA)
 
-    if(CMAKE_CUDA_COMPILER)
+    if(CMAKE_CUDA_COMPILER AND NOT DISABLE_CUDA_BUILD)
         enable_language(CUDA)
         message(STATUS " CUDA ${CMAKE_CUDA_COMPILER_ID} ${CMAKE_CUDA_COMPILER_VERSION} enabled ")
 
         set(CMAKE_CUDA_STANDARD 17)
-        set(CMAKE_CUDA_STANDARD_REQUIRED ON)
 
         set(CMAKE_CUDA_ARCHITECTURES 80)
-        set(CMAKE_CUDA_FLAGS " -ccbin=/usr/bin/gcc-10 ")
 
         file(GLOB_RECURSE cuda_files ${CMAKE_CURRENT_SOURCE_DIR}/test/*.cu)
     else()
