@@ -37,7 +37,7 @@ void* LogStream::alloc_block(unsigned size) {
     if (last->size + size > LogStreamMaxSize) {
         if (flush_mode == FLUSH_WHEN_FULL) {
             logger->flush(last);
-            last->size = 0;    
+            last->size = 0;
         } else {
             last->next = new DataBlock();
             last       = last->next;
