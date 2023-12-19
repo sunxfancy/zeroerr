@@ -19,9 +19,8 @@ jobs:
           # “最近更新时间” 等 git 日志相关信息，需要拉取全部提交记录
           fetch-depth: 0
   
-      - uses: ssciwr/doxygen-install@v1
-        with:
-          version: "1.9.1"
+      - name: Install doxygen
+        run: sudo apt-get install -y doxygen
 
       - name: Build project
         run: make linux
