@@ -10,9 +10,7 @@ Hope you get 0 errors and 0 warnings everyday!
 
 ZeroErr 零误框架是一款轻量级C++单元测试框架，同时也集成了断言库，日志库，打印调试等诸多功能，实现了以上功能的整合与协同工作。既可以选择整体使用，也可以单独使用其中的部分功能。
 
-[使用教程](./docs/tutorial.md)
-
-[print功能详细介绍](./docs/print.md)
+[项目文档]([./docs/tutorial.md](https://sunxfancy.github.io/zeroerr/zh/))
 
 
 ## 为何要开发一款新的测试框架
