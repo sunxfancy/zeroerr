@@ -1,0 +1,17 @@
+{
+  "name": "zeroerr",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sunxfancy/zeroerr.git",
+  "author": "西风逍遥游 <sunxfancy@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "cmake:docs": "vuepress build build-linux/docs",
+    "cmake:dev": "vuepress dev build-linux/docs"
+  },
+  "devDependencies": {
+    "vuepress": "^2.0.0-rc.0"
+  }
+}
