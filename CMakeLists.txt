@@ -169,12 +169,14 @@ if(MAIN_PROJECT)
 
         # note the option ALL which allows to build the docs together with the application
         add_custom_target( doc_doxygen ALL
+            COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/doc_doxygen/zh
             COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen"
             VERBATIM )
         
         add_custom_target( doc_doxygen_en ALL
+            COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/doc_doxygen/en
             COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.en
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen"
