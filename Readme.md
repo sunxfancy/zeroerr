@@ -5,14 +5,14 @@
 
 Hope you get 0 errors and 0 warnings everyday!
 
-![](./doc/fig/zeroerr.jpg)
+![](./docs/fig/zeroerr.jpg)
 
 
 ZeroErr 零误框架是一款轻量级C++单元测试框架，同时也集成了断言库，日志库，打印调试等诸多功能，实现了以上功能的整合与协同工作。既可以选择整体使用，也可以单独使用其中的部分功能。
 
-[使用教程](./doc/tutorial.md)
+[使用教程](./docs/tutorial.md)
 
-[print功能详细介绍](./doc/print.md)
+[print功能详细介绍](./docs/print.md)
 
 
 ## 为何要开发一款新的测试框架
@@ -34,7 +34,7 @@ TEST_CASE("Try logging") {
 类似于其他C++单元测试框架，ZeroErr可以将这段宏注册的单元测试代码编译成自动运行的函数，执行后结果如下，这里我们无需定义任何规则，就可以使用LOG宏打印`vector`模板：
 
 
-![case1](doc/fig/case1.png)
+![case1](docs/fig/case1.png)
 
 
 对于带有 `std::ostream& operator<<(std::ostream&, Type)` 流输出重载的自定义类型，可以不加修改直接打印。并且还支持容器类型的嵌套。
@@ -58,7 +58,7 @@ TEST_CASE("Try logging with custom type") {
 }
 ```
 
-![case2](doc/fig/case2.png)
+![case2](docs/fig/case2.png)
 
 
 当然，很多情况下，第三方库并没有重载我们预期的`<<`操作符。对于较复杂的情况，我们可以编写泛型打印函数来处理，这大大增强了系统对不同接口的处置能力。例如，我们对这个LLVM的 `llvm::Function*` 类型，可以使用如下方式用`dbg`函数打印，这里`dbg`类似于rust的`dbg`宏，用来快速打印检查任意类型，并且可以嵌套使用：
@@ -93,7 +93,7 @@ TEST_CASE("customize printing of LLVM pointers") {
 
 这个泛型函数会匹配所有基类为`Value`和`Type`的llvm类，然后打印时创建一个`llvm::raw_os_ostream`输出流，并对其进行调用`print`方法打印。
 
-![case3-llvm](./doc/fig/case3.png)
+![case3-llvm](./docs/fig/case3.png)
 
 ### 2. 断言、日志、单元测试的联合使用
 
@@ -120,7 +120,7 @@ TEST_CASE("fib function test") {
 }
 ```
 
-![joint1](doc/fig/joint1.png)
+![joint1](docs/fig/joint1.png)
 
 
 更进一步，单元测试甚至可以通过比较log结果是否与之前正确的结果相同，从而避免很多复杂的单元测试编写，粗略检查代码的正确性。

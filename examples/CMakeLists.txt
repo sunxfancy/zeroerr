@@ -1,1 +1,1 @@
-add_executable(1.basic ${CMAKE_CURRENT_SOURCE_DIR}/1.basic.cpp)
+add_executable(1_basic ${CMAKE_CURRENT_SOURCE_DIR}/1_basic.cpp)

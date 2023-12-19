@@ -5,15 +5,15 @@
 
 Hope you get 0 errors and 0 warnings everyday!
 
-![](./doc/fig/zeroerr.jpg)
+![](./docs/fig/zeroerr.jpg)
 
 
 
 ZeroErr is a smart assert library, a lightweight unit test framework and a quick logging framework. It integrates those features and provided an unite and clear interface for seperate using or joint using. 
 
-[Tutorial](./doc/tutorial.en.md)
+[Tutorial](./docs/tutorial.en.md)
 
-[Introducation of Print Feature](./doc/print.en.md)
+[Introducation of Print Feature](./docs/print.en.md)
 
 ## Why we need another unit testing framework
 
@@ -34,7 +34,7 @@ TEST_CASE("Try logging") {
 
 Similar to other C++ unit testing frameworks, `zeroerr` will convert this piece of code into a function and register it to automatically run once you link the main function and the library. Here, we can log the data in `vector` template directly without writing any code. 
 
-![case1](doc/fig/case1.png)
+![case1](docs/fig/case1.png)
 
 For the custom struct type with override `std::ostream& operator<<(std::ostream&, Type)` stream output, you can use it not only for this type but also all contains using this type, including multiple recurisve contains:
 
@@ -57,7 +57,7 @@ TEST_CASE("Try logging with custom type") {
 }
 ```
 
-![case2](doc/fig/case2.png)
+![case2](docs/fig/case2.png)
 
 Of cause, in many cases, some third-party libraries may not use `<<` operators. For those cases, we can write own rules to create a generic way for printing. For example, LLVM `llvm::Function*` type can not be streamed into std::ostream, we can write code to handle it. However, it will be more simple if we can write a rule for all the sub-classes of `llvm::Value` and `llvm::Type` since we can call the `print` method to print the output. Here we use a `dbg` marco defined in `zeroerr` to quickly print any type. This is very similar to the `dbg` marco in rust.
 
@@ -92,7 +92,7 @@ TEST_CASE("customize printing of LLVM pointers") {
 
 This functin `PrintExt` will match all the class who's base class is `Value` and `Type`. Then, it will create a stream ``llvm::raw_os_ostream` for output.
 
-![case3-llvm](./doc/fig/case3.png)
+![case3-llvm](./docs/fig/case3.png)
 
 ### 2. Joint using of assert, log and unit testing
 
@@ -119,7 +119,7 @@ TEST_CASE("fib function test") {
 }
 ```
 
-![joint1](doc/fig/joint1.png)
+![joint1](docs/fig/joint1.png)
 
 Further more, the unit testing can check the log result matches the previous running result to avoid writing code to check it.
 
