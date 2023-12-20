@@ -9,7 +9,7 @@ ZeroErr可以采用两种方式引用，其一是直接下载 `zeroerr.hpp` 文�
 #include "zeroerr.hpp"
 ```
 
-其二是使用CMake，把本仓库当做一个CMake子项目引用，这样您可以按需引用需要的头文件, 例如，单独引用 `zeroerr/assert.h` 可以引入断言库部分。但您需要在最后链接编译后的库 `libzeroerr.a`
+其二是使用CMake，把本仓库当做一个CMake子项目引用，这样您可以按需引用需要的头文件, 例如，单独引用 zeroerr/assert.h 可以引入断言库部分。但您需要在最后链接编译后的库 `libzeroerr.a`
 
 
 下面我们用一些简单的示例来说明如何使用框架。
@@ -52,12 +52,12 @@ TEST_CASE("fib function test") {
 
 以上三个宏可以直接检测简单的表达式，但其包含一定的开销，我们还提供更轻量的一组宏来实现同样的功能（`REQUIRE` 和 `ASSERT` 同理）：
 
-- `CHECK_EQ(a, b)` 判断是否相等   `==`
-- `CHECK_NE(a, b)` 判断是否不等   `!=`
-- `CHECK_LT(a, b)` 判断是否小于   `<`
-- `CHECK_GT(a, b)` 判断是否大于   `>`
-- `CHECK_LE(a, b)` 判断是否小于等于 `<=`
-- `CHECK_GE(a, b)` 判断是否大于等于 `>=`
+- CHECK_EQ(a, b) 判断是否相等   `==`
+- CHECK_NE(a, b) 判断是否不等   `!=`
+- CHECK_LT(a, b) 判断是否小于   `<`
+- CHECK_GT(a, b) 判断是否大于   `>`
+- CHECK_LE(a, b) 判断是否小于等于 `<=`
+- CHECK_GE(a, b) 判断是否大于等于 `>=`
 
 
 ## log 日志系统

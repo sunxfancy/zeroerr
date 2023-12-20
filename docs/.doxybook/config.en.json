@@ -1,5 +1,7 @@
 {
     "baseUrl": "/en/",
+    "copyImages": false,
+    "convertImagePaths": false,
     "indexInFolders": true,
     "linkLowercase": false,
     "indexClassesName": "index",
