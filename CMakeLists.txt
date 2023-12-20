@@ -202,6 +202,8 @@ if(MAIN_PROJECT)
         
         add_custom_target( doxy ALL DEPENDS doxybook2 doxybook2-en
             COMMAND cp -r ${CMAKE_SOURCE_DIR}/docs/.vuepress ${CMAKE_CURRENT_BINARY_DIR}/docs
+            COMMAND cp -r ${CMAKE_SOURCE_DIR}/docs/fig ${CMAKE_CURRENT_BINARY_DIR}/docs/zh
+            COMMAND cp -r ${CMAKE_SOURCE_DIR}/docs/fig ${CMAKE_CURRENT_BINARY_DIR}/docs/en
             COMMAND cp ${CMAKE_SOURCE_DIR}/docs/en/index.md ${CMAKE_CURRENT_BINARY_DIR}/docs/en/index.md
             COMMAND cp ${CMAKE_SOURCE_DIR}/docs/zh/index.md ${CMAKE_CURRENT_BINARY_DIR}/docs/zh/index.md
             )

@@ -8,7 +8,7 @@ linux:
 
 windows:
 	mkdir -p build-windows
-	cd build-windows && cmake.exe -DBUILD_EXAMPLES=ON -DBUILD_DOC=ON .. && cmake.exe --build . --config Debug -j `nproc`
+	cd build-windows && cmake.exe -DBUILD_EXAMPLES=ON -DBUILD_DOC=ON -T host=x64 -A x64 .. && cmake.exe --build . --config Debug -j `nproc`
 
 doc-dev:
 	yarn run cmake:dev
