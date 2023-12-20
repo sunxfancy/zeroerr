@@ -84,7 +84,14 @@ extern const char* BgMagenta;
 extern const char* BgCyan;
 extern const char* BgWhite;
 
+/**
+ * @brief Global function to disable colorful output.
+ */
 extern void disableColorOutput();
+
+/**
+ * @brief Global function to enable colorful output.
+ */
 extern void enableColorOutput();
 
 #endif
