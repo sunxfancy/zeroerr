@@ -20,7 +20,7 @@
 #include "magic_enum.hpp"
 #endif
 
-#if defined(ZEROERR_ENABLE_DSVIZ) 
+#if defined(ZEROERR_ENABLE_DSVIZ)
 #include "dsviz.h"
 #endif
 
@@ -131,7 +131,6 @@ struct has_extension<
     T, void_t<decltype(zeroerr::PrinterExt(std::declval<zeroerr::Printer&>(), std::declval<T&>(), 0,
                                            nullptr, zeroerr::rank<zeroerr::max_rank>()))>>
     : std::true_type {};
-
 
 
 #define ZEROERR_ENABLE_IF(x) \
@@ -326,9 +325,7 @@ struct Printer {
     }
 
     template <class TupType>
-    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb,
-                            detail::seq<>) {
-    }
+    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb, detail::seq<>) {}
 
     template <class TupType, unsigned... I>
     inline void print_tuple(const TupType& _tup, unsigned level, const char* lb,
@@ -369,11 +366,13 @@ struct Printer {
 
 /**
  * @brief PrinterExt is an extension of Printer that allows user to write custom rules for printing.
+ * @details
  * User can use SFINAE to extend PrinterExt, e.g.:
- * template <typename T>
+ * ```
+ * template<typename T>
  * typename std::enable_if<std::is_base_of<llvm::Function, T>::value, void>::type
  * PrinterExt(Printer& P, T* s, unsigned level, const char* lb, rank<3>);
- *
+ * ```
  * @tparam T the type of the object to be printed.
  * @param P Printer class
  * @param v the object to be printed.
