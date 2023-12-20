@@ -3,10 +3,10 @@ home: true
 title: Home
 heroImage: zeroerr.jpg
 actions:
-  - text: Get Started
+  - text: 快速上手
     link: /zh/Pages/md_docs_zh_get_started
     type: primary
-  - text: Introduction
+  - text: 项目简介
     link: /zh/Pages/md_docs_zh_introduction
     type: secondary
 features:
