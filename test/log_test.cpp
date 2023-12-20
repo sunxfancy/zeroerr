@@ -5,7 +5,9 @@
 #include "zeroerr/benchmark.h"
 #include "zeroerr/unittest.h"
 
+#ifdef ZEROERR_ENABLE_SPEED_TEST
 #include "spdlog/spdlog.h"
+#endif
 
 using namespace zeroerr;
 
@@ -35,7 +37,7 @@ TEST_CASE("lazy evaluation") {
     }
 }
 
-
+#ifdef ZEROERR_ENABLE_SPEED_TEST
 TEST_CASE("speed test") {
 #ifdef ZEROERR_OS_UNIX
     uint64_t* data      = new uint64_t[1000000];
@@ -61,6 +63,7 @@ TEST_CASE("speed test") {
     delete[] data;
 #endif
 }
+#endif
 
 TEST_CASE("log group") {
     int sum = 0;

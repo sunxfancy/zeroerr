@@ -102,7 +102,7 @@ TEST_CASE("traditional check macro") {
 }
 
 TEST_CASE("parsing arguments") {
-    int argc = 3;
+    int argc = 2;
     const char* argvs[4][2] = {
         {"test", "-v"},
         {"test", "-q"},

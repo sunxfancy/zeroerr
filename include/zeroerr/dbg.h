@@ -25,11 +25,20 @@ struct last<T1> {
     using type = T1;
 };
 
+/**
+ * @brief get_last is a function to get the last argument of a variadic template.
+ *        It is used by DebugExpr.
+ */
 template <typename... Args>
 auto get_last(Args&&... args) -> typename last<Args...>::type {
     return std::get<sizeof...(Args) - 1>(std::tie(args...));
 }
 
+
+/**
+ * @brief DebugExpr is a function to print any type of variable with its type name.
+ *        It is used by dbg macro.
+ */
 template <typename... T>
 auto DebugExpr(const char* file, unsigned line, const char* func, const char* exprs, T... t) ->
     typename last<T...>::type {

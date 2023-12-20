@@ -73,7 +73,7 @@
         zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
                                   zeroerr::assert_throw::throws, is_false};                      \
                                                                                                  \
-        zeroerr::Printer print;                                                                           \
+        zeroerr::Printer print;                                                                  \
         print.isQuoted = false;                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #lhs " " #op " " #rhs, info);  \
         assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                          \
@@ -185,7 +185,10 @@ enum class assert_level : uint8_t { ZEROERR_WARN_l, ZEROERR_ERROR_l, ZEROERR_FAT
 enum class assert_throw : uint8_t { no_throw, throws, throws_as };
 enum class assert_cmp : uint8_t { eq, ne, gt, ge, lt, le };
 
-// This is a one-byte assert info struct, which is used to collect the meta info of an assertion
+/**
+ * @brief This is a one-byte assert info struct, which is used to collect the meta info of an
+ * assertion
+ */
 struct assert_info {
     assert_level level      : 2;
     assert_throw throw_type : 2;
@@ -195,14 +198,17 @@ struct assert_info {
 
 #pragma region handle message
 
-
+/**
+ * @brief AssertionData is a struct that contains all the information of an assertion.
+ *       It will be thrown as an exception when the assertion failed.
+ */
 struct AssertionData : std::exception {
-    const char* file;
-    unsigned    line;
-    assert_info info;
-    bool        passed;
-    std::string message;
-    std::string cond;
+    const char* file;     // file name
+    unsigned    line;     // line number
+    assert_info info;     // assert info
+    bool        passed;   // if the assertion passed
+    std::string message;  // the message of the assertion
+    std::string cond;     // the condition of the assertion
 
     AssertionData(const char* file, unsigned line, const char* cond, assert_info info)
         : file(file), line(line), cond(cond), info(info) {}

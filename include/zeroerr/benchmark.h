@@ -16,7 +16,9 @@ namespace zeroerr {
 
 #pragma region Benchmark
 
-
+/**
+ * @brief PerfCountSet is a set of performance counters.
+ */
 template <typename T>
 struct PerfCountSet {
     T iterations{};
@@ -38,6 +40,9 @@ namespace detail {
 struct LinuxPerformanceCounter;
 }
 
+/**
+ * @brief PerformanceCounter is a class to measure the performance of a function.
+ */
 struct PerformanceCounter {
     PerformanceCounter();
     ~PerformanceCounter();
@@ -61,7 +66,9 @@ protected:
     detail::LinuxPerformanceCounter* _perf = nullptr;
 };
 
-
+/**
+ * @brief BenchResult is a result of running the benchmark.
+ */
 struct BenchResult {
     enum Measure {
         time_elapsed        = 1 << 0,
