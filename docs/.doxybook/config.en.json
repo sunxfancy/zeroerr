@@ -12,5 +12,5 @@
     "indexExamplesName": "index",
     "mainPageInRoot": true,
     "mainPageName": "index",
-    "foldersToGenerate": ["classes", "pages", "namespaces", "examples"]
+    "foldersToGenerate": ["classes", "pages", "files", "namespaces", "examples"]
 }

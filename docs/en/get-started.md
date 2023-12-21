@@ -1,2 +1,108 @@
 Get Started
 ===================
+
+ZeroErr can be used in two ways. One is to download the `zeroerr.hpp` file directly. This file packages all the header files and implementations. You can put it in your project directory for direct reference and use the `ZEROERR_IMPLEMENTATION` macro to enable it in a source file that references `zeroerr.hpp`. In this way, all the implementation parts can be placed in the compilation unit.
+
+```
+#define ZEROERR_IMPLEMENTATION
+#include "zeroerr.hpp"
+```
+
+Another way is to use CMake, which references this repository as a CMake subproject, so that you can reference the required header files as needed. For example, if you reference zeroerr/assert.h separately, you can introduce the assertion library part. But you need to link the compiled library `libzeroerr.a` at the end.
+
+Next, we will use some simple examples to illustrate how to use the framework.
+
+## Unit Testing
+
+`TEST_CASE` Macro is the most basic macro to define a unit test. If you are familiar with catch2 or doctest, you should be very familiar with this marco. We give the test a name and then write the test code in the following function body.
+
+```
+int fib(int n) {
+    REQUIRE(n >= 0, "n must be non-negative");
+    REQUIRE(n < 20, "n must be less than 20");
+    if (n <= 2) {
+        return 1;
+    }
+    return fib(n - 1) + fib(n - 2);
+}
+
+TEST_CASE("fib function test") {
+    CHECK(fib(0) == 0);
+    CHECK(fib(1) == 1);
+    CHECK(fib(2) == 1);
+    CHECK(fib(3) == 2);
+    CHECK(fib(4) == 3);
+    CHECK(fib(5) == 5);
+}
+```
+
+`CHECK` Macro provides the function of checking an expression. Since we did not calculate `fib(0)` correctly here, we will get the following output:
+
+
+```
+[WARN  2023-05-10 16:15:44 1.basic.cpp:44]   Assertion Failed:
+        fib(0) == 0  expands to  1 == 0
+    (/mnt/SSD/Workspace/zeroerr/examples/1.basic.cpp:44)
+```
+
+Here after the error, the test time, the wrong file, line number, assertion expression, and what it looks like after expansion will be printed automatically. These information can intuitively let people know where the error is, and can find the error point for troubleshooting.
+
+The similar macros are `REQUIRE` and `ASSERT`, but these three macros have different exception levels. `CHECK` means detection, if an error occurs, the following code will continue to execute. `REQUIRE` means a more serious error, there is no need to continue executing after an error occurs, an exception will be thrown, and the information of Error level will be displayed in the log. `ASSERT` means a fatal error, if it occurs, the code cannot continue to execute, which will cause the program to crash.
+
+The above three macros can directly detect simple expressions, but they contain a certain overhead. We also provide a lighter set of macros to achieve the same function (`REQUIRE` and `ASSERT` are the same):
+
+- CHECK_EQ(a, b) Check if equal  `==`
+- CHECK_NE(a, b) Check if not equal   `!=`
+- CHECK_LT(a, b) Check less than   `<`
+- CHECK_GT(a, b) Check greater than   `>`
+- CHECK_LE(a, b) Check less than and equal  `<=`
+- CHECK_GE(a, b) Check greater than and equal `>=`
+
+
+## logging
+
+logging system provides a set of macros to record events. It is divided into five levels:
+
+- `LOG` represent daily events, normal record of what happened
+- `WARN` represent warning, there may be events that need attention in the current system
+- `ERROR` represent error, unexpected problems have occurred in the current system
+- `FATAL` represent fatal error, which causes the current system to shut down immediately
+
+Those macroes are used in a similar way:
+
+```
+LOG("message {n1} {n2}", data1, ...)
+```
+
+First is the format string of the message. This string must be the original string of type `const char*`, it cannot be converted from `string`, or constructed by yourself, because the address of this string will also be used to index the location where the LOG occurred.
+
+`{n1}` represents a parameter of any type, and the name is `n1`. The reason for this design is that log is generally used to record the occurrence of some events. If we immediately format the string and write the log to the file, it will often consume a certain amount of time. However, if we just record the parameters, the efficiency can be greatly improved. Setting a name can also facilitate the retrieval of log data, so as to quickly find the required log entries in the system.
+
+`LOG_IF` conditional log, can be used like this:
+
+```
+LOG_IF(condition, "message {n1} {n2}", data1, ...)
+```
+
+`LOG_EVERY_` For every N times, log once, will log at loop 1, 1+N, 1+2N, ...
+
+
+```
+LOG_EVERY_(N, "message {n1} {n2}", data1, ...)
+```
+
+
+
+`LOG_IF_EVERY_` is a combination of the above two
+
+```
+LOG_IF_EVERY_(N, condition, "message {n1} {n2}", data1, ...)
+```
+
+
+
+`LOG_FIRST` only record the first time it runs here
+
+```
+LOG_FIRST("message {n1} {n2}", data1, ...)
+```

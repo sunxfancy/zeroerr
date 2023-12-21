@@ -1,30 +1,29 @@
 日志（Logging）
 ===============
 
-LOG is a macro help you to LOG structured data into a file and record the meta data about it (FILE, LINE, FUNCTION and LOG messages).
-
-All the data that put in LOG should be on disk and saved.
+日志是一组帮助你记录程序运行状态的宏。它可以记录你的程序运行时的状态，比如函数调用，变量值，错误信息等等。
+所有的数据都会被写入到文件中。
 
 ## LOG condition (when the log is enabled)
 
-INFO_IF()
-INFO_EVERY_()
-INFO_IF_EVERY_()
-INFO_FIRST()
-INFO_FIRST_()
-INFO_LAST()
-INFO_LAST_()
+- INFO_IF()
+- INFO_EVERY_()
+- INFO_IF_EVERY_()
+- INFO_FIRST()
+- INFO_FIRST_()
 
 ## Severity Level
 
-There 5 levels of log information: INFO, LOG, WARNING, ERROR, and FATAL
-LOG FATAL will cause the program terminate
-The INFO level will discard the information if there is no other LOG, WARNING, ERROR, and FATAL happens in the context.
+这里有五种Log等级: INFO, LOG, WARNING, ERROR, FATAL.
+
+INFO等级的日志会在当前上下文中没有其他LOG, WARNING, ERROR, and FATAL时被丢弃。
+
+注意：LOG FATAL 会导致程序终止
 
 ## LOG Only
 
-Log only on a function, on a file, on a module
+LOG_ONLY 可以让你只在某个函数，或者某个文件，或者某个模块中打印日志。
 
 ## Trace
 
-You can use info to get some information and later use LOG macro to record them.
+你可以使用info来打印一些信息，然后使用LOG宏来记录它们。这样可以构建更加完整的日志trace信息。
