@@ -5,7 +5,7 @@ LOG is a macro help you to LOG structured data into a file and record the meta d
 
 All the data that put in LOG should be on disk and saved.
 
-## LOG condition (when the log is enabled)
+### LOG condition (when the log is enabled)
 
 - INFO_IF()
 - INFO_EVERY_()
@@ -13,7 +13,7 @@ All the data that put in LOG should be on disk and saved.
 - INFO_FIRST()
 - INFO_FIRST_()
 
-## Severity Level
+### Severity Level
 
 There 5 levels of log information: INFO, LOG, WARNING, ERROR, and FATAL.
 
@@ -21,10 +21,10 @@ The INFO level will discard the information if there is no other LOG, WARNING, E
 
 Note: LOG FATAL will cause the program terminate
 
-## LOG Only
+### LOG Only
 
 Log only on a function, or on a file, or on a module
 
-## Trace
+### Trace
 
 You can use info to get some information and later use LOG macro to record them.

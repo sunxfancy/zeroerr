@@ -12,7 +12,7 @@ Another way is to use CMake, which references this repository as a CMake subproj
 
 Next, we will use some simple examples to illustrate how to use the framework.
 
-## Unit Testing
+### Unit Testing
 
 `TEST_CASE` Macro is the most basic macro to define a unit test. If you are familiar with catch2 or doctest, you should be very familiar with this marco. We give the test a name and then write the test code in the following function body.
 
@@ -59,7 +59,7 @@ The above three macros can directly detect simple expressions, but they contain 
 - CHECK_GE(a, b) Check greater than and equal `>=`
 
 
-## logging
+### logging
 
 logging system provides a set of macros to record events. It is divided into five levels:
 

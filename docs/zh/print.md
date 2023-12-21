@@ -4,7 +4,7 @@ Printer MultiFunctor
 
 `Printer` 是一个用来打印任意类型数据的模板类。本身是一个有状态的MultiFunctor, 可以打印到`std::ostream` 或者 `std::stringstream`。
 
-## 构造函数
+### 构造函数
 
 您可以选择打印到内置的 `stringstream` 或者您传入的一个 `std::ostream`。
 
@@ -19,7 +19,7 @@ extern Printer& getStdoutPrinter();
 extern Printer& getStderrPrinter();
 ```
 
-## 打印任意类型
+### 打印任意类型
 
 仿函数 `print(...)` 可以传入任意个任意不同类型的参数，他们将被依次打印。
 
@@ -85,7 +85,7 @@ Output:
 ```
 
 
-## 不同类型的优先级规则
+### 不同类型的优先级规则
 
 该函数在打印不同类型元素时，是根据不同的类型，选取不同的优先级规则，例如，一个 string 类型，是container类型，也是Object类型，但因为std::string 有专属的规则在level4， 所以会调用专属规则进行打印。
 
@@ -122,7 +122,7 @@ Output:
    print.line_break = "\r\n"; // for windows
    ```
 
-## 在流输出中打印
+### 在流输出中打印
 
 
 ```c++
@@ -130,7 +130,7 @@ Printer print(); // print to stringstream
 std::cerr << print("hello world") << std::endl;
 ```
 
-## 自定义规则
+### 自定义规则
 
 打印规则是可以自定义的，并且会在最高优先级上。创建一个 `PrinterExt` function templates：
 
