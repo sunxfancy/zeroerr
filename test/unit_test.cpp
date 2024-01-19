@@ -125,12 +125,25 @@ TEST_CASE("parsing arguments") {
     CHECK_EQ(ut.silent, true);
 }
 
+struct Node
+{
+    int val;
+    const Node* next;
+    bool operator==(const Node& other) const {
+        return val == other.val && next == other.next;
+    }
+};
 
 TEST_CASE("assertion") {
     // reference 
 
     int a = 1;
-    int &b = a;
+    const int &b = a;
 
     CHECK(b == 1);
+
+    const Node n1{1, nullptr};
+    Node n2{2, &n1};
+
+    CHECK(n2 == n1);
 }
