@@ -1,3 +1,4 @@
+#define ZEROERR_ENABLE_PFR
 #include "zeroerr/assert.h"
 #include "zeroerr/dbg.h"
 #include "zeroerr/print.h"
@@ -146,4 +147,6 @@ TEST_CASE("assertion") {
     Node n2{2, &n1};
 
     CHECK(n2 == n1);
+
+    CHECK(n2.val == 0 AND n1.val == 0);
 }

@@ -168,21 +168,21 @@ if(MAIN_PROJECT)
         message("Doxygen build started")
 
         # note the option ALL which allows to build the docs together with the application
-        add_custom_target( doc_doxygen ALL
+        add_custom_target( doc_doxygen 
             COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/doc_doxygen/zh
             COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen"
             VERBATIM )
         
-        add_custom_target( doc_doxygen_en ALL
+        add_custom_target( doc_doxygen_en 
             COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/doc_doxygen/en
             COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile.en
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen"
             VERBATIM )
 
-        add_custom_target( doxybook2 ALL 
+        add_custom_target( doxybook2  
             COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/docs/zh
             COMMAND ${CMAKE_SOURCE_DIR}/docs/.doxybook/doxybook2
             --config ${CMAKE_SOURCE_DIR}/docs/.doxybook/config.json
@@ -191,7 +191,7 @@ if(MAIN_PROJECT)
             DEPENDS doc_doxygen
             )
 
-        add_custom_target( doxybook2-en ALL 
+        add_custom_target( doxybook2-en  
             COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/docs/en
             COMMAND ${CMAKE_SOURCE_DIR}/docs/.doxybook/doxybook2
             --config ${CMAKE_SOURCE_DIR}/docs/.doxybook/config.en.json
@@ -200,7 +200,7 @@ if(MAIN_PROJECT)
             DEPENDS doc_doxygen_en
             )
         
-        add_custom_target( doxy ALL DEPENDS doxybook2 doxybook2-en
+        add_custom_target( doxy  DEPENDS doxybook2 doxybook2-en
             COMMAND cp -r ${CMAKE_SOURCE_DIR}/docs/.vuepress ${CMAKE_CURRENT_BINARY_DIR}/docs
             COMMAND cp -r ${CMAKE_SOURCE_DIR}/docs/fig ${CMAKE_CURRENT_BINARY_DIR}/docs/zh
             COMMAND cp -r ${CMAKE_SOURCE_DIR}/docs/fig ${CMAKE_CURRENT_BINARY_DIR}/docs/en

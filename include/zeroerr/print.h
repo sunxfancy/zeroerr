@@ -237,7 +237,7 @@ struct Printer {
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS)
     print(T value, unsigned level, const char* lb, rank<0>) {
-        os << tab(level) << "Object " << type(value) << lb;
+        os << tab(level) << type(value) << lb;
     }
 
 
