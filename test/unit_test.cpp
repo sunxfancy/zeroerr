@@ -150,3 +150,9 @@ TEST_CASE("assertion") {
 
     CHECK(n2.val == 0 AND n1.val == 0);
 }
+
+TEST_CASE("range") {
+    float a = 2.5;
+    CHECK(0.5 <= a < 3.0);
+    CHECK(0.5 <= a <= 1.0);
+}
