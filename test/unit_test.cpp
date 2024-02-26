@@ -1,3 +1,4 @@
+#define ZEROERR_ENABLE_PFR
 #include "zeroerr/assert.h"
 #include "zeroerr/dbg.h"
 #include "zeroerr/print.h"
@@ -125,12 +126,50 @@ TEST_CASE("parsing arguments") {
     CHECK_EQ(ut.silent, true);
 }
 
+struct Node
+{
+    int val;
+    const Node* next;
+    bool operator==(const Node& other) const {
+        return val == other.val && next == other.next;
+    }
+};
 
 TEST_CASE("assertion") {
     // reference 
 
     int a = 1;
-    int &b = a;
+    const int &b = a;
 
     CHECK(b == 1);
+
+    const Node n1{1, nullptr};
+    Node n2{2, &n1};
+
+    CHECK(n2 == n1);
+
+    CHECK(n2.val == 0 AND n1.val == 0);
 }
+
+TEST_CASE("range") {
+    float a = 2.5;
+    CHECK(0.5 <= a < 3.0);
+    CHECK(0.5 <= a <= 1.0);
+}
+
+static int targetFunc(int a, int b) {
+    if (a == 3 && b == 5) return 7;
+    return a + b;
+}
+
+
+TEST_CASE("combinational test args") {
+    TestArgs<int> a{1, 2, 3};
+    TestArgs<int> b{4, 5, 6};
+
+    CombinationalTest test([&]{
+        CHECK(targetFunc(a, b) == (a+b));
+    });
+    test(a, b);
+}
+

@@ -44,19 +44,24 @@ namespace zeroerr {
 #undef WARN
 #endif
 
-#ifdef ERROR
-#undef ERROR
+#ifdef ERR
+#undef ERR
 #endif
 
 #ifdef FATAL
 #undef FATAL
 #endif
 
+#ifdef VERBOSE
+#undef VERBOSE
+#endif
+
 #define INFO(...)  ZEROERR_INFO(__VA_ARGS__)
 #define LOG(...)   ZEROERR_LOG(__VA_ARGS__)
 #define WARN(...)  ZEROERR_WARN(__VA_ARGS__)
-#define ERROR(...) ZEROERR_ERROR(__VA_ARGS__)
+#define ERR(...)   ZEROERR_ERROR(__VA_ARGS__)
 #define FATAL(...) ZEROERR_FATAL(__VA_ARGS__)
+#define VERBOSE(v) ZEROERR_VERBOSE(v)
 
 #endif
 
@@ -69,7 +74,7 @@ namespace zeroerr {
 #define INFO_IF(cond, ...)  ZEROERR_LOG_IF(cond, ZEROERR_INFO, __VA_ARGS__)
 #define LOG_IF(cond, ...)   ZEROERR_LOG_IF(cond, ZEROERR_LOG, __VA_ARGS__)
 #define WARN_IF(cond, ...)  ZEROERR_LOG_IF(cond, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_IF(cond, ...) ZEROERR_LOG_IF(cond, ZEROERR_ERROR, __VA_ARGS__)
+#define ERR_IF(cond, ...)   ZEROERR_LOG_IF(cond, ZEROERR_ERROR, __VA_ARGS__)
 #define FATAL_IF(cond, ...) ZEROERR_LOG_IF(cond, ZEROERR_FATAL, __VA_ARGS__)
 
 
@@ -87,7 +92,7 @@ namespace zeroerr {
 #define INFO_EVERY_(n, ...)  ZEROERR_LOG_EVERY_(n, ZEROERR_INFO, __VA_ARGS__)
 #define LOG_EVERY_(n, ...)   ZEROERR_LOG_EVERY_(n, ZEROERR_LOG, __VA_ARGS__)
 #define WARN_EVERY_(n, ...)  ZEROERR_LOG_EVERY_(n, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_EVERY_(n, ...) ZEROERR_LOG_EVERY_(n, ZEROERR_ERROR, __VA_ARGS__)
+#define ERR_EVERY_(n, ...)   ZEROERR_LOG_EVERY_(n, ZEROERR_ERROR, __VA_ARGS__)
 #define FATAL_EVERY_(n, ...) ZEROERR_LOG_EVERY_(n, ZEROERR_FATAL, __VA_ARGS__)
 
 
@@ -104,7 +109,7 @@ namespace zeroerr {
 #define INFO_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_INFO, __VA_ARGS__)
 #define LOG_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_LOG, __VA_ARGS__)
 #define WARN_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_ERROR, __VA_ARGS__)
+#define ERR_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_ERROR, __VA_ARGS__)
 #define FATAL_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_FATAL, __VA_ARGS__)
 
 #define ZEROERR_LOG_FIRST(cond, ACTION, ...) \
@@ -119,7 +124,7 @@ namespace zeroerr {
 #define INFO_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, ZEROERR_INFO, __VA_ARGS__)
 #define LOG_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, ZEROERR_LOG, __VA_ARGS__)
 #define WARN_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, ZEROERR_ERROR, __VA_ARGS__)
+#define ERR_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, ZEROERR_ERROR, __VA_ARGS__)
 #define FATAL_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, ZEROERR_FATAL, __VA_ARGS__)
 
 #define ZEROERR_LOG_FIRST_(n, cond, ACTION, ...) \
@@ -133,7 +138,7 @@ namespace zeroerr {
 #define INFO_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, ZEROERR_INFO, __VA_ARGS__)
 #define LOG_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, ZEROERR_LOG, __VA_ARGS__)
 #define WARN_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ZEROERR_ERROR, __VA_ARGS__)
+#define ERR_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, ZEROERR_ERROR, __VA_ARGS__)
 #define FATAL_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ZEROERR_FATAL, __VA_ARGS__)
 
 #ifdef _DEBUG
@@ -142,17 +147,22 @@ namespace zeroerr {
 #define DLOG(ACTION, ...)
 #endif
 
+extern int _ZEROERR_G_VERBOSE;
 
-#define ZEROERR_LOG_(severity, message, ...)                                                  \
-    do {                                                                                      \
-        ZEROERR_G_CONTEXT_SCOPE(true);                                                        \
-        auto                    msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);     \
-        static zeroerr::LogInfo log_info{__FILE__, message,  ZEROERR_LOG_CATEGORY,            \
-                                         __LINE__, msg.size, zeroerr::LogSeverity::severity}; \
-        msg.log->info = &log_info;                                                            \
-        if (zeroerr::LogStream::getDefault().flush_mode ==                                    \
-            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)                                     \
-            zeroerr::LogStream::getDefault().flush();                                         \
+#define ZEROERR_VERBOSE(v) if (zeroerr::_ZEROERR_G_VERBOSE >= (v)) 
+
+#define ZEROERR_LOG_(severity, message, ...)                            \
+    do {                                                                \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                  \
+        auto msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);  \
+                                                                        \
+        static zeroerr::LogInfo log_info{                               \
+            __FILE__, message, ZEROERR_LOG_CATEGORY,          __LINE__, \
+            msg.size,    zeroerr::LogSeverity::severity};         \
+        msg.log->info = &log_info;                                      \
+        if (zeroerr::LogStream::getDefault().flush_mode ==              \
+            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)               \
+            zeroerr::LogStream::getDefault().flush();                   \
     } while (0)
 
 #define ZEROERR_INFO_(...) \
@@ -274,7 +284,7 @@ struct LogMessageImpl : LogMessage {
 };
 
 
-constexpr size_t LogStreamMaxSize = 1024 * 1024;
+constexpr size_t LogStreamMaxSize = 1024 * 1024 - 16;
 
 struct DataBlock {
     char       data[LogStreamMaxSize];
@@ -297,7 +307,14 @@ public:
         unsigned    size;
     };
 
-    enum FlushMode { FLUSH_AT_ONCE, FLUSH_WHEN_FULL, FLUSH_MANULLY };
+    enum FlushMode { FLUSH_AT_ONCE, FLUSH_WHEN_FULL, FLUSH_MANUALLY };
+    enum LogMode { ASYNC, SYNC };
+    enum DirMode {
+        SINGLE_FILE       = 0,
+        DAILY_FILE        = 1,
+        SPLIT_BY_SEVERITY = 1 << 1,
+        SPLIT_BY_CATEGORY = 1 << 2
+    };
 
     template <typename... T>
     PushResult push(T&&... args) {
@@ -314,8 +331,11 @@ public:
     void setStdoutLogger();
     void setStderrLogger();
 
+
     static LogStream& getDefault();
     FlushMode         flush_mode = FLUSH_AT_ONCE;
+    LogMode           log_mode   = SYNC;
+    DirMode           dir_mode   = SINGLE_FILE;
 
 private:
     DataBlock *first, *last;

@@ -15,6 +15,10 @@
 // If you didn't wish override operator<< for ostream, we can disable it
 // #define ZEROERR_DISABLE_OSTREAM_OVERRIDE
 
+// If you wish to disable AND, OR macro
+// #define ZEROERR_DISABLE_COMPLEX_AND_OR
+
+
 // Detect C++ standard
 #if __cplusplus >= 201703L
 #define ZEROERR_CXX_STANDARD 17

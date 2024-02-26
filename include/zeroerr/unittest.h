@@ -123,5 +123,45 @@ struct regReporter {
 
 #pragma endregion
 
+#pragma region combinational
+
+class CombinationalTest {
+
+public:
+    CombinationalTest(std::function<void()> func) : func(func) {}
+    std::function<void()> func;
+
+    template <typename T>
+    void operator()(T& arg) {
+        arg.reset();
+        for (int i = 0; i < arg.size(); ++i, ++arg) {
+            func();
+        }
+    }
+
+    template <typename T, typename... Args>
+    void operator()(T& arg, Args&... args) {
+        arg.reset();
+        for (int i = 0; i < arg.size(); ++i, ++arg) {
+            operator()(args...);
+        }
+    }
+};
+
+template<typename T>
+class TestArgs {
+public:
+    TestArgs(std::initializer_list<T> args) : args(args) {}
+    std::vector<T> args;
+
+    operator T() const { return args[index]; }
+    TestArgs& operator++() { index++; return *this; }
+    int size() const { return args.size(); }
+    void reset() { index = 0; }
+private:
+    int index = 0;
+};
+
+#pragma endregion
 
 }  // namespace zeroerr

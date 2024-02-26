@@ -4,7 +4,7 @@ Printer MultiFunctor
 
 Printer is a template based multifunctor which can print any type. Printer is a stateful functor which support printing to any `std::ostream` or `std::stringstream` if not specified. 
 
-## Construction
+### Construction
 
 Printer can be constructed with or without a `std::ostream` object:
 
@@ -20,7 +20,7 @@ extern Printer& getStdoutPrinter();
 extern Printer& getStderrPrinter();
 ```
 
-## Printing Any type
+### Printing Any type
 
 A functor `print(...)` of the class Printer can be used to print any type variable/values.
 
@@ -86,7 +86,7 @@ Output:
 ```
 
 
-## Type Priority 
+### Type Priority 
 
 The types are matched in the following priorities:
 
@@ -99,7 +99,7 @@ The types are matched in the following priorities:
 | 1     | char, wchar, POD type(need PFR library)                                           |
 | 0     | Object, C pointer, integer, float                                                 |
 
-## Configuration
+### Configuration
 
 The functor can be configured with different mode:
 1. Compact mode - everything in one line, e.g. `{"a" : 1, "b" : 2}`
@@ -123,7 +123,7 @@ The functor can be configured with different mode:
    print.line_break = "\r\n"; // for windows
    ```
 
-## Print inside stream
+### Print inside stream
 
 The printer can be used in a stream once you constructed it without giving a output stream.
 
@@ -132,7 +132,7 @@ Printer print(); // print to stringstream
 std::cerr << print("hello world") << std::endl;
 ```
 
-## Customized Rules 
+### Customized Rules 
 
 You can extend the printer by creating the `PrinterExt` function templates, you need the following function template:
 ```c++

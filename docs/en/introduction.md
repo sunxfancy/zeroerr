@@ -1,11 +1,11 @@
 Introduction
 =============
 
-## Why we need another unit testing framework
+### Why we need another unit testing framework
 
 The current popular unit testing frameworks, e.g. Catch2, doctest, Boost.Test and cpputest are mature and well-established which covers common cases during development. The logger libraries like glog and spdlog are also easy to use. However, there are still some issues:
 
-### 1. Generic Printing
+#### 1. Generic Printing
 
 Most unit testing frameworks and logger libraries can not provide a generic printing for user customized type. Especially, when using containers, struct and pointers (including smart pointers), user have to manualy write code to generate the log message or print those information during unit testing failed cases. 
 
@@ -80,7 +80,7 @@ This functin `PrintExt` will match all the class who's base class is `Value` and
 
 ![case3-llvm](../fig/case3.png)
 
-### 2. Joint using of assert, log and unit testing
+#### 2. Joint using of assert, log and unit testing
 
 If you use a logger, an unit testing framework and a smart assert libary, you can joint use them and some macros may conflict. In `zeroerr`, if an assertion is failed, the logger will recevie an event and stored in your log file. If you are using an assertion in unit testing, the assertion can be recorded and reported in the end. 
 
@@ -125,7 +125,7 @@ Once you set `ZEROERR_HAVE_SAME_OUTPUT` marco, the system will check the output 
 
 
 
-## Features
+### Features
 
 
 Using ZeroErr, you can catch your assert error, log fatal event in the unit testing.

@@ -6,6 +6,8 @@ const char* ZEROERR_LOG_CATEGORY = "default";
 
 namespace zeroerr {
 
+int _ZEROERR_G_VERBOSE = 0;
+
 thread_local std::vector<IContextScope*> _ZEROERR_G_CONTEXT_SCOPE_VECTOR;
 
 LogStream::LogStream() {
@@ -52,7 +54,6 @@ void LogStream::flush() {
     // FIXME: this flush did not flush the previous data block
     logger->flush(last);
     last->size = 0;
-    // std::cerr << "flush" << std::endl;
 }
 
 
@@ -73,11 +74,12 @@ public:
             if (binary) {
                 // TODO: Design a binary format, currently, it can not work
                 fwrite(msg->data, msg->size, 1, file);
-            }
-            for (LogMessage* p = (LogMessage*)msg->data; 
-                    p < (LogMessage*)&msg->data[msg->size]; p += p->info->size) {
-                auto ss = p->str(false);
-                fwrite(ss.c_str(), ss.size(), 1, file);
+            } else {
+                for (LogMessage* p = (LogMessage*)msg->data; 
+                        p < (LogMessage*)&msg->data[msg->size]; p += p->info->size) {
+                    auto ss = p->str(false);
+                    fwrite(ss.c_str(), ss.size(), 1, file);
+                }
             }
             fflush(file);
         }

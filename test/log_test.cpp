@@ -16,13 +16,13 @@ TEST_CASE("log_test") {
     LOG("Hello {i}", 1);
     WARN("Test Warning {print}", "print data");
 
-    ERROR_IF(1 == 1, "1 == 1");
+    ERR_IF(1 == 1, "1 == 1");
 }
 
 
 TEST_CASE("isempty") {
     int k = ISEMPTY(test, 1);
-    // REQUIRE(k == 0);
+    REQUIRE(k == 0);
 }
 
 
@@ -33,7 +33,7 @@ TEST_CASE("lazy evaluation") {
         sum += i;
         INFO("i =", i);
         INFO("i+1 =", i + 1);
-        // REQUIRE(0 <= sum < 50);
+        REQUIRE(0 <= sum < 50);
     }
 }
 
@@ -69,11 +69,29 @@ TEST_CASE("log group") {
     int sum = 0;
     for (int i = 0; i < 10; ++i) {
         sum += i;
-        INFO("i = {i}", i);
+        INFO("i = ", i);
         if (sum > 20) {
             LOG("sum = {sum}", sum);
         }
     }
+}
+
+
+static void test_feature(int k) {
+    if (k == 1) {
+        LOG("k equals 1");
+    }
+}
+
+TEST_CASE("cross function info") {
+    int k = 0;
+    INFO("k = ", k);
+    
+    test_feature(k);
+    k = 1;
+    test_feature(k);
+    k = 2;
+    test_feature(k);
 }
 
 
@@ -87,5 +105,12 @@ TEST_CASE("log to file") {
     zeroerr::LogStream::getDefault().setFileLogger("log.txt");
     LOG("log to file {i}", 1);
     LOG("log the data {i}", 2);
+    zeroerr::LogStream::getDefault().setStderrLogger();
+}
 
-} 
+TEST_CASE("verbose") {
+    zeroerr::_ZEROERR_G_VERBOSE = 1;
+    VERBOSE(1) LOG("verbose log {i}", 1);
+    VERBOSE(2) LOG("verbose log {i}", 2);
+}
+

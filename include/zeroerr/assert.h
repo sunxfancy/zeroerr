@@ -7,6 +7,7 @@
 #include "zeroerr/print.h"
 
 #include <cstdint>
+#include <regex>
 #include <exception>
 #include <iostream>
 
@@ -211,7 +212,10 @@ struct AssertionData : std::exception {
     std::string cond;     // the condition of the assertion
 
     AssertionData(const char* file, unsigned line, const char* cond, assert_info info)
-        : file(file), line(line), cond(cond), info(info) {}
+        : file(file), line(line), info(info) {
+            std::regex pattern("zeroerr::ExpressionDecomposer\\(\\) << ");
+            this->cond = std::regex_replace(cond, pattern, "");
+        }
 
     void setResult(ExprResult&& result) {
         ExprResult r(std::move(result));

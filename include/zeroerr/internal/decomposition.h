@@ -3,8 +3,10 @@
 #include "zeroerr/dbg.h"
 #include "zeroerr/print.h"
 
-#define AND &&zeroerr::ExpressionDecomposer() <<
+#ifndef ZEROERR_DISABLE_COMPLEX_AND_OR
+#define AND && zeroerr::ExpressionDecomposer() <<
 #define OR  || zeroerr::ExpressionDecomposer() <<
+#endif
 
 namespace zeroerr {
 
@@ -19,23 +21,39 @@ struct deferred_false {
     static const bool value = false;
 };
 
-#define ZEROERR_EXPRESSION_COMPARISON(op, op_name)                                           \
-    template <typename R>                                                                    \
-    ZEROERR_SFINAE_OP(Expression<typename std::decay<R>::type>, op)                          \
-    operator op(R&& rhs) {                                                                   \
-        std::stringstream ss;                                                                \
-        Printer           print(ss);                                                         \
-        print.isCompact  = true;                                                             \
-        print.line_break = "";                                                               \
-        if (decomp.empty()) {                                                                \
-            print(lhs);                                                                      \
-            res = true;                                                                      \
-        } else                                                                               \
-            ss << decomp;                                                                    \
-        ss << " " #op " ";                                                                   \
-        print(rhs);                                                                          \
-        return Expression<typename std::decay<R>::type>(                                     \
-            std::forward<typename std::decay<R>::type>(rhs), res && (lhs op rhs), ss.str()); \
+#define ZEROERR_EXPRESSION_COMPARISON(op, op_name)                                                 \
+    template <typename R>                                                                          \
+    ZEROERR_SFINAE_OP(Expression<R>, op)                                \
+    operator op(R&& rhs) {                                                                         \
+        std::stringstream ss;                                                                      \
+        Printer           print(ss);                                                               \
+        print.isCompact  = true;                                                                   \
+        print.line_break = "";                                                                     \
+        if (decomp.empty()) {                                                                      \
+            print(lhs);                                                                            \
+            res = true;                                                                            \
+        } else                                                                                     \
+            ss << decomp;                                                                          \
+        ss << " " #op " ";                                                                         \
+        print(rhs);                                                                                \
+        return Expression<R>(static_cast<R&&>(rhs), res && (lhs op rhs), ss.str());                \
+    }                                                                                              \
+    template <typename R,                                                                          \
+              typename std::enable_if<!std::is_rvalue_reference<R>::value, void>::type* = nullptr> \
+    ZEROERR_SFINAE_OP(Expression<const R&>, op)                                \
+    operator op(const R& rhs) {                                                                    \
+        std::stringstream ss;                                                                      \
+        Printer           print(ss);                                                               \
+        print.isCompact  = true;                                                                   \
+        print.line_break = "";                                                                     \
+        if (decomp.empty()) {                                                                      \
+            print(lhs);                                                                            \
+            res = true;                                                                            \
+        } else                                                                                     \
+            ss << decomp;                                                                          \
+        ss << " " #op " ";                                                                         \
+        print(rhs);                                                                                \
+        return Expression<const R&>(rhs, res && (lhs op rhs), ss.str());                           \
     }
 
 #define ZEROERR_EXPRESSION_ANDOR(op, op_name)        \
@@ -84,16 +102,30 @@ struct ExprResult {
     ZEROERR_FORBIT_EXPRESSION(ExprResult, |=)
 };
 
+namespace details {
+    template <typename T>
+    typename std::enable_if<std::is_convertible<T, bool>::value, bool>::type
+    getBool(T&& lhs) {
+        return static_cast<bool>(lhs);
+    }
+
+    template <typename T>
+    typename std::enable_if<!std::is_convertible<T, bool>::value, bool>::type
+    getBool(T&& lhs) {
+        return true;
+    }
+}  // namespace details
+
 template <typename L>
 struct Expression {
     L           lhs;
     bool        res = true;
     std::string decomp;
 
-    explicit Expression(L&& in) : lhs(std::forward<L>(in)) { res = static_cast<bool>(lhs); }
+    explicit Expression(L&& in) : lhs(static_cast<L&&>(in)) { res = details::getBool(lhs); }
     explicit Expression(L&& in, bool res, std::string&& decomp)
-        : lhs(std::forward<L>(in)), res(res), decomp(std::forward<std::string>(decomp)) {}
-
+        : lhs(static_cast<L&&>(in)), res(res), decomp(static_cast<std::string&&>(decomp)) {}
+    
     operator ExprResult() {
         if (decomp.empty()) {
             Printer print;
@@ -119,8 +151,6 @@ struct Expression {
     ZEROERR_FORBIT_EXPRESSION(Expression, &)
     ZEROERR_FORBIT_EXPRESSION(Expression, ^)
     ZEROERR_FORBIT_EXPRESSION(Expression, |)
-    ZEROERR_FORBIT_EXPRESSION(Expression, &&)
-    ZEROERR_FORBIT_EXPRESSION(Expression, ||)
     ZEROERR_FORBIT_EXPRESSION(Expression, =)
     ZEROERR_FORBIT_EXPRESSION(Expression, +=)
     ZEROERR_FORBIT_EXPRESSION(Expression, -=)
@@ -142,9 +172,18 @@ struct ExpressionDecomposer {
     // and since "_Pragma()" is problematic this will stay for now...
     // https://github.com/catchorg/Catch2/issues/870
     // https://github.com/catchorg/Catch2/issues/565
+
+    // For temporary objects, we need to use rvalue reference to avoid copy
     template <typename L>
     Expression<L> operator<<(L&& operand) {
-        return Expression<L>(std::forward<L>(operand));
+        return Expression<L>(static_cast<L&&>(operand));
+    }
+
+    // For other objects, we will store the reference
+    template <typename L,
+              typename std::enable_if<!std::is_rvalue_reference<L>::value, void>::type* = nullptr>
+    Expression<const L&> operator<<(const L& operand) {
+        return Expression<const L&>(operand);
     }
 };
 
