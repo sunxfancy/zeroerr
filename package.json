@@ -8,8 +8,8 @@
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "cmake:docs": "vuepress build build-linux/docs",
-    "cmake:dev": "vuepress dev build-linux/docs"
+    "cmake:docs": "vuepress build build-linux-doc/docs",
+    "cmake:dev": "vuepress dev build-linux-doc/docs"
   },
   "devDependencies": {
     "vuepress": "^2.0.0-rc.0"
