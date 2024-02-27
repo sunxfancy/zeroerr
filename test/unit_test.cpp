@@ -156,3 +156,20 @@ TEST_CASE("range") {
     CHECK(0.5 <= a < 3.0);
     CHECK(0.5 <= a <= 1.0);
 }
+
+static int targetFunc(int a, int b) {
+    if (a == 3 && b == 5) return 7;
+    return a + b;
+}
+
+
+TEST_CASE("combinational test args") {
+    TestArgs<int> a{1, 2, 3};
+    TestArgs<int> b{4, 5, 6};
+
+    CombinationalTest test([&]{
+        CHECK(targetFunc(a, b) == (a+b));
+    });
+    test(a, b);
+}
+
