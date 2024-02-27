@@ -97,8 +97,8 @@ TEST_CASE("cross function info") {
 
 TEST_CASE("debug log") {
     int sum = 0;
-    // DLOG(LOG_FIRST, "debug log i = {i}", 1);
-    // DLOG(WARNING_IF, sum < 5, "debug log i = {i}, sum = {sum}", 2, sum);
+    DLOG(LOG_FIRST, sum < 5, "debug log i = {i}", 1);
+    DLOG(WARN_IF,sum < 5, "debug log i = {i}, sum = {sum}", 2, sum);
 }
 
 TEST_CASE("log to file") {

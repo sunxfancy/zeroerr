@@ -142,7 +142,7 @@ namespace zeroerr {
 #define FATAL_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ZEROERR_FATAL, __VA_ARGS__)
 
 #ifdef _DEBUG
-#define DLOG(ACTION, ...) ACTION(__VA_ARGS__)
+#define DLOG(ACTION, ...) ZEROERR_EXPAND(ACTION(__VA_ARGS__))
 #else
 #define DLOG(ACTION, ...)
 #endif
