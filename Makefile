@@ -1,4 +1,4 @@
-.PHONY: all linux windows test doc-dev doc copy clean
+.PHONY: all linux windows test doc-build doc-dev doc copy clean
 
 all: linux windows
 
@@ -17,7 +17,11 @@ test:
 doc-dev:
 	yarn run cmake:dev
 
-doc: linux
+doc-build:
+	mkdir -p build-linux-doc
+	cd build-linux-doc && cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_EXAMPLES=ON -DBUILD_DOC=ON && cmake --build . --target doxy -j `nproc`
+
+doc: doc-build
 	yarn run cmake:docs
 
 copy:
