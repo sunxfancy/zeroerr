@@ -26,7 +26,7 @@ jobs:
         run: chmod a+x docs/.doxybook/doxybook2
 
       - name: Build project
-        run: make linux
+        run: make doc-build
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
