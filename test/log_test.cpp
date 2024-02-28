@@ -1,4 +1,5 @@
 #define ZEROERR_ENABLE_PFR
+#define ZEROERR_ENABLE_SPEED_TEST
 
 #include "zeroerr/log.h"
 #include "zeroerr/assert.h"
@@ -36,9 +37,8 @@ TEST_CASE("lazy evaluation") {
         REQUIRE(0 <= sum < 50);
     }
 }
-
 #ifdef ZEROERR_ENABLE_SPEED_TEST
-TEST_CASE("speed test") {
+BENCHMARK("speed test") {
 #ifdef ZEROERR_OS_UNIX
     uint64_t* data      = new uint64_t[1000000];
     FILE*     file      = fmemopen(data, 1000000 * sizeof(uint64_t), "w");

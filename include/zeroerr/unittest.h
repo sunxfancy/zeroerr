@@ -59,6 +59,7 @@ public:
     UnitTest&   parseArgs(int argc, const char** argv);
     int         run();
     bool        silent = false;
+    bool        run_bench = false;
     std::string correct_output_path;
     std::string reporter_name = "console";
 };
@@ -110,7 +111,7 @@ protected:
 namespace detail {
 
 struct regTest {
-    explicit regTest(const TestCase& tc);
+    explicit regTest(const TestCase& tc, bool isBench = false);
 };
 
 struct regReporter {
