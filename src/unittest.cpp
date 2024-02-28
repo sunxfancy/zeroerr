@@ -72,8 +72,8 @@ void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
     TestContext local;
     try {
         op(&local);
-    } catch (const AssertionData& e) {
-    } catch (const std::exception& e) {
+    } catch (const AssertionData&) {
+    } catch (const std::exception&) {
         if (local.failed_as == 0) {
             local.failed_as = 1;
         }
@@ -102,7 +102,7 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         return false;
     };
 
-    auto parse_pos = [&](const std::vector<std::string>& args, int pos) {
+    auto parse_pos = [&](const std::vector<std::string>& args, size_t pos) {
         if (args[pos].size() == 2 && args[pos][0] == '-') {
             return parse_char(args[pos][1]);
         }
@@ -146,8 +146,8 @@ int UnitTest::run() {
         std::cerr << std::endl;
         try {
             tc.func(&context);  // run the test case
-        } catch (const AssertionData& e) {
-        } catch (const std::exception& e) {
+        } catch (const AssertionData&) {
+        } catch (const std::exception&) {
             if (context.failed_as == 0) {
                 context.failed_as = 1;
             }

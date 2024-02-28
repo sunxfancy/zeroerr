@@ -9,17 +9,17 @@
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_TEST_FUNC(function, name)                      \
-    static void                     function(zeroerr::TestContext*);  \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(    \
-        {name, __FILE__, __LINE__, function});                        \
-    static void function(zeroerr::TestContext* ZEROERR_UNUSED(_ZEROERR_TEST_CONTEXT)) 
+#define ZEROERR_CREATE_TEST_FUNC(function, name)                     \
+    static void                     function(zeroerr::TestContext*); \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \
+        {name, __FILE__, __LINE__, function});                       \
+    static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
 #define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
 
 #define SUB_CASE(name)                                                   \
     zeroerr::SubCaseReg(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
-        << [](zeroerr::TestContext * ZEROERR_UNUSED(_ZEROERR_TEST_CONTEXT))
+        << [](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT))
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
     class classname : public fixture {                                                       \
@@ -32,7 +32,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
     }                                                                                        \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \
         {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname)});                           \
-    inline void classname::funcname(zeroerr::TestContext* ZEROERR_UNUSED(_ZEROERR_TEST_CONTEXT))
+    inline void classname::funcname(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
 #define TEST_CASE_FIXTURE(fixture, name)                                \
     ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
@@ -152,7 +152,7 @@ public:
         index++;
         return *this;
     }
-    int  size() const { return args.size(); }
+    size_t size() const { return args.size(); }
     void reset() { index = 0; }
 
 private:
