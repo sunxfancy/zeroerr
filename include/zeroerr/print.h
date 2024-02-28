@@ -24,6 +24,8 @@
 #include "dsviz.h"
 #endif
 
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+
 // those predefines can help to avoid include too many headers
 namespace std {
 template <typename T>
@@ -42,7 +44,6 @@ class weak_ptr;
 
 namespace zeroerr {
 
-#pragma region type traits
 
 struct Printer;
 
@@ -157,7 +158,6 @@ struct has_extension<
 #define ZEROERR_IS_EXT detail::has_extension<T>::value
 
 }  // namespace detail
-#pragma endregion
 
 
 /**
@@ -248,8 +248,9 @@ struct Printer {
 
 #if defined(ZEROERR_ENABLE_PFR) && (ZEROERR_CXX_STANDARD >= 14)
     template <class StructType, unsigned... I>
-    void print_struct(const StructType& s, unsigned level, const char* lb, detail::seq<I...>) {
-        int a[] = {(os << (I == 0 ? "" : ", ") << pfr::get<I>(s), 0)...};
+    void print_struct(const StructType& s, unsigned, const char*, detail::seq<I...>) {
+        int _[] = {(os << (I == 0 ? "" : ", ") << pfr::get<I>(s), 0)...};
+        (void)_;
     }
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS&& ZEROERR_IS_POD)
@@ -294,7 +295,7 @@ struct Printer {
 
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_AUTOPTR)
-    print(T value, unsigned level, const char* lb, rank<3> r) {
+    print(T value, unsigned level, const char* lb, rank<3>) {
         if (value.get() == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
@@ -325,16 +326,16 @@ struct Printer {
     }
 
     template <class TupType>
-    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb, detail::seq<>) {}
+    inline void print_tuple(const TupType&, unsigned, const char*, detail::seq<>) {}
 
     template <class TupType, unsigned... I>
-    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb,
-                            detail::seq<I...>) {
-        int a[] = {(os << (I == 0 ? "" : ", ") << std::get<I>(_tup), 0)...};
+    inline void print_tuple(const TupType& _tup, unsigned, const char*, detail::seq<I...>) {
+        int _[] = {(os << (I == 0 ? "" : ", ") << std::get<I>(_tup), 0)...};
+        (void)_;
     }
 
     template <class... Args>
-    void print(const std::tuple<Args...>& value, unsigned level, const char* lb, rank<3> r) {
+    void print(const std::tuple<Args...>& value, unsigned level, const char* lb, rank<3>) {
         os << tab(level) << "(";
         print_tuple(value, level, isCompact ? " " : line_break, detail::gen_seq<sizeof...(Args)>{});
         os << ")" << lb;
@@ -381,7 +382,7 @@ struct Printer {
  * @param r  the rank of the rule. 0 is lowest priority.
  */
 template <class T>
-void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0> r) {
+void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0>) {
     P.print(std::forward<T>(v), level, lb, rank<max_rank>{});
 }
 
@@ -390,3 +391,5 @@ extern Printer& getStderrPrinter();
 
 
 }  // namespace zeroerr
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

@@ -18,6 +18,10 @@
 // If you didn't wish override operator<< for ostream, we can disable it
 // #define ZEROERR_DISABLE_OSTREAM_OVERRIDE
 
+// If you wish to disable AND, OR macro
+// #define ZEROERR_DISABLE_COMPLEX_AND_OR
+
+
 // Detect C++ standard
 #if __cplusplus >= 201703L
 #define ZEROERR_CXX_STANDARD 17
@@ -115,6 +119,192 @@ struct gen_seq<0, Is...> : seq<Is...> {};
 
 }  // namespace detail
 }  // namespace zeroerr
+
+
+
+// !!This idea is got from the doctest library.!!
+// =================================================================================================
+// == COMPILER VERSION =============================================================================
+// =================================================================================================
+
+// ideas for the version stuff are taken from here: https://github.com/cxxstuff/cxx_detect
+#pragma once
+
+#ifdef _MSC_VER
+#define ZEROERR_CPLUSPLUS _MSVC_LANG
+#else
+#define ZEROERR_CPLUSPLUS __cplusplus
+#endif
+
+#define ZEROERR_COMPILER(MAJOR, MINOR, PATCH) ((MAJOR)*10000000 + (MINOR)*100000 + (PATCH))
+
+// GCC/Clang and GCC/MSVC are mutually exclusive, but Clang/MSVC are not because of clang-cl...
+#if defined(_MSC_VER) && defined(_MSC_FULL_VER)
+#if _MSC_VER == _MSC_FULL_VER / 10000
+#define ZEROERR_MSVC ZEROERR_COMPILER(_MSC_VER / 100, _MSC_VER % 100, _MSC_FULL_VER % 10000)
+#else // MSVC
+#define ZEROERR_MSVC                                                                               \
+    ZEROERR_COMPILER(_MSC_VER / 100, (_MSC_FULL_VER / 100000) % 100, _MSC_FULL_VER % 100000)
+#endif // MSVC
+#endif // MSVC
+#if defined(__clang__) && defined(__clang_minor__) && defined(__clang_patchlevel__)
+#define ZEROERR_CLANG ZEROERR_COMPILER(__clang_major__, __clang_minor__, __clang_patchlevel__)
+#elif defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__GNUC_PATCHLEVEL__) &&              \
+        !defined(__INTEL_COMPILER)
+#define ZEROERR_GCC ZEROERR_COMPILER(__GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__)
+#endif // GCC
+#if defined(__INTEL_COMPILER)
+#define ZEROERR_ICC ZEROERR_COMPILER(__INTEL_COMPILER / 100, __INTEL_COMPILER % 100, 0)
+#endif // ICC
+
+#ifndef ZEROERR_MSVC
+#define ZEROERR_MSVC 0
+#endif // ZEROERR_MSVC
+#ifndef ZEROERR_CLANG
+#define ZEROERR_CLANG 0
+#endif // ZEROERR_CLANG
+#ifndef ZEROERR_GCC
+#define ZEROERR_GCC 0
+#endif // ZEROERR_GCC
+#ifndef ZEROERR_ICC
+#define ZEROERR_ICC 0
+#endif // ZEROERR_ICC
+
+// =================================================================================================
+// == COMPILER WARNINGS HELPERS ====================================================================
+// =================================================================================================
+
+#if ZEROERR_CLANG && !ZEROERR_ICC
+#define ZEROERR_PRAGMA_TO_STR(x) _Pragma(#x)
+#define ZEROERR_CLANG_SUPPRESS_WARNING_PUSH _Pragma("clang diagnostic push")
+#define ZEROERR_CLANG_SUPPRESS_WARNING(w) ZEROERR_PRAGMA_TO_STR(clang diagnostic ignored w)
+#define ZEROERR_CLANG_SUPPRESS_WARNING_POP _Pragma("clang diagnostic pop")
+#define ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH(w)                                                \
+    ZEROERR_CLANG_SUPPRESS_WARNING_PUSH ZEROERR_CLANG_SUPPRESS_WARNING(w)
+#else // ZEROERR_CLANG
+#define ZEROERR_CLANG_SUPPRESS_WARNING_PUSH
+#define ZEROERR_CLANG_SUPPRESS_WARNING(w)
+#define ZEROERR_CLANG_SUPPRESS_WARNING_POP
+#define ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH(w)
+#endif // ZEROERR_CLANG
+
+#if ZEROERR_GCC
+#define ZEROERR_PRAGMA_TO_STR(x) _Pragma(#x)
+#define ZEROERR_GCC_SUPPRESS_WARNING_PUSH _Pragma("GCC diagnostic push")
+#define ZEROERR_GCC_SUPPRESS_WARNING(w) ZEROERR_PRAGMA_TO_STR(GCC diagnostic ignored w)
+#define ZEROERR_GCC_SUPPRESS_WARNING_POP _Pragma("GCC diagnostic pop")
+#define ZEROERR_GCC_SUPPRESS_WARNING_WITH_PUSH(w)                                                  \
+    ZEROERR_GCC_SUPPRESS_WARNING_PUSH ZEROERR_GCC_SUPPRESS_WARNING(w)
+#else // ZEROERR_GCC
+#define ZEROERR_GCC_SUPPRESS_WARNING_PUSH
+#define ZEROERR_GCC_SUPPRESS_WARNING(w)
+#define ZEROERR_GCC_SUPPRESS_WARNING_POP
+#define ZEROERR_GCC_SUPPRESS_WARNING_WITH_PUSH(w)
+#endif // ZEROERR_GCC
+
+#if ZEROERR_MSVC
+#define ZEROERR_MSVC_SUPPRESS_WARNING_PUSH __pragma(warning(push))
+#define ZEROERR_MSVC_SUPPRESS_WARNING(w) __pragma(warning(disable : w))
+#define ZEROERR_MSVC_SUPPRESS_WARNING_POP __pragma(warning(pop))
+#define ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH(w)                                                 \
+    ZEROERR_MSVC_SUPPRESS_WARNING_PUSH ZEROERR_MSVC_SUPPRESS_WARNING(w)
+#else // ZEROERR_MSVC
+#define ZEROERR_MSVC_SUPPRESS_WARNING_PUSH
+#define ZEROERR_MSVC_SUPPRESS_WARNING(w)
+#define ZEROERR_MSVC_SUPPRESS_WARNING_POP
+#define ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH(w)
+#endif // ZEROERR_MSVC
+
+// =================================================================================================
+// == COMPILER WARNINGS ============================================================================
+// =================================================================================================
+
+// both the header and the implementation suppress all of these,
+// so it only makes sense to aggregate them like so
+#define ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                                      \
+    ZEROERR_CLANG_SUPPRESS_WARNING_PUSH                                                            \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wunknown-pragmas")                                            \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wweak-vtables")                                               \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wpadded")                                                     \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wmissing-prototypes")                                         \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wc++98-compat")                                               \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wc++98-compat-pedantic")                                      \
+                                                                                                   \
+    ZEROERR_GCC_SUPPRESS_WARNING_PUSH                                                              \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wunknown-pragmas")                                              \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wpragmas")                                                      \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Weffc++")                                                       \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wstrict-overflow")                                              \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wstrict-aliasing")                                              \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wmissing-declarations")                                         \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wuseless-cast")                                                 \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wnoexcept")                                                     \
+                                                                                                   \
+    ZEROERR_MSVC_SUPPRESS_WARNING_PUSH                                                             \
+    /* these 4 also disabled globally via cmake: */                                                \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4514) /* unreferenced inline function has been removed */        \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4571) /* SEH related */                                          \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4710) /* function not inlined */                                 \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4711) /* function selected for inline expansion*/                \
+    /* common ones */                                                                              \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4616) /* invalid compiler warning */                             \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4619) /* invalid compiler warning */                             \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4996) /* The compiler encountered a deprecated declaration */    \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4706) /* assignment within conditional expression */             \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4512) /* 'class' : assignment operator could not be generated */ \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4127) /* conditional expression is constant */                   \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4820) /* padding */                                              \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4625) /* copy constructor was implicitly deleted */              \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4626) /* assignment operator was implicitly deleted */           \
+    ZEROERR_MSVC_SUPPRESS_WARNING(5027) /* move assignment operator implicitly deleted */          \
+    ZEROERR_MSVC_SUPPRESS_WARNING(5026) /* move constructor was implicitly deleted */              \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4640) /* construction of local static object not thread-safe */  \
+    ZEROERR_MSVC_SUPPRESS_WARNING(5045) /* Spectre mitigation for memory load */                   \
+    ZEROERR_MSVC_SUPPRESS_WARNING(5264) /* 'variable-name': 'const' variable is not used */        \
+    /* static analysis */                                                                          \
+    ZEROERR_MSVC_SUPPRESS_WARNING(26439) /* Function may not throw. Declare it 'noexcept' */       \
+    ZEROERR_MSVC_SUPPRESS_WARNING(26495) /* Always initialize a member variable */                 \
+    ZEROERR_MSVC_SUPPRESS_WARNING(26451) /* Arithmetic overflow ... */                             \
+    ZEROERR_MSVC_SUPPRESS_WARNING(26444) /* Avoid unnamed objects with custom ctor and dtor... */  \
+    ZEROERR_MSVC_SUPPRESS_WARNING(26812) /* Prefer 'enum class' over 'enum' */
+
+#define ZEROERR_SUPPRESS_COMMON_WARNINGS_POP                                                       \
+    ZEROERR_CLANG_SUPPRESS_WARNING_POP                                                             \
+    ZEROERR_GCC_SUPPRESS_WARNING_POP                                                               \
+    ZEROERR_MSVC_SUPPRESS_WARNING_POP
+
+
+#define ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN                                 \
+    ZEROERR_MSVC_SUPPRESS_WARNING_PUSH                                                             \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4548) /* before comma no effect; expected side - effect */       \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4265) /* virtual functions, but destructor is not virtual */     \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4986) /* exception specification does not match previous */      \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4350) /* 'member1' called instead of 'member2' */                \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4668) /* not defined as a preprocessor macro */                  \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4365) /* signed/unsigned mismatch */                             \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4774) /* format string not a string literal */                   \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4820) /* padding */                                              \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4625) /* copy constructor was implicitly deleted */              \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4626) /* assignment operator was implicitly deleted */           \
+    ZEROERR_MSVC_SUPPRESS_WARNING(5027) /* move assignment operator implicitly deleted */          \
+    ZEROERR_MSVC_SUPPRESS_WARNING(5026) /* move constructor was implicitly deleted */              \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4623) /* default constructor was implicitly deleted */           \
+    ZEROERR_MSVC_SUPPRESS_WARNING(5039) /* pointer to pot. throwing function passed to extern C */ \
+    ZEROERR_MSVC_SUPPRESS_WARNING(5045) /* Spectre mitigation for memory load */                   \
+    ZEROERR_MSVC_SUPPRESS_WARNING(5105) /* macro producing 'defined' has undefined behavior */     \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4738) /* storing float result in memory, loss of performance */  \
+    ZEROERR_MSVC_SUPPRESS_WARNING(5262) /* implicit fall-through */
+
+#define ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END ZEROERR_MSVC_SUPPRESS_WARNING_POP
+
+
+#if ZEROERR_CLANG || ZEROERR_GCC
+# define ZEROERR_UNUSED(x) x __attribute__((unused)) 
+#elif defined(__LCLINT__) 
+# define ZEROERR_UNUSED(x) /*@unused@*/ x 
+#else 
+# define ZEROERR_UNUSED(x) x 
+#endif
 #pragma once
 
 
@@ -201,7 +391,14 @@ extern const char* BgMagenta;
 extern const char* BgCyan;
 extern const char* BgWhite;
 
+/**
+ * @brief Global function to disable colorful output.
+ */
 extern void disableColorOutput();
+
+/**
+ * @brief Global function to enable colorful output.
+ */
 extern void enableColorOutput();
 
 #endif
@@ -489,9 +686,11 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() { retur
 #include "magic_enum.hpp"
 #endif
 
-#if defined(ZEROERR_ENABLE_DSVIZ) 
+#if defined(ZEROERR_ENABLE_DSVIZ)
 #include "dsviz.h"
 #endif
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 // those predefines can help to avoid include too many headers
 namespace std {
@@ -511,7 +710,6 @@ class weak_ptr;
 
 namespace zeroerr {
 
-#pragma region type traits
 
 struct Printer;
 
@@ -602,7 +800,6 @@ struct has_extension<
     : std::true_type {};
 
 
-
 #define ZEROERR_ENABLE_IF(x) \
     template <typename T>    \
     typename std::enable_if<x, void>::type
@@ -627,7 +824,6 @@ struct has_extension<
 #define ZEROERR_IS_EXT detail::has_extension<T>::value
 
 }  // namespace detail
-#pragma endregion
 
 
 /**
@@ -707,7 +903,7 @@ struct Printer {
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS)
     print(T value, unsigned level, const char* lb, rank<0>) {
-        os << tab(level) << "Object " << type(value) << lb;
+        os << tab(level) << type(value) << lb;
     }
 
 
@@ -718,8 +914,9 @@ struct Printer {
 
 #if defined(ZEROERR_ENABLE_PFR) && (ZEROERR_CXX_STANDARD >= 14)
     template <class StructType, unsigned... I>
-    void print_struct(const StructType& s, unsigned level, const char* lb, detail::seq<I...>) {
-        int a[] = {(os << (I == 0 ? "" : ", ") << pfr::get<I>(s), 0)...};
+    void print_struct(const StructType& s, unsigned, const char*, detail::seq<I...>) {
+        int _[] = {(os << (I == 0 ? "" : ", ") << pfr::get<I>(s), 0)...};
+        (void)_;
     }
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS&& ZEROERR_IS_POD)
@@ -764,7 +961,7 @@ struct Printer {
 
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_AUTOPTR)
-    print(T value, unsigned level, const char* lb, rank<3> r) {
+    print(T value, unsigned level, const char* lb, rank<3>) {
         if (value.get() == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
@@ -795,18 +992,16 @@ struct Printer {
     }
 
     template <class TupType>
-    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb,
-                            detail::seq<>) {
-    }
+    inline void print_tuple(const TupType&, unsigned, const char*, detail::seq<>) {}
 
     template <class TupType, unsigned... I>
-    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb,
-                            detail::seq<I...>) {
-        int a[] = {(os << (I == 0 ? "" : ", ") << std::get<I>(_tup), 0)...};
+    inline void print_tuple(const TupType& _tup, unsigned, const char*, detail::seq<I...>) {
+        int _[] = {(os << (I == 0 ? "" : ", ") << std::get<I>(_tup), 0)...};
+        (void)_;
     }
 
     template <class... Args>
-    void print(const std::tuple<Args...>& value, unsigned level, const char* lb, rank<3> r) {
+    void print(const std::tuple<Args...>& value, unsigned level, const char* lb, rank<3>) {
         os << tab(level) << "(";
         print_tuple(value, level, isCompact ? " " : line_break, detail::gen_seq<sizeof...(Args)>{});
         os << ")" << lb;
@@ -838,11 +1033,13 @@ struct Printer {
 
 /**
  * @brief PrinterExt is an extension of Printer that allows user to write custom rules for printing.
+ * @details
  * User can use SFINAE to extend PrinterExt, e.g.:
- * template <typename T>
+ * ```
+ * template<typename T>
  * typename std::enable_if<std::is_base_of<llvm::Function, T>::value, void>::type
  * PrinterExt(Printer& P, T* s, unsigned level, const char* lb, rank<3>);
- *
+ * ```
  * @tparam T the type of the object to be printed.
  * @param P Printer class
  * @param v the object to be printed.
@@ -851,7 +1048,7 @@ struct Printer {
  * @param r  the rank of the rule. 0 is lowest priority.
  */
 template <class T>
-void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0> r) {
+void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0>) {
     P.print(std::forward<T>(v), level, lb, rank<max_rank>{});
 }
 
@@ -861,17 +1058,24 @@ extern Printer& getStderrPrinter();
 
 }  // namespace zeroerr
 
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
 #pragma once
 
 
 
 
-#define AND &&zeroerr::ExpressionDecomposer() <<
+
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+
+#ifndef ZEROERR_DISABLE_COMPLEX_AND_OR
+#define AND && zeroerr::ExpressionDecomposer() <<
 #define OR  || zeroerr::ExpressionDecomposer() <<
+#endif
 
 namespace zeroerr {
 
-#pragma region expression decompostion
 
 // SFINAE helper used to check L op R is supported, but the result type is `ret`
 #define ZEROERR_SFINAE_OP(ret, op) \
@@ -882,23 +1086,39 @@ struct deferred_false {
     static const bool value = false;
 };
 
-#define ZEROERR_EXPRESSION_COMPARISON(op, op_name)                                           \
-    template <typename R>                                                                    \
-    ZEROERR_SFINAE_OP(Expression<typename std::decay<R>::type>, op)                          \
-    operator op(R&& rhs) {                                                                   \
-        std::stringstream ss;                                                                \
-        Printer           print(ss);                                                         \
-        print.isCompact  = true;                                                             \
-        print.line_break = "";                                                               \
-        if (decomp.empty()) {                                                                \
-            print(lhs);                                                                      \
-            res = true;                                                                      \
-        } else                                                                               \
-            ss << decomp;                                                                    \
-        ss << " " #op " ";                                                                   \
-        print(rhs);                                                                          \
-        return Expression<typename std::decay<R>::type>(                                     \
-            std::forward<typename std::decay<R>::type>(rhs), res && (lhs op rhs), ss.str()); \
+#define ZEROERR_EXPRESSION_COMPARISON(op, op_name)                                                 \
+    template <typename R>                                                                          \
+    ZEROERR_SFINAE_OP(Expression<R>, op)                                \
+    operator op(R&& rhs) {                                                                         \
+        std::stringstream ss;                                                                      \
+        Printer           print(ss);                                                               \
+        print.isCompact  = true;                                                                   \
+        print.line_break = "";                                                                     \
+        if (decomp.empty()) {                                                                      \
+            print(lhs);                                                                            \
+            res = true;                                                                            \
+        } else                                                                                     \
+            ss << decomp;                                                                          \
+        ss << " " #op " ";                                                                         \
+        print(rhs);                                                                                \
+        return Expression<R>(static_cast<R&&>(rhs), res && (lhs op rhs), ss.str());                \
+    }                                                                                              \
+    template <typename R,                                                                          \
+              typename std::enable_if<!std::is_rvalue_reference<R>::value, void>::type* = nullptr> \
+    ZEROERR_SFINAE_OP(Expression<const R&>, op)                                \
+    operator op(const R& rhs) {                                                                    \
+        std::stringstream ss;                                                                      \
+        Printer           print(ss);                                                               \
+        print.isCompact  = true;                                                                   \
+        print.line_break = "";                                                                     \
+        if (decomp.empty()) {                                                                      \
+            print(lhs);                                                                            \
+            res = true;                                                                            \
+        } else                                                                                     \
+            ss << decomp;                                                                          \
+        ss << " " #op " ";                                                                         \
+        print(rhs);                                                                                \
+        return Expression<const R&>(rhs, res && (lhs op rhs), ss.str());                           \
     }
 
 #define ZEROERR_EXPRESSION_ANDOR(op, op_name)        \
@@ -947,16 +1167,30 @@ struct ExprResult {
     ZEROERR_FORBIT_EXPRESSION(ExprResult, |=)
 };
 
+namespace details {
+    template <typename T>
+    typename std::enable_if<std::is_convertible<T, bool>::value, bool>::type
+    getBool(T&& lhs) {
+        return static_cast<bool>(lhs);
+    }
+
+    template <typename T>
+    typename std::enable_if<!std::is_convertible<T, bool>::value, bool>::type
+    getBool(T&&) {
+        return true;
+    }
+}  // namespace details
+
 template <typename L>
 struct Expression {
     L           lhs;
     bool        res = true;
     std::string decomp;
 
-    explicit Expression(L&& in) : lhs(std::forward<L>(in)) { res = static_cast<bool>(lhs); }
+    explicit Expression(L&& in) : lhs(static_cast<L&&>(in)) { res = details::getBool(lhs); }
     explicit Expression(L&& in, bool res, std::string&& decomp)
-        : lhs(std::forward<L>(in)), res(res), decomp(std::forward<std::string>(decomp)) {}
-
+        : lhs(static_cast<L&&>(in)), res(res), decomp(static_cast<std::string&&>(decomp)) {}
+    
     operator ExprResult() {
         if (decomp.empty()) {
             Printer print;
@@ -982,8 +1216,6 @@ struct Expression {
     ZEROERR_FORBIT_EXPRESSION(Expression, &)
     ZEROERR_FORBIT_EXPRESSION(Expression, ^)
     ZEROERR_FORBIT_EXPRESSION(Expression, |)
-    ZEROERR_FORBIT_EXPRESSION(Expression, &&)
-    ZEROERR_FORBIT_EXPRESSION(Expression, ||)
     ZEROERR_FORBIT_EXPRESSION(Expression, =)
     ZEROERR_FORBIT_EXPRESSION(Expression, +=)
     ZEROERR_FORBIT_EXPRESSION(Expression, -=)
@@ -1005,16 +1237,20 @@ struct ExpressionDecomposer {
     // and since "_Pragma()" is problematic this will stay for now...
     // https://github.com/catchorg/Catch2/issues/870
     // https://github.com/catchorg/Catch2/issues/565
+
+    // For temporary objects, we need to use rvalue reference to avoid copy
     template <typename L>
     Expression<L> operator<<(L&& operand) {
-        return Expression<L>(std::forward<L>(operand));
+        return Expression<L>(static_cast<L&&>(operand));
+    }
+
+    // For other objects, we will store the reference
+    template <typename L,
+              typename std::enable_if<!std::is_rvalue_reference<L>::value, void>::type* = nullptr>
+    Expression<const L&> operator<<(const L& operand) {
+        return Expression<const L&>(operand);
     }
 };
-
-#pragma endregion
-
-
-#pragma region matcher
 
 
 template <typename T>
@@ -1125,11 +1361,9 @@ start_with(T&& s) {
     return new StartWithMatcher<std::string>(std::string(s));
 }
 
-
-#pragma endregion
-
-
 }  // namespace zeroerr
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 /*
  * This benchmark component is modified from nanobench by Martin Ankerl
  * https://github.com/martinus/nanobench
@@ -1143,12 +1377,15 @@ start_with(T&& s) {
 #include <string>
 #include <vector>
 
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+
 namespace zeroerr {
 
 
-#pragma region Benchmark
-
-
+/**
+ * @brief PerfCountSet is a set of performance counters.
+ */
 template <typename T>
 struct PerfCountSet {
     T iterations{};
@@ -1170,6 +1407,9 @@ namespace detail {
 struct LinuxPerformanceCounter;
 }
 
+/**
+ * @brief PerformanceCounter is a class to measure the performance of a function.
+ */
 struct PerformanceCounter {
     PerformanceCounter();
     ~PerformanceCounter();
@@ -1193,7 +1433,9 @@ protected:
     detail::LinuxPerformanceCounter* _perf = nullptr;
 };
 
-
+/**
+ * @brief BenchResult is a result of running the benchmark.
+ */
 struct BenchResult {
     enum Measure {
         time_elapsed        = 1 << 0,
@@ -1274,10 +1516,6 @@ struct Benchmark {
     void                     report();
 };
 
-
-#pragma endregion
-
-#pragma region details
 
 
 namespace detail {
@@ -1476,12 +1714,11 @@ void doNotOptimizeAway(Arg&& arg) {
     detail::doNotOptimizeAway(std::forward<Arg>(arg));
 }
 
-
-#pragma endregion
-
 }  // namespace zeroerr
 
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #pragma once
+
 
 
 
@@ -1492,8 +1729,10 @@ void doNotOptimizeAway(Arg&& arg) {
 #include <cstdint>
 #include <exception>
 #include <iostream>
+#include <regex>
 
-#pragma region define macros
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+
 
 // This macro will be redefined in the log.h header, so the global context variable could be
 // envolved only when we use log.h at the same time. If you didn't use log.h, this is still a
@@ -1556,7 +1795,7 @@ void doNotOptimizeAway(Arg&& arg) {
         zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
                                   zeroerr::assert_throw::throws, is_false};                      \
                                                                                                  \
-        zeroerr::Printer print;                                                                           \
+        zeroerr::Printer print;                                                                  \
         print.isQuoted = false;                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #lhs " " #op " " #rhs, info);  \
         assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                          \
@@ -1652,7 +1891,6 @@ void doNotOptimizeAway(Arg&& arg) {
 
 #endif
 
-#pragma endregion
 
 
 // This symbol must be in the global namespace or anonymous namespace
@@ -1668,7 +1906,10 @@ enum class assert_level : uint8_t { ZEROERR_WARN_l, ZEROERR_ERROR_l, ZEROERR_FAT
 enum class assert_throw : uint8_t { no_throw, throws, throws_as };
 enum class assert_cmp : uint8_t { eq, ne, gt, ge, lt, le };
 
-// This is a one-byte assert info struct, which is used to collect the meta info of an assertion
+/**
+ * @brief This is a one-byte assert info struct, which is used to collect the meta info of an
+ * assertion
+ */
 struct assert_info {
     assert_level level      : 2;
     assert_throw throw_type : 2;
@@ -1676,19 +1917,23 @@ struct assert_info {
 };
 
 
-#pragma region handle message
-
-
+/**
+ * @brief AssertionData is a struct that contains all the information of an assertion.
+ *       It will be thrown as an exception when the assertion failed.
+ */
 struct AssertionData : std::exception {
-    const char* file;
-    unsigned    line;
-    assert_info info;
-    bool        passed;
-    std::string message;
-    std::string cond;
+    const char* file;     // file name
+    unsigned    line;     // line number
+    assert_info info;     // assert info
+    bool        passed;   // if the assertion passed
+    std::string message;  // the message of the assertion
+    std::string cond;     // the condition of the assertion
 
     AssertionData(const char* file, unsigned line, const char* cond, assert_info info)
-        : file(file), line(line), cond(cond), info(info) {}
+        : file(file), line(line), info(info) {
+        std::regex pattern("zeroerr::ExpressionDecomposer\\(\\) << ");
+        this->cond = std::regex_replace(cond, pattern, "");
+    }
 
     void setResult(ExprResult&& result) {
         ExprResult r(std::move(result));
@@ -1745,10 +1990,10 @@ struct context_helper<T, false> {
 };
 }  // namespace detail
 
-#pragma endregion
-
 
 }  // namespace zeroerr
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #pragma once
 
 
@@ -1757,6 +2002,8 @@ struct context_helper<T, false> {
 
 #include <iostream>
 #include <tuple>  // for std::get and std::tie
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #ifndef ZEROERR_DISABLE_DBG_MARCO
 #define dbg(...) zeroerr::DebugExpr(__FILE__, __LINE__, __func__, #__VA_ARGS__, __VA_ARGS__)
@@ -1776,11 +2023,20 @@ struct last<T1> {
     using type = T1;
 };
 
+/**
+ * @brief get_last is a function to get the last argument of a variadic template.
+ *        It is used by DebugExpr.
+ */
 template <typename... Args>
 auto get_last(Args&&... args) -> typename last<Args...>::type {
     return std::get<sizeof...(Args) - 1>(std::tie(args...));
 }
 
+
+/**
+ * @brief DebugExpr is a function to print any type of variable with its type name.
+ *        It is used by dbg macro.
+ */
 template <typename... T>
 auto DebugExpr(const char* file, unsigned line, const char* func, const char* exprs, T... t) ->
     typename last<T...>::type {
@@ -1806,11 +2062,12 @@ auto DebugExpr(const char* file, unsigned line, const char* func, const char* ex
 
 }  // namespace zeroerr
 
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #pragma once
+
 
 #include <string>
 #include <sstream>
-
 
 namespace zeroerr
 {
@@ -1847,6 +2104,7 @@ std::string format(const char* fmt, T... args) {
 
 
 
+
 #include <chrono>
 #include <cstdlib>
 #include <deque>
@@ -1857,6 +2115,8 @@ std::string format(const char* fmt, T... args) {
 #include <unordered_set>
 #include <vector>
 
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+
 extern const char* ZEROERR_LOG_CATEGORY;
 
 namespace std {
@@ -1864,8 +2124,6 @@ class mutex;
 }
 
 namespace zeroerr {
-
-#pragma region log macros
 
 
 #define ZEROERR_INFO(...)  ZEROERR_EXPAND(ZEROERR_INFO_(__VA_ARGS__))
@@ -1888,19 +2146,24 @@ namespace zeroerr {
 #undef WARN
 #endif
 
-#ifdef ERROR
-#undef ERROR
+#ifdef ERR
+#undef ERR
 #endif
 
 #ifdef FATAL
 #undef FATAL
 #endif
 
+#ifdef VERBOSE
+#undef VERBOSE
+#endif
+
 #define INFO(...)  ZEROERR_INFO(__VA_ARGS__)
 #define LOG(...)   ZEROERR_LOG(__VA_ARGS__)
 #define WARN(...)  ZEROERR_WARN(__VA_ARGS__)
-#define ERROR(...) ZEROERR_ERROR(__VA_ARGS__)
+#define ERR(...)   ZEROERR_ERROR(__VA_ARGS__)
 #define FATAL(...) ZEROERR_FATAL(__VA_ARGS__)
+#define VERBOSE(v) ZEROERR_VERBOSE(v)
 
 #endif
 
@@ -1913,7 +2176,7 @@ namespace zeroerr {
 #define INFO_IF(cond, ...)  ZEROERR_LOG_IF(cond, ZEROERR_INFO, __VA_ARGS__)
 #define LOG_IF(cond, ...)   ZEROERR_LOG_IF(cond, ZEROERR_LOG, __VA_ARGS__)
 #define WARN_IF(cond, ...)  ZEROERR_LOG_IF(cond, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_IF(cond, ...) ZEROERR_LOG_IF(cond, ZEROERR_ERROR, __VA_ARGS__)
+#define ERR_IF(cond, ...)   ZEROERR_LOG_IF(cond, ZEROERR_ERROR, __VA_ARGS__)
 #define FATAL_IF(cond, ...) ZEROERR_LOG_IF(cond, ZEROERR_FATAL, __VA_ARGS__)
 
 
@@ -1928,11 +2191,11 @@ namespace zeroerr {
     } while (0)
 
 
-#define INFO_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, ZEROERR_INFO, __VA_ARGS__)
-#define LOG_EVERY_(cond, ...)   ZEROERR_LOG_EVERY_(cond, ZEROERR_LOG, __VA_ARGS__)
-#define WARN_EVERY_(cond, ...)  ZEROERR_LOG_EVERY_(cond, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, ZEROERR_ERROR, __VA_ARGS__)
-#define FATAL_EVERY_(cond, ...) ZEROERR_LOG_EVERY_(cond, ZEROERR_FATAL, __VA_ARGS__)
+#define INFO_EVERY_(n, ...)  ZEROERR_LOG_EVERY_(n, ZEROERR_INFO, __VA_ARGS__)
+#define LOG_EVERY_(n, ...)   ZEROERR_LOG_EVERY_(n, ZEROERR_LOG, __VA_ARGS__)
+#define WARN_EVERY_(n, ...)  ZEROERR_LOG_EVERY_(n, ZEROERR_WARN, __VA_ARGS__)
+#define ERR_EVERY_(n, ...)   ZEROERR_LOG_EVERY_(n, ZEROERR_ERROR, __VA_ARGS__)
+#define FATAL_EVERY_(n, ...) ZEROERR_LOG_EVERY_(n, ZEROERR_FATAL, __VA_ARGS__)
 
 
 #define ZEROERR_LOG_IF_EVERY_(n, cond, ACTION, ...) \
@@ -1948,7 +2211,7 @@ namespace zeroerr {
 #define INFO_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_INFO, __VA_ARGS__)
 #define LOG_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_LOG, __VA_ARGS__)
 #define WARN_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_ERROR, __VA_ARGS__)
+#define ERR_IF_EVERY_(n, cond, ...)   ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_ERROR, __VA_ARGS__)
 #define FATAL_IF_EVERY_(n, cond, ...) ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_FATAL, __VA_ARGS__)
 
 #define ZEROERR_LOG_FIRST(cond, ACTION, ...) \
@@ -1963,7 +2226,7 @@ namespace zeroerr {
 #define INFO_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, ZEROERR_INFO, __VA_ARGS__)
 #define LOG_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, ZEROERR_LOG, __VA_ARGS__)
 #define WARN_FIRST(cond, ...)  ZEROERR_LOG_FIRST(cond, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, ZEROERR_ERROR, __VA_ARGS__)
+#define ERR_FIRST(cond, ...)   ZEROERR_LOG_FIRST(cond, ZEROERR_ERROR, __VA_ARGS__)
 #define FATAL_FIRST(cond, ...) ZEROERR_LOG_FIRST(cond, ZEROERR_FATAL, __VA_ARGS__)
 
 #define ZEROERR_LOG_FIRST_(n, cond, ACTION, ...) \
@@ -1977,20 +2240,24 @@ namespace zeroerr {
 #define INFO_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, ZEROERR_INFO, __VA_ARGS__)
 #define LOG_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, ZEROERR_LOG, __VA_ARGS__)
 #define WARN_FIRST_(n, cond, ...)  ZEROERR_LOG_FIRST_(n, cond, ZEROERR_WARN, __VA_ARGS__)
-#define ERROR_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ZEROERR_ERROR, __VA_ARGS__)
+#define ERR_FIRST_(n, cond, ...)   ZEROERR_LOG_FIRST_(n, cond, ZEROERR_ERROR, __VA_ARGS__)
 #define FATAL_FIRST_(n, cond, ...) ZEROERR_LOG_FIRST_(n, cond, ZEROERR_FATAL, __VA_ARGS__)
 
 #ifdef _DEBUG
-#define DLOG(ACTION, ...) ACTION(__VA_ARGS__)
+#define DLOG(ACTION, ...) ZEROERR_EXPAND(ACTION(__VA_ARGS__))
 #else
 #define DLOG(ACTION, ...)
 #endif
 
+extern int _ZEROERR_G_VERBOSE;
+
+#define ZEROERR_VERBOSE(v) if (zeroerr::_ZEROERR_G_VERBOSE >= (v))
 
 #define ZEROERR_LOG_(severity, message, ...)                                                  \
     do {                                                                                      \
         ZEROERR_G_CONTEXT_SCOPE(true);                                                        \
-        auto                    msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);     \
+        auto msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);                        \
+                                                                                              \
         static zeroerr::LogInfo log_info{__FILE__, message,  ZEROERR_LOG_CATEGORY,            \
                                          __LINE__, msg.size, zeroerr::LogSeverity::severity}; \
         msg.log->info = &log_info;                                                            \
@@ -2027,7 +2294,6 @@ namespace zeroerr {
 #define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, ...) \
     ZEROERR_LOG_IF(cond, level, __VA_ARGS__)
 
-#pragma endregion
 
 namespace detail {
 
@@ -2037,7 +2303,7 @@ std::string gen_str(const char* msg, const T& args, seq<I...>) {
 }
 
 template <typename T>
-std::string gen_str(const char* msg, const T& args, seq<>) {
+std::string gen_str(const char* msg, const T&, seq<>) {
     return msg;
 }
 
@@ -2118,7 +2384,7 @@ struct LogMessageImpl : LogMessage {
 };
 
 
-constexpr size_t LogStreamMaxSize = 1024 * 1024;
+constexpr size_t LogStreamMaxSize = 1024 * 1024 - 16;
 
 struct DataBlock {
     char       data[LogStreamMaxSize];
@@ -2128,6 +2394,7 @@ struct DataBlock {
 
 class Logger {
 public:
+    virtual ~Logger() = default;
     virtual void flush(DataBlock*) = 0;
 };
 
@@ -2141,7 +2408,14 @@ public:
         unsigned    size;
     };
 
-    enum FlushMode { FLUSH_AT_ONCE, FLUSH_WHEN_FULL, FLUSH_MANULLY };
+    enum FlushMode { FLUSH_AT_ONCE, FLUSH_WHEN_FULL, FLUSH_MANUALLY };
+    enum LogMode { ASYNC, SYNC };
+    enum DirMode {
+        SINGLE_FILE       = 0,
+        DAILY_FILE        = 1,
+        SPLIT_BY_SEVERITY = 1 << 1,
+        SPLIT_BY_CATEGORY = 1 << 2
+    };
 
     template <typename... T>
     PushResult push(T&&... args) {
@@ -2158,8 +2432,11 @@ public:
     void setStdoutLogger();
     void setStderrLogger();
 
+
     static LogStream& getDefault();
     FlushMode         flush_mode = FLUSH_AT_ONCE;
+    LogMode           log_mode   = SYNC;
+    DirMode           dir_mode   = SINGLE_FILE;
 
 private:
     DataBlock *first, *last;
@@ -2203,6 +2480,7 @@ ContextScope<F> MakeContextScope(const F& f) {
 
 }  // namespace zeroerr
 
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #pragma once
 
 
@@ -2338,9 +2616,6 @@ protected:
 
 }  // namespace  zeroerr
 
-#pragma once
-
-namespace zeroerr {}  // namespace zeroerr
 
 #pragma once
 
@@ -2351,19 +2626,19 @@ namespace zeroerr {}  // namespace zeroerr
 #include <string>
 #include <vector>
 
-#pragma region unittest
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_TEST_FUNC(function, name)                     \
-    static void                     function(zeroerr::TestContext*); \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \
-        {name, __FILE__, __LINE__, function});                       \
-    static void function(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT)
+#define ZEROERR_CREATE_TEST_FUNC(function, name)                      \
+    static void                     function(zeroerr::TestContext*);  \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(    \
+        {name, __FILE__, __LINE__, function});                        \
+    static void function(zeroerr::TestContext* ZEROERR_UNUSED(_ZEROERR_TEST_CONTEXT)) 
 
 #define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
 
 #define SUB_CASE(name)                                                   \
     zeroerr::SubCaseReg(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
-        << [](zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)
+        << [](zeroerr::TestContext * ZEROERR_UNUSED(_ZEROERR_TEST_CONTEXT))
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
     class classname : public fixture {                                                       \
@@ -2376,7 +2651,7 @@ namespace zeroerr {}  // namespace zeroerr
     }                                                                                        \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \
         {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname)});                           \
-    inline void classname::funcname(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT)
+    inline void classname::funcname(zeroerr::TestContext* ZEROERR_UNUSED(_ZEROERR_TEST_CONTEXT))
 
 #define TEST_CASE_FIXTURE(fixture, name)                                \
     ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
@@ -2400,11 +2675,11 @@ public:
 class IReporter;
 class UnitTest {
 public:
-    UnitTest&   parseArgs(int argc, char** argv);
+    UnitTest&   parseArgs(int argc, const char** argv);
     int         run();
-    bool        silent   = false;
-    IReporter*  reporter = nullptr;
+    bool        silent = false;
     std::string correct_output_path;
+    std::string reporter_name = "console";
 };
 
 struct TestCase {
@@ -2431,24 +2706,23 @@ struct TestedObjects {
 };
 
 
-#pragma endregion
-
-#pragma region reporter
-
 class IReporter {
 public:
+    virtual ~IReporter()                = default;
     virtual std::string getName() const = 0;
 
-    virtual void reportQuery() = 0;
-
-    virtual void reportResult(const TestContext& tc) = 0;
-
     // There are a list of events
-    virtual void testStart() = 0;
-    virtual void testEnd()   = 0;
+    virtual void testStart()                                                   = 0;
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb)         = 0;
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) = 0;
+    virtual void testEnd(const TestContext& tc)                                = 0;
 
-    virtual void testCaseStart(const TestCase& tc) = 0;
-    virtual void testCaseEnd(const TestCase& tc)   = 0;
+    static IReporter* create(const std::string& name, UnitTest& ut);
+
+    IReporter(UnitTest& ut) : ut(ut) {}
+
+protected:
+    UnitTest& ut;
 };
 
 
@@ -2464,11 +2738,49 @@ struct regReporter {
 }  // namespace detail
 
 
-#pragma endregion
+class CombinationalTest {
+public:
+    CombinationalTest(std::function<void()> func) : func(func) {}
+    std::function<void()> func;
 
+    template <typename T>
+    void operator()(T& arg) {
+        arg.reset();
+        for (int i = 0; i < arg.size(); ++i, ++arg) {
+            func();
+        }
+    }
+
+    template <typename T, typename... Args>
+    void operator()(T& arg, Args&... args) {
+        arg.reset();
+        for (int i = 0; i < arg.size(); ++i, ++arg) {
+            operator()(args...);
+        }
+    }
+};
+
+template <typename T>
+class TestArgs {
+public:
+    TestArgs(std::initializer_list<T> args) : args(args) {}
+    std::vector<T> args;
+
+    operator T() const { return args[index]; }
+    TestArgs& operator++() {
+        index++;
+        return *this;
+    }
+    int  size() const { return args.size(); }
+    void reset() { index = 0; }
+
+private:
+    int index = 0;
+};
 
 }  // namespace zeroerr
 
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #ifdef ZEROERR_IMPLEMENTATION
 
 
@@ -2717,7 +3029,6 @@ struct LinuxPerformanceCounter {
 }  // namespace detail
 #endif
 
-#pragma region PerformanceCounter
 
 PerformanceCounter::PerformanceCounter() {
     _has.timeElapsed() = true; // this should be always available
@@ -2780,7 +3091,6 @@ void PerformanceCounter::updateResults(uint64_t numIters) {
 #endif
 }
 
-#pragma endregion
 
 // determines resolution of the given clock. This is done by measuring multiple times and returning
 // the minimum time difference.
@@ -2813,7 +3123,6 @@ static inline double d(Clock::duration duration) noexcept {
     return std::chrono::duration_cast<std::chrono::duration<double, std::nano>>(duration).count();
 }
 
-#pragma region BenchState
 struct BenchState {
     BenchState(Benchmark& bench) : bench(bench), stage(UnInit) {
         targetEpochTime = clockResolution() * bench.minimalResolutionMutipler;
@@ -2952,7 +3261,6 @@ void moveResult(BenchState* state, std::string name) {
     destroyBenchState(state);
 }
 
-#pragma endregion
 
 PerfCountSet<double> BenchResult::average() const {
     PerfCountSet<double> avg;
@@ -3007,7 +3315,7 @@ void Benchmark::report() {
     std::cerr << "" << title << ":" << std::endl;
 
     std::vector<std::string> headers{""};
-    for (int i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
+    for (unsigned i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
         if (result[0].has.data[i]) headers.push_back(names[i]);
     }
     Table output;
@@ -3034,7 +3342,6 @@ void doNotOptimizeAwaySink(void const*) {}
 #pragma optimize("", on)
 #endif
 
-#pragma region Rng random number generator
 
 Rng::Rng() : mX(0), mY(0) {
     std::random_device                      rd;
@@ -3123,7 +3430,6 @@ constexpr uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept {
     return (x << k) | (x >> (64U - k));
 }
 
-#pragma endregion
 
 }  // namespace detail
 
@@ -3342,6 +3648,8 @@ const char* ZEROERR_LOG_CATEGORY = "default";
 
 namespace zeroerr {
 
+int _ZEROERR_G_VERBOSE = 0;
+
 thread_local std::vector<IContextScope*> _ZEROERR_G_CONTEXT_SCOPE_VECTOR;
 
 LogStream::LogStream() {
@@ -3373,7 +3681,7 @@ void* LogStream::alloc_block(unsigned size) {
     if (last->size + size > LogStreamMaxSize) {
         if (flush_mode == FLUSH_WHEN_FULL) {
             logger->flush(last);
-            last->size = 0;    
+            last->size = 0;
         } else {
             last->next = new DataBlock();
             last       = last->next;
@@ -3388,7 +3696,6 @@ void LogStream::flush() {
     // FIXME: this flush did not flush the previous data block
     logger->flush(last);
     last->size = 0;
-    // std::cerr << "flush" << std::endl;
 }
 
 
@@ -3409,11 +3716,12 @@ public:
             if (binary) {
                 // TODO: Design a binary format, currently, it can not work
                 fwrite(msg->data, msg->size, 1, file);
-            }
-            for (LogMessage* p = (LogMessage*)msg->data; 
-                    p < (LogMessage*)&msg->data[msg->size]; p += p->info->size) {
-                auto ss = p->str(false);
-                fwrite(ss.c_str(), ss.size(), 1, file);
+            } else {
+                for (LogMessage* p = (LogMessage*)msg->data; 
+                        p < (LogMessage*)&msg->data[msg->size]; p += p->info->size) {
+                    auto ss = p->str(false);
+                    fwrite(ss.c_str(), ss.size(), 1, file);
+                }
             }
             fflush(file);
         }
@@ -3756,10 +4064,10 @@ Table::Style Table::getStyle(std::string name) { return StyleManager::instance()
     else                 \
         skip_lb = false; \
     ss << left;          \
-    for (int i = 0; i < header.size(); ++i)
+    for (size_t i = 0; i < header.size(); ++i)
 
 
-inline std::string _rept(unsigned k, std::string j, Table::Style& s) {
+inline std::string _rept(unsigned k, std::string j, Table::Style&) {
     std::stringstream ss;
     for (unsigned i = 0; i < k; i++) {
         ss << j;
@@ -3778,7 +4086,7 @@ std::string Table::str(Config c, Table::Style s) {
     }
 
     if (col_width.size() == 0) {
-        for (int i = 0; i < header.size(); ++i) {
+        for (size_t i = 0; i < header.size(); ++i) {
             unsigned max_width = 0;
             for (auto& row : cells) {
                 max_width = std::max<unsigned>(row[i].size(), max_width);
@@ -3920,7 +4228,44 @@ void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
     context->add(std::move(local));
 }
 
-UnitTest& UnitTest::parseArgs(int argc, char** argv) { return *this; }
+UnitTest& UnitTest::parseArgs(int argc, const char** argv) { 
+    auto convert_to_vec = [=](int argc, const char** argv) {
+        std::vector<std::string> result;
+        for (int i = 1; i < argc; i++) {
+            result.emplace_back(argv[i]);
+        }
+        return result;
+    };
+    
+    auto parse_char = [&](char arg) {
+        if (arg == 'v') { this->silent = false; return true; }
+        if (arg == 'q') { this->silent = true; return true; }
+        return false;
+    };
+
+    auto parse_token = [&](std::string arg) {
+        if (arg == "verbose") { this->silent = false; return true; }
+        if (arg == "quiet") { this->silent = true; return true; }
+        return false;
+    };
+
+    auto parse_pos = [&](const std::vector<std::string>& args, int pos) {
+        if (args[pos].size() == 2 && args[pos][0] == '-') {
+            return parse_char(args[pos][1]);
+        }
+        if (args[pos].size() > 2 && args[pos][0] == '-' && args[pos][1] == '-') {
+            return parse_token(args[pos].substr(2));
+        }
+        return false;
+    };
+
+    auto args = convert_to_vec(argc, argv);
+    for (size_t i = 0; i < args.size(); ++i) {
+        parse_pos(args, i);
+    }
+    
+    return *this; 
+}
 
 
 static std::string insertIndentation(std::string str) {
@@ -3936,15 +4281,15 @@ static std::string insertIndentation(std::string str) {
 }
 
 int UnitTest::run() {
-    setlocale(LC_ALL, "en_US.utf8");
-    std::cerr << "ZeroErr Unit Test" << std::endl;
-    TestContext     context, sum;
-    std::stringbuf* new_buf = new std::stringbuf();
+    TestContext context, sum;
+    IReporter*  reporter = IReporter::create(reporter_name, *this);
+    if (!reporter) reporter = IReporter::create("console", *this);
+    reporter->testStart();
+    std::stringbuf new_buf;
     for (auto& tc : detail::getRegisteredTests()) {
-        std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
-                  << Reset << FgCyan << tc.name << Reset << std::endl;
+        reporter->testCaseStart(tc, new_buf);
         std::streambuf* orig_buf = std::cerr.rdbuf();
-        std::cerr.rdbuf(new_buf);
+        std::cerr.rdbuf(&new_buf);
         std::cerr << std::endl;
         try {
             tc.func(&context);  // run the test case
@@ -3956,20 +4301,11 @@ int UnitTest::run() {
         }
         int type = sum.add(std::move(context));
         std::cerr.rdbuf(orig_buf);
-        if (!(silent && type == 0)) std::cerr << insertIndentation(new_buf->str()) << std::endl;
-        new_buf->str("");
+        reporter->testCaseEnd(tc, new_buf, type);
+        new_buf.str("");
     }
-    delete new_buf;
-    std::cerr << "----------------------------------------------------------------" << std::endl;
-    std::cerr << "             " << FgGreen << "PASSED" << Reset << "   |   " << FgYellow
-              << "WARNING" << Reset << "   |   " << FgRed << "FAILED" << Reset << "   |   " << Dim
-              << "SKIPPED" << Reset << std::endl;
-    std::cerr << "TEST CASE:   " << std::setw(6) << sum.passed << "       " << std::setw(7)
-              << sum.warning << "       " << std::setw(6) << sum.failed << "       " << std::setw(7)
-              << sum.skipped << std::endl;
-    std::cerr << "ASSERTION:   " << std::setw(6) << sum.passed_as << "       " << std::setw(7)
-              << sum.warning_as << "       " << std::setw(6) << sum.failed_as << "       "
-              << std::setw(7) << sum.skipped_as << std::endl;
+    reporter->testEnd(sum);
+    delete reporter;
     return 0;
 }
 
@@ -3999,19 +4335,39 @@ regReporter::regReporter(IReporter* reporter) { getRegisteredReporters().insert(
 
 class ConsoleReporter : public IReporter {
 public:
+    std::string getName() const override { return "console"; }
+
+    virtual void testStart() {
+        setlocale(LC_ALL, "en_US.utf8");
+        std::cerr << "ZeroErr Unit Test" << std::endl;
+    }
+
+    virtual void testEnd(const TestContext& sum) {
+        std::cerr << "----------------------------------------------------------------"
+                  << std::endl;
+        std::cerr << "             " << FgGreen << "PASSED" << Reset << "   |   " << FgYellow
+                  << "WARNING" << Reset << "   |   " << FgRed << "FAILED" << Reset << "   |   "
+                  << Dim << "SKIPPED" << Reset << std::endl;
+        std::cerr << "TEST CASE:   " << std::setw(6) << sum.passed << "       " << std::setw(7)
+                  << sum.warning << "       " << std::setw(6) << sum.failed << "       "
+                  << std::setw(7) << sum.skipped << std::endl;
+        std::cerr << "ASSERTION:   " << std::setw(6) << sum.passed_as << "       " << std::setw(7)
+                  << sum.warning_as << "       " << std::setw(6) << sum.failed_as << "       "
+                  << std::setw(7) << sum.skipped_as << std::endl;
+    }
+
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) {
+        std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
+                  << Reset << FgCyan << tc.name << Reset << std::endl;
+    }
+
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) {
+        if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
+    }
+
+    ConsoleReporter(UnitTest& ut) : IReporter(ut) {}
 };
 
-
-class XmlEncode;
-class XmlWriter;
-
-class XmlReporter : public IReporter {
-public:
-};
-
-class JUnitReporter : public IReporter {
-public:
-};
 
 
 // =================================================================================================
@@ -4342,9 +4698,93 @@ void XmlWriter::newlineIfNecessary() {
 // =================================================================================================
 
 
+
+
+class XmlReporter : public IReporter {
+public:
+    XmlWriter xml;
+
+    struct TestCaseData {
+        struct TestMessage {
+            std::string message, details, type;
+        };
+
+        struct TestCase {
+            std::string              classname, name;
+            double                   time;
+            std::vector<TestMessage> failures, errors;
+        };
+
+        std::vector<TestCase> testcases;
+        double                total_time;
+
+        void add_failure(const std::string& message, const std::string& type,
+                         const std::string& details) {
+            testcases.back().failures.push_back({message, details, type});
+        }
+
+        void add_error(const std::string& message, const std::string& details) {
+            testcases.back().errors.push_back({message, details});
+        }
+    } tc_data;
+
+    virtual std::string getName() const { return "xml"; }
+
+    // There are a list of events
+    virtual void testStart() { xml.writeDeclaration(); }
+
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) {
+        tc_data.testcases.push_back({tc.file, tc.name});
+    }
+
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) {
+    }
+
+    virtual void testEnd(const TestContext& tc) {
+        xml.startElement("testsuites");
+        xml.startElement("testsuite")
+            .writeAttribute("name", "ZeroErrTest")
+            .writeAttribute("errors", tc.failed_as)
+            .writeAttribute("failures", tc.failed)
+            .writeAttribute("tests", tc.passed + tc.failed + tc.warning);
+        for (const auto& testCase : tc_data.testcases) {
+            xml.startElement("testcase")
+                .writeAttribute("classname", testCase.classname)
+                .writeAttribute("name", testCase.name);
+            xml.writeAttribute("time", testCase.time);
+            xml.writeAttribute("status", "run");
+
+            for (const auto& failure : testCase.failures) {
+                xml.scopedElement("failure")
+                    .writeAttribute("message", failure.message)
+                    .writeAttribute("type", failure.type)
+                    .writeText(failure.details, false);
+            }
+
+            for (const auto& error : testCase.errors) {
+                xml.scopedElement("error")
+                    .writeAttribute("message", error.message)
+                    .writeText(error.details);
+            }
+            xml.endElement();
+        }
+        xml.endElement();
+        xml.endElement();
+    }
+
+    XmlReporter(UnitTest& ut) : IReporter(ut), xml(std::cerr) {}
+};
+
+IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
+    if (name == "console") return new ConsoleReporter(ut);
+    if (name == "xml") return new XmlReporter(ut);
+    return nullptr;
+}
+
+
 }  // namespace zeroerr
 
 
-int main(int argc, char** argv) { return zeroerr::UnitTest().parseArgs(argc, argv).run(); }
+int main(int argc, const char** argv) { return zeroerr::UnitTest().parseArgs(argc, argv).run(); }
 
 #endif // ZEROERR_IMPLEMENTATION

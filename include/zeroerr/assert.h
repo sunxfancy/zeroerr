@@ -1,17 +1,19 @@
 #pragma once
 
-#include "zeroerr/format.h"
 #include "zeroerr/internal/config.h"
+
+#include "zeroerr/format.h"
 #include "zeroerr/internal/debugbreak.h"
 #include "zeroerr/internal/decomposition.h"
 #include "zeroerr/print.h"
 
 #include <cstdint>
-#include <regex>
 #include <exception>
 #include <iostream>
+#include <regex>
 
-#pragma region define macros
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+
 
 // This macro will be redefined in the log.h header, so the global context variable could be
 // envolved only when we use log.h at the same time. If you didn't use log.h, this is still a
@@ -170,7 +172,6 @@
 
 #endif
 
-#pragma endregion
 
 
 // This symbol must be in the global namespace or anonymous namespace
@@ -197,8 +198,6 @@ struct assert_info {
 };
 
 
-#pragma region handle message
-
 /**
  * @brief AssertionData is a struct that contains all the information of an assertion.
  *       It will be thrown as an exception when the assertion failed.
@@ -213,9 +212,9 @@ struct AssertionData : std::exception {
 
     AssertionData(const char* file, unsigned line, const char* cond, assert_info info)
         : file(file), line(line), info(info) {
-            std::regex pattern("zeroerr::ExpressionDecomposer\\(\\) << ");
-            this->cond = std::regex_replace(cond, pattern, "");
-        }
+        std::regex pattern("zeroerr::ExpressionDecomposer\\(\\) << ");
+        this->cond = std::regex_replace(cond, pattern, "");
+    }
 
     void setResult(ExprResult&& result) {
         ExprResult r(std::move(result));
@@ -272,7 +271,7 @@ struct context_helper<T, false> {
 };
 }  // namespace detail
 
-#pragma endregion
-
 
 }  // namespace zeroerr
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

@@ -73,6 +73,10 @@ file(GLOB_RECURSE source_files ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
 add_library(zeroerr STATIC ${source_files})
 
+target_compile_options(zeroerr PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/W4>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
+    )
 # if(ENABLE_SAN)
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize-recover=all -fsanitize=address -fsanitize=undefined -fsanitize=float-divide-by-zero -fsanitize=float-cast-overflow -fno-sanitize=null -fno-sanitize=alignment")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize-recover=address -fsanitize=address")
@@ -139,6 +143,10 @@ if(MAIN_PROJECT)
 
     add_executable(unittest ${test_files} ${cuda_files})
     target_link_libraries(unittest zeroerr ${llvm_libs})
+    target_compile_options(unittest PRIVATE
+        $<$<CXX_COMPILER_ID:MSVC>:/W4>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
+        )
 
     add_executable(single_file_test ${CMAKE_CURRENT_SOURCE_DIR}/test/single_file_test.cpp)
     add_dependencies(single_file_test assemble_single_header)

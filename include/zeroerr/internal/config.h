@@ -116,3 +116,6 @@ struct gen_seq<0, Is...> : seq<Is...> {};
 
 }  // namespace detail
 }  // namespace zeroerr
+
+
+#include "zeroerr/internal/warnings.h"

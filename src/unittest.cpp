@@ -113,7 +113,7 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
     };
 
     auto args = convert_to_vec(argc, argv);
-    for (int i = 0; i < args.size(); ++i) {
+    for (size_t i = 0; i < args.size(); ++i) {
         parse_pos(args, i);
     }
     

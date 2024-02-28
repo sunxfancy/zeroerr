@@ -1,8 +1,8 @@
 #pragma once
+#include "zeroerr/print.h"
 
 #include <string>
 #include <sstream>
-#include "zeroerr/print.h"
 
 namespace zeroerr
 {

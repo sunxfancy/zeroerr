@@ -1,6 +1,7 @@
 #pragma once
-#include "zeroerr/format.h"
 #include "zeroerr/internal/config.h"
+
+#include "zeroerr/format.h"
 #include "zeroerr/print.h"
 
 #include <chrono>
@@ -13,6 +14,8 @@
 #include <unordered_set>
 #include <vector>
 
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+
 extern const char* ZEROERR_LOG_CATEGORY;
 
 namespace std {
@@ -20,8 +23,6 @@ class mutex;
 }
 
 namespace zeroerr {
-
-#pragma region log macros
 
 
 #define ZEROERR_INFO(...)  ZEROERR_EXPAND(ZEROERR_INFO_(__VA_ARGS__))
@@ -149,20 +150,19 @@ namespace zeroerr {
 
 extern int _ZEROERR_G_VERBOSE;
 
-#define ZEROERR_VERBOSE(v) if (zeroerr::_ZEROERR_G_VERBOSE >= (v)) 
+#define ZEROERR_VERBOSE(v) if (zeroerr::_ZEROERR_G_VERBOSE >= (v))
 
-#define ZEROERR_LOG_(severity, message, ...)                            \
-    do {                                                                \
-        ZEROERR_G_CONTEXT_SCOPE(true);                                  \
-        auto msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);  \
-                                                                        \
-        static zeroerr::LogInfo log_info{                               \
-            __FILE__, message, ZEROERR_LOG_CATEGORY,          __LINE__, \
-            msg.size,    zeroerr::LogSeverity::severity};         \
-        msg.log->info = &log_info;                                      \
-        if (zeroerr::LogStream::getDefault().flush_mode ==              \
-            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)               \
-            zeroerr::LogStream::getDefault().flush();                   \
+#define ZEROERR_LOG_(severity, message, ...)                                                  \
+    do {                                                                                      \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                                        \
+        auto msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);                        \
+                                                                                              \
+        static zeroerr::LogInfo log_info{__FILE__, message,  ZEROERR_LOG_CATEGORY,            \
+                                         __LINE__, msg.size, zeroerr::LogSeverity::severity}; \
+        msg.log->info = &log_info;                                                            \
+        if (zeroerr::LogStream::getDefault().flush_mode ==                                    \
+            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)                                     \
+            zeroerr::LogStream::getDefault().flush();                                         \
     } while (0)
 
 #define ZEROERR_INFO_(...) \
@@ -193,7 +193,6 @@ extern int _ZEROERR_G_VERBOSE;
 #define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, ...) \
     ZEROERR_LOG_IF(cond, level, __VA_ARGS__)
 
-#pragma endregion
 
 namespace detail {
 
@@ -203,7 +202,7 @@ std::string gen_str(const char* msg, const T& args, seq<I...>) {
 }
 
 template <typename T>
-std::string gen_str(const char* msg, const T& args, seq<>) {
+std::string gen_str(const char* msg, const T&, seq<>) {
     return msg;
 }
 
@@ -294,6 +293,7 @@ struct DataBlock {
 
 class Logger {
 public:
+    virtual ~Logger() = default;
     virtual void flush(DataBlock*) = 0;
 };
 
@@ -378,3 +378,5 @@ ContextScope<F> MakeContextScope(const F& f) {
 
 
 }  // namespace zeroerr
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

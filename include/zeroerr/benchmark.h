@@ -11,10 +11,11 @@
 #include <string>
 #include <vector>
 
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+
 namespace zeroerr {
 
-
-#pragma region Benchmark
 
 /**
  * @brief PerfCountSet is a set of performance counters.
@@ -149,10 +150,6 @@ struct Benchmark {
     void                     report();
 };
 
-
-#pragma endregion
-
-#pragma region details
 
 
 namespace detail {
@@ -351,7 +348,6 @@ void doNotOptimizeAway(Arg&& arg) {
     detail::doNotOptimizeAway(std::forward<Arg>(arg));
 }
 
-
-#pragma endregion
-
 }  // namespace zeroerr
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

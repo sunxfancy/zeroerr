@@ -17,7 +17,7 @@ struct A {
 };
 
 
-void PrinterExt(Printer& P, A s, unsigned level, const char* lb, rank<1>) {
+void PrinterExt(Printer& P, A s, unsigned, const char*, rank<1>) {
     P.os << "A(" << s.a << ", " << s.b << ")";
 }
 
