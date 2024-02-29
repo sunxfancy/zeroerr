@@ -173,3 +173,6 @@ TEST_CASE("combinational test args") {
     test(a, b);
 }
 
+TEST_CASE("check 0") {
+    CHECK(0 == 1);
+}

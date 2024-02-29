@@ -114,3 +114,21 @@ TEST_CASE("verbose") {
     VERBOSE(2) LOG("verbose log {i}", 2);
 }
 
+
+static void function() {
+    LOG("function log {i}", 1);
+    LOG("function log {sum}, {i}", 10, 1);
+}
+
+TEST_CASE("access log in Test case") {
+    zeroerr::suspendLog();
+    function();
+    std::cerr << LOG_GET(function, 119, i, int) << std::endl;
+    std::cerr << LOG_GET(function, 120, sum, int) << std::endl;
+    std::cerr << LOG_GET(function, 120, i, int) << std::endl;
+
+    CHECK(LOG_GET(function, 119, i, int) == 1);
+    CHECK(LOG_GET(function, 120, sum, int) == 9);
+    CHECK(LOG_GET(function, 120, i, int) == 2);
+    zeroerr::resumeLog();
+}

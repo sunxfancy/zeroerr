@@ -136,84 +136,84 @@ struct gen_seq<0, Is...> : seq<Is...> {};
 #define ZEROERR_CPLUSPLUS __cplusplus
 #endif
 
-#define ZEROERR_COMPILER(MAJOR, MINOR, PATCH) ((MAJOR)*10000000 + (MINOR)*100000 + (PATCH))
+#define ZEROERR_COMPILER(MAJOR, MINOR, PATCH) ((MAJOR) * 10000000 + (MINOR) * 100000 + (PATCH))
 
 // GCC/Clang and GCC/MSVC are mutually exclusive, but Clang/MSVC are not because of clang-cl...
 #if defined(_MSC_VER) && defined(_MSC_FULL_VER)
 #if _MSC_VER == _MSC_FULL_VER / 10000
 #define ZEROERR_MSVC ZEROERR_COMPILER(_MSC_VER / 100, _MSC_VER % 100, _MSC_FULL_VER % 10000)
-#else // MSVC
-#define ZEROERR_MSVC                                                                               \
+#else  // MSVC
+#define ZEROERR_MSVC \
     ZEROERR_COMPILER(_MSC_VER / 100, (_MSC_FULL_VER / 100000) % 100, _MSC_FULL_VER % 100000)
-#endif // MSVC
-#endif // MSVC
+#endif  // MSVC
+#endif  // MSVC
 #if defined(__clang__) && defined(__clang_minor__) && defined(__clang_patchlevel__)
 #define ZEROERR_CLANG ZEROERR_COMPILER(__clang_major__, __clang_minor__, __clang_patchlevel__)
-#elif defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__GNUC_PATCHLEVEL__) &&              \
-        !defined(__INTEL_COMPILER)
+#elif defined(__GNUC__) && defined(__GNUC_MINOR__) && defined(__GNUC_PATCHLEVEL__) && \
+    !defined(__INTEL_COMPILER)
 #define ZEROERR_GCC ZEROERR_COMPILER(__GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__)
-#endif // GCC
+#endif  // GCC
 #if defined(__INTEL_COMPILER)
 #define ZEROERR_ICC ZEROERR_COMPILER(__INTEL_COMPILER / 100, __INTEL_COMPILER % 100, 0)
-#endif // ICC
+#endif  // ICC
 
 #ifndef ZEROERR_MSVC
 #define ZEROERR_MSVC 0
-#endif // ZEROERR_MSVC
+#endif  // ZEROERR_MSVC
 #ifndef ZEROERR_CLANG
 #define ZEROERR_CLANG 0
-#endif // ZEROERR_CLANG
+#endif  // ZEROERR_CLANG
 #ifndef ZEROERR_GCC
 #define ZEROERR_GCC 0
-#endif // ZEROERR_GCC
+#endif  // ZEROERR_GCC
 #ifndef ZEROERR_ICC
 #define ZEROERR_ICC 0
-#endif // ZEROERR_ICC
+#endif  // ZEROERR_ICC
 
 // =================================================================================================
 // == COMPILER WARNINGS HELPERS ====================================================================
 // =================================================================================================
 
 #if ZEROERR_CLANG && !ZEROERR_ICC
-#define ZEROERR_PRAGMA_TO_STR(x) _Pragma(#x)
+#define ZEROERR_PRAGMA_TO_STR(x)            _Pragma(#x)
 #define ZEROERR_CLANG_SUPPRESS_WARNING_PUSH _Pragma("clang diagnostic push")
-#define ZEROERR_CLANG_SUPPRESS_WARNING(w) ZEROERR_PRAGMA_TO_STR(clang diagnostic ignored w)
-#define ZEROERR_CLANG_SUPPRESS_WARNING_POP _Pragma("clang diagnostic pop")
-#define ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH(w)                                                \
+#define ZEROERR_CLANG_SUPPRESS_WARNING(w)   ZEROERR_PRAGMA_TO_STR(clang diagnostic ignored w)
+#define ZEROERR_CLANG_SUPPRESS_WARNING_POP  _Pragma("clang diagnostic pop")
+#define ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH(w) \
     ZEROERR_CLANG_SUPPRESS_WARNING_PUSH ZEROERR_CLANG_SUPPRESS_WARNING(w)
-#else // ZEROERR_CLANG
+#else  // ZEROERR_CLANG
 #define ZEROERR_CLANG_SUPPRESS_WARNING_PUSH
 #define ZEROERR_CLANG_SUPPRESS_WARNING(w)
 #define ZEROERR_CLANG_SUPPRESS_WARNING_POP
 #define ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH(w)
-#endif // ZEROERR_CLANG
+#endif  // ZEROERR_CLANG
 
 #if ZEROERR_GCC
-#define ZEROERR_PRAGMA_TO_STR(x) _Pragma(#x)
+#define ZEROERR_PRAGMA_TO_STR(x)          _Pragma(#x)
 #define ZEROERR_GCC_SUPPRESS_WARNING_PUSH _Pragma("GCC diagnostic push")
-#define ZEROERR_GCC_SUPPRESS_WARNING(w) ZEROERR_PRAGMA_TO_STR(GCC diagnostic ignored w)
-#define ZEROERR_GCC_SUPPRESS_WARNING_POP _Pragma("GCC diagnostic pop")
-#define ZEROERR_GCC_SUPPRESS_WARNING_WITH_PUSH(w)                                                  \
+#define ZEROERR_GCC_SUPPRESS_WARNING(w)   ZEROERR_PRAGMA_TO_STR(GCC diagnostic ignored w)
+#define ZEROERR_GCC_SUPPRESS_WARNING_POP  _Pragma("GCC diagnostic pop")
+#define ZEROERR_GCC_SUPPRESS_WARNING_WITH_PUSH(w) \
     ZEROERR_GCC_SUPPRESS_WARNING_PUSH ZEROERR_GCC_SUPPRESS_WARNING(w)
-#else // ZEROERR_GCC
+#else  // ZEROERR_GCC
 #define ZEROERR_GCC_SUPPRESS_WARNING_PUSH
 #define ZEROERR_GCC_SUPPRESS_WARNING(w)
 #define ZEROERR_GCC_SUPPRESS_WARNING_POP
 #define ZEROERR_GCC_SUPPRESS_WARNING_WITH_PUSH(w)
-#endif // ZEROERR_GCC
+#endif  // ZEROERR_GCC
 
 #if ZEROERR_MSVC
 #define ZEROERR_MSVC_SUPPRESS_WARNING_PUSH __pragma(warning(push))
-#define ZEROERR_MSVC_SUPPRESS_WARNING(w) __pragma(warning(disable : w))
-#define ZEROERR_MSVC_SUPPRESS_WARNING_POP __pragma(warning(pop))
-#define ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH(w)                                                 \
+#define ZEROERR_MSVC_SUPPRESS_WARNING(w)   __pragma(warning(disable : w))
+#define ZEROERR_MSVC_SUPPRESS_WARNING_POP  __pragma(warning(pop))
+#define ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH(w) \
     ZEROERR_MSVC_SUPPRESS_WARNING_PUSH ZEROERR_MSVC_SUPPRESS_WARNING(w)
-#else // ZEROERR_MSVC
+#else  // ZEROERR_MSVC
 #define ZEROERR_MSVC_SUPPRESS_WARNING_PUSH
 #define ZEROERR_MSVC_SUPPRESS_WARNING(w)
 #define ZEROERR_MSVC_SUPPRESS_WARNING_POP
 #define ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH(w)
-#endif // ZEROERR_MSVC
+#endif  // ZEROERR_MSVC
 
 // =================================================================================================
 // == COMPILER WARNINGS ============================================================================
@@ -268,9 +268,9 @@ struct gen_seq<0, Is...> : seq<Is...> {};
     ZEROERR_MSVC_SUPPRESS_WARNING(26444) /* Avoid unnamed objects with custom ctor and dtor... */  \
     ZEROERR_MSVC_SUPPRESS_WARNING(26812) /* Prefer 'enum class' over 'enum' */
 
-#define ZEROERR_SUPPRESS_COMMON_WARNINGS_POP                                                       \
-    ZEROERR_CLANG_SUPPRESS_WARNING_POP                                                             \
-    ZEROERR_GCC_SUPPRESS_WARNING_POP                                                               \
+#define ZEROERR_SUPPRESS_COMMON_WARNINGS_POP \
+    ZEROERR_CLANG_SUPPRESS_WARNING_POP       \
+    ZEROERR_GCC_SUPPRESS_WARNING_POP         \
     ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
 
@@ -299,11 +299,14 @@ struct gen_seq<0, Is...> : seq<Is...> {};
 
 
 #if ZEROERR_CLANG || ZEROERR_GCC
-# define ZEROERR_UNUSED(x) x __attribute__((unused)) 
-#elif defined(__LCLINT__) 
-# define ZEROERR_UNUSED(x) /*@unused@*/ x 
-#else 
-# define ZEROERR_UNUSED(x) x 
+#define ZEROERR_UNUSED(x) x __attribute__((unused))
+#elif defined(__LCLINT__)
+#define ZEROERR_UNUSED(x) /*@unused@*/ x
+#elif ZEROERR_MSVC
+#define ZEROERR_UNUSED(x) \
+    ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH(4100) x ZEROERR_MSVC_SUPPRESS_WARNING_POP
+#else
+#define ZEROERR_UNUSED(x) x
 #endif
 #pragma once
 
@@ -1380,8 +1383,15 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-namespace zeroerr {
+#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name) \
+    static void function(zeroerr::TestContext*);       \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)({name, __FILE__, __LINE__, function}, true); \
+    static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
+#define BENCHMARK(name) ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name)
+
+
+namespace zeroerr {
 
 /**
  * @brief PerfCountSet is a set of performance counters.
@@ -2076,7 +2086,9 @@ template <typename... T>
 std::string format(const char* fmt, T... args) {
     std::stringstream ss;
     bool parse_name = false;
-    Printer print; print.isQuoted = false;
+    Printer print; 
+    print.isQuoted = false; print.isCompact = true;
+    print.line_break = "";
     std::string str_args[] = {print(args)...};
     int j = 0;
     for (const char* i = fmt; *i != '\0'; i++) {
@@ -2105,11 +2117,13 @@ std::string format(const char* fmt, T... args) {
 
 
 
+
 #include <chrono>
 #include <cstdlib>
 #include <deque>
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
 #include <unordered_set>
@@ -2253,17 +2267,22 @@ extern int _ZEROERR_G_VERBOSE;
 
 #define ZEROERR_VERBOSE(v) if (zeroerr::_ZEROERR_G_VERBOSE >= (v))
 
-#define ZEROERR_LOG_(severity, message, ...)                                                  \
-    do {                                                                                      \
-        ZEROERR_G_CONTEXT_SCOPE(true);                                                        \
-        auto msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);                        \
-                                                                                              \
-        static zeroerr::LogInfo log_info{__FILE__, message,  ZEROERR_LOG_CATEGORY,            \
-                                         __LINE__, msg.size, zeroerr::LogSeverity::severity}; \
-        msg.log->info = &log_info;                                                            \
-        if (zeroerr::LogStream::getDefault().flush_mode ==                                    \
-            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)                                     \
-            zeroerr::LogStream::getDefault().flush();                                         \
+#define ZEROERR_LOG_(severity, message, ...)                              \
+    do {                                                                  \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                    \
+        auto msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);    \
+                                                                          \
+        static zeroerr::LogInfo log_info{__FILE__,                        \
+                                         __func__,                        \
+                                         message,                         \
+                                         ZEROERR_LOG_CATEGORY,            \
+                                         __LINE__,                        \
+                                         msg.size,                        \
+                                         zeroerr::LogSeverity::severity}; \
+        msg.log->info = &log_info;                                        \
+        if (zeroerr::LogStream::getDefault().flush_mode ==                \
+            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)                 \
+            zeroerr::LogStream::getDefault().flush();                     \
     } while (0)
 
 #define ZEROERR_INFO_(...) \
@@ -2295,6 +2314,11 @@ extern int _ZEROERR_G_VERBOSE;
     ZEROERR_LOG_IF(cond, level, __VA_ARGS__)
 
 
+// This macro can access the log in memory
+#define LOG_GET(func, line, name, type) \
+    zeroerr::LogStream::getDefault().getLog<type>(#func, line, #name)
+
+
 namespace detail {
 
 template <typename T, unsigned... I>
@@ -2305,6 +2329,33 @@ std::string gen_str(const char* msg, const T& args, seq<I...>) {
 template <typename T>
 std::string gen_str(const char* msg, const T&, seq<>) {
     return msg;
+}
+
+template <size_t I>
+struct visit_impl {
+    template <typename T, typename F>
+    static void visit(T& tup, size_t idx, F& fun) {
+        if (idx == I - 1)
+            fun(std::get<I - 1>(tup));
+        else
+            visit_impl<I - 1>::visit(tup, idx, fun);
+    }
+};
+
+template <>
+struct visit_impl<0> {
+    template <typename T, typename F>
+    static void visit(T& tup, size_t idx, F& fun) {}
+};
+
+template <typename F, typename... Ts>
+void visit_at(std::tuple<Ts...> const& tup, size_t idx, F& fun) {
+    visit_impl<sizeof...(Ts)>::visit(tup, idx, fun);
+}
+
+template <typename F, typename... Ts>
+void visit_at(std::tuple<Ts...>& tup, size_t idx, F& fun) {
+    visit_impl<sizeof...(Ts)>::visit(tup, idx, fun);
 }
 
 }  // namespace detail
@@ -2321,63 +2372,80 @@ enum LogSeverity {
 struct LogTime {};
 
 struct LogInfo {
-    const char* filename;
-    const char* message;
-    const char* category;
-    unsigned    line;
-    unsigned    size;
-    LogSeverity severity;
+    const char*                filename;
+    const char*                function;
+    const char*                message;
+    const char*                category;
+    unsigned                   line;
+    unsigned                   size;
+    LogSeverity                severity;
+    std::map<std::string, int> names;
+
+    LogInfo(const char* filename, const char* function, const char* message, const char* category,
+            unsigned line, unsigned size, LogSeverity severity)
+        : filename(filename),
+          function(function),
+          message(message),
+          category(category),
+          line(line),
+          size(size),
+          severity(severity) {
+        for (const char* p = message; *p; p++)
+            if (*p == '{') {
+                const char* q = p + 1;
+                while (*q && *q != '}') q++;
+                if (*q == '}') {
+                    names[std::string(p + 1, q)] = names.size();
+                    p                            = q;
+                }
+            }
+    }
 };
 
-typedef void (*LogCustomCallback)(LogInfo);
+struct LogMessage;
+typedef std::string (*LogCustomCallback)(const LogMessage&, bool colorful);
 
 extern void setLogLevel(LogSeverity level);
 extern void setLogCategory(const char* categories);
+extern void setLogCustomCallback(LogCustomCallback callback);
+extern void suspendLog();
+extern void resumeLog();
 
 struct LogMessage {
     LogMessage() { time = std::chrono::system_clock::now(); }
 
-    virtual std::string str(bool colorful = true) = 0;
+    virtual std::string str() const = 0;
+    virtual void*       getRawLog(std::string name) const = 0;
 
     // meta data of this log message
-    LogInfo* info;
+    const LogInfo* info;
 
     // recorded wall time
     std::chrono::system_clock::time_point time;
 };
 
-#define zeroerr_color(x) (colorful ? x : "")
+
+// This is a helper class to get the raw pointer of the tuple
+struct GetTuplePtr {
+    void* ptr = nullptr;
+    template <typename H>
+    void operator()(H& v) {
+        ptr = (void*)&v;
+    }
+};
 
 template <typename... T>
 struct LogMessageImpl : LogMessage {
     LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
-    std::string str(bool colorful = true) override {
-        std::stringstream ss;
-        std::time_t       t  = std::chrono::system_clock::to_time_t(time);
-        std::tm           tm = *std::localtime(&t);
+    std::string str() const override {
+        return gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
+    }
 
-        ss << zeroerr_color(Dim) << '[' << zeroerr_color(Reset);
-        switch (info->severity) {
-            case INFO_l: ss << "INFO "; break;
-            case LOG_l: ss << zeroerr_color(FgGreen) << "LOG  " << zeroerr_color(Reset); break;
-            case WARN_l: ss << zeroerr_color(FgYellow) << "WARN " << zeroerr_color(Reset); break;
-            case ERROR_l: ss << zeroerr_color(FgRed) << "ERROR" << zeroerr_color(Reset); break;
-            case FATAL_l: ss << zeroerr_color(FgMagenta) << "FATAL" << zeroerr_color(Reset); break;
-        }
-        ss << " " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
-
-        std::string fileName(info->filename);
-
-        auto p = fileName.find_last_of('/');
-        if (p != std::string::npos) fileName = fileName.substr(p + 1);
-        auto q = fileName.find_last_of('\\');
-        if (q != std::string::npos) fileName = fileName.substr(q + 1);
-
-        ss << " " << fileName << ":" << info->line;
-        ss << zeroerr_color(Dim) << ']' << zeroerr_color(Reset) << "  "
-           << gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
-        return ss.str();
+    void* getRawLog(std::string name) const override {
+        GetTuplePtr f;
+        detail::visit_at(args, info->names.at(name), f);
+        return f.ptr;
     }
 
     std::tuple<T...> args;
@@ -2394,7 +2462,7 @@ struct DataBlock {
 
 class Logger {
 public:
-    virtual ~Logger() = default;
+    virtual ~Logger()              = default;
     virtual void flush(DataBlock*) = 0;
 };
 
@@ -2424,6 +2492,15 @@ public:
         LogMessage* msg  = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
         return {msg, size};
     }
+
+    template <typename T>
+    T getLog(std::string func, unsigned line, std::string name) {
+        void* data = getRawLog(func, line, name);
+        if (data) return *(T*)(data);
+        return T{};
+    }
+
+    void* getRawLog(std::string func, unsigned line, std::string name);
 
     void flush();
 
@@ -2628,17 +2705,17 @@ protected:
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_TEST_FUNC(function, name)                      \
-    static void                     function(zeroerr::TestContext*);  \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(    \
-        {name, __FILE__, __LINE__, function});                        \
-    static void function(zeroerr::TestContext* ZEROERR_UNUSED(_ZEROERR_TEST_CONTEXT)) 
+#define ZEROERR_CREATE_TEST_FUNC(function, name)                     \
+    static void                     function(zeroerr::TestContext*); \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \
+        {name, __FILE__, __LINE__, function});                       \
+    static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
 #define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
 
 #define SUB_CASE(name)                                                   \
     zeroerr::SubCaseReg(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
-        << [](zeroerr::TestContext * ZEROERR_UNUSED(_ZEROERR_TEST_CONTEXT))
+        << [](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT))
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
     class classname : public fixture {                                                       \
@@ -2651,7 +2728,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
     }                                                                                        \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \
         {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname)});                           \
-    inline void classname::funcname(zeroerr::TestContext* ZEROERR_UNUSED(_ZEROERR_TEST_CONTEXT))
+    inline void classname::funcname(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
 #define TEST_CASE_FIXTURE(fixture, name)                                \
     ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
@@ -2678,6 +2755,7 @@ public:
     UnitTest&   parseArgs(int argc, const char** argv);
     int         run();
     bool        silent = false;
+    bool        run_bench = false;
     std::string correct_output_path;
     std::string reporter_name = "console";
 };
@@ -2729,7 +2807,7 @@ protected:
 namespace detail {
 
 struct regTest {
-    explicit regTest(const TestCase& tc);
+    explicit regTest(const TestCase& tc, bool isBench = false);
 };
 
 struct regReporter {
@@ -2771,7 +2849,7 @@ public:
         index++;
         return *this;
     }
-    int  size() const { return args.size(); }
+    size_t size() const { return args.size(); }
     void reset() { index = 0; }
 
 private:
@@ -3652,6 +3730,11 @@ int _ZEROERR_G_VERBOSE = 0;
 
 thread_local std::vector<IContextScope*> _ZEROERR_G_CONTEXT_SCOPE_VECTOR;
 
+static std::string       DefaultLogCallback(const LogMessage& msg, bool colorful);
+static LogCustomCallback log_custom_callback = DefaultLogCallback;
+void setLogCustomCallback(LogCustomCallback callback) { log_custom_callback = callback; }
+
+
 LogStream::LogStream() {
     first = last = new DataBlock();
 #ifndef ZEROERR_NO_THREAD_SAFE
@@ -3693,11 +3776,30 @@ void* LogStream::alloc_block(unsigned size) {
 }
 
 void LogStream::flush() {
-    // FIXME: this flush did not flush the previous data block
+    ZEROERR_LOCK(*mutex);
+    for (DataBlock* p = first; p != last; p = p->next) {
+        logger->flush(p);
+        delete p;
+    }
     logger->flush(last);
     last->size = 0;
+    first = last;
 }
 
+static LogMessage* moveBytes(LogMessage* p, unsigned size) {
+    char* src = (char*)p;
+    char* dst = src + size;
+    return (LogMessage*)dst;
+}
+
+void* LogStream::getRawLog(std::string func, unsigned line, std::string name) {
+    for (DataBlock* p = first; p; p = p->next)
+        for (LogMessage* q = (LogMessage*)p->data; q < (LogMessage*)&p->data[p->size];
+             q = moveBytes(q, q->info->size))
+            if (line == q->info->line && func == q->info->function)
+                return q->getRawLog(name);
+    return nullptr;
+}
 
 class FileLogger : public Logger {
 public:
@@ -3717,18 +3819,19 @@ public:
                 // TODO: Design a binary format, currently, it can not work
                 fwrite(msg->data, msg->size, 1, file);
             } else {
-                for (LogMessage* p = (LogMessage*)msg->data; 
-                        p < (LogMessage*)&msg->data[msg->size]; p += p->info->size) {
-                    auto ss = p->str(false);
+                for (LogMessage* p = (LogMessage*)msg->data; p < (LogMessage*)&msg->data[msg->size];
+                     p = moveBytes(p, p->info->size)) {
+                    auto ss = log_custom_callback(*p, false);
                     fwrite(ss.c_str(), ss.size(), 1, file);
                 }
             }
             fflush(file);
         }
     }
+
 protected:
     FILE* file;
-    bool binary;
+    bool  binary;
 };
 
 class OStreamLogger : public Logger {
@@ -3736,9 +3839,9 @@ public:
     OStreamLogger(std::ostream& os) : os(os) {}
 
     void flush(DataBlock* msg) override {
-        for (LogMessage* p = (LogMessage*)msg->data; 
-                p < (LogMessage*)&msg->data[msg->size]; p += p->info->size) {
-            os << p->str();
+        for (LogMessage* p = (LogMessage*)msg->data; p < (LogMessage*)&msg->data[msg->size];
+             p = moveBytes(p, p->info->size)) {
+            os << log_custom_callback(*p, true);
         }
         os.flush();
     }
@@ -3774,15 +3877,13 @@ void LogStream::setStderrLogger() {
 }
 
 
-static LogSeverity                     LogLevel;
+static LogSeverity LogLevel;
 
 static std::unordered_set<std::string> LogCategory;
 static std::vector<std::string>        AllLogCategory;
 
 
-void setLogLevel(LogSeverity level) {
-    LogLevel = level;
-}
+void setLogLevel(LogSeverity level) { LogLevel = level; }
 
 void setLogCategory(const char* categories) {
     LogCategory.clear();
@@ -3799,6 +3900,46 @@ void setLogCategory(const char* categories) {
     if (!cat.empty()) {
         LogCategory.insert(cat);
     }
+}
+
+static LogStream::FlushMode saved_flush_mode;
+void                        suspendLog() {
+    saved_flush_mode                   = LogStream::getDefault().flush_mode;
+    LogStream::getDefault().flush_mode = LogStream::FLUSH_MANUALLY;
+}
+
+void resumeLog() {
+    LogStream::getDefault().flush_mode = saved_flush_mode;
+    LogStream::getDefault().flush();
+}
+
+#define zeroerr_color(x) (colorful ? x : "")
+static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
+    std::stringstream ss;
+    std::time_t       t  = std::chrono::system_clock::to_time_t(msg.time);
+    std::tm           tm = *std::localtime(&t);
+
+    ss << zeroerr_color(Dim) << '[' << zeroerr_color(Reset);
+    switch (msg.info->severity) {
+        case INFO_l: ss << "INFO "; break;
+        case LOG_l: ss << zeroerr_color(FgGreen) << "LOG  " << zeroerr_color(Reset); break;
+        case WARN_l: ss << zeroerr_color(FgYellow) << "WARN " << zeroerr_color(Reset); break;
+        case ERROR_l: ss << zeroerr_color(FgRed) << "ERROR" << zeroerr_color(Reset); break;
+        case FATAL_l: ss << zeroerr_color(FgMagenta) << "FATAL" << zeroerr_color(Reset); break;
+    }
+    ss << " " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+
+    std::string fileName(msg.info->filename);
+
+    auto p = fileName.find_last_of('/');
+    if (p != std::string::npos) fileName = fileName.substr(p + 1);
+    auto q = fileName.find_last_of('\\');
+    if (q != std::string::npos) fileName = fileName.substr(q + 1);
+
+    ss << " " << fileName << ":" << msg.info->line;
+    ss << zeroerr_color(Dim) << ']' << zeroerr_color(Reset) << "  " << msg.str();
+    ss << std::endl;
+    return ss.str();
 }
 
 
@@ -4161,6 +4302,7 @@ namespace zeroerr {
 
 namespace detail {
 static std::set<TestCase>& getRegisteredTests();
+static std::set<TestCase>& getRegisteredBenchmarks();
 }
 
 int TestContext::add(TestContext&& local) {
@@ -4219,8 +4361,8 @@ void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
     TestContext local;
     try {
         op(&local);
-    } catch (const AssertionData& e) {
-    } catch (const std::exception& e) {
+    } catch (const AssertionData&) {
+    } catch (const std::exception&) {
         if (local.failed_as == 0) {
             local.failed_as = 1;
         }
@@ -4228,7 +4370,7 @@ void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
     context->add(std::move(local));
 }
 
-UnitTest& UnitTest::parseArgs(int argc, const char** argv) { 
+UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
     auto convert_to_vec = [=](int argc, const char** argv) {
         std::vector<std::string> result;
         for (int i = 1; i < argc; i++) {
@@ -4236,20 +4378,39 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         }
         return result;
     };
-    
+
     auto parse_char = [&](char arg) {
-        if (arg == 'v') { this->silent = false; return true; }
-        if (arg == 'q') { this->silent = true; return true; }
+        if (arg == 'v') {
+            this->silent = false;
+            return true;
+        }
+        if (arg == 'q') {
+            this->silent = true;
+            return true;
+        }
+        if (arg == 'b') {
+            this->run_bench = true;
+            return true;
+        }
         return false;
     };
 
     auto parse_token = [&](std::string arg) {
-        if (arg == "verbose") { this->silent = false; return true; }
-        if (arg == "quiet") { this->silent = true; return true; }
+        if (arg == "verbose") {
+            this->silent = false;
+            return true;
+        }
+        if (arg == "quiet") {
+            this->silent = true;
+            return true;
+        }
+        if (arg == "bench") {
+            this->run_bench = true;
+        }
         return false;
     };
 
-    auto parse_pos = [&](const std::vector<std::string>& args, int pos) {
+    auto parse_pos = [&](const std::vector<std::string>& args, size_t pos) {
         if (args[pos].size() == 2 && args[pos][0] == '-') {
             return parse_char(args[pos][1]);
         }
@@ -4263,8 +4424,8 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
     for (size_t i = 0; i < args.size(); ++i) {
         parse_pos(args, i);
     }
-    
-    return *this; 
+
+    return *this;
 }
 
 
@@ -4286,15 +4447,22 @@ int UnitTest::run() {
     if (!reporter) reporter = IReporter::create("console", *this);
     reporter->testStart();
     std::stringbuf new_buf;
-    for (auto& tc : detail::getRegisteredTests()) {
+
+    std::set<TestCase> testcases = detail::getRegisteredTests();
+    if (run_bench) {
+        testcases.insert(detail::getRegisteredBenchmarks().begin(),
+                         detail::getRegisteredBenchmarks().end());
+    }
+
+    for (auto& tc : testcases) {
         reporter->testCaseStart(tc, new_buf);
         std::streambuf* orig_buf = std::cerr.rdbuf();
         std::cerr.rdbuf(&new_buf);
         std::cerr << std::endl;
         try {
             tc.func(&context);  // run the test case
-        } catch (const AssertionData& e) {
-        } catch (const std::exception& e) {
+        } catch (const AssertionData&) {
+        } catch (const std::exception&) {
             if (context.failed_as == 0) {
                 context.failed_as = 1;
             }
@@ -4321,7 +4489,18 @@ static std::set<TestCase>& getRegisteredTests() {
     return data;
 }
 
-regTest::regTest(const TestCase& tc) { getRegisteredTests().insert(tc); }
+static std::set<TestCase>& getRegisteredBenchmarks() {
+    static std::set<TestCase> data;
+    return data;
+}
+
+regTest::regTest(const TestCase& tc, bool isBench) {
+    if (isBench) {
+        getRegisteredBenchmarks().insert(tc);
+    } else {
+        getRegisteredTests().insert(tc);
+    }
+}
 
 static std::set<IReporter*>& getRegisteredReporters() {
     static std::set<IReporter*> data;
@@ -4367,7 +4546,6 @@ public:
 
     ConsoleReporter(UnitTest& ut) : IReporter(ut) {}
 };
-
 
 
 // =================================================================================================
@@ -4698,8 +4876,6 @@ void XmlWriter::newlineIfNecessary() {
 // =================================================================================================
 
 
-
-
 class XmlReporter : public IReporter {
 public:
     XmlWriter xml;
@@ -4737,8 +4913,7 @@ public:
         tc_data.testcases.push_back({tc.file, tc.name});
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) {
-    }
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) {}
 
     virtual void testEnd(const TestContext& tc) {
         xml.startElement("testsuites");

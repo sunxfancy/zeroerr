@@ -1,6 +1,7 @@
 #pragma once
 #include "zeroerr/internal/config.h"
 
+#include "zeroerr/dbg.h"
 #include "zeroerr/format.h"
 #include "zeroerr/print.h"
 
@@ -9,6 +10,7 @@
 #include <deque>
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
 #include <unordered_set>
@@ -152,17 +154,22 @@ extern int _ZEROERR_G_VERBOSE;
 
 #define ZEROERR_VERBOSE(v) if (zeroerr::_ZEROERR_G_VERBOSE >= (v))
 
-#define ZEROERR_LOG_(severity, message, ...)                                                  \
-    do {                                                                                      \
-        ZEROERR_G_CONTEXT_SCOPE(true);                                                        \
-        auto msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);                        \
-                                                                                              \
-        static zeroerr::LogInfo log_info{__FILE__, message,  ZEROERR_LOG_CATEGORY,            \
-                                         __LINE__, msg.size, zeroerr::LogSeverity::severity}; \
-        msg.log->info = &log_info;                                                            \
-        if (zeroerr::LogStream::getDefault().flush_mode ==                                    \
-            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)                                     \
-            zeroerr::LogStream::getDefault().flush();                                         \
+#define ZEROERR_LOG_(severity, message, ...)                              \
+    do {                                                                  \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                    \
+        auto msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);    \
+                                                                          \
+        static zeroerr::LogInfo log_info{__FILE__,                        \
+                                         __func__,                        \
+                                         message,                         \
+                                         ZEROERR_LOG_CATEGORY,            \
+                                         __LINE__,                        \
+                                         msg.size,                        \
+                                         zeroerr::LogSeverity::severity}; \
+        msg.log->info = &log_info;                                        \
+        if (zeroerr::LogStream::getDefault().flush_mode ==                \
+            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)                 \
+            zeroerr::LogStream::getDefault().flush();                     \
     } while (0)
 
 #define ZEROERR_INFO_(...) \
@@ -194,6 +201,11 @@ extern int _ZEROERR_G_VERBOSE;
     ZEROERR_LOG_IF(cond, level, __VA_ARGS__)
 
 
+// This macro can access the log in memory
+#define LOG_GET(func, line, name, type) \
+    zeroerr::LogStream::getDefault().getLog<type>(#func, line, #name)
+
+
 namespace detail {
 
 template <typename T, unsigned... I>
@@ -204,6 +216,33 @@ std::string gen_str(const char* msg, const T& args, seq<I...>) {
 template <typename T>
 std::string gen_str(const char* msg, const T&, seq<>) {
     return msg;
+}
+
+template <size_t I>
+struct visit_impl {
+    template <typename T, typename F>
+    static void visit(T& tup, size_t idx, F& fun) {
+        if (idx == I - 1)
+            fun(std::get<I - 1>(tup));
+        else
+            visit_impl<I - 1>::visit(tup, idx, fun);
+    }
+};
+
+template <>
+struct visit_impl<0> {
+    template <typename T, typename F>
+    static void visit(T&, size_t, F&) {}
+};
+
+template <typename F, typename... Ts>
+void visit_at(std::tuple<Ts...> const& tup, size_t idx, F& fun) {
+    visit_impl<sizeof...(Ts)>::visit(tup, idx, fun);
+}
+
+template <typename F, typename... Ts>
+void visit_at(std::tuple<Ts...>& tup, size_t idx, F& fun) {
+    visit_impl<sizeof...(Ts)>::visit(tup, idx, fun);
 }
 
 }  // namespace detail
@@ -220,63 +259,80 @@ enum LogSeverity {
 struct LogTime {};
 
 struct LogInfo {
-    const char* filename;
-    const char* message;
-    const char* category;
-    unsigned    line;
-    unsigned    size;
-    LogSeverity severity;
+    const char*                filename;
+    const char*                function;
+    const char*                message;
+    const char*                category;
+    unsigned                   line;
+    unsigned                   size;
+    LogSeverity                severity;
+    std::map<std::string, int> names;
+
+    LogInfo(const char* filename, const char* function, const char* message, const char* category,
+            unsigned line, unsigned size, LogSeverity severity)
+        : filename(filename),
+          function(function),
+          message(message),
+          category(category),
+          line(line),
+          size(size),
+          severity(severity) {
+        for (const char* p = message; *p; p++)
+            if (*p == '{') {
+                const char* q = p + 1;
+                while (*q && *q != '}') q++;
+                if (*q == '}') {
+                    names[std::string(p + 1, q)] = names.size();
+                    p                            = q;
+                }
+            }
+    }
 };
 
-typedef void (*LogCustomCallback)(LogInfo);
+struct LogMessage;
+typedef std::string (*LogCustomCallback)(const LogMessage&, bool colorful);
 
 extern void setLogLevel(LogSeverity level);
 extern void setLogCategory(const char* categories);
+extern void setLogCustomCallback(LogCustomCallback callback);
+extern void suspendLog();
+extern void resumeLog();
 
 struct LogMessage {
     LogMessage() { time = std::chrono::system_clock::now(); }
 
-    virtual std::string str(bool colorful = true) = 0;
+    virtual std::string str() const                       = 0;
+    virtual void*       getRawLog(std::string name) const = 0;
 
     // meta data of this log message
-    LogInfo* info;
+    const LogInfo* info;
 
     // recorded wall time
     std::chrono::system_clock::time_point time;
 };
 
-#define zeroerr_color(x) (colorful ? x : "")
+
+// This is a helper class to get the raw pointer of the tuple
+struct GetTuplePtr {
+    void* ptr = nullptr;
+    template <typename H>
+    void operator()(H& v) {
+        ptr = (void*)&v;
+    }
+};
 
 template <typename... T>
 struct LogMessageImpl : LogMessage {
     LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
-    std::string str(bool colorful = true) override {
-        std::stringstream ss;
-        std::time_t       t  = std::chrono::system_clock::to_time_t(time);
-        std::tm           tm = *std::localtime(&t);
+    std::string str() const override {
+        return gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
+    }
 
-        ss << zeroerr_color(Dim) << '[' << zeroerr_color(Reset);
-        switch (info->severity) {
-            case INFO_l: ss << "INFO "; break;
-            case LOG_l: ss << zeroerr_color(FgGreen) << "LOG  " << zeroerr_color(Reset); break;
-            case WARN_l: ss << zeroerr_color(FgYellow) << "WARN " << zeroerr_color(Reset); break;
-            case ERROR_l: ss << zeroerr_color(FgRed) << "ERROR" << zeroerr_color(Reset); break;
-            case FATAL_l: ss << zeroerr_color(FgMagenta) << "FATAL" << zeroerr_color(Reset); break;
-        }
-        ss << " " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
-
-        std::string fileName(info->filename);
-
-        auto p = fileName.find_last_of('/');
-        if (p != std::string::npos) fileName = fileName.substr(p + 1);
-        auto q = fileName.find_last_of('\\');
-        if (q != std::string::npos) fileName = fileName.substr(q + 1);
-
-        ss << " " << fileName << ":" << info->line;
-        ss << zeroerr_color(Dim) << ']' << zeroerr_color(Reset) << "  "
-           << gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
-        return ss.str();
+    void* getRawLog(std::string name) const override {
+        GetTuplePtr f;
+        detail::visit_at(args, info->names.at(name), f);
+        return f.ptr;
     }
 
     std::tuple<T...> args;
@@ -293,7 +349,7 @@ struct DataBlock {
 
 class Logger {
 public:
-    virtual ~Logger() = default;
+    virtual ~Logger()              = default;
     virtual void flush(DataBlock*) = 0;
 };
 
@@ -323,6 +379,15 @@ public:
         LogMessage* msg  = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
         return {msg, size};
     }
+
+    template <typename T>
+    T getLog(std::string func, unsigned line, std::string name) {
+        void* data = getRawLog(func, line, name);
+        if (data) return *(T*)(data);
+        return T{};
+    }
+
+    void* getRawLog(std::string func, unsigned line, std::string name);
 
     void flush();
 
