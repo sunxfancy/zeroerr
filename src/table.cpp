@@ -258,10 +258,10 @@ Table::Style Table::getStyle(std::string name) { return StyleManager::instance()
     else                 \
         skip_lb = false; \
     ss << left;          \
-    for (int i = 0; i < header.size(); ++i)
+    for (size_t i = 0; i < header.size(); ++i)
 
 
-inline std::string _rept(unsigned k, std::string j, Table::Style& s) {
+inline std::string _rept(unsigned k, std::string j, Table::Style&) {
     std::stringstream ss;
     for (unsigned i = 0; i < k; i++) {
         ss << j;
@@ -280,7 +280,7 @@ std::string Table::str(Config c, Table::Style s) {
     }
 
     if (col_width.size() == 0) {
-        for (int i = 0; i < header.size(); ++i) {
+        for (size_t i = 0; i < header.size(); ++i) {
             unsigned max_width = 0;
             for (auto& row : cells) {
                 max_width = std::max<unsigned>(row[i].size(), max_width);

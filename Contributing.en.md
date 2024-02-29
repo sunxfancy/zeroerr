@@ -8,3 +8,14 @@ We encourage developers to contribute to this project, but please follow the rul
 5. Please make sure to use English for comments in the code to avoid compiler encoding problems
 6. Make sure that the modified project has been completely built once, so that the merged version `zeroerr.hpp` file in the root directory is consistent with the source code
 7. We welcome the extension of special environment use and the integration of third-party libraries. Please put these extensions in the extension directory
+
+
+## Tips
+
+### Enable the pre-commit hook
+This hook script can help auto build and test the project before you submit a commit:
+```bash
+git config --local core.hooksPath .githooks/
+```
+
+

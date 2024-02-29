@@ -22,7 +22,6 @@ loadfile(${my_include_folder}/format.h format)
 loadfile(${my_include_folder}/dbg.h dbg)
 loadfile(${my_include_folder}/log.h log)
 loadfile(${my_include_folder}/table.h table)
-loadfile(${my_include_folder}/profiler.h profiler)
 loadfile(${my_include_folder}/unittest.h unittest)
 
 loadfile(${my_src_folder}/benchmark.cpp benchmark_cpp)

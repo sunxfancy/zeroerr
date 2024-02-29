@@ -7,6 +7,8 @@
 #include <iostream>
 #include <tuple>  // for std::get and std::tie
 
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+
 #ifndef ZEROERR_DISABLE_DBG_MARCO
 #define dbg(...) zeroerr::DebugExpr(__FILE__, __LINE__, __func__, #__VA_ARGS__, __VA_ARGS__)
 #else
@@ -63,3 +65,5 @@ auto DebugExpr(const char* file, unsigned line, const char* func, const char* ex
 
 
 }  // namespace zeroerr
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

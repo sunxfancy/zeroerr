@@ -7,19 +7,19 @@
 #include <string>
 #include <vector>
 
-#pragma region unittest
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define ZEROERR_CREATE_TEST_FUNC(function, name)                     \
     static void                     function(zeroerr::TestContext*); \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \
         {name, __FILE__, __LINE__, function});                       \
-    static void function(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT)
+    static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
 #define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
 
 #define SUB_CASE(name)                                                   \
     zeroerr::SubCaseReg(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
-        << [](zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)
+        << [](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT))
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
     class classname : public fixture {                                                       \
@@ -32,7 +32,7 @@
     }                                                                                        \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \
         {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname)});                           \
-    inline void classname::funcname(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT)
+    inline void classname::funcname(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
 #define TEST_CASE_FIXTURE(fixture, name)                                \
     ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
@@ -58,7 +58,8 @@ class UnitTest {
 public:
     UnitTest&   parseArgs(int argc, const char** argv);
     int         run();
-    bool        silent   = false;
+    bool        silent = false;
+    bool        run_bench = false;
     std::string correct_output_path;
     std::string reporter_name = "console";
 };
@@ -87,23 +88,21 @@ struct TestedObjects {
 };
 
 
-#pragma endregion
-
-#pragma region reporter
-
 class IReporter {
 public:
+    virtual ~IReporter()                = default;
     virtual std::string getName() const = 0;
 
     // There are a list of events
-    virtual void testStart() = 0;
-    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) = 0;
+    virtual void testStart()                                                   = 0;
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb)         = 0;
     virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) = 0;
-    virtual void testEnd(const TestContext& tc) = 0;
+    virtual void testEnd(const TestContext& tc)                                = 0;
 
     static IReporter* create(const std::string& name, UnitTest& ut);
 
     IReporter(UnitTest& ut) : ut(ut) {}
+
 protected:
     UnitTest& ut;
 };
@@ -112,7 +111,7 @@ protected:
 namespace detail {
 
 struct regTest {
-    explicit regTest(const TestCase& tc);
+    explicit regTest(const TestCase& tc, bool isBench = false);
 };
 
 struct regReporter {
@@ -121,12 +120,7 @@ struct regReporter {
 }  // namespace detail
 
 
-#pragma endregion
-
-#pragma region combinational
-
 class CombinationalTest {
-
 public:
     CombinationalTest(std::function<void()> func) : func(func) {}
     std::function<void()> func;
@@ -134,7 +128,7 @@ public:
     template <typename T>
     void operator()(T& arg) {
         arg.reset();
-        for (int i = 0; i < arg.size(); ++i, ++arg) {
+        for (size_t i = 0; i < arg.size(); ++i, ++arg) {
             func();
         }
     }
@@ -142,26 +136,30 @@ public:
     template <typename T, typename... Args>
     void operator()(T& arg, Args&... args) {
         arg.reset();
-        for (int i = 0; i < arg.size(); ++i, ++arg) {
+        for (size_t i = 0; i < arg.size(); ++i, ++arg) {
             operator()(args...);
         }
     }
 };
 
-template<typename T>
+template <typename T>
 class TestArgs {
 public:
     TestArgs(std::initializer_list<T> args) : args(args) {}
     std::vector<T> args;
 
     operator T() const { return args[index]; }
-    TestArgs& operator++() { index++; return *this; }
-    int size() const { return args.size(); }
+    TestArgs& operator++() {
+        index++;
+        return *this;
+    }
+    size_t size() const { return args.size(); }
     void reset() { index = 0; }
+
 private:
     int index = 0;
 };
 
-#pragma endregion
-
 }  // namespace zeroerr
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

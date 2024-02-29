@@ -11,10 +11,18 @@
 #include <string>
 #include <vector>
 
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+
+#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name) \
+    static void function(zeroerr::TestContext*);       \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)({name, __FILE__, __LINE__, function}, true); \
+    static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
+
+#define BENCHMARK(name) ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name)
+
+
 namespace zeroerr {
-
-
-#pragma region Benchmark
 
 /**
  * @brief PerfCountSet is a set of performance counters.
@@ -149,10 +157,6 @@ struct Benchmark {
     void                     report();
 };
 
-
-#pragma endregion
-
-#pragma region details
 
 
 namespace detail {
@@ -351,7 +355,6 @@ void doNotOptimizeAway(Arg&& arg) {
     detail::doNotOptimizeAway(std::forward<Arg>(arg));
 }
 
-
-#pragma endregion
-
 }  // namespace zeroerr
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

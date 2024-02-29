@@ -14,6 +14,7 @@ namespace zeroerr {
 
 namespace detail {
 static std::set<TestCase>& getRegisteredTests();
+static std::set<TestCase>& getRegisteredBenchmarks();
 }
 
 int TestContext::add(TestContext&& local) {
@@ -72,8 +73,8 @@ void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
     TestContext local;
     try {
         op(&local);
-    } catch (const AssertionData& e) {
-    } catch (const std::exception& e) {
+    } catch (const AssertionData&) {
+    } catch (const std::exception&) {
         if (local.failed_as == 0) {
             local.failed_as = 1;
         }
@@ -81,7 +82,7 @@ void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
     context->add(std::move(local));
 }
 
-UnitTest& UnitTest::parseArgs(int argc, const char** argv) { 
+UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
     auto convert_to_vec = [=](int argc, const char** argv) {
         std::vector<std::string> result;
         for (int i = 1; i < argc; i++) {
@@ -89,20 +90,39 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         }
         return result;
     };
-    
+
     auto parse_char = [&](char arg) {
-        if (arg == 'v') { this->silent = false; return true; }
-        if (arg == 'q') { this->silent = true; return true; }
+        if (arg == 'v') {
+            this->silent = false;
+            return true;
+        }
+        if (arg == 'q') {
+            this->silent = true;
+            return true;
+        }
+        if (arg == 'b') {
+            this->run_bench = true;
+            return true;
+        }
         return false;
     };
 
     auto parse_token = [&](std::string arg) {
-        if (arg == "verbose") { this->silent = false; return true; }
-        if (arg == "quiet") { this->silent = true; return true; }
+        if (arg == "verbose") {
+            this->silent = false;
+            return true;
+        }
+        if (arg == "quiet") {
+            this->silent = true;
+            return true;
+        }
+        if (arg == "bench") {
+            this->run_bench = true;
+        }
         return false;
     };
 
-    auto parse_pos = [&](const std::vector<std::string>& args, int pos) {
+    auto parse_pos = [&](const std::vector<std::string>& args, size_t pos) {
         if (args[pos].size() == 2 && args[pos][0] == '-') {
             return parse_char(args[pos][1]);
         }
@@ -113,11 +133,11 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
     };
 
     auto args = convert_to_vec(argc, argv);
-    for (int i = 0; i < args.size(); ++i) {
+    for (size_t i = 0; i < args.size(); ++i) {
         parse_pos(args, i);
     }
-    
-    return *this; 
+
+    return *this;
 }
 
 
@@ -139,15 +159,22 @@ int UnitTest::run() {
     if (!reporter) reporter = IReporter::create("console", *this);
     reporter->testStart();
     std::stringbuf new_buf;
-    for (auto& tc : detail::getRegisteredTests()) {
+
+    std::set<TestCase> testcases = detail::getRegisteredTests();
+    if (run_bench) {
+        testcases.insert(detail::getRegisteredBenchmarks().begin(),
+                         detail::getRegisteredBenchmarks().end());
+    }
+
+    for (auto& tc : testcases) {
         reporter->testCaseStart(tc, new_buf);
         std::streambuf* orig_buf = std::cerr.rdbuf();
         std::cerr.rdbuf(&new_buf);
         std::cerr << std::endl;
         try {
             tc.func(&context);  // run the test case
-        } catch (const AssertionData& e) {
-        } catch (const std::exception& e) {
+        } catch (const AssertionData&) {
+        } catch (const std::exception&) {
             if (context.failed_as == 0) {
                 context.failed_as = 1;
             }
@@ -174,7 +201,18 @@ static std::set<TestCase>& getRegisteredTests() {
     return data;
 }
 
-regTest::regTest(const TestCase& tc) { getRegisteredTests().insert(tc); }
+static std::set<TestCase>& getRegisteredBenchmarks() {
+    static std::set<TestCase> data;
+    return data;
+}
+
+regTest::regTest(const TestCase& tc, bool isBench) {
+    if (isBench) {
+        getRegisteredBenchmarks().insert(tc);
+    } else {
+        getRegisteredTests().insert(tc);
+    }
+}
 
 static std::set<IReporter*>& getRegisteredReporters() {
     static std::set<IReporter*> data;
@@ -220,7 +258,6 @@ public:
 
     ConsoleReporter(UnitTest& ut) : IReporter(ut) {}
 };
-
 
 
 // =================================================================================================
@@ -551,8 +588,6 @@ void XmlWriter::newlineIfNecessary() {
 // =================================================================================================
 
 
-
-
 class XmlReporter : public IReporter {
 public:
     XmlWriter xml;
@@ -590,8 +625,7 @@ public:
         tc_data.testcases.push_back({tc.file, tc.name});
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) {
-    }
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) {}
 
     virtual void testEnd(const TestContext& tc) {
         xml.startElement("testsuites");

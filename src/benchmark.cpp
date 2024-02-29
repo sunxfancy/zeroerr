@@ -245,7 +245,6 @@ struct LinuxPerformanceCounter {
 }  // namespace detail
 #endif
 
-#pragma region PerformanceCounter
 
 PerformanceCounter::PerformanceCounter() {
     _has.timeElapsed() = true; // this should be always available
@@ -308,7 +307,6 @@ void PerformanceCounter::updateResults(uint64_t numIters) {
 #endif
 }
 
-#pragma endregion
 
 // determines resolution of the given clock. This is done by measuring multiple times and returning
 // the minimum time difference.
@@ -341,7 +339,6 @@ static inline double d(Clock::duration duration) noexcept {
     return std::chrono::duration_cast<std::chrono::duration<double, std::nano>>(duration).count();
 }
 
-#pragma region BenchState
 struct BenchState {
     BenchState(Benchmark& bench) : bench(bench), stage(UnInit) {
         targetEpochTime = clockResolution() * bench.minimalResolutionMutipler;
@@ -480,7 +477,6 @@ void moveResult(BenchState* state, std::string name) {
     destroyBenchState(state);
 }
 
-#pragma endregion
 
 PerfCountSet<double> BenchResult::average() const {
     PerfCountSet<double> avg;
@@ -535,7 +531,7 @@ void Benchmark::report() {
     std::cerr << "" << title << ":" << std::endl;
 
     std::vector<std::string> headers{""};
-    for (int i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
+    for (unsigned i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
         if (result[0].has.data[i]) headers.push_back(names[i]);
     }
     Table output;
@@ -562,7 +558,6 @@ void doNotOptimizeAwaySink(void const*) {}
 #pragma optimize("", on)
 #endif
 
-#pragma region Rng random number generator
 
 Rng::Rng() : mX(0), mY(0) {
     std::random_device                      rd;
@@ -651,7 +646,6 @@ constexpr uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept {
     return (x << k) | (x >> (64U - k));
 }
 
-#pragma endregion
 
 }  // namespace detail
 

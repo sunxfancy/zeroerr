@@ -1,7 +1,11 @@
 #pragma once
 
+#include "zeroerr/internal/config.h"
+
 #include "zeroerr/dbg.h"
 #include "zeroerr/print.h"
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #ifndef ZEROERR_DISABLE_COMPLEX_AND_OR
 #define AND && zeroerr::ExpressionDecomposer() <<
@@ -10,7 +14,6 @@
 
 namespace zeroerr {
 
-#pragma region expression decompostion
 
 // SFINAE helper used to check L op R is supported, but the result type is `ret`
 #define ZEROERR_SFINAE_OP(ret, op) \
@@ -111,7 +114,7 @@ namespace details {
 
     template <typename T>
     typename std::enable_if<!std::is_convertible<T, bool>::value, bool>::type
-    getBool(T&& lhs) {
+    getBool(T&&) {
         return true;
     }
 }  // namespace details
@@ -186,11 +189,6 @@ struct ExpressionDecomposer {
         return Expression<const L&>(operand);
     }
 };
-
-#pragma endregion
-
-
-#pragma region matcher
 
 
 template <typename T>
@@ -301,8 +299,6 @@ start_with(T&& s) {
     return new StartWithMatcher<std::string>(std::string(s));
 }
 
-
-#pragma endregion
-
-
 }  // namespace zeroerr
+
+ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

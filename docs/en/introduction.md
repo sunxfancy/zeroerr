@@ -125,6 +125,30 @@ Once you set `ZEROERR_HAVE_SAME_OUTPUT` marco, the system will check the output 
 
 
 
+Finally, for the log system, the unit testing can access the log data to ensure that the function has executed the expected logic and results.
+
+```c++
+118 static void function() {
+119    LOG("function log {i}", 1);  
+120    LOG("function log {sum}, {i}", 10, 1);
+121 }
+...
+
+TEST_CASE("access log in Test case") {
+    zeroerr::suspendLog();
+    function();
+    CHECK(LOG_GET(function, 119, i, int) == 1);
+    CHECK(LOG_GET(function, 120, sum, int) == 10);
+    CHECK(LOG_GET(function, 120, i, int) == 1);
+    zeroerr::resumeLog();
+}
+```
+
+In order to access the log, we need to pause the log system first, to avoid the data being output to the file, then call the function, access the data in the log through the `LOG_GET` macro, and finally resume the log system. (Currently experimental, only the first call of each log point can be accessed)
+
+
+
+
 ### Features
 
 

@@ -8,12 +8,12 @@ Hope you get 0 errors and 0 warnings everyday!
 ![](./docs/fig/zeroerr.jpg)
 
 
-
 ZeroErr is a smart assert library, a lightweight unit test framework and a quick logging framework. It integrates those features and provided an unite and clear interface for seperate using or joint using. 
 
-[Tutorial](./docs/tutorial.en.md)
+[English Documentation](https://sunxfancy.github.io/zeroerr/en/) | [项目文档](https://sunxfancy.github.io/zeroerr/zh/)
 
-[Introducation of Print Feature](./docs/print.en.md)
+Note: The project is currently in the experimental stage, and the API may change significantly. It is not recommended to use it in a production environment.
+
 
 ## Why we need another unit testing framework
 
@@ -136,6 +136,28 @@ TEST_CASE("match ostream") {
 ```
 
 Once you set `ZEROERR_HAVE_SAME_OUTPUT` marco, the system will check the output stream and save the first run result into a file. Then, the next run will compare the result to see if it the same. (Currently experimental)
+
+
+Finally, for the log system, the unit testing can access the log data to ensure that the function has executed the expected logic and results.
+
+```c++
+118 static void function() {
+119    LOG("function log {i}", 1);  
+120    LOG("function log {sum}, {i}", 10, 1);
+121 }
+...
+
+TEST_CASE("access log in Test case") {
+    zeroerr::suspendLog();
+    function();
+    CHECK(LOG_GET(function, 119, i, int) == 1);
+    CHECK(LOG_GET(function, 120, sum, int) == 10);
+    CHECK(LOG_GET(function, 120, i, int) == 1);
+    zeroerr::resumeLog();
+}
+```
+
+In order to access the log, we need to pause the log system first, to avoid the data being output to the file, then call the function, access the data in the log through the `LOG_GET` macro, and finally resume the log system. (Currently experimental, only the first call of each log point can be accessed)
 
 
 
