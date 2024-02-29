@@ -2732,8 +2732,9 @@ class UnitTest {
 public:
     UnitTest&   parseArgs(int argc, const char** argv);
     int         run();
-    bool        silent = false;
-    bool        run_bench = false;
+    bool        silent          = false;
+    bool        run_bench       = false;
+    bool        list_test_cases = false;
     std::string correct_output_path;
     std::string reporter_name = "console";
 };
@@ -2828,7 +2829,7 @@ public:
         return *this;
     }
     size_t size() const { return args.size(); }
-    void reset() { index = 0; }
+    void   reset() { index = 0; }
 
 private:
     int index = 0;
@@ -4382,6 +4383,14 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
             this->run_bench = true;
             return true;
         }
+        if (arg == 'l') {
+            this->list_test_cases = true;
+            return true;
+        }
+        if (arg == 'x') {
+            this->reporter_name = "xml";
+            return true;
+        }
         return false;
     };
 
@@ -4396,6 +4405,13 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         }
         if (arg == "bench") {
             this->run_bench = true;
+        }
+        if (arg == "list-test-cases") {
+            this->list_test_cases = true;
+        }
+        if (arg.substr(0, 9) == "reporters") {
+            this->reporter_name = arg.substr(10);
+            return true;
         }
         return false;
     };
@@ -4446,19 +4462,22 @@ int UnitTest::run() {
 
     for (auto& tc : testcases) {
         reporter->testCaseStart(tc, new_buf);
-        std::streambuf* orig_buf = std::cerr.rdbuf();
-        std::cerr.rdbuf(&new_buf);
-        std::cerr << std::endl;
-        try {
-            tc.func(&context);  // run the test case
-        } catch (const AssertionData&) {
-        } catch (const std::exception&) {
-            if (context.failed_as == 0) {
-                context.failed_as = 1;
+        int type = 0;
+        if (!list_test_cases) {
+            std::streambuf* orig_buf = std::cerr.rdbuf();
+            std::cerr.rdbuf(&new_buf);
+            std::cerr << std::endl;
+            try {
+                tc.func(&context);  // run the test case
+            } catch (const AssertionData&) {
+            } catch (const std::exception&) {
+                if (context.failed_as == 0) {
+                    context.failed_as = 1;
+                }
             }
+            type = sum.add(std::move(context));
+            std::cerr.rdbuf(orig_buf);
         }
-        int type = sum.add(std::move(context));
-        std::cerr.rdbuf(orig_buf);
         reporter->testCaseEnd(tc, new_buf, type);
         new_buf.str("");
     }

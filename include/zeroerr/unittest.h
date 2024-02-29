@@ -58,8 +58,9 @@ class UnitTest {
 public:
     UnitTest&   parseArgs(int argc, const char** argv);
     int         run();
-    bool        silent = false;
-    bool        run_bench = false;
+    bool        silent          = false;
+    bool        run_bench       = false;
+    bool        list_test_cases = false;
     std::string correct_output_path;
     std::string reporter_name = "console";
 };
@@ -154,7 +155,7 @@ public:
         return *this;
     }
     size_t size() const { return args.size(); }
-    void reset() { index = 0; }
+    void   reset() { index = 0; }
 
 private:
     int index = 0;

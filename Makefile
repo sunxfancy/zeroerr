@@ -1,4 +1,4 @@
-.PHONY: all linux windows test doc-build doc-dev doc copy clean
+.PHONY: all linux windows build test doc-build doc-dev doc copy clean
 
 all: linux windows
 
@@ -10,8 +10,12 @@ windows:
 	mkdir -p build-windows
 	cd build-windows && cmake.exe -DBUILD_EXAMPLES=ON -DBUILD_DOC=ON -T host=x64 -A x64 .. && cmake.exe --build . --config Debug -j `nproc`
 
+build:
+	mkdir -p build
+	cd build && cmake.exe -DBUILD_EXAMPLES=ON -DBUILD_DOC=ON -T host=x64 -A x64 .. && cmake.exe --build . --config Debug -j `nproc`
+
 test: 
-	cd build-linux && ./unittest
+	cd build-linux && ./unittest -x
 	cd build-windows && ./Debug/unittest.exe
 
 doc-dev:
