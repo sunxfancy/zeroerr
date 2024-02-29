@@ -9,3 +9,12 @@
 5. 代码中注释的添加与修改请确保使用英文，避免出现编译器编码问题
 6. 确保修改后完整构建过一次本项目，这样可以使得根目录下的合并版`zeroerr.hpp`文件与源码保持一致
 7. 我们欢迎给特殊环境的使用、第三方库的集成提供扩展功能，请将这些扩展放到extension目录下
+
+
+## 小技巧
+
+### 启用 git pre-commit hook
+这个hook会在每次commit前运行，可以用来检查代码风格、运行测试等，最后把构建的zeroerr.hpp文件放到根目录下并一起提交
+```bash
+git config --local core.hooksPath .githooks/
+```
