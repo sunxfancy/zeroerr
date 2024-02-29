@@ -128,7 +128,7 @@ public:
     template <typename T>
     void operator()(T& arg) {
         arg.reset();
-        for (int i = 0; i < arg.size(); ++i, ++arg) {
+        for (size_t i = 0; i < arg.size(); ++i, ++arg) {
             func();
         }
     }
@@ -136,7 +136,7 @@ public:
     template <typename T, typename... Args>
     void operator()(T& arg, Args&... args) {
         arg.reset();
-        for (int i = 0; i < arg.size(); ++i, ++arg) {
+        for (size_t i = 0; i < arg.size(); ++i, ++arg) {
             operator()(args...);
         }
     }

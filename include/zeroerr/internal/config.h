@@ -19,15 +19,27 @@
 // #define ZEROERR_DISABLE_COMPLEX_AND_OR
 
 
-// Detect C++ standard
-#if __cplusplus >= 201703L
-#define ZEROERR_CXX_STANDARD 17
-#elif __cplusplus >= 201402L
-#define ZEROERR_CXX_STANDARD 14
-#else
-#define ZEROERR_CXX_STANDARD 11
+// Detect C++ standard with a cross-platform way
+
+#if defined(_MSVC_LANG)
+#define ZEROERR_CXX_STANDARD_VERSION _MSVC_LANG
+#elif defined(__cplusplus)
+#define ZEROERR_CXX_STANDARD_VERSION __cplusplus
 #endif
 
+#if ZEROERR_CXX_STANDARD_VERSION >= 202300L
+#define ZEROERR_CXX_STANDARD 23
+#elif ZEROERR_CXX_STANDARD_VERSION >= 202002L
+#define ZEROERR_CXX_STANDARD 20
+#elif ZEROERR_CXX_STANDARD_VERSION >= 201703L
+#define ZEROERR_CXX_STANDARD 17
+#elif ZEROERR_CXX_STANDARD_VERSION >= 201402L
+#define ZEROERR_CXX_STANDARD 14
+#elif ZEROERR_CXX_STANDARD_VERSION >= 201103L
+#define ZEROERR_CXX_STANDARD 11
+#else
+#error "Unsupported C++ standard detected. ZeroErr requires C++11 or later."
+#endif
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #define ZEROERR_OS_UNIX

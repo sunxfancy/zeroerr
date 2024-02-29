@@ -53,10 +53,6 @@ endif()
 option(BUILD_EXAMPLES "Build examples(ON, OFF)" OFF)
 option(BUILD_DOC "Build documentation" OFF)
 
-# add_compile_options("$<$<C_COMPILER_ID:MSVC>:/P>" "$<$<CXX_COMPILER_ID:MSVC>:/P>")
-
-# add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>" "$<$<C_COMPILER_ID:MSVC>:/Zc:preprocessor>")
-# add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>" "$<$<CXX_COMPILER_ID:MSVC>:/Zc:preprocessor>")
 
 
 add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>" )
@@ -64,7 +60,6 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>" )
 
 # add_compile_options("$<$<CXX_COMPILER_ID:GNU>:-ftime-report>")
 
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(header_dirs ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/extension ${CMAKE_CURRENT_SOURCE_DIR}/third_party ${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${header_dirs})
 
