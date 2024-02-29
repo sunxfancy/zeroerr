@@ -125,3 +125,25 @@ TEST_CASE("match ostream") {
 ```
 通过设置 `ZEROERR_HAVE_SAME_OUTPUT` 宏，系统会自动检查该测试点的output stream输出，第一次执行时的结果会自动保存起来，而之后每次执行，都会将输出与第一次输出进行对比，相同则正确，否则该点错误。用户可以第一次手动观察输出是否符合预期，若是修改了实现后，想清除保存的结果，只需要将测试目录下的 `output.txt` 缓存文件删除即可。(目前仍是实验功能)
 
+
+最后，对于日志系统，单元测试不但能够访问日志数据，以确保函数按照预期逻辑执行出来了结果。
+还可以在逻辑出错时，自动捕获函数中的断言和相关打印信息，以便于后续的调试。
+
+```c++
+118 static void function() {
+119    LOG("function log {i}", 1);  
+120    LOG("function log {sum}, {i}", 10, 1);
+121 }
+...
+
+TEST_CASE("access log in Test case") {
+    zeroerr::suspendLog();
+    function();
+    CHECK(LOG_GET(function, 119, i, int) == 1);
+    CHECK(LOG_GET(function, 120, sum, int) == 10);
+    CHECK(LOG_GET(function, 120, i, int) == 1);
+    zeroerr::resumeLog();
+}
+```
+
+为了访问log，我们首先要暂停log系统，避免数据被输出到文件中，然后调用函数，通过`LOG_GET`宏访问log中的数据，最后再恢复log系统的运行。(目前，暂时仅能获取到每个Log点第一次调用的数据，仍是实验功能)。
