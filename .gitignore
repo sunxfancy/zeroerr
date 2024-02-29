@@ -1,6 +1,4 @@
-/.vscode
 /build*
-/.xmake
 /.cache
 /node_modules
 /docs/.vuepress/.cache

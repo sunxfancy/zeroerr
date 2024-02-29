@@ -60,7 +60,7 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>" )
 
 # add_compile_options("$<$<CXX_COMPILER_ID:GNU>:-ftime-report>")
 
-set(header_dirs ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/extension ${CMAKE_CURRENT_SOURCE_DIR}/third_party ${CMAKE_CURRENT_BINARY_DIR})
+set(header_dirs ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/extension ${CMAKE_CURRENT_SOURCE_DIR}/third_party ${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${header_dirs})
 
 file(GLOB_RECURSE include_files ${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.h)
