@@ -256,8 +256,6 @@ enum LogSeverity {
     FATAL_l,  // it will contain a stack trace
 };
 
-struct LogTime {};
-
 struct LogInfo {
     const char*                filename;
     const char*                function;
@@ -269,24 +267,7 @@ struct LogInfo {
     std::map<std::string, int> names;
 
     LogInfo(const char* filename, const char* function, const char* message, const char* category,
-            unsigned line, unsigned size, LogSeverity severity)
-        : filename(filename),
-          function(function),
-          message(message),
-          category(category),
-          line(line),
-          size(size),
-          severity(severity) {
-        for (const char* p = message; *p; p++)
-            if (*p == '{') {
-                const char* q = p + 1;
-                while (*q && *q != '}') q++;
-                if (*q == '}') {
-                    names[std::string(p + 1, q)] = names.size();
-                    p                            = q;
-                }
-            }
-    }
+            unsigned line, unsigned size, LogSeverity severity);
 };
 
 struct LogMessage;
@@ -323,6 +304,7 @@ struct GetTuplePtr {
 
 template <typename... T>
 struct LogMessageImpl : LogMessage {
+    std::tuple<T...> args;
     LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
     std::string str() const override {
@@ -334,19 +316,9 @@ struct LogMessageImpl : LogMessage {
         detail::visit_at(args, info->names.at(name), f);
         return f.ptr;
     }
-
-    std::tuple<T...> args;
 };
 
-
-constexpr size_t LogStreamMaxSize = 1024 * 1024 - 16;
-
-struct DataBlock {
-    char       data[LogStreamMaxSize];
-    size_t     size = 0;
-    DataBlock* next = nullptr;
-};
-
+struct DataBlock;
 class Logger {
 public:
     virtual ~Logger()              = default;
@@ -390,12 +362,9 @@ public:
     void* getRawLog(std::string func, unsigned line, std::string name);
 
     void flush();
-
-    void setBinFileLogger(std::string name);
     void setFileLogger(std::string name);
     void setStdoutLogger();
     void setStderrLogger();
-
 
     static LogStream& getDefault();
     FlushMode         flush_mode = FLUSH_AT_ONCE;

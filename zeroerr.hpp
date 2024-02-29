@@ -2379,8 +2379,6 @@ enum LogSeverity {
     FATAL_l,  // it will contain a stack trace
 };
 
-struct LogTime {};
-
 struct LogInfo {
     const char*                filename;
     const char*                function;
@@ -2392,24 +2390,7 @@ struct LogInfo {
     std::map<std::string, int> names;
 
     LogInfo(const char* filename, const char* function, const char* message, const char* category,
-            unsigned line, unsigned size, LogSeverity severity)
-        : filename(filename),
-          function(function),
-          message(message),
-          category(category),
-          line(line),
-          size(size),
-          severity(severity) {
-        for (const char* p = message; *p; p++)
-            if (*p == '{') {
-                const char* q = p + 1;
-                while (*q && *q != '}') q++;
-                if (*q == '}') {
-                    names[std::string(p + 1, q)] = names.size();
-                    p                            = q;
-                }
-            }
-    }
+            unsigned line, unsigned size, LogSeverity severity);
 };
 
 struct LogMessage;
@@ -2446,6 +2427,7 @@ struct GetTuplePtr {
 
 template <typename... T>
 struct LogMessageImpl : LogMessage {
+    std::tuple<T...> args;
     LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
     std::string str() const override {
@@ -2457,19 +2439,9 @@ struct LogMessageImpl : LogMessage {
         detail::visit_at(args, info->names.at(name), f);
         return f.ptr;
     }
-
-    std::tuple<T...> args;
 };
 
-
-constexpr size_t LogStreamMaxSize = 1024 * 1024 - 16;
-
-struct DataBlock {
-    char       data[LogStreamMaxSize];
-    size_t     size = 0;
-    DataBlock* next = nullptr;
-};
-
+struct DataBlock;
 class Logger {
 public:
     virtual ~Logger()              = default;
@@ -2513,12 +2485,9 @@ public:
     void* getRawLog(std::string func, unsigned line, std::string name);
 
     void flush();
-
-    void setBinFileLogger(std::string name);
     void setFileLogger(std::string name);
     void setStdoutLogger();
     void setStderrLogger();
-
 
     static LogStream& getDefault();
     FlushMode         flush_mode = FLUSH_AT_ONCE;
@@ -3744,6 +3713,38 @@ static LogCustomCallback log_custom_callback = DefaultLogCallback;
 void setLogCustomCallback(LogCustomCallback callback) { log_custom_callback = callback; }
 
 
+LogInfo::LogInfo(const char* filename, const char* function, const char* message,
+                 const char* category, unsigned line, unsigned size, LogSeverity severity)
+    : filename(filename),
+      function(function),
+      message(message),
+      category(category),
+      line(line),
+      size(size),
+      severity(severity) {
+    for (const char* p = message; *p; p++)
+        if (*p == '{') {
+            const char* q = p + 1;
+            while (*q && *q != '}') q++;
+            if (*q == '}') {
+                names[std::string(p + 1, q)] = names.size();
+                p                            = q;
+            }
+        }
+}
+
+
+constexpr size_t LogStreamMaxSize = 1024 * 1024 - 16;
+
+struct DataBlock {
+    size_t     size = 0;
+    DataBlock* next = nullptr;
+    char       data[LogStreamMaxSize];
+
+    LogMessage* begin() { return (LogMessage*)data; }
+    LogMessage* end() { return (LogMessage*)&data[size]; }
+};
+
 LogStream::LogStream() {
     first = last = new DataBlock();
 #ifndef ZEROERR_NO_THREAD_SAFE
@@ -3792,7 +3793,7 @@ void LogStream::flush() {
     }
     logger->flush(last);
     last->size = 0;
-    first = last;
+    first      = last;
 }
 
 static LogMessage* moveBytes(LogMessage* p, unsigned size) {
@@ -3803,36 +3804,22 @@ static LogMessage* moveBytes(LogMessage* p, unsigned size) {
 
 void* LogStream::getRawLog(std::string func, unsigned line, std::string name) {
     for (DataBlock* p = first; p; p = p->next)
-        for (LogMessage* q = (LogMessage*)p->data; q < (LogMessage*)&p->data[p->size];
-             q = moveBytes(q, q->info->size))
-            if (line == q->info->line && func == q->info->function)
-                return q->getRawLog(name);
+        for (auto q = p->begin(); q < p->end(); q = moveBytes(q, q->info->size))
+            if (line == q->info->line && func == q->info->function) return q->getRawLog(name);
     return nullptr;
 }
 
 class FileLogger : public Logger {
 public:
-    FileLogger(std::string name, bool binary = true) : binary(binary) {
-        if (binary) {
-            file = fopen(name.c_str(), "wb");
-        } else {
-            file = fopen(name.c_str(), "w");
-        }
-    }
+    FileLogger(std::string name) { file = fopen(name.c_str(), "w"); }
     ~FileLogger() {
         if (file) fclose(file);
     }
     void flush(DataBlock* msg) override {
         if (file) {
-            if (binary) {
-                // TODO: Design a binary format, currently, it can not work
-                fwrite(msg->data, msg->size, 1, file);
-            } else {
-                for (LogMessage* p = (LogMessage*)msg->data; p < (LogMessage*)&msg->data[msg->size];
-                     p = moveBytes(p, p->info->size)) {
-                    auto ss = log_custom_callback(*p, false);
-                    fwrite(ss.c_str(), ss.size(), 1, file);
-                }
+            for (auto p = msg->begin(); p < msg->end(); p = moveBytes(p, p->info->size)) {
+                auto ss = log_custom_callback(*p, false);
+                fwrite(ss.c_str(), ss.size(), 1, file);
             }
             fflush(file);
         }
@@ -3840,7 +3827,6 @@ public:
 
 protected:
     FILE* file;
-    bool  binary;
 };
 
 class OStreamLogger : public Logger {
@@ -3848,8 +3834,7 @@ public:
     OStreamLogger(std::ostream& os) : os(os) {}
 
     void flush(DataBlock* msg) override {
-        for (LogMessage* p = (LogMessage*)msg->data; p < (LogMessage*)&msg->data[msg->size];
-             p = moveBytes(p, p->info->size)) {
+        for (auto p = msg->begin(); p < msg->end(); p = moveBytes(p, p->info->size)) {
             os << log_custom_callback(*p, true);
         }
         os.flush();
@@ -3865,14 +3850,9 @@ LogStream& LogStream::getDefault() {
     return stream;
 }
 
-void LogStream::setBinFileLogger(std::string name) {
-    if (logger) delete logger;
-    logger = new FileLogger(name);
-}
-
 void LogStream::setFileLogger(std::string name) {
     if (logger) delete logger;
-    logger = new FileLogger(name, false);
+    logger = new FileLogger(name);
 }
 
 void LogStream::setStdoutLogger() {
@@ -3912,7 +3892,8 @@ void setLogCategory(const char* categories) {
 }
 
 static LogStream::FlushMode saved_flush_mode;
-void                        suspendLog() {
+
+void suspendLog() {
     saved_flush_mode                   = LogStream::getDefault().flush_mode;
     LogStream::getDefault().flush_mode = LogStream::FLUSH_MANUALLY;
 }
@@ -3950,7 +3931,7 @@ static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
     ss << std::endl;
     return ss.str();
 }
-
+#undef zeroerr_color
 
 }  // namespace zeroerr
 
