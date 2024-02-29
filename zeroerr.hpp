@@ -3,6 +3,11 @@
 // ======================================================================
 #pragma once
 
+#define ZEROERR_VERSION_MAJOR 0
+#define ZEROERR_VERSION_MINOR 1
+#define ZEROERR_VERSION_PATCH 0
+#define ZEROERR_VERSION       (ZEROERR_VERSION_MAJOR * 10000 + ZEROERR_VERSION_MINOR * 100 + ZEROERR_VERSION_PATCH)
+
 
 // If you just wish to use the color without dynamic
 // enable or disable it, you can uncomment the following line
@@ -22,15 +27,27 @@
 // #define ZEROERR_DISABLE_COMPLEX_AND_OR
 
 
-// Detect C++ standard
-#if __cplusplus >= 201703L
-#define ZEROERR_CXX_STANDARD 17
-#elif __cplusplus >= 201402L
-#define ZEROERR_CXX_STANDARD 14
+// Detect C++ standard with a cross-platform way
+
+#ifdef _MSC_VER
+#define ZEROERR_CPLUSPLUS _MSVC_LANG
 #else
-#define ZEROERR_CXX_STANDARD 11
+#define ZEROERR_CPLUSPLUS __cplusplus
 #endif
 
+#if ZEROERR_CPLUSPLUS >= 202300L
+#define ZEROERR_CXX_STANDARD 23
+#elif ZEROERR_CPLUSPLUS >= 202002L
+#define ZEROERR_CXX_STANDARD 20
+#elif ZEROERR_CPLUSPLUS >= 201703L
+#define ZEROERR_CXX_STANDARD 17
+#elif ZEROERR_CPLUSPLUS >= 201402L
+#define ZEROERR_CXX_STANDARD 14
+#elif ZEROERR_CPLUSPLUS >= 201103L
+#define ZEROERR_CXX_STANDARD 11
+#else
+#error "Unsupported C++ standard detected. ZeroErr requires C++11 or later."
+#endif
 
 #if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
 #define ZEROERR_OS_UNIX
@@ -103,38 +120,10 @@
 
 #define ZEROERR_EXPAND(x) x
 
-namespace zeroerr {
-namespace detail {
 
-// Generate sequence of integers from 0 to N-1
-// Usage: detail::gen_seq<N>  then use <size_t... I> to match it
-template <unsigned...>
-struct seq {};
-
-template <unsigned N, unsigned... Is>
-struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
-
-template <unsigned... Is>
-struct gen_seq<0, Is...> : seq<Is...> {};
-
-}  // namespace detail
-}  // namespace zeroerr
-
-
-
-// !!This idea is got from the doctest library.!!
 // =================================================================================================
-// == COMPILER VERSION =============================================================================
+// == COMPILER Detector ============================================================================
 // =================================================================================================
-
-// ideas for the version stuff are taken from here: https://github.com/cxxstuff/cxx_detect
-#pragma once
-
-#ifdef _MSC_VER
-#define ZEROERR_CPLUSPLUS _MSVC_LANG
-#else
-#define ZEROERR_CPLUSPLUS __cplusplus
-#endif
 
 #define ZEROERR_COMPILER(MAJOR, MINOR, PATCH) ((MAJOR) * 10000000 + (MINOR) * 100000 + (PATCH))
 
@@ -169,6 +158,7 @@ struct gen_seq<0, Is...> : seq<Is...> {};
 #ifndef ZEROERR_ICC
 #define ZEROERR_ICC 0
 #endif  // ZEROERR_ICC
+
 
 // =================================================================================================
 // == COMPILER WARNINGS HELPERS ====================================================================
@@ -308,6 +298,26 @@ struct gen_seq<0, Is...> : seq<Is...> {};
 #else
 #define ZEROERR_UNUSED(x) x
 #endif
+
+
+namespace zeroerr {
+namespace detail {
+
+// Generate sequence of integers from 0 to N-1
+// Usage: detail::gen_seq<N>  then use <size_t... I> to match it
+template <unsigned...>
+struct seq {};
+
+template <unsigned N, unsigned... Is>
+struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
+
+template <unsigned... Is>
+struct gen_seq<0, Is...> : seq<Is...> {};
+
+}  // namespace detail
+}  // namespace zeroerr
+
+
 #pragma once
 
 
@@ -2345,7 +2355,7 @@ struct visit_impl {
 template <>
 struct visit_impl<0> {
     template <typename T, typename F>
-    static void visit(T& tup, size_t idx, F& fun) {}
+    static void visit(T&, size_t, F&) {}
 };
 
 template <typename F, typename... Ts>
@@ -2414,7 +2424,7 @@ extern void resumeLog();
 struct LogMessage {
     LogMessage() { time = std::chrono::system_clock::now(); }
 
-    virtual std::string str() const = 0;
+    virtual std::string str() const                       = 0;
     virtual void*       getRawLog(std::string name) const = 0;
 
     // meta data of this log message
@@ -2684,7 +2694,6 @@ protected:
     std::string title;
     unsigned    width = 0, height = 0;  // auto-calculated
 
-
     std::vector<unsigned>                 col_width;
     std::vector<std::string>              header, footer;
     std::vector<std::vector<std::string>> cells;
@@ -2824,7 +2833,7 @@ public:
     template <typename T>
     void operator()(T& arg) {
         arg.reset();
-        for (int i = 0; i < arg.size(); ++i, ++arg) {
+        for (size_t i = 0; i < arg.size(); ++i, ++arg) {
             func();
         }
     }
@@ -2832,7 +2841,7 @@ public:
     template <typename T, typename... Args>
     void operator()(T& arg, Args&... args) {
         arg.reset();
-        for (int i = 0; i < arg.size(); ++i, ++arg) {
+        for (size_t i = 0; i < arg.size(); ++i, ++arg) {
             operator()(args...);
         }
     }

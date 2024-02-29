@@ -124,7 +124,6 @@ protected:
     std::string title;
     unsigned    width = 0, height = 0;  // auto-calculated
 
-
     std::vector<unsigned>                 col_width;
     std::vector<std::string>              header, footer;
     std::vector<std::vector<std::string>> cells;

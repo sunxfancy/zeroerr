@@ -3,4 +3,6 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 cd $SCRIPTPATH/../
 
-wsl -- bash -c "make && make test && make build-doc && cp build-linux/zeroerr.hpp ./zeroerr.hpp"
+wsl -- bash -c "make && make test && make doc-build && cp build-linux/zeroerr.hpp ./zeroerr.hpp"
+
+git add zeroerr.hpp
