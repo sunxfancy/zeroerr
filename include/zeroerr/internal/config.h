@@ -4,7 +4,7 @@
 #define ZEROERR_VERSION_MINOR 1
 #define ZEROERR_VERSION_PATCH 0
 #define ZEROERR_VERSION       (ZEROERR_VERSION_MAJOR * 10000 + ZEROERR_VERSION_MINOR * 100 + ZEROERR_VERSION_PATCH)
-
+#define ZEROERR_VERSION_STR   "0.1.0"
 
 // If you just wish to use the color without dynamic
 // enable or disable it, you can uncomment the following line

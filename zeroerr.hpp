@@ -7,7 +7,7 @@
 #define ZEROERR_VERSION_MINOR 1
 #define ZEROERR_VERSION_PATCH 0
 #define ZEROERR_VERSION       (ZEROERR_VERSION_MAJOR * 10000 + ZEROERR_VERSION_MINOR * 100 + ZEROERR_VERSION_PATCH)
-
+#define ZEROERR_VERSION_STR   "0.1.0"
 
 // If you just wish to use the color without dynamic
 // enable or disable it, you can uncomment the following line
@@ -2693,7 +2693,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define SUB_CASE(name)                                                   \
     zeroerr::SubCaseReg(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
-        << [](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT))
+        << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT))
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
     class classname : public fixture {                                                       \
@@ -2723,8 +2723,13 @@ public:
     unsigned passed = 0, warning = 0, failed = 0, skipped = 0;
     unsigned passed_as = 0, warning_as = 0, failed_as = 0, skipped_as = 0;
 
-    int  add(TestContext&& local);
+    IReporter& reporter;
+    int  add(TestContext& local);
+    void reset();
     void save_output();
+
+    TestContext(IReporter& reporter) : reporter(reporter) {}
+    ~TestContext() = default;
 };
 
 class IReporter;
@@ -2737,21 +2742,27 @@ public:
     bool        list_test_cases = false;
     std::string correct_output_path;
     std::string reporter_name = "console";
+    std::string binary;
 };
 
 struct TestCase {
     std::string name;
     std::string file;
     unsigned    line;
-    void (*func)(TestContext*);
+    std::function<void(TestContext*)> func;
     bool operator<(const TestCase& rhs) const;
+
+    TestCase(std::string name, std::string file, unsigned line)
+        : name(name), file(file), line(line) {}
+    TestCase(std::string name, std::string file, unsigned line, std::function<void(TestContext*)> func)
+        : name(name), file(file), line(line), func(func) {}
 };
 
-struct SubCaseReg {
-    SubCaseReg(std::string name, std::string file, unsigned line, TestContext* context);
-    ~SubCaseReg() {}
+struct SubCase : TestCase {
+    SubCase(std::string name, std::string file, unsigned line, TestContext* context);
+    ~SubCase() = default;
     TestContext* context;
-
+    std::stringbuf new_buf;
     void operator<<(std::function<void(TestContext*)> op);
 };
 
@@ -2765,14 +2776,19 @@ struct TestedObjects {
 
 class IReporter {
 public:
-    virtual ~IReporter()                = default;
+    virtual ~IReporter() = default;
+
     virtual std::string getName() const = 0;
 
     // There are a list of events
-    virtual void testStart()                                                   = 0;
-    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb)         = 0;
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) = 0;
-    virtual void testEnd(const TestContext& tc)                                = 0;
+    virtual void testStart()                                           = 0;
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) = 0;
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+                             int type)                                 = 0;
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb)  = 0;
+    virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+                            int type)                                  = 0;
+    virtual void testEnd(const TestContext& tc)                        = 0;
 
     static IReporter* create(const std::string& name, UnitTest& ut);
 
@@ -4294,9 +4310,9 @@ namespace zeroerr {
 namespace detail {
 static std::set<TestCase>& getRegisteredTests();
 static std::set<TestCase>& getRegisteredBenchmarks();
-}
+}  // namespace detail
 
-int TestContext::add(TestContext&& local) {
+int TestContext::add(TestContext& local) {
     int type = 0;
     if (local.failed_as == 0 && local.warning_as == 0) {
         passed += 1;
@@ -4311,7 +4327,6 @@ int TestContext::add(TestContext&& local) {
     warning_as += local.warning_as;
     failed_as += local.failed_as;
 
-    memset(&local, 0, sizeof(local));
     return type;
 }
 
@@ -4335,6 +4350,11 @@ void TestContext::save_output() {
     file.close();
 }
 
+void TestContext::reset() {
+    passed = warning = failed = skipped = 0;
+    passed_as = warning_as = failed_as = skipped_as = 0;
+}
+
 static inline std::string getFileName(std::string file) {
     std::string fileName(file);
     auto        p = fileName.find_last_of('/');
@@ -4342,14 +4362,16 @@ static inline std::string getFileName(std::string file) {
     return fileName;
 }
 
-SubCaseReg::SubCaseReg(std::string name, std::string file, unsigned line, TestContext* context)
-    : context(context) {
-    std::cerr << "SUBCASE " << Dim << "[" << getFileName(file) << ":" << line << "] " << Reset
-              << FgCyan << name << Reset << std::endl;
+SubCase::SubCase(std::string name, std::string file, unsigned line, TestContext* context)
+    : TestCase(name, file, line), context(context) {
+    context->reporter.subCaseStart(*this, new_buf);
 }
 
-void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
-    TestContext local;
+void SubCase::operator<<(std::function<void(TestContext*)> op) {
+    func = op;
+    TestContext local(context->reporter);
+    std::streambuf* orig_buf = std::cerr.rdbuf();
+    std::cerr.rdbuf(&new_buf);
     try {
         op(&local);
     } catch (const AssertionData&) {
@@ -4358,11 +4380,14 @@ void SubCaseReg::operator<<(std::function<void(TestContext*)> op) {
             local.failed_as = 1;
         }
     }
-    context->add(std::move(local));
+    std::cerr.rdbuf(orig_buf);
+    int type = context->add(local);
+
+    context->reporter.subCaseEnd(*this, new_buf, local, type);
 }
 
-UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
-    auto convert_to_vec = [=](int argc, const char** argv) {
+UnitTest& UnitTest::parseArgs(int argc, const char** argv) {   
+    auto convert_to_vec = [=]() {
         std::vector<std::string> result;
         for (int i = 1; i < argc; i++) {
             result.emplace_back(argv[i]);
@@ -4426,11 +4451,10 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         return false;
     };
 
-    auto args = convert_to_vec(argc, argv);
-    for (size_t i = 0; i < args.size(); ++i) {
-        parse_pos(args, i);
-    }
+    auto args = convert_to_vec();
+    for (size_t i = 0; i < args.size(); ++i) parse_pos(args, i);
 
+    binary = argv[0];
     return *this;
 }
 
@@ -4448,9 +4472,9 @@ static std::string insertIndentation(std::string str) {
 }
 
 int UnitTest::run() {
-    TestContext context, sum;
     IReporter*  reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
+    TestContext context(*reporter), sum(*reporter);
     reporter->testStart();
     std::stringbuf new_buf;
 
@@ -4462,7 +4486,6 @@ int UnitTest::run() {
 
     for (auto& tc : testcases) {
         reporter->testCaseStart(tc, new_buf);
-        int type = 0;
         if (!list_test_cases) {
             std::streambuf* orig_buf = std::cerr.rdbuf();
             std::cerr.rdbuf(&new_buf);
@@ -4475,10 +4498,11 @@ int UnitTest::run() {
                     context.failed_as = 1;
                 }
             }
-            type = sum.add(std::move(context));
             std::cerr.rdbuf(orig_buf);
         }
-        reporter->testCaseEnd(tc, new_buf, type);
+        int type = sum.add(context);
+        reporter->testCaseEnd(tc, new_buf, context, type);
+        context.reset();
         new_buf.str("");
     }
     reporter->testEnd(sum);
@@ -4549,7 +4573,18 @@ public:
                   << Reset << FgCyan << tc.name << Reset << std::endl;
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) {
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+                             int type) {
+        if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
+    }
+
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) {
+        std::cerr << "SUB CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] " << Reset
+                  << FgCyan << tc.name << Reset << std::endl;
+    }
+
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+                             int type) {
         if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
     }
 
@@ -4557,17 +4592,16 @@ public:
 };
 
 
+namespace detail {
+
 // =================================================================================================
 // The following code has been taken verbatim from Catch2/include/internal/catch_xmlwriter.h/cpp
 // =================================================================================================
 class XmlEncode {
 public:
     enum ForWhat { ForTextNodes, ForAttributes };
-
     XmlEncode(std::string const& str, ForWhat forWhat = ForTextNodes);
-
-    void encodeTo(std::ostream& os) const;
-
+    void                 encodeTo(std::ostream& os) const;
     friend std::ostream& operator<<(std::ostream& os, XmlEncode const& xmlEncode);
 
 private:
@@ -4580,10 +4614,8 @@ public:
     class ScopedElement {
     public:
         ScopedElement(XmlWriter* writer);
-
         ScopedElement(ScopedElement&& other) noexcept;
         ScopedElement& operator=(ScopedElement&& other) noexcept;
-
         ~ScopedElement();
 
         ScopedElement& writeText(std::string const& text, bool indent = true);
@@ -4604,16 +4636,12 @@ public:
     XmlWriter(XmlWriter const&)            = delete;
     XmlWriter& operator=(XmlWriter const&) = delete;
 
-    XmlWriter& startElement(std::string const& name);
-
+    XmlWriter&    startElement(std::string const& name);
     ScopedElement scopedElement(std::string const& name);
-
-    XmlWriter& endElement();
+    XmlWriter&    endElement();
 
     XmlWriter& writeAttribute(std::string const& name, std::string const& attribute);
-
     XmlWriter& writeAttribute(std::string const& name, const char* attribute);
-
     XmlWriter& writeAttribute(std::string const& name, bool attribute);
 
     template <typename T>
@@ -4626,7 +4654,6 @@ public:
     XmlWriter& writeText(std::string const& text, bool indent = true);
 
     void ensureTagClosed();
-
     void writeDeclaration();
 
 private:
@@ -4703,9 +4730,7 @@ void XmlEncode::encodeTo(std::ostream& os) const {
 
             default:
                 // Check for control characters and invalid utf-8
-
-                // Escape control characters in standard ascii
-                // see
+                // Escape control characters in standard ascii, see:
                 // https://stackoverflow.com/questions/404107/why-are-control-characters-illegal-in-xml-1-0
                 if (c < 0x09 || (c > 0x0D && c < 0x20) || c == 0x7F) {
                     hexEscapeChar(os, c);
@@ -4788,7 +4813,6 @@ XmlWriter::ScopedElement& XmlWriter::ScopedElement::operator=(ScopedElement&& ot
     other.m_writer = nullptr;
     return *this;
 }
-
 
 XmlWriter::ScopedElement::~ScopedElement() {
     if (m_writer) m_writer->endElement();
@@ -4883,11 +4907,11 @@ void XmlWriter::newlineIfNecessary() {
 // =================================================================================================
 // End of copy-pasted code from Catch
 // =================================================================================================
-
+}  // namespace detail
 
 class XmlReporter : public IReporter {
 public:
-    XmlWriter xml;
+    detail::XmlWriter xml;
 
     struct TestCaseData {
         struct TestMessage {
@@ -4895,8 +4919,10 @@ public:
         };
 
         struct TestCase {
-            std::string              classname, name;
+            std::string              filename, name;
+            unsigned                 line;
             double                   time;
+            TestContext              context;
             std::vector<TestMessage> failures, errors;
         };
 
@@ -4912,6 +4938,7 @@ public:
             testcases.back().errors.push_back({message, details});
         }
     } tc_data;
+    std::vector<const TestCase*> current;
 
     virtual std::string getName() const { return "xml"; }
 
@@ -4919,24 +4946,45 @@ public:
     virtual void testStart() { xml.writeDeclaration(); }
 
     virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) {
-        tc_data.testcases.push_back({tc.file, tc.name});
+        current.push_back(&tc);
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, int type) {}
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+                             int type) {
+        tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
+        current.pop_back();
+    }
+
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) {
+        current.push_back(&tc);
+    }
+
+    virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+                            int type) {
+        tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
+        current.pop_back();
+    }
 
     virtual void testEnd(const TestContext& tc) {
-        xml.startElement("testsuites");
-        xml.startElement("testsuite")
-            .writeAttribute("name", "ZeroErrTest")
+        xml.startElement("ZeroErr")
+            .writeAttribute("binary", ut.binary)
+            .writeAttribute("version", ZEROERR_VERSION_STR);
+        xml.startElement("OverallResults")
             .writeAttribute("errors", tc.failed_as)
             .writeAttribute("failures", tc.failed)
             .writeAttribute("tests", tc.passed + tc.failed + tc.warning);
+        xml.endElement();
+        xml.startElement("TestSuite");
         for (const auto& testCase : tc_data.testcases) {
-            xml.startElement("testcase")
-                .writeAttribute("classname", testCase.classname)
-                .writeAttribute("name", testCase.name);
-            xml.writeAttribute("time", testCase.time);
-            xml.writeAttribute("status", "run");
+            xml.startElement("TestCase")
+                .writeAttribute("name", testCase.name)
+                .writeAttribute("filename", testCase.filename)
+                .writeAttribute("line", testCase.line)
+                .writeAttribute("skipped", "false");
+            xml.scopedElement("Result")
+                .writeAttribute("time", testCase.time)
+                .writeAttribute("passed", tc.passed)
+                .writeAttribute("warnings", tc.warning);
 
             for (const auto& failure : testCase.failures) {
                 xml.scopedElement("failure")
@@ -4956,7 +5004,7 @@ public:
         xml.endElement();
     }
 
-    XmlReporter(UnitTest& ut) : IReporter(ut), xml(std::cerr) {}
+    XmlReporter(UnitTest& ut) : IReporter(ut), xml(std::cout) {}
 };
 
 IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
