@@ -1,22 +1,24 @@
-.PHONY: all linux windows build test doc-build doc-dev doc copy clean
+.PHONY: all linux windows test doc-build doc-dev doc copy clean
 
 all: linux windows
 
-linux:
-	mkdir -p build-linux
-	cd build-linux && cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_EXAMPLES=ON -DBUILD_DOC=ON && cmake --build . -j `nproc`
+build/linux/Makefile:
+	mkdir -p build/linux
+	cmake -B build/linux -S . -DCMAKE_BUILD_TYPE=Debug -DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON
 
-windows:
-	mkdir -p build-windows
-	cd build-windows && cmake.exe -DBUILD_EXAMPLES=ON -DBUILD_DOC=ON -T host=x64 -A x64 .. && cmake.exe --build . --config Debug -j `nproc`
+linux: build/linux/Makefile
+	cmake --build build/linux -j `nproc`
 
-build:
-	mkdir -p build
-	cd build && cmake.exe -DBUILD_EXAMPLES=ON -DBUILD_DOC=ON -T host=x64 -A x64 .. && cmake.exe --build . --config Debug -j `nproc`
+build/windows/ZeroErr.sln:
+	mkdir -p build/windows
+	cmake.exe -B build/windows -S . -DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -T host=x64 -A x64
 
-test: 
-	cd build-linux && ./unittest -x
-	cd build-windows && ./Debug/unittest.exe
+windows: build/windows/ZeroErr.sln
+	cmake.exe --build build/windows --config Debug -j `nproc`
+
+test: linux windows
+	cd build/linux/test && ./unittest
+	cd build/windows/test && ./Debug/unittest.exe
 
 doc-dev:
 	yarn run cmake:dev
@@ -29,8 +31,7 @@ doc: doc-build
 	yarn run cmake:docs
 
 copy:
-	cp -r docs/.vuepress  build-linux/docs/
-	cp -r docs/.vuepress  build-windows/docs/
+	cp -r docs/.vuepress  build-linux-doc/docs/
 
 clean:
-	rm -rf build-linux build-windows
+	rm -rf build

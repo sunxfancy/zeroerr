@@ -58,8 +58,7 @@ public:
     ~TestContext() = default;
 };
 
-class UnitTest {
-public:
+struct UnitTest {
     UnitTest&   parseArgs(int argc, const char** argv);
     int         run();
     bool        silent          = false;
@@ -128,7 +127,8 @@ protected:
 namespace detail {
 
 struct regTest {
-    explicit regTest(const TestCase& tc, bool isBench = false);
+    enum Type { test_case, sub_case, bench, fuzz_test };
+    explicit regTest(const TestCase& tc, Type type = test_case);
 };
 
 struct regReporter {

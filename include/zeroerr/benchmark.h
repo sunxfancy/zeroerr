@@ -14,9 +14,10 @@
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name) \
-    static void function(zeroerr::TestContext*);       \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)({name, __FILE__, __LINE__, function}, true); \
+#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name)                                 \
+    static void                     function(zeroerr::TestContext*);                  \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                    \
+        {name, __FILE__, __LINE__, function}, zeroerr::detail::regTest::Type::bench); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
 #define BENCHMARK(name) ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name)
@@ -156,7 +157,6 @@ struct Benchmark {
     std::vector<BenchResult> result;
     void                     report();
 };
-
 
 
 namespace detail {

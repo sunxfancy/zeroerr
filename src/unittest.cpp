@@ -237,11 +237,16 @@ static std::set<TestCase>& getRegisteredBenchmarks() {
     return data;
 }
 
-regTest::regTest(const TestCase& tc, bool isBench) {
-    if (isBench) {
-        getRegisteredBenchmarks().insert(tc);
-    } else {
-        getRegisteredTests().insert(tc);
+static std::set<TestCase>& getRegisteredFuzzTests() {
+    static std::set<TestCase> data;
+    return data;
+}
+
+regTest::regTest(const TestCase& tc, Type type) {
+    switch (type) {
+        case test_case: getRegisteredTests().insert(tc); break;
+        case bench: getRegisteredBenchmarks().insert(tc); break;
+        case fuzz_test: getRegisteredFuzzTests().insert(tc); break;
     }
 }
 
