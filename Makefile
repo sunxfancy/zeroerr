@@ -4,7 +4,7 @@ all: linux windows
 
 build/linux/Makefile:
 	mkdir -p build/linux
-	cmake -B build/linux -S . -DCMAKE_BUILD_TYPE=Debug -DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON
+	cmake -B build/linux -S . -DCMAKE_BUILD_TYPE=Debug -DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
 
 linux: build/linux/Makefile
 	cmake --build build/linux -j `nproc`

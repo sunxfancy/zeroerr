@@ -264,12 +264,12 @@ class ConsoleReporter : public IReporter {
 public:
     std::string getName() const override { return "console"; }
 
-    virtual void testStart() {
+    virtual void testStart() override {
         setlocale(LC_ALL, "en_US.utf8");
         std::cerr << "ZeroErr Unit Test" << std::endl;
     }
 
-    virtual void testEnd(const TestContext& sum) {
+    virtual void testEnd(const TestContext& sum) override {
         std::cerr << "----------------------------------------------------------------"
                   << std::endl;
         std::cerr << "             " << FgGreen << "PASSED" << Reset << "   |   " << FgYellow
@@ -283,23 +283,23 @@ public:
                   << std::setw(7) << sum.skipped_as << std::endl;
     }
 
-    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) {
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) override {
         std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
                   << Reset << FgCyan << tc.name << Reset << std::endl;
     }
 
     virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                             int type) {
+                             int type) override {
         if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
     }
 
-    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) {
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) override {
         std::cerr << "SUB CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
                   << Reset << FgCyan << tc.name << Reset << std::endl;
     }
 
     virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                            int type) {
+                            int type) override {
         if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
     }
 
@@ -655,28 +655,28 @@ public:
     } tc_data;
     std::vector<const TestCase*> current;
 
-    virtual std::string getName() const { return "xml"; }
+    virtual std::string getName() const override { return "xml"; }
 
     // There are a list of events
-    virtual void testStart() { xml.writeDeclaration(); }
+    virtual void testStart() override { xml.writeDeclaration(); }
 
-    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) { current.push_back(&tc); }
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) override { current.push_back(&tc); }
 
     virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                             int type) {
+                             int type) override {
         tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
         current.pop_back();
     }
 
-    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) { current.push_back(&tc); }
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) override { current.push_back(&tc); }
 
     virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                            int type) {
+                            int type) override {
         tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
         current.pop_back();
     }
 
-    virtual void testEnd(const TestContext& tc) {
+    virtual void testEnd(const TestContext& tc) override {
         xml.startElement("ZeroErr")
             .writeAttribute("binary", ut.binary)
             .writeAttribute("version", ZEROERR_VERSION_STR);
