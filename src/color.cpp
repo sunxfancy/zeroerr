@@ -30,7 +30,6 @@ static const char* _BgBlue    = "\x1b[44m";
 static const char* _BgMagenta = "\x1b[45m";
 static const char* _BgCyan    = "\x1b[46m";
 static const char* _BgWhite   = "\x1b[47m";
-ZEROERR_MUTEX(m);
 
 const char* Reset      = _Reset;
 const char* Bright     = _Bright;
@@ -57,6 +56,8 @@ const char* BgBlue    = _BgBlue;
 const char* BgMagenta = _BgMagenta;
 const char* BgCyan    = _BgCyan;
 const char* BgWhite   = _BgWhite;
+
+ZEROERR_MUTEX(m);
 
 void disableColorOutput() {
     ZEROERR_LOCK(m);
