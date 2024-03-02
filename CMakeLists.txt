@@ -66,8 +66,7 @@ set(header_dirs
     ${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${header_dirs})
 
-file(GLOB_RECURSE include_files ${CMAKE_CURRENT_SOURCE_DIR}/include/**/*.h)
-
+add_subdirectory(include)
 add_subdirectory(src)
 
 # if(ENABLE_SAN)

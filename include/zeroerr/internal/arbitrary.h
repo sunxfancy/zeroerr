@@ -22,6 +22,11 @@ class Arbitrary<int> {
 
 
 
+Arbitrary<int> InRange(int min, int max) {
+    return Arbitrary<int>();
+}
+
+
 } // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

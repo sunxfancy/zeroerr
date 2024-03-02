@@ -16,7 +16,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
 
-#define SUB_CASE(name)                                                   \
+#define SUB_CASE(name)                                                \
     zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
         << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT))
 
@@ -50,9 +50,9 @@ public:
     unsigned passed_as = 0, warning_as = 0, failed_as = 0, skipped_as = 0;
 
     IReporter& reporter;
-    int  add(TestContext& local);
-    void reset();
-    void save_output();
+    int        add(TestContext& local);
+    void       reset();
+    void       save_output();
 
     TestContext(IReporter& reporter) : reporter(reporter) {}
     ~TestContext() = default;
@@ -63,6 +63,7 @@ struct UnitTest {
     int         run();
     bool        silent          = false;
     bool        run_bench       = false;
+    bool        run_fuzz        = false;
     bool        list_test_cases = false;
     std::string correct_output_path;
     std::string reporter_name = "console";
@@ -70,17 +71,18 @@ struct UnitTest {
 };
 
 struct TestCase {
-    std::string name;
-    std::string file;
-    unsigned    line;
+    std::string                       name;
+    std::string                       file;
+    unsigned                          line;
     std::function<void(TestContext*)> func;
-    bool operator<(const TestCase& rhs) const;
+    bool                              operator<(const TestCase& rhs) const;
 
     std::vector<TestCase*> subcases;
-    
+
     TestCase(std::string name, std::string file, unsigned line)
         : name(name), file(file), line(line) {}
-    TestCase(std::string name, std::string file, unsigned line, std::function<void(TestContext*)> func)
+    TestCase(std::string name, std::string file, unsigned line,
+             std::function<void(TestContext*)> func)
         : name(name), file(file), line(line), func(func) {}
 };
 
@@ -88,7 +90,7 @@ struct SubCase : TestCase {
     SubCase(std::string name, std::string file, unsigned line, TestContext* context);
     ~SubCase() = default;
     TestContext* context;
-    void operator<<(std::function<void(TestContext*)> op);
+    void         operator<<(std::function<void(TestContext*)> op);
 };
 
 
@@ -124,11 +126,11 @@ protected:
 };
 
 
-namespace detail {
+enum TestType { test_case = 1, sub_case = 1 << 1, bench = 1 << 2, fuzz_test = 1 << 3 };
 
+namespace detail {
 struct regTest {
-    enum Type { test_case, sub_case, bench, fuzz_test };
-    explicit regTest(const TestCase& tc, Type type = test_case);
+    explicit regTest(const TestCase& tc, TestType type = test_case);
 };
 
 struct regReporter {
@@ -165,7 +167,7 @@ public:
     TestArgs(std::initializer_list<T> args) : args(args) {}
     std::vector<T> args;
 
-    operator T() const { return args[index]; }
+              operator T() const { return args[index]; }
     TestArgs& operator++() {
         index++;
         return *this;

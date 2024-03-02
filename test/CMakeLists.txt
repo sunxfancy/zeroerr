@@ -43,6 +43,7 @@ endif()
 ## Test Cases
 
 set(test_files 
+    fuzz_test.cpp
     llvm_test.cpp
     log_test.cpp
     print_test.cpp

@@ -13,8 +13,7 @@
 namespace zeroerr {
 
 namespace detail {
-static std::set<TestCase>& getRegisteredTests();
-static std::set<TestCase>& getRegisteredBenchmarks();
+static std::set<TestCase>& getRegisteredTests(unsigned type);
 }  // namespace detail
 
 // This function update both sum and local.
@@ -118,6 +117,10 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
             this->run_bench = true;
             return true;
         }
+        if (arg == 'f') {
+            this->run_fuzz = true;
+            return true;
+        }
         if (arg == 'l') {
             this->list_test_cases = true;
             return true;
@@ -140,6 +143,9 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         }
         if (arg == "bench") {
             this->run_bench = true;
+        }
+        if (arg == "fuzz") {
+            this->run_fuzz = true;
         }
         if (arg == "list-test-cases") {
             this->list_test_cases = true;
@@ -188,11 +194,10 @@ int UnitTest::run() {
     reporter->testStart();
     std::stringbuf new_buf;
 
-    std::set<TestCase> testcases = detail::getRegisteredTests();
-    if (run_bench) {
-        testcases.insert(detail::getRegisteredBenchmarks().begin(),
-                         detail::getRegisteredBenchmarks().end());
-    }
+    unsigned types = TestType::test_case;
+    if (run_bench) types |= TestType::bench;
+    if (run_fuzz) types |= TestType::fuzz_test;
+    std::set<TestCase> testcases = detail::getRegisteredTests(types);
 
     for (auto& tc : testcases) {
         reporter->testCaseStart(tc, new_buf);
@@ -227,26 +232,20 @@ bool TestCase::operator<(const TestCase& rhs) const {
 
 namespace detail {
 
-static std::set<TestCase>& getRegisteredTests() {
-    static std::set<TestCase> data;
-    return data;
+static std::set<TestCase> test_set, bench_set, fuzz_set;
+static std::set<TestCase>& getRegisteredTests(unsigned type) {
+    std::set<TestCase> result;
+    if (type & TestType::test_case) result.insert(test_set.begin(), test_set.end());
+    if (type & TestType::bench) result.insert(bench_set.begin(), bench_set.end());
+    if (type & TestType::fuzz_test) result.insert(fuzz_set.begin(), fuzz_set.end());
+    return result;
 }
 
-static std::set<TestCase>& getRegisteredBenchmarks() {
-    static std::set<TestCase> data;
-    return data;
-}
-
-static std::set<TestCase>& getRegisteredFuzzTests() {
-    static std::set<TestCase> data;
-    return data;
-}
-
-regTest::regTest(const TestCase& tc, Type type) {
+regTest::regTest(const TestCase& tc, TestType type) {
     switch (type) {
-        case test_case: getRegisteredTests().insert(tc); break;
-        case bench: getRegisteredBenchmarks().insert(tc); break;
-        case fuzz_test: getRegisteredFuzzTests().insert(tc); break;
+        case test_case: test_set.insert(tc); break;
+        case bench: bench_set.insert(tc); break;
+        case fuzz_test: fuzz_set.insert(tc); break;
     }
 }
 

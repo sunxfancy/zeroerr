@@ -2,17 +2,19 @@
 
 #include "zeroerr/internal/config.h"
 #include "zeroerr/unittest.h"
+#include "zeroerr/internal/arbitrary.h"
 
 #include <functional>
 #include <string>
 #include <vector>
+#include <type_traits>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define ZEROERR_CREATE_FUZZ_TEST_FUNC(function, name)                                     \
     static void                     function(zeroerr::TestContext*);                      \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                        \
-        {name, __FILE__, __LINE__, function}, zeroerr::detail::regTest::Type::fuzz_test); \
+        {name, __FILE__, __LINE__, function}, zeroerr::TestType::fuzz_test); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
 #define FUZZ_TEST_CASE(name) ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
@@ -22,7 +24,46 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
-struct FuzzTest {
+template <typename... Args>
+struct FunctionDecomposition {
+    static constexpr size_t numOfArgs = sizeof...(Args);
+    using SeedType = std::tuple<Args...>;
+};
+
+template <typename... Args>
+FunctionDecomposition<typename std::decay<Args>::type...> FunctionDecompositionImpl
+(void (*)(Args...));
+
+template <typename... Args>
+FunctionDecomposition<typename std::decay<Args>::type...> FunctionDecompositionImpl
+(std::function<void(Args...)>);
+
+
+template<typename T>
+struct memfun_type
+{
+    using type = void;
+};
+
+template<typename Ret, typename Class, typename... Args>
+struct memfun_type<Ret (Class::*)(Args...) const>
+{
+    using ret_type = FunctionDecomposition<typename std::decay<Args>::type...>;
+};
+
+template <typename F>
+typename memfun_type<decltype(&F::operator())>::ret_type FunctionDecompositionImpl(F);
+
+
+template <typename T>
+using FunctionDecompositionT = decltype(FunctionDecompositionImpl(std::declval<T>()));
+
+
+template <typename TargetFunction,
+          typename Base = FunctionDecompositionT<TargetFunction>>
+struct FuzzTest
+    : public Base {
+    using SeedType = typename Base::SeedType;
 
     template <typename... T>
     FuzzTest& WithDomains(T&&... domains) {
@@ -30,8 +71,7 @@ struct FuzzTest {
         return *this;
     }
 
-    template <typename T>
-    FuzzTest& WithSeeds(std::initializer_list<T>&& seeds) {
+    FuzzTest& WithSeeds(std::initializer_list<SeedType>&& seeds) {
 
         return *this;
     }
@@ -42,9 +82,9 @@ struct FuzzTest {
 };
 
 template <typename T>
-FuzzTest FuzzFunction(std::function<T> func, TestContext* context) {
+FuzzTest<T> FuzzFunction(T func, TestContext* context) {
     
-    return FuzzTest();
+    return FuzzTest<T>();
 }
 
 template <typename T>
