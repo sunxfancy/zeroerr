@@ -12,7 +12,7 @@ class Domain {
 
 
 private:
-    std::unique_ptr<TypedDomain<T>
+    std::unique_ptr<TypedDomain> domain;
 };
 
 

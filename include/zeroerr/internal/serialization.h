@@ -40,8 +40,8 @@ struct IRObject {
 
     template <typename T>
     std::enable_if<std::is_same<T, std::string>::value, T> GetScalar() {
-        if (s & 1)
-            return std::string((char*)(s & ~1));
+        if ((uint64_t)s & 1)
+            return std::string((char*)((uint64_t)s & ~1));
         else
             return std::string(ss);
     }
@@ -65,7 +65,7 @@ struct IRObject {
     std::enable_if<std::is_same<T, std::string>::value, void> SetScalar(T val) {
         unsigned size = val.size();
         if (size > 7) {
-            s = (char*)(alloc_str(size) | 1);
+            s = (char*)((uint64_t)alloc_str(size) | 1);
             strcpy(s, val.c_str());
         } else {
             strcpy(ss, val.c_str());
@@ -110,28 +110,29 @@ struct IRObject {
         unsigned size = val.size();
 
         IRObject* children = alloc(size);
-        SetChildren(children);
+        val.SetChildren(children);
         
-        for (const auto& elem : value) {
+        for (const auto& elem : val) {
             *children++ = IRObject::FromCorpus(elem);
         }
     }
 
 
     template <class TupType, unsigned... I>
-    inline void handle_tuple(const TupType& _tup, IRObject* children, detail::seq<I...>) {
-        int _[] = {((children+I)->SetScala(FromCorpus(std::get<I>(_tup))), 0)...};
+    inline static void handle_tuple(const TupType& _tup, IRObject* children, detail::seq<I...>) {
+        int _[] = {((children+I)->SetScalar(FromCorpus(std::get<I>(_tup))), 0)...};
         (void)_;
     }
 
     template <typename... Args> static
     IRObject FromCorpus(const std::tuple<Args...>& val) {
         unsigned size = sizeof...(Args);
-
+        IRObject obj;
         IRObject* children = alloc(size);
-        SetChildren(children);
+        obj.SetChildren(children);
         
         handle_tuple(val, children, detail::gen_seq<sizeof...(Args)>{});
+        return obj;
     }
 
 
