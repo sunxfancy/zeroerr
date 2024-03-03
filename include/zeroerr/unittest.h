@@ -167,7 +167,7 @@ public:
     TestArgs(std::initializer_list<T> args) : args(args) {}
     std::vector<T> args;
 
-              operator T() const { return args[index]; }
+    operator T() const { return args[index]; }
     TestArgs& operator++() {
         index++;
         return *this;

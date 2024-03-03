@@ -99,5 +99,5 @@
         "valarray": "cpp",
         "regex": "cpp"
     },
-    "cmake.buildDirectory": "${workspaceFolder}/build-windows"
+    "cmake.buildDirectory": "${workspaceFolder}/build/windows"
 }

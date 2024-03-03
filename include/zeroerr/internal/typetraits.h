@@ -99,30 +99,67 @@ struct ele_type_is_pair<
 template <size_t I>
 struct visit_impl {
     template <typename T, typename F>
-    static void visit(T& tup, size_t idx, F& fun) {
+    static void visit(T& tup, size_t idx, F&& fun) {
         if (idx == I - 1)
             fun(std::get<I - 1>(tup));
         else
-            visit_impl<I - 1>::visit(tup, idx, fun);
+            visit_impl<I - 1>::visit(tup, idx, std::forward<F>(fun));
     }
 };
 
 template <>
 struct visit_impl<0> {
     template <typename T, typename F>
-    static void visit(T&, size_t, F&) {}
+    static void visit(T&, size_t, F&&) {}
 };
 
 template <typename F, typename... Ts>
-void visit_at(std::tuple<Ts...> const& tup, size_t idx, F& fun) {
-    visit_impl<sizeof...(Ts)>::visit(tup, idx, fun);
+void visit_at(std::tuple<Ts...> const& tup, size_t idx, F&& fun) {
+    visit_impl<sizeof...(Ts)>::visit(tup, idx, std::forward<F>(fun));
 }
 
 template <typename F, typename... Ts>
-void visit_at(std::tuple<Ts...>& tup, size_t idx, F& fun) {
-    visit_impl<sizeof...(Ts)>::visit(tup, idx, fun);
+void visit_at(std::tuple<Ts...>& tup, size_t idx, F&& fun) {
+    visit_impl<sizeof...(Ts)>::visit(tup, idx, std::forward<F>(fun));
 }
 
+
+template <size_t I>
+struct visit2_impl {
+    template <typename T1, typename T2, typename F>
+    static void visit(T1 tup1, T2 tup2, size_t idx, F&& fun) {
+        if (idx == I - 1)
+            fun(std::get<I - 1>(tup1), std::get<I - 1>(tup2));
+        else
+            visit2_impl<I - 1>::visit(tup1, tup2, idx, std::forward<F>(fun));
+    }
+};
+
+template <>
+struct visit2_impl<0> {
+    template <typename T1, typename T2, typename F>
+    static void visit(T1&, T2&, size_t, F&&) {}
+};
+
+template <typename F, typename... Ts, typename... T2s>
+void visit2_at(std::tuple<Ts...> const& tup1, std::tuple<T2s...> const& tup2, size_t idx, F&& fun) {
+    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
+}
+
+template <typename F, typename... Ts, typename... T2s>
+void visit2_at(std::tuple<Ts...>& tup1, std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
+    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
+}
+
+template <typename F, typename... Ts, typename... T2s>
+void visit2_at(std::tuple<Ts...> const& tup1, std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
+    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
+}
+
+template <typename F, typename... Ts, typename... T2s>
+void visit2_at(std::tuple<Ts...>& tup1, std::tuple<T2s...> const& tup2, size_t idx, F&& fun) {
+    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
+}
 
 #define ZEROERR_ENABLE_IF(x) \
     template <typename T>    \

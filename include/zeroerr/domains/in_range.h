@@ -9,20 +9,23 @@ namespace zeroerr {
 
 template <typename T>
 class InRange : public Domain<T> {
+public:
     using ValueType = T;
     using CorpusType = T;
 
     ValueType min, max;
 
-public:
     InRange(T min, T max) : min(min), max(max) {}
 
     ValueType GetRandomValue(Rng& rng) override {
-        return elements[rng.bounded(elements.size())];
+        ValueType offsize = max - min + 1;
+        ValueType v = rng.bounded(offsize);
+        v = min + v;
+        return v;
     }
 
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
-        ValueType offsize = max - min + 1;
+        CorpusType offsize = max - min + 1;
         v = rng.bounded(offsize);
         v = min + v;
     }

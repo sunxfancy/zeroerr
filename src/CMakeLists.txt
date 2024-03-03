@@ -8,7 +8,8 @@ set(source_files
     ${CMAKE_CURRENT_SOURCE_DIR}/log.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/print.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/table.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/unittest.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/unittest.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/serialization.cpp)
 
 set(source_files ${source_files} PARENT_SCOPE)
 

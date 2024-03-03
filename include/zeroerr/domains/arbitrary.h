@@ -8,27 +8,61 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 namespace zeroerr {
 
 template <typename T>
-class Arbitrary {
+class Arbitrary : public Domain<T>{
+public:
+    using ValueType = T;
+    using CorpusType = T;
 
 };
 
 template <>
-class Arbitrary<bool> {
+class Arbitrary<bool> : public Domain<bool> {
+public:
     using ValueType = bool;
-    using CorpusType = uint64_t;
+    using CorpusType = bool;
 
-    
+    ValueType GetRandomValue(Rng& rng) override {
+        return rng.bounded(2);
+    }
+
+    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+        v = !v;
+    }
+
 };
 
 template <>
-class Arbitrary<int> {
+class Arbitrary<int> : public Domain<int> {
+public:
+    using ValueType = int;
+    using CorpusType = int;
+
+    ValueType GetRandomValue(Rng& rng) override {
+        return rng.bounded(100);
+    }
+
+    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+        v = rng.bounded(100);
+    }
 };
 
 
+template <>
+class Arbitrary<std::string> : public Domain<std::string> {
+public:
+    using ValueType = std::string;
+    using CorpusType = std::string;
 
-Arbitrary<int> InRange(int min, int max) {
-    return Arbitrary<int>();
-}
+    ValueType GetRandomValue(Rng& rng) override {
+        return "arbitrary";
+    }
+
+    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+        v = "arbitrary";
+    }
+
+};
+
 
 
 } // namespace zeroerr

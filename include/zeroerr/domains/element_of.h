@@ -9,12 +9,12 @@ namespace zeroerr {
 
 template <typename T>
 class ElementOf : public Domain<T, uint64_t> {
+public:
     using ValueType = T;
     using CorpusType = uint64_t;
 
     std::vector<T> elements;
 
-public:
     ElementOf(std::vector<T> elements) : elements(elements) {}
 
     ValueType GetRandomValue(Rng& rng) override {
