@@ -6,6 +6,8 @@
 #include "zeroerr/domains/aggregate_of.h"
 #include "zeroerr/domains/arbitrary.h"
 #include "zeroerr/domains/in_range.h"
+#include "zeroerr/domains/element_of.h"
+#include "zeroerr/domains/container_of.h"
 #include "zeroerr/internal/rng.h"
 
 
