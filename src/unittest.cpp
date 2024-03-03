@@ -13,7 +13,7 @@
 namespace zeroerr {
 
 namespace detail {
-static std::set<TestCase>& getRegisteredTests(unsigned type);
+static std::set<TestCase> getRegisteredTests(unsigned type);
 }  // namespace detail
 
 // This function update both sum and local.
@@ -232,21 +232,28 @@ bool TestCase::operator<(const TestCase& rhs) const {
 
 namespace detail {
 
-static std::set<TestCase> test_set, bench_set, fuzz_set;
-static std::set<TestCase>& getRegisteredTests(unsigned type) {
+std::set<TestCase>& getTestSet(TestType type) {
+    static std::set<TestCase> test_set, bench_set, fuzz_set;
+    switch (type) {
+        case TestType::test_case: return test_set;
+        case TestType::bench: return bench_set;
+        case TestType::fuzz_test: return fuzz_set;
+    }
+    return test_set;
+}
+
+static std::set<TestCase> getRegisteredTests(unsigned type) {
     std::set<TestCase> result;
-    if (type & TestType::test_case) result.insert(test_set.begin(), test_set.end());
-    if (type & TestType::bench) result.insert(bench_set.begin(), bench_set.end());
-    if (type & TestType::fuzz_test) result.insert(fuzz_set.begin(), fuzz_set.end());
+    if (type & TestType::test_case)
+        result.insert(getTestSet(test_case).begin(), getTestSet(test_case).end());
+    if (type & TestType::bench) result.insert(getTestSet(bench).begin(), getTestSet(bench).end());
+    if (type & TestType::fuzz_test)
+        result.insert(getTestSet(fuzz_test).begin(), getTestSet(fuzz_test).end());
     return result;
 }
 
 regTest::regTest(const TestCase& tc, TestType type) {
-    switch (type) {
-        case test_case: test_set.insert(tc); break;
-        case bench: bench_set.insert(tc); break;
-        case fuzz_test: fuzz_set.insert(tc); break;
-    }
+    getTestSet(type).insert(tc);
 }
 
 static std::set<IReporter*>& getRegisteredReporters() {
@@ -659,7 +666,9 @@ public:
     // There are a list of events
     virtual void testStart() override { xml.writeDeclaration(); }
 
-    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) override { current.push_back(&tc); }
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+        current.push_back(&tc);
+    }
 
     virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
                              int type) override {
@@ -667,7 +676,9 @@ public:
         current.pop_back();
     }
 
-    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) override { current.push_back(&tc); }
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+        current.push_back(&tc);
+    }
 
     virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
                             int type) override {
@@ -702,7 +713,7 @@ public:
                 .writeAttribute("warnings", testCase.context.warning_as)
                 .writeAttribute("failed", testCase.context.failed_as)
                 .writeAttribute("skipped", testCase.context.skipped_as);
-                
+
             for (const auto& failure : testCase.failures) {
                 xml.scopedElement("failure")
                     .writeAttribute("message", failure.message)
