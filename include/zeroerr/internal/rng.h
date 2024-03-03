@@ -121,7 +121,7 @@ public:
      *
      * @param range Upper exclusive range. E.g a value of 3 will generate random numbers 0,
      * 1, 2.
-     * @return uint32_t Generated random values in range [0, range(.
+     * @return uint32_t Generated random values in range [0, range).
      */
     inline uint32_t bounded(uint32_t range) noexcept {
         uint64_t r32         = static_cast<uint32_t>(operator()());

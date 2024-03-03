@@ -2,7 +2,7 @@
 
 #include "zeroerr/internal/config.h"
 #include "zeroerr/unittest.h"
-#include "zeroerr/internal/arbitrary.h"
+#include "zeroerr/domains/arbitrary.h"
 
 #include <functional>
 #include <string>
@@ -24,6 +24,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+namespace detail {
 template <typename... Args>
 struct FunctionDecomposition {
     static constexpr size_t numOfArgs = sizeof...(Args);
@@ -58,9 +59,10 @@ typename memfun_type<decltype(&F::operator())>::ret_type FunctionDecompositionIm
 template <typename T>
 using FunctionDecompositionT = decltype(FunctionDecompositionImpl(std::declval<T>()));
 
+}  // namespace detail
 
 template <typename TargetFunction,
-          typename Base = FunctionDecompositionT<TargetFunction>>
+          typename Base = detail::FunctionDecompositionT<TargetFunction>>
 struct FuzzTest
     : public Base {
     using SeedType = typename Base::SeedType;
@@ -89,6 +91,7 @@ FuzzTest<T> FuzzFunction(T func, TestContext* context) {
 
 template <typename T>
 std::vector<T> ReadCorpusFromDir(std::string dir);
+
 
 }  // namespace zeroerr
 

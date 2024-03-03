@@ -1,13 +1,13 @@
 
 set(include_files
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/config.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/arbitrary.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/console.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/debugbreak.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/decomposition.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/rng.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/serialization.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/threadsafe.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/domains/arbitrary.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/assert.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/benchmark.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/color.h
