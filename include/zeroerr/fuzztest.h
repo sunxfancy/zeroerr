@@ -5,9 +5,9 @@
 
 #include "zeroerr/domains/aggregate_of.h"
 #include "zeroerr/domains/arbitrary.h"
-#include "zeroerr/domains/in_range.h"
-#include "zeroerr/domains/element_of.h"
 #include "zeroerr/domains/container_of.h"
+#include "zeroerr/domains/element_of.h"
+#include "zeroerr/domains/in_range.h"
 #include "zeroerr/internal/rng.h"
 
 
@@ -75,8 +75,15 @@ template <typename TargetFunction, typename FuncType, typename Domain,
           typename Base = FuzzTest<TargetFunction, FuncType>>
 struct FuzzTestWithDomain;
 
+struct IFuzzTest {
+    virtual void        Run(int count = 1000, int seed = 0)          = 0;
+    virtual void        RunOneTime(const uint8_t* data, size_t size) = 0;
+    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
+                                   unsigned int seed)                = 0;
+};
+
 template <typename TargetFunction, typename FuncType>
-struct FuzzTest {
+struct FuzzTest : IFuzzTest {
     using ValueType = typename FuncType::ValueType;
     FuzzTest(TargetFunction func) : func(func) {}
     FuzzTest(const FuzzTest& other) : func(other.func), seeds(other.seeds) {}
@@ -103,21 +110,51 @@ struct FuzzTest {
     }
 
     // This should create default domains
-    virtual void Run(int count = 1000, int seed = 0) {}
+    virtual void        Run(int count = 1000, int seed = 0) {}
+    virtual void        RunOneTime(const uint8_t* data, size_t size) {}
+    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
+                                   unsigned int seed) {
+        return "";
+    }
 
     TargetFunction         func;
     std::vector<ValueType> seeds;
 };
 
+extern void RunFuzzTest(IFuzzTest& fuzz_test, int seed = 0, int runs = 1000, int max_len = 0,
+                        int timeout = 1200, int len_control = 100);
+
 template <typename TargetFunction, typename FuncType, typename Domain, typename Base>
 struct FuzzTestWithDomain : public Base {
     FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), domain(domain) {}
 
-    void Run(int count = 1000, int seed = 0) override {
-        
+    virtual void Run(int count = 1000, int seed = 0) override {
+        rng = new Rng(seed);
+        RunFuzzTest(*this, seed, count);
+        delete rng;
+        rng = nullptr;
+    }
+
+    virtual void RunOneTime(const uint8_t* data, size_t size) override {
+        std::string                 input  = std::string((const char*)data);
+        IRObject                    obj    = IRObject::FromString(input);
+        typename Domain::CorpusType corpus = domain.ParseCorpus(obj);
+        typename Domain::ValueType  value  = domain.GetValue(corpus);
+        std::apply(this->func, value);
+    }
+
+    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
+                           unsigned int seed) override {
+        std::string                 input  = std::string((const char*)data);
+        IRObject                    obj    = IRObject::FromString(input);
+        typename Domain::CorpusType corpus = domain.ParseCorpus(obj);
+        domain.Mutate(*rng, corpus, false);
+        IRObject mutated_obj = domain.SerializeCorpus(corpus);
+        return IRObject::ToString(mutated_obj);
     }
 
     Domain domain;
+    Rng*   rng;
 };
 
 

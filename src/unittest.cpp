@@ -85,7 +85,8 @@ void SubCase::operator<<(std::function<void(TestContext*)> op) {
     try {
         op(&local);
     } catch (const AssertionData&) {
-    } catch (const std::exception&) {
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << std::endl;
         if (local.failed_as == 0) {
             local.failed_as = 1;
         }
@@ -245,7 +246,8 @@ int UnitTest::run() {
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
-            } catch (const std::exception&) {
+            } catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
                 if (context.failed_as == 0) {
                     context.failed_as = 1;
                 }

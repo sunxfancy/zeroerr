@@ -4,14 +4,17 @@ all: linux windows
 
 build/linux/Makefile:
 	mkdir -p build/linux
-	cmake -B build/linux -S . -DCMAKE_BUILD_TYPE=Debug -DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
+	cmake -B build/linux -S . -DCMAKE_BUILD_TYPE=Debug \
+		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON -DENABLE_FUZZING=ON \
+		-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
 
 linux: build/linux/Makefile
 	cmake --build build/linux -j `nproc`
 
 build/windows/ZeroErr.sln:
 	mkdir -p build/windows
-	cmake.exe -B build/windows -S . -DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -T host=x64 -A x64
+	cmake.exe -B build/windows -S . \
+		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -T host=x64 -A x64
 
 windows: build/windows/ZeroErr.sln
 	cmake.exe --build build/windows --config Debug -j `nproc`
@@ -32,7 +35,9 @@ doc-dev:
 
 doc-build:
 	mkdir -p build-linux-doc
-	cd build-linux-doc && cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_EXAMPLES=ON -DBUILD_DOC=ON && cmake --build . --target doxy -j `nproc`
+	cd build-linux-doc && cmake .. -DCMAKE_BUILD_TYPE=Debug \
+		-DBUILD_EXAMPLES=ON -DBUILD_DOC=ON && \
+		cmake --build . --target doxy -j `nproc`
 
 doc: doc-build
 	yarn run cmake:docs

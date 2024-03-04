@@ -1,5 +1,6 @@
 #include "zeroerr/fuzztest.h"
 #include "zeroerr/log.h"
+#include "zeroerr/assert.h"
 
 #include <cstring>
 
@@ -10,12 +11,13 @@ extern "C" int LLVMFuzzerRunDriver(int* argc, char*** argv,
 extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size,
                                           size_t max_size, unsigned int seed);
 
-extern "C" std::string MutateData(const uint8_t* data, size_t size, size_t max_size, unsigned int seed);
+namespace zeroerr {
+static IFuzzTest* current_fuzz_test = nullptr;
+}  // namespace zeroerr
 
 size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size,
                                unsigned int seed) {
-  
-  const std::string mutated_data = MutateData(data, size, max_size, seed);
+  const std::string mutated_data = zeroerr::current_fuzz_test->MutateData(data, size, max_size, seed);
   if (mutated_data.size() > max_size) {
     WARN("Mutated data is larger than the limit. Returning the original data");
     return size;
@@ -24,12 +26,12 @@ size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size,
   return mutated_data.size();
 }
 
-std::string MutateData(const uint8_t* data, size_t size, size_t max_size, unsigned int seed) {
-  std::string mutated_data = std::string((const char*)data);
-  return mutated_data;
-}
+namespace zeroerr {
 
-void RunFuzzTest(int seed = 0, int runs = 1000, int max_len = 0, int timeout = 1200, int len_control = 100) {
+void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int timeout, int len_control) {
+    LOG("RunFuzzTest");
+#ifdef ZEROERR_ENABLE_FUZZING
+    current_fuzz_test = &fuzz_test;
     int argc = 6;
     std::string argv[] = {
         "fuzztest",
@@ -43,9 +45,16 @@ void RunFuzzTest(int seed = 0, int runs = 1000, int max_len = 0, int timeout = 1
     for (int i = 0; i < argc; i++) {
         argv_c[i] = (char*)argv[i].c_str();
     }
-
+    LOG("Running fuzz test");
+    
     LLVMFuzzerRunDriver(&argc, &argv_c, [](const uint8_t* data, size_t size) -> int {
+        LOG("Running RunOneTime");
+        current_fuzz_test->RunOneTime(data, size);
         return 0;
     });
 
+    current_fuzz_test = nullptr;
+#endif
 }
+
+}  // namespace zeroerr

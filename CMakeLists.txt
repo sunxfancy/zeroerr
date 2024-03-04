@@ -51,6 +51,16 @@ if(USE_MOLD)
     endif()
 endif()
 
+option(ENABLE_FUZZING "Enable fuzzing(ON, OFF)" OFF)
+
+if(ENABLE_FUZZING)
+    message(STATUS "Enable fuzzing")
+    if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        message(FATAL_ERROR "Fuzzing is only supported by Clang")
+    endif()
+    add_definitions(-DZEROERR_ENABLE_FUZZING)
+endif()
+
 option(BUILD_EXAMPLES "Build examples(ON, OFF)" OFF)
 option(BUILD_DOC "Build documentation" OFF)
 option(BUILD_TEST "Build unittest" OFF)

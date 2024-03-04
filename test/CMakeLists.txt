@@ -52,11 +52,23 @@ set(test_files
 )
 
 add_executable(unittest ${test_files} ${cuda_files})
-target_link_libraries(unittest zeroerr ${llvm_libs})
+target_link_libraries(unittest zeroerr clang_rt.fuzzer_no_main-x86_64 ${llvm_libs})
 target_compile_options(unittest PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4>
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
     )
+
+## Fuzzing Support
+if (ENABLE_FUZZING)
+    execute_process(COMMAND ${CMAKE_CXX_COMPILER} -print-runtime-dir
+        OUTPUT_VARIABLE LIB_FUZZER_PATH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    target_compile_options(unittest PRIVATE -fsanitize=fuzzer-no-link)
+    target_link_directories(unittest PRIVATE ${LIB_FUZZER_PATH})
+    target_link_options(unittest PRIVATE -fsanitize=fuzzer-no-link)
+endif()
 
 enable_testing()
 add_test(NAME RunUnitTest COMMAND unittest)
