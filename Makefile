@@ -1,4 +1,4 @@
-.PHONY: all linux windows test doc-build doc-dev doc copy clean
+.PHONY: all linux windows test linux-test windows-test doc-build doc-dev doc copy clean
 
 all: linux windows
 
@@ -16,8 +16,15 @@ build/windows/ZeroErr.sln:
 windows: build/windows/ZeroErr.sln
 	cmake.exe --build build/windows --config Debug -j `nproc`
 
-test: linux windows
+test: linux-test windows-test fuzz-test
+
+fuzz-test: linux
+	cd build/linux/test && ./unittest -f --testcase=fuzz_test
+
+linux-test: linux
 	cd build/linux/test && ./unittest
+
+windows-test: windows
 	cd build/windows/test && ./Debug/unittest.exe
 
 doc-dev:

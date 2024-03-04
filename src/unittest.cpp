@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <iostream>
 #include <ostream>
+#include <regex>
 #include <set>
 #include <string>
 #include <vector>
@@ -95,7 +96,13 @@ void SubCase::operator<<(std::function<void(TestContext*)> op) {
     context->reporter.subCaseEnd(*this, new_buf, local, type);
 }
 
+struct Filiters {
+    std::vector<std::regex> name, name_exclude;
+    std::vector<std::regex> file, file_exclude;
+};
+
 UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
+    filiters            = new Filiters();
     auto convert_to_vec = [=]() {
         std::vector<std::string> result;
         for (int i = 1; i < argc; i++) {
@@ -154,6 +161,22 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
             this->reporter_name = arg.substr(10);
             return true;
         }
+        if (arg.substr(0, 8) == "testcase") {
+            filiters->name.push_back(std::regex(arg.substr(9)));
+            return true;
+        }
+        if (arg.substr(0, 14) == "testcase-exclude") {
+            filiters->name_exclude.push_back(std::regex(arg.substr(15)));
+            return true;
+        }
+        if (arg.substr(0, 5) == "file") {
+            filiters->file.push_back(std::regex(arg.substr(6)));
+            return true;
+        }
+        if (arg.substr(0, 11) == "file-exclude") {
+            filiters->file_exclude.push_back(std::regex(arg.substr(12)));
+            return true;
+        }
         return false;
     };
 
@@ -187,6 +210,19 @@ static std::string insertIndentation(std::string str) {
     return result.str();
 }
 
+bool UnitTest::run_filiter(const TestCase& tc) {
+    if (filiters == nullptr) return true;
+    for (auto& r : filiters->name)
+        if (!std::regex_match(tc.name, r)) return false;
+    for (auto& r : filiters->name_exclude)
+        if (std::regex_match(tc.name, r)) return false;
+    for (auto& r : filiters->file)
+        if (!std::regex_match(tc.file, r)) return false;
+    for (auto& r : filiters->file_exclude)
+        if (std::regex_match(tc.file, r)) return false;
+    return true;
+}
+
 int UnitTest::run() {
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
@@ -200,6 +236,7 @@ int UnitTest::run() {
     std::set<TestCase> testcases = detail::getRegisteredTests(types);
 
     for (auto& tc : testcases) {
+        if (!run_filiter(tc)) continue;
         reporter->testCaseStart(tc, new_buf);
         if (!list_test_cases) {
             std::streambuf* orig_buf = std::cerr.rdbuf();
@@ -252,9 +289,7 @@ static std::set<TestCase> getRegisteredTests(unsigned type) {
     return result;
 }
 
-regTest::regTest(const TestCase& tc, TestType type) {
-    getTestSet(type).insert(tc);
-}
+regTest::regTest(const TestCase& tc, TestType type) { getTestSet(type).insert(tc); }
 
 static std::set<IReporter*>& getRegisteredReporters() {
     static std::set<IReporter*> data;
