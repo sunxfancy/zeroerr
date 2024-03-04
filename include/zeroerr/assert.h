@@ -10,7 +10,6 @@
 #include <cstdint>
 #include <exception>
 #include <iostream>
-#include <regex>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -173,7 +172,6 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 #endif
 
 
-
 // This symbol must be in the global namespace or anonymous namespace
 // used for checking the assert is inside testing or not
 namespace {
@@ -212,8 +210,10 @@ struct AssertionData : std::exception {
 
     AssertionData(const char* file, unsigned line, const char* cond, assert_info info)
         : file(file), line(line), info(info) {
-        std::regex pattern("zeroerr::ExpressionDecomposer\\(\\) << ");
-        this->cond = std::regex_replace(cond, pattern, "");
+        std::string cond_str(cond);
+        std::string pattern = "zeroerr::ExpressionDecomposer() << ";
+        unsigned    pos     = cond_str.find(pattern);
+        this->cond          = cond_str.replace(pos, pos + pattern.size(), "");
     }
 
     void setResult(ExprResult&& result) {

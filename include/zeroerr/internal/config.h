@@ -1,10 +1,11 @@
 #pragma once
 
 #define ZEROERR_VERSION_MAJOR 0
-#define ZEROERR_VERSION_MINOR 1
+#define ZEROERR_VERSION_MINOR 2
 #define ZEROERR_VERSION_PATCH 0
-#define ZEROERR_VERSION       (ZEROERR_VERSION_MAJOR * 10000 + ZEROERR_VERSION_MINOR * 100 + ZEROERR_VERSION_PATCH)
-#define ZEROERR_VERSION_STR   "0.1.0"
+#define ZEROERR_VERSION \
+    (ZEROERR_VERSION_MAJOR * 10000 + ZEROERR_VERSION_MINOR * 100 + ZEROERR_VERSION_PATCH)
+#define ZEROERR_VERSION_STR "0.2.0"
 
 // If you just wish to use the color without dynamic
 // enable or disable it, you can uncomment the following line
@@ -69,24 +70,26 @@
 
 // The following macros are used to check the arguments is empty or not
 // from: https://gustedt.wordpress.com/2010/06/08/detect-empty-macro-arguments/
-#define _ARG16(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, ...) _15
-#define HAS_COMMA(...)                                                                    _ARG16(__VA_ARGS__, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
-#define _TRIGGER_PARENTHESIS_(...)                                                        ,
+#define ZEROERR_ARG16(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, ...) _15
+#define ZEROERR_HAS_COMMA(...) \
+    ZEROERR_ARG16(__VA_ARGS__, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+#define ZEROERR_TRIGGER_PARENTHESIS_(...) ,
 
-#define ISEMPTY(...)                                                                               \
-    _ISEMPTY(                        /* test if there is just one argument, eventually an empty    \
-                                        one */                                                     \
-             HAS_COMMA(__VA_ARGS__), /* test if _TRIGGER_PARENTHESIS_ together with the argument   \
-                                        adds a comma */                                            \
-             HAS_COMMA(_TRIGGER_PARENTHESIS_ __VA_ARGS__), /* test if the argument together with a \
-                                                              parenthesis adds a comma */          \
-             HAS_COMMA(                                                                            \
-                 __VA_ARGS__(/*empty*/)), /* test if placing it between _TRIGGER_PARENTHESIS_ and  \
-                                             the parenthesis adds a comma */                       \
-             HAS_COMMA(_TRIGGER_PARENTHESIS_ __VA_ARGS__(/*empty*/)))
+#define ZEROERR_ISEMPTY(...)                                                                               \
+    _ZEROERR_ISEMPTY(/* test if there is just one argument, eventually an empty                            \
+                one */                                                                             \
+             ZEROERR_HAS_COMMA(__VA_ARGS__), /* test if ZEROERR_TRIGGER_PARENTHESIS_ together with \
+                                        the argument adds a comma */                                                                                   \
+             ZEROERR_HAS_COMMA(                                                                    \
+                 ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__), /* test if the argument together with  \
+                                                a parenthesis adds a comma */                                                                       \
+             ZEROERR_HAS_COMMA(__VA_ARGS__(                                                        \
+                 /*empty*/)), /* test if placing it between ZEROERR_TRIGGER_PARENTHESIS_ and       \
+                                 the parenthesis adds a comma */                                   \
+             ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__(/*empty*/)))
 
-#define PASTE5(_0, _1, _2, _3, _4) _0##_1##_2##_3##_4
-#define _ISEMPTY(_0, _1, _2, _3)   HAS_COMMA(PASTE5(_IS_EMPTY_CASE_, _0, _1, _2, _3))
+#define ZEROERR_PASTE5(_0, _1, _2, _3, _4) _0##_1##_2##_3##_4
+#define _ZEROERR_ISEMPTY(_0, _1, _2, _3)   ZEROERR_HAS_COMMA(ZEROERR_PASTE5(_IS_EMPTY_CASE_, _0, _1, _2, _3))
 #define _IS_EMPTY_CASE_0001        ,
 
 
@@ -122,7 +125,7 @@
 // == COMPILER Detector ============================================================================
 // =================================================================================================
 
-#define ZEROERR_COMPILER(MAJOR, MINOR, PATCH) ((MAJOR) * 10000000 + (MINOR) * 100000 + (PATCH))
+#define ZEROERR_COMPILER(MAJOR, MINOR, PATCH) ((MAJOR)*10000000 + (MINOR)*100000 + (PATCH))
 
 // GCC/Clang and GCC/MSVC are mutually exclusive, but Clang/MSVC are not because of clang-cl...
 #if defined(_MSC_VER) && defined(_MSC_FULL_VER)
@@ -313,4 +316,3 @@ struct gen_seq<0, Is...> : seq<Is...> {};
 
 }  // namespace detail
 }  // namespace zeroerr
-

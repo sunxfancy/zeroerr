@@ -22,7 +22,7 @@ TEST_CASE("log_test") {
 
 
 TEST_CASE("isempty") {
-    int k = ISEMPTY(test, 1);
+    int k = ZEROERR_ISEMPTY(test, 1);
     REQUIRE(k == 0);
 }
 

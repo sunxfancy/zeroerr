@@ -246,6 +246,7 @@ void Table::registerStyle(std::string name, Table::Style style) {
 }
 Table::Style Table::getStyle(std::string name) { return StyleManager::instance().styles[name]; }
 
+// TODO: Refactor those macros into functions
 #define left  (c.show_lr_border ? s.m_args[p] : "")
 #define space s.m_args[p + 1]
 #define bar   (c.show_col_split ? s.m_args[p + 2] : s.m_args[p + 1])
@@ -336,5 +337,13 @@ std::string Table::str(Config c, Table::Style s) {
     return ss.str();
 }
 
+#undef left
+#undef space
+#undef bar
+#undef right
+#undef last
+#undef for_row
+#undef rep
+#undef remain
 
 }  // namespace zeroerr
