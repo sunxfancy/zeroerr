@@ -19,6 +19,14 @@
             "program": "${workspaceFolder}/build/linux/test/unittest",
             "args": [],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Linux-fuzz",
+            "program": "${workspaceFolder}/build/linux/test/unittest",
+            "args": ["--testcase=fuzz_.*"],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

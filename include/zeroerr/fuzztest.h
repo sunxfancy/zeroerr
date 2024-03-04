@@ -113,7 +113,9 @@ template <typename TargetFunction, typename FuncType, typename Domain, typename 
 struct FuzzTestWithDomain : public Base {
     FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), domain(domain) {}
 
-    void Run(int count = 1000, int seed = 0) override {}
+    void Run(int count = 1000, int seed = 0) override {
+        
+    }
 
     Domain domain;
 };

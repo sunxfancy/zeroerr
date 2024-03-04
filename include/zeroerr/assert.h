@@ -212,8 +212,10 @@ struct AssertionData : std::exception {
         : file(file), line(line), info(info) {
         std::string cond_str(cond);
         std::string pattern = "zeroerr::ExpressionDecomposer() << ";
-        unsigned    pos     = cond_str.find(pattern);
-        this->cond          = cond_str.replace(pos, pos + pattern.size(), "");
+        size_t      pos     = cond_str.find(pattern);
+        if (pos != std::string::npos)
+            cond_str.replace(pos, pos + pattern.size(), "");
+        this->cond = cond_str;
     }
 
     void setResult(ExprResult&& result) {
