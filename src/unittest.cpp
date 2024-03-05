@@ -224,7 +224,13 @@ bool UnitTest::run_filiter(const TestCase& tc) {
     return true;
 }
 
+static void atexit_handler() {
+    throw std::runtime_error("User exit");
+}
+
 int UnitTest::run() {
+    std::atexit(atexit_handler);
+
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
     TestContext context(*reporter), sum(*reporter);

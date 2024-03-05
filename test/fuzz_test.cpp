@@ -12,11 +12,24 @@ FUZZ_TEST_CASE("fuzz_test") {
     LOG("Run fuzz_test");
     FUZZ_FUNC([=](int k, std::string num) {
         int t = atoi(num.c_str());
+        LOG("k: {k}, num:{num}, t: {t}", k, num, t);
         REQUIRE(k == t);
     })
         .WithDomains(InRange<int>(0, 10), Arbitrary<std::string>())
         .WithSeeds({{5, "Foo"}, {10, "Bar"}})
-        .Run();
+        .Run(1000);
+}
+
+
+FUZZ_TEST_CASE("fuzz_test2") {
+    LOG("Run fuzz_test2");
+    FUZZ_FUNC([=](int k, std::string num) {
+        int t = atoi(num.c_str());
+        LOG("k: {k}, t: {t}", k, t);
+    })
+        .WithDomains(InRange<int>(0, 10), Arbitrary<std::string>())
+        .WithSeeds({{5, "Foo"}, {10, "Bar"}})
+        .Run(100);
 }
 
 TEST_CASE("fuzz_serialize") { 
