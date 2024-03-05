@@ -103,7 +103,10 @@ struct IRObject {
     };
     Childrens GetChildren() { return {o->i, o + 1}; }
 
-    void SetChildren(IRObject* children) { o = children - 1; type = Type::Object; }
+    void SetChildren(IRObject* children) {
+        o    = children - 1;
+        type = Type::Object;
+    }
 
     // ================================================================
 
@@ -125,11 +128,13 @@ struct IRObject {
         unsigned size = val.size();
 
         IRObject* children = alloc(size);
-        val.SetChildren(children);
+        IRObject  obj;
+        obj.SetChildren(children);
 
         for (const auto& elem : val) {
             *children++ = IRObject::FromCorpus(elem);
         }
+        return obj;
     }
 
 
@@ -150,6 +155,16 @@ struct IRObject {
         return obj;
     }
 
+    template <typename T1, typename T2>
+    static IRObject FromCorpus(const std::pair<T1, T2>& val) {
+        IRObject  obj;
+        IRObject* children = alloc(2);
+        obj.SetChildren(children);
+        children[0] = IRObject::FromCorpus(val.first);
+        children[1] = IRObject::FromCorpus(val.second);
+        return obj;
+    }
+
     template <typename T>
     static
         typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value ||
@@ -160,20 +175,36 @@ struct IRObject {
     }
 
     template <typename TupType, unsigned... I>
-    static void parse_tuple(TupType& _tup, IRObject* children, detail::seq<I...>) {
-        int _[] = {((std::get<I>(_tup) =
-                         ToCorpus<typename std::tuple_element<I, TupType>::type>(*(children + I))),
-                    0)...};
-        (void)_;
+    static TupType parse_tuple(IRObject* children, detail::seq<I...>) {
+        return std::make_tuple(
+            ToCorpus<typename std::tuple_element<I, TupType>::type>(*(children + I))...);
+    }
+
+    template <typename T>
+    static typename std::enable_if<
+        detail::is_container<T>::value && !std::is_same<T, std::string>::value, T>::type
+    ToCorpus(IRObject obj) {
+        auto c = obj.GetChildren();
+
+        T val;
+        for (int i = 0; i < c.size; i++) {
+            val.insert(val.end(), ToCorpus<typename T::value_type>(c.children[i]));
+        }
+        return val;
     }
 
 
     template <typename T>
     static typename std::enable_if<detail::is_specialization<T, std::tuple>::value, T>::type
     ToCorpus(IRObject obj) {
-        T tup;
-        parse_tuple(tup, obj.o + 1, detail::gen_seq<std::tuple_size<T>::value>{});
-        return tup;
+        return parse_tuple<T>(obj.o + 1, detail::gen_seq<std::tuple_size<T>::value>{});
+    }
+
+    template <typename T>
+    static typename std::enable_if<detail::is_specialization<T, std::pair>::value, T>::type
+    ToCorpus(IRObject obj) {
+        return std::make_pair(ToCorpus<typename T::first_type>(obj.o[1]),
+                              ToCorpus<typename T::second_type>(obj.o[2]));
     }
 
 

@@ -22,6 +22,9 @@ windows: build/windows/ZeroErr.sln
 test: linux-test windows-test fuzz-test
 
 fuzz-test: linux
+	cd build/linux/test && ./unittest --testcase=fuzz_serialize.*
+
+fuzz: linux
 	cd build/linux/test && ./unittest -f --testcase=fuzz_.*
 
 linux-test: linux

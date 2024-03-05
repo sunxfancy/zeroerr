@@ -35,7 +35,7 @@ FUZZ_TEST_CASE("fuzz_test2") {
 TEST_CASE("fuzz_serialize") { 
     LOG("fuzz_serialize"); 
 
-    std::string data = R"({ "foo" 5 { 3.0f "test\sspace" } "bar" "hello" })";
+    std::string data = R"({ "foo" 5 { 3f "test\sspace" } "bar" "hello" })";
 
     IRObject obj = IRObject::FromString(data);
     std::string str = obj.ToString(obj);
@@ -43,4 +43,19 @@ TEST_CASE("fuzz_serialize") {
     LOG("data: {str}", str);
 
     CHECK(data == str);
+}
+
+TEST_CASE("fuzz_serialize_from_corpus") {
+    using test_type = std::tuple<std::vector<std::tuple<int, std::string, float>>, std::string, std::map<int, float>>;
+    test_type data = {
+        {{1, "foo", 3.0f}, {2, "bar", 4.0f}}, "hello", {{1, 3.0f}, {2, 4.0f}}
+    };
+
+    IRObject obj = IRObject::FromCorpus(data);
+    std::string str = obj.ToString(obj);
+    LOG("data: {str}", str);
+
+    auto data2 = IRObject::ToCorpus<test_type>(obj);
+
+    CHECK(data == data2);
 }

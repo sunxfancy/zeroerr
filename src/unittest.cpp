@@ -224,12 +224,14 @@ bool UnitTest::run_filiter(const TestCase& tc) {
     return true;
 }
 
+static bool _block_user_exit = true;
 static void atexit_handler() {
-    throw std::runtime_error("User exit");
+    if (_block_user_exit)
+        throw std::runtime_error("User exit");
 }
 
 int UnitTest::run() {
-    std::atexit(atexit_handler);
+    std::atexit(atexit_handler);    
 
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
@@ -267,6 +269,7 @@ int UnitTest::run() {
     }
     reporter->testEnd(sum);
     delete reporter;
+    _block_user_exit = false;
     return 0;
 }
 

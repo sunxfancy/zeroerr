@@ -25,7 +25,7 @@
             "request": "launch",
             "name": "Linux-fuzz",
             "program": "${workspaceFolder}/build/linux/test/unittest",
-            "args": ["--testcase=fuzz_.*"],
+            "args": ["--testcase=fuzz_serialize.*"],
             "cwd": "${workspaceFolder}"
         }
     ]

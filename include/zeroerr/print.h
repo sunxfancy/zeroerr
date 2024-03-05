@@ -223,8 +223,8 @@ struct Printer {
     inline void print_tuple(const TupType&, unsigned, const char*, detail::seq<>) {}
 
     template <class TupType, unsigned... I>
-    inline void print_tuple(const TupType& _tup, unsigned, const char*, detail::seq<I...>) {
-        int _[] = {(os << (I == 0 ? "" : ", ") << std::get<I>(_tup), 0)...};
+    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb, detail::seq<I...>) {
+        int _[] = {(os << (I == 0 ? "" : ", "), print(std::get<I>(_tup), level+1, "", rank<max_rank>{}), 0)...};
         (void)_;
     }
 
