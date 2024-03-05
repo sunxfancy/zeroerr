@@ -102,7 +102,10 @@ static IRObject from_string(std::stringstream& ss, std::string& token) {
         std::vector<IRObject> children;
         while (ss >> token) {
             if (token == "}") break;
-            children.push_back(from_string(ss, token));
+            IRObject child = from_string(ss, token);
+            if (child.type == IRObject::Type::Undefined)
+                return obj;
+            children.push_back(child);
         }
         IRObject* child = IRObject::alloc(children.size());
         for (unsigned i = 0; i < children.size(); ++i) {
@@ -120,7 +123,10 @@ static IRObject from_string(std::stringstream& ss, std::string& token) {
         obj.SetScalar(std::stod(token.substr(0, token.size() - 1)));
         return obj;
     }
-    obj.SetScalar(std::stoll(token));
+    if (token[0] == '-' || (token[0] >= '0' && token[0] <= '9')) {
+        obj.SetScalar(std::stoll(token));
+        return obj;
+    }
     return obj;
 }
 

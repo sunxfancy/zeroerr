@@ -135,10 +135,20 @@ struct FuzzTestWithDomain : public Base {
         rng = nullptr;
     }
 
+    typename Domain::CorpusType TryParse(const std::string& input) {
+        try {
+            IRObject obj = IRObject::FromString(input);
+            if (obj.type == IRObject::Type::Undefined)
+                return domain.GetRandomValue(*rng);
+            return domain.ParseCorpus(obj);
+        } catch (...) {
+            return domain.GetRandomValue(*rng);
+        }
+    }
+
     virtual void RunOneTime(const uint8_t* data, size_t size) override {
         std::string                 input  = std::string((const char*)data);
-        IRObject                    obj    = IRObject::FromString(input);
-        typename Domain::CorpusType corpus = domain.ParseCorpus(obj);
+        typename Domain::CorpusType corpus = TryParse(input);
         typename Domain::ValueType  value  = domain.GetValue(corpus);
         std::apply(this->func, value);
     }
@@ -146,8 +156,7 @@ struct FuzzTestWithDomain : public Base {
     virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
                            unsigned int seed) override {
         std::string                 input  = std::string((const char*)data);
-        IRObject                    obj    = IRObject::FromString(input);
-        typename Domain::CorpusType corpus = domain.ParseCorpus(obj);
+        typename Domain::CorpusType corpus = TryParse(input);
         domain.Mutate(*rng, corpus, false);
         IRObject mutated_obj = domain.SerializeCorpus(corpus);
         return IRObject::ToString(mutated_obj);

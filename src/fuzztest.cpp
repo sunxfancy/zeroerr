@@ -29,7 +29,6 @@ size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size,
 namespace zeroerr {
 
 void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int timeout, int len_control) {
-    LOG("RunFuzzTest");
 #ifdef ZEROERR_ENABLE_FUZZING
     current_fuzz_test = &fuzz_test;
     int argc = 6;
