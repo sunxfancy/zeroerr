@@ -31,7 +31,7 @@ endif()
 
 option(DISABLE_CUDA_BUILD "Disable CUDA build(ON, OFF)" ON)
 
-option(USE_MOLD "Use mold for linking" OFF)
+option(USE_MOLD "Use mold for linking" ON)
 
 if(USE_MOLD)
     find_program(HAS_MOLD "mold")

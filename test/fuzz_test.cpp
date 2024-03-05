@@ -9,6 +9,7 @@
 using namespace zeroerr;
 
 FUZZ_TEST_CASE("fuzz_test") {
+    LOG("Run fuzz_test");
     FUZZ_FUNC([=](int k, std::string num) {
         int t = atoi(num.c_str());
         REQUIRE(k == t);

@@ -51,8 +51,14 @@ set(test_files
     unit_test.cpp
 )
 
+if (ENABLE_FUZZING)
+    set(libfuzzer clang_rt.fuzzer_no_main-x86_64)
+else()
+    set(libfuzzer "")
+endif()
+
 add_executable(unittest ${test_files} ${cuda_files})
-target_link_libraries(unittest zeroerr clang_rt.fuzzer_no_main-x86_64 ${llvm_libs})
+target_link_libraries(unittest zeroerr ${libfuzzer} ${llvm_libs})
 target_compile_options(unittest PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4>
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
