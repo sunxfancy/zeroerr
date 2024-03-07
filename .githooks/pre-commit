@@ -3,6 +3,13 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 cd $SCRIPTPATH/../
 
-wsl -- bash -c "make && make test && make doc-build && cp build-linux/zeroerr.hpp ./zeroerr.hpp"
+set -e
+
+CMD_TO_RUN="make && make test && make doc-build && cp build/linux/zeroerr.hpp ./zeroerr.hpp"
+if [ -f "/etc/wsl.conf" ]; then
+    bash -c "$CMD_TO_RUN"
+else
+    wsl -- bash -c "$CMD_TO_RUN"
+fi
 
 git add zeroerr.hpp
