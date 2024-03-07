@@ -11,12 +11,12 @@
 #include "zeroerr/internal/rng.h"
 
 
+#include <exception>
 #include <functional>
 #include <string>
 #include <tuple>
 #include <type_traits>
 #include <vector>
-#include <exception>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -94,8 +94,9 @@ public:
 template <typename TargetFunction, typename FuncType>
 struct FuzzTest : IFuzzTest {
     using ValueType = typename FuncType::ValueType;
-    FuzzTest(TargetFunction func) : func(func) {}
-    FuzzTest(const FuzzTest& other) : func(other.func), seeds(other.seeds) {}
+    FuzzTest(TargetFunction func, TestContext* context) : func(func), context(context) {}
+    FuzzTest(const FuzzTest& other)
+        : func(other.func), context(other.context), seeds(other.seeds) {}
 
     template <typename... T>
     using FuzzTestWithDomainType =
@@ -113,20 +114,18 @@ struct FuzzTest : IFuzzTest {
         return WithDomains(TupleOf(std::forward<T>(domains)...));
     }
 
-    FuzzTest& WithSeeds(std::vector<ValueType> seeds) {
-        this->seeds.insert(this->seeds.end(), seeds.begin(), seeds.end());
+    FuzzTest& WithSeeds(std::vector<ValueType> _seeds) {
+        this->seeds.insert(this->seeds.end(), _seeds.begin(), _seeds.end());
         return *this;
     }
 
     // This should create default domains
-    virtual void        Run(int count = 1000, int seed = 0) {}
-    virtual void        RunOneTime(const uint8_t* data, size_t size) {}
-    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
-                                   unsigned int seed) {
-        return "";
-    }
+    virtual void        Run(int = 1000, int = 0) {}
+    virtual void        RunOneTime(const uint8_t*, size_t) {}
+    virtual std::string MutateData(const uint8_t*, size_t, size_t, unsigned int) { return ""; }
 
     TargetFunction         func;
+    TestContext*           context;
     std::vector<ValueType> seeds;
 };
 
@@ -137,11 +136,11 @@ template <typename TargetFunction, typename FuncType, typename Domain, typename 
 struct FuzzTestWithDomain : public Base {
     FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), domain(domain) {}
 
-    virtual void Run(int count = 1000, int seed = 0) override {
+    virtual void Run(int _count = 1000, int _seed = 0) override {
         Base::count     = 1;
-        Base::max_count = count;
-        rng             = new Rng(seed);
-        RunFuzzTest(*this, seed, count, 500, 1200, 1);
+        Base::max_count = _count;
+        rng             = new Rng(_seed);
+        RunFuzzTest(*this, _seed, _count, 500, 1200, 1);
         delete rng;
         rng = nullptr;
     }
@@ -156,17 +155,22 @@ struct FuzzTestWithDomain : public Base {
         }
     }
 
-    virtual void RunOneTime(const uint8_t* data, size_t size) override {
-        Base::count++;
-        std::string                 input  = std::string((const char*)data);
-        typename Domain::CorpusType corpus = TryParse(input);
-        typename Domain::ValueType  value  = domain.GetValue(corpus);
-        std::apply(this->func, value);
+    template <typename T, unsigned... I>
+    void apply(T args, detail::seq<I...>) {
+        this->func(std::get<I>(args)...);
     }
 
-    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
-                                   unsigned int seed) override {
-        std::string                 input  = std::string((const char*)data);
+    virtual void RunOneTime(const uint8_t* data, size_t size) override {
+        Base::count++;
+        std::string                 input  = std::string((const char*)data, size);
+        typename Domain::CorpusType corpus = TryParse(input);
+        typename Domain::ValueType  value  = domain.GetValue(corpus);
+        apply(value, detail::gen_seq<std::tuple_size<typename Domain::ValueType>::value>{});
+    }
+
+    virtual std::string MutateData(const uint8_t* data, size_t size, size_t,
+                                   unsigned int) override {
+        std::string                 input  = std::string((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
         domain.Mutate(*rng, corpus, false);
         IRObject mutated_obj = domain.SerializeCorpus(corpus);
@@ -180,7 +184,7 @@ struct FuzzTestWithDomain : public Base {
 
 template <typename T>
 FuzzTest<T> FuzzFunction(T func, TestContext* context) {
-    return FuzzTest<T>(func);
+    return FuzzTest<T>(func, context);
 }
 
 template <typename T>

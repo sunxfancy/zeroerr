@@ -15,7 +15,7 @@ namespace zeroerr {
 
 template <typename T, typename = void>
 class Arbitrary {
-    static_assert(detail::always_false<T>, "No Arbitrary specialization for this type");
+    static_assert(detail::always_false<T>::value, "No Arbitrary specialization for this type");
 };
 
 template <>
@@ -26,7 +26,7 @@ public:
 
     CorpusType GetRandomCorpus(Rng& rng) const override { return rng.bounded(2); }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override { v = !v; }
+    void Mutate(Rng&, CorpusType& v, bool) const override { v = !v; }
 };
 
 template <typename T>
@@ -126,11 +126,11 @@ public:
 
 template <typename T, typename U>
 class Arbitrary<std::pair<T, U>>
-    : public AggregateOf<std::pair<std::remove_const_t<T>, std::remove_const_t<U>>> {};
+    : public AggregateOf<std::pair<typename std::remove_const<T>::type, typename std::remove_const<U>::type>> {};
 
 
 template <typename... T>
-class Arbitrary<std::tuple<T...>> : public AggregateOf<std::tuple<std::remove_const_t<T>...>> {};
+class Arbitrary<std::tuple<T...>> : public AggregateOf<std::tuple<typename std::remove_const<T>::type...>> {};
 
 template <typename T>
 class Arbitrary<const T> : public Arbitrary<T> {};

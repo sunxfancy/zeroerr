@@ -11,9 +11,9 @@ namespace zeroerr {
 struct ContainerOfBase {
     int min_size = 0, max_size = 100, size = -1;
 
-    void WithMaxSize(unsigned max_size) { this->max_size = max_size; }
-    void WithMinSize(unsigned min_size) { this->min_size = min_size; }
-    void WithSize(unsigned size) { this->size = size; }
+    void WithMaxSize(unsigned _max_size) { this->max_size = _max_size; }
+    void WithMinSize(unsigned _min_size) { this->min_size = _min_size; }
+    void WithSize(unsigned _size) { this->size = _size; }
 };
 
 
@@ -28,7 +28,7 @@ public:
 
     AssociativeContainerOf(InnerDomain&& inner_domain) : inner_domain(std::move(inner_domain)) {}
 
-    virtual ValueType GetValue(const CorpusType& v) const {
+    virtual ValueType GetValue(const CorpusType& v) const override {
         ValueType result;
         for (const auto& elem : v) {
             result.insert(inner_domain.GetValue(elem));
@@ -36,7 +36,7 @@ public:
         return result;
     }
 
-    virtual CorpusType FromValue(const ValueType& v) const {
+    virtual CorpusType FromValue(const ValueType& v) const override {
         CorpusType result;
         for (const auto& elem : v) {
             result.push_back(inner_domain.FromValue(elem));
@@ -56,13 +56,15 @@ public:
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
         int action = rng.bounded(5);
         if (size == -1 && action == 0) {
-            if (v.size() > min_size) v.erase(v.begin() + rng.bounded(v.size()));
+            if (static_cast<int>(v.size()) > min_size)
+                v.erase(v.begin() + rng.bounded(static_cast<uint32_t>(v.size())));
 
         } else if (size == -1 && action == 1) {
-            if (v.size() < max_size) v.push_back(inner_domain.GetRandomCorpus(rng));
+            if (static_cast<int>(v.size()) < max_size)
+                v.push_back(inner_domain.GetRandomCorpus(rng));
 
         } else {
-            inner_domain.Mutate(rng, v[rng.bounded(v.size())], only_shrink);
+            inner_domain.Mutate(rng, v[rng.bounded(static_cast<uint32_t>(v.size()))], only_shrink);
         }
     }
 };
@@ -97,12 +99,13 @@ public:
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
         int action = rng.bounded(5);
         if (size == -1 && action == 0) {
-            if (v.size() > min_size) v.erase(v.begin() + rng.bounded(v.size()));
+            if (static_cast<int>(v.size()) > min_size) v.erase(v.begin() + rng.bounded(static_cast<uint32_t>(v.size())));
 
         } else if (size == -1 && action == 1) {
-            if (v.size() < max_size) v.push_back(inner_domain.GetRandomCorpus(rng));
+            if (static_cast<int>(v.size()) < max_size)
+                v.push_back(inner_domain.GetRandomCorpus(rng));
         } else {
-            inner_domain.Mutate(rng, v[rng.bounded(v.size())], only_shrink);
+            inner_domain.Mutate(rng, v[rng.bounded(static_cast<uint32_t>(v.size()))], only_shrink);
         }
     }
 };
@@ -141,7 +144,7 @@ ContainerOf(Inner&& inner) {
 //
 //   ContainerOf<std::vector>(Positive<int>()).WithSize(3);
 //
-template <template <typename, typename...> typename T, typename... Inner,
+template <template <typename, typename...> class T, typename... Inner,
           typename C = T<typename Inner::ValueType...>>
 auto ContainerOf(Inner... inner) -> decltype(ContainerOf<C>(std::move(inner)...)) {
     return ContainerOf<C>(std::move(inner)...);

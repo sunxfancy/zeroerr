@@ -2,9 +2,9 @@
 
 all: linux windows
 
-build/linux/Makefile:
+build/linux/Makefile: Makefile
 	mkdir -p build/linux
-	cmake -B build/linux -S . -DCMAKE_BUILD_TYPE=Debug \
+	cmake -B build/linux -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=11 \
 		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON -DENABLE_FUZZING=ON \
 		-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
 

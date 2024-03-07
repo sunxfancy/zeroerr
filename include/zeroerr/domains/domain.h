@@ -24,9 +24,9 @@ public:
     virtual IRObject SerializeCorpus(const CorpusType& v) const { return IRObject::FromCorpus(v); }
 
     virtual void     Mutate(Rng& rng, CorpusType& v, bool only_shrink = false) const = 0;
-    virtual void     MutateSelectedField(Rng& rng, CorpusType& v, unsigned field,
-                                         bool only_shrink = false) const {}
-    virtual unsigned CountNumberOfFields(CorpusType v) const { return 0; }
+    // virtual void     MutateSelectedField(Rng& rng, CorpusType& v, unsigned field,
+    //                                      bool only_shrink = false) const {}
+    // virtual unsigned CountNumberOfFields(CorpusType v) const { return 0; }
 };
 
 template <typename ValueType, typename CorpusType = ValueType>

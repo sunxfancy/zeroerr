@@ -34,8 +34,8 @@ public:
      */
     using result_type = uint64_t;
 
-    static constexpr uint64_t(min)();
-    static constexpr uint64_t(max)();
+    static uint64_t min();
+    static uint64_t max();
 
     /**
      * As a safety precausion, we don't allow copying. Copying a PRNG would mean you would have
@@ -176,7 +176,7 @@ public:
     std::vector<uint64_t> state() const;
 
 private:
-    static constexpr uint64_t rotl(uint64_t x, unsigned k) noexcept;
+    static uint64_t rotl(uint64_t x, unsigned k) noexcept;
 
     uint64_t mX;
     uint64_t mY;

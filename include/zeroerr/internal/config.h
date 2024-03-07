@@ -75,22 +75,23 @@
     ZEROERR_ARG16(__VA_ARGS__, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 #define ZEROERR_TRIGGER_PARENTHESIS_(...) ,
 
-#define ZEROERR_ISEMPTY(...)                                                                               \
-    _ZEROERR_ISEMPTY(/* test if there is just one argument, eventually an empty                            \
-                one */                                                                             \
-             ZEROERR_HAS_COMMA(__VA_ARGS__), /* test if ZEROERR_TRIGGER_PARENTHESIS_ together with \
-                                        the argument adds a comma */                                                                                   \
-             ZEROERR_HAS_COMMA(                                                                    \
-                 ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__), /* test if the argument together with  \
-                                                a parenthesis adds a comma */                                                                       \
-             ZEROERR_HAS_COMMA(__VA_ARGS__(                                                        \
-                 /*empty*/)), /* test if placing it between ZEROERR_TRIGGER_PARENTHESIS_ and       \
-                                 the parenthesis adds a comma */                                   \
-             ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__(/*empty*/)))
+#define ZEROERR_ISEMPTY(...)                                                                     \
+    _ZEROERR_ISEMPTY(/* test if there is just one argument, eventually an empty                  \
+                one */                                                                           \
+                     ZEROERR_HAS_COMMA(__VA_ARGS__), /* test if ZEROERR_TRIGGER_PARENTHESIS_     \
+                                                together with the argument adds a comma */       \
+                     ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_                              \
+                                           __VA_ARGS__), /* test if the argument together with   \
+                                             a parenthesis adds a comma */                       \
+                     ZEROERR_HAS_COMMA(__VA_ARGS__(                                              \
+                         /*empty*/)), /* test if placing it between ZEROERR_TRIGGER_PARENTHESIS_ \
+                                         and the parenthesis adds a comma */                     \
+                     ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__(/*empty*/)))
 
 #define ZEROERR_PASTE5(_0, _1, _2, _3, _4) _0##_1##_2##_3##_4
-#define _ZEROERR_ISEMPTY(_0, _1, _2, _3)   ZEROERR_HAS_COMMA(ZEROERR_PASTE5(_IS_EMPTY_CASE_, _0, _1, _2, _3))
-#define _IS_EMPTY_CASE_0001        ,
+#define _ZEROERR_ISEMPTY(_0, _1, _2, _3) \
+    ZEROERR_HAS_COMMA(ZEROERR_PASTE5(_IS_EMPTY_CASE_, _0, _1, _2, _3))
+#define _IS_EMPTY_CASE_0001 ,
 
 
 // The counter is used to generate a unique name
@@ -125,7 +126,7 @@
 // == COMPILER Detector ============================================================================
 // =================================================================================================
 
-#define ZEROERR_COMPILER(MAJOR, MINOR, PATCH) ((MAJOR)*10000000 + (MINOR)*100000 + (PATCH))
+#define ZEROERR_COMPILER(MAJOR, MINOR, PATCH) ((MAJOR) * 10000000 + (MINOR) * 100000 + (PATCH))
 
 // GCC/Clang and GCC/MSVC are mutually exclusive, but Clang/MSVC are not because of clang-cl...
 #if defined(_MSC_VER) && defined(_MSC_FULL_VER)
@@ -287,6 +288,27 @@
 
 #define ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
+#define ZEROERR_SUPPRESS_VARIADIC_MACRO \
+    ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
+
+#define ZEROERR_SUPPRESS_VARIADIC_MACRO_POP ZEROERR_CLANG_SUPPRESS_WARNING_POP
+
+#define ZEROERR_SUPPRESS_COMPARE                                          \
+    ZEROERR_CLANG_SUPPRESS_WARNING_PUSH                                   \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wsign-conversion")                   \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wsign-compare")                      \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wgnu-zero-variadic-macro-arguments") \
+    ZEROERR_GCC_SUPPRESS_WARNING_PUSH                                     \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wsign-conversion")                     \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wsign-compare")                        \
+    ZEROERR_MSVC_SUPPRESS_WARNING_PUSH                                    \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4388)                                   \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4389)                                   \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4018)
+
+#define ZEROERR_SUPPRESS_COMPARE_POP                                    \
+    ZEROERR_CLANG_SUPPRESS_WARNING_POP ZEROERR_GCC_SUPPRESS_WARNING_POP \
+        ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
 #if ZEROERR_CLANG || ZEROERR_GCC
 #define ZEROERR_UNUSED(x) x __attribute__((unused))
@@ -298,21 +320,3 @@
 #else
 #define ZEROERR_UNUSED(x) x
 #endif
-
-
-namespace zeroerr {
-namespace detail {
-
-// Generate sequence of integers from 0 to N-1
-// Usage: detail::gen_seq<N>  then use <size_t... I> to match it
-template <unsigned...>
-struct seq {};
-
-template <unsigned N, unsigned... Is>
-struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
-
-template <unsigned... Is>
-struct gen_seq<0, Is...> : seq<Is...> {};
-
-}  // namespace detail
-}  // namespace zeroerr

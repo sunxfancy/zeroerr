@@ -52,12 +52,12 @@ std::vector<uint64_t> Rng::state() const {
 }
 
 
-constexpr uint64_t(Rng::min)() { return 0; }
+uint64_t Rng::min() { return 0; }
 
-constexpr uint64_t(Rng::max)() { return (std::numeric_limits<uint64_t>::max)(); }
+uint64_t Rng::max() { return (std::numeric_limits<uint64_t>::max)(); }
 
 
-constexpr uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept {
+uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept {
     return (x << k) | (x >> (64U - k));
 }
 

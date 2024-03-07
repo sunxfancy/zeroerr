@@ -62,6 +62,7 @@ struct IRObject {
             return std::string(s);
         else if (type == Type::ShortString)
             return std::string(ss);
+        return "";
     }
 
     template <typename T>
@@ -83,7 +84,7 @@ struct IRObject {
 
     template <typename T>
     typename std::enable_if<std::is_same<T, std::string>::value, void>::type SetScalar(T val) {
-        unsigned size = val.size();
+        size_t size = val.size();
         if (size > 14) {
             s = alloc_str(size);
             strcpy(s, val.c_str());
@@ -125,9 +126,7 @@ struct IRObject {
     static typename std::enable_if<
         detail::is_container<T>::value && !std::is_same<T, std::string>::value, IRObject>::type
     FromCorpus(const T& val) {
-        unsigned size = val.size();
-
-        IRObject* children = alloc(size);
+        IRObject* children = alloc(val.size());
         IRObject  obj;
         obj.SetChildren(children);
 
@@ -237,8 +236,8 @@ struct IRObject {
     }
 
 
-    static char*     alloc_str(unsigned size);
-    static IRObject* alloc(unsigned size);
+    static char*     alloc_str(size_t size);
+    static IRObject* alloc(size_t size);
 
     // Serialize the object as a string.
     static std::string ToString(IRObject obj);

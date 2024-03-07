@@ -329,22 +329,22 @@ public:
                   << std::setw(7) << sum.skipped_as << std::endl;
     }
 
-    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf&) override {
         std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
                   << Reset << FgCyan << tc.name << Reset << std::endl;
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+    virtual void testCaseEnd(const TestCase&, std::stringbuf& sb, const TestContext&,
                              int type) override {
         if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
     }
 
-    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf&) override {
         std::cerr << "SUB CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
                   << Reset << FgCyan << tc.name << Reset << std::endl;
     }
 
-    virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+    virtual void subCaseEnd(const TestCase&, std::stringbuf& sb, const TestContext&,
                             int type) override {
         if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
     }
@@ -675,29 +675,15 @@ public:
     detail::XmlWriter xml;
 
     struct TestCaseData {
-        struct TestMessage {
-            std::string message, details, type;
-        };
-
         struct TestCase {
             std::string              filename, name;
             unsigned                 line;
             double                   time;
             TestContext              context;
-            std::vector<TestMessage> failures, errors;
         };
 
         std::vector<TestCase> testcases;
         double                total_time;
-
-        void add_failure(const std::string& message, const std::string& type,
-                         const std::string& details) {
-            testcases.back().failures.push_back({message, details, type});
-        }
-
-        void add_error(const std::string& message, const std::string& details) {
-            testcases.back().errors.push_back({message, details});
-        }
     } tc_data;
     std::vector<const TestCase*> current;
 
@@ -706,22 +692,22 @@ public:
     // There are a list of events
     virtual void testStart() override { xml.writeDeclaration(); }
 
-    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf&) override {
         current.push_back(&tc);
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                             int type) override {
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf&, const TestContext& ctx,
+                             int) override {
         tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
         current.pop_back();
     }
 
-    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf&) override {
         current.push_back(&tc);
     }
 
-    virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                            int type) override {
+    virtual void subCaseEnd(const TestCase& tc, std::stringbuf&, const TestContext& ctx,
+                            int) override {
         tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
         current.pop_back();
     }
@@ -753,19 +739,6 @@ public:
                 .writeAttribute("warnings", testCase.context.warning_as)
                 .writeAttribute("failed", testCase.context.failed_as)
                 .writeAttribute("skipped", testCase.context.skipped_as);
-
-            for (const auto& failure : testCase.failures) {
-                xml.scopedElement("failure")
-                    .writeAttribute("message", failure.message)
-                    .writeAttribute("type", failure.type)
-                    .writeText(failure.details, false);
-            }
-
-            for (const auto& error : testCase.errors) {
-                xml.scopedElement("error")
-                    .writeAttribute("message", error.message)
-                    .writeText(error.details);
-            }
             xml.endElement();
         }
         xml.endElement();

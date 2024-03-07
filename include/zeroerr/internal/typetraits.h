@@ -39,9 +39,27 @@ using void_t = void;
 // Useful for SFINAE and static_asserts where we need a type dependent
 // expression that happens to be constant.
 template <typename T>
-constexpr std::false_type always_false = {};
+struct always_false {
+    static std::false_type value;
+};
+
 template <typename T>
-constexpr std::true_type always_true = {};
+struct always_true {
+    static std::true_type value;
+};
+
+
+// Generate sequence of integers from 0 to N-1
+// Usage: detail::gen_seq<N>  then use <size_t... I> to match it
+template <unsigned...>
+struct seq {};
+
+template <unsigned N, unsigned... Is>
+struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
+
+template <unsigned... Is>
+struct gen_seq<0, Is...> : seq<Is...> {};
+
 
 // Some utility structs to check template specialization
 template <typename Test, template <typename...> class Ref>

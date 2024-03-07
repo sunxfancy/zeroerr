@@ -73,19 +73,19 @@ public:
 #ifdef ZEROERR_ENABLE_PFR
 
 template <typename T, typename... Inner>
-auto StructOf(Inner&&... inner) {
+AggregateOfImpl<T, Inner...> StructOf(Inner&&... inner) {
     return AggregateOfImpl<T, Inner...>(std::move(inner)...);
 }
 
 #endif
 
 template <typename... Inner>
-auto TupleOf(Inner&&... inner) {
+AggregateOf<std::tuple<typename Inner::ValueType...>, Inner...> TupleOf(Inner&&... inner) {
     return AggregateOf<std::tuple<typename Inner::ValueType...>, Inner...>(std::move(inner)...);
 }
 
 template <typename K, typename V>
-auto PairOf(K&& k, V&& v) {
+AggregateOf<std::pair<typename K::ValueType, typename V::ValueType>, K, V> PairOf(K&& k, V&& v) {
     return AggregateOf<std::pair<typename K::ValueType, typename V::ValueType>, K, V>(std::move(k),
                                                                                       std::move(v));
 }
