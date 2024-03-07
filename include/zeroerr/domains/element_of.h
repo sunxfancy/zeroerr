@@ -1,7 +1,7 @@
 #pragma once
 
-#include "zeroerr/internal/config.h"
 #include "zeroerr/domains/domain.h"
+#include "zeroerr/internal/config.h"
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -10,20 +10,16 @@ namespace zeroerr {
 template <typename T>
 class ElementOf : public Domain<T, uint64_t> {
 public:
-    using ValueType = T;
+    using ValueType  = T;
     using CorpusType = uint64_t;
 
     std::vector<T> elements;
 
     ElementOf(std::vector<T> elements) : elements(elements) {}
 
-    ValueType GetRandomValue(Rng& rng) override {
-        return elements[rng.bounded(elements.size())];
-    }
+    CorpusType GetRandomCorpus(Rng& rng) override { return rng.bounded(elements.size()); }
 
-    ValueType GetValue(const CorpusType& v) const override {
-        return elements[v];
-    }
+    ValueType GetValue(const CorpusType& v) const override { return elements[v]; }
 
     CorpusType FromValue(const ValueType& v) const override {
         for (size_t i = 0; i < elements.size(); i++) {
@@ -42,9 +38,8 @@ public:
             v = rng.bounded(elements.size());
         }
     }
+};
 
-};  
-
-} // namespace zeroerr
+}  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

@@ -80,6 +80,9 @@ struct IFuzzTest {
     virtual void        RunOneTime(const uint8_t* data, size_t size) = 0;
     virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
                                    unsigned int seed)                = 0;
+
+    int  count = 0, max_count = 0;
+    bool should_stop() { return count == max_count; }
 };
 
 template <typename TargetFunction, typename FuncType>
@@ -129,8 +132,10 @@ struct FuzzTestWithDomain : public Base {
     FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), domain(domain) {}
 
     virtual void Run(int count = 1000, int seed = 0) override {
-        rng = new Rng(seed);
-        RunFuzzTest(*this, seed, count);
+        Base::count     = 1;
+        Base::max_count = count;
+        rng             = new Rng(seed);
+        RunFuzzTest(*this, seed, count, 500, 1200, 1);
         delete rng;
         rng = nullptr;
     }
@@ -138,15 +143,15 @@ struct FuzzTestWithDomain : public Base {
     typename Domain::CorpusType TryParse(const std::string& input) {
         try {
             IRObject obj = IRObject::FromString(input);
-            if (obj.type == IRObject::Type::Undefined)
-                return domain.GetRandomValue(*rng);
+            if (obj.type == IRObject::Type::Undefined) return domain.GetRandomCorpus(*rng);
             return domain.ParseCorpus(obj);
         } catch (...) {
-            return domain.GetRandomValue(*rng);
+            return domain.GetRandomCorpus(*rng);
         }
     }
 
     virtual void RunOneTime(const uint8_t* data, size_t size) override {
+        Base::count++;
         std::string                 input  = std::string((const char*)data);
         typename Domain::CorpusType corpus = TryParse(input);
         typename Domain::ValueType  value  = domain.GetValue(corpus);
@@ -154,7 +159,7 @@ struct FuzzTestWithDomain : public Base {
     }
 
     virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
-                           unsigned int seed) override {
+                                   unsigned int seed) override {
         std::string                 input  = std::string((const char*)data);
         typename Domain::CorpusType corpus = TryParse(input);
         domain.Mutate(*rng, corpus, false);

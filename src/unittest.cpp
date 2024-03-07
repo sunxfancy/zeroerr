@@ -224,15 +224,7 @@ bool UnitTest::run_filiter(const TestCase& tc) {
     return true;
 }
 
-static bool _block_user_exit = true;
-static void atexit_handler() {
-    if (_block_user_exit)
-        throw std::runtime_error("User exit");
-}
-
 int UnitTest::run() {
-    std::atexit(atexit_handler);    
-
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
     TestContext context(*reporter), sum(*reporter);
@@ -269,7 +261,6 @@ int UnitTest::run() {
     }
     reporter->testEnd(sum);
     delete reporter;
-    _block_user_exit = false;
     return 0;
 }
 
@@ -791,4 +782,8 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
 }  // namespace zeroerr
 
 
-int main(int argc, const char** argv) { return zeroerr::UnitTest().parseArgs(argc, argv).run(); }
+int main(int argc, const char** argv) { 
+    zeroerr::UnitTest().parseArgs(argc, argv).run(); 
+    std::_Exit(0);
+    return 0;
+}

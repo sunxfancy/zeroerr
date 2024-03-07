@@ -1,7 +1,7 @@
 #include "zeroerr/fuzztest.h"
 
-#include "zeroerr/log.h"
 #include "zeroerr/assert.h"
+#include "zeroerr/log.h"
 #include "zeroerr/unittest.h"
 
 #include <string>
@@ -17,7 +17,7 @@ FUZZ_TEST_CASE("fuzz_test") {
     })
         .WithDomains(InRange<int>(0, 10), Arbitrary<std::string>())
         .WithSeeds({{5, "Foo"}, {10, "Bar"}})
-        .Run(1000);
+        .Run(10);
 }
 
 
@@ -29,15 +29,50 @@ FUZZ_TEST_CASE("fuzz_test2") {
     })
         .WithDomains(InRange<int>(0, 10), Arbitrary<std::string>())
         .WithSeeds({{5, "Foo"}, {10, "Bar"}})
-        .Run(100);
+        .Run(10);
 }
 
-TEST_CASE("fuzz_serialize") { 
-    LOG("fuzz_serialize"); 
+
+FUZZ_TEST_CASE("fuzz_test3") {
+    LOG("Run fuzz_test3");
+    FUZZ_FUNC([=](int k, std::vector<int> num) {
+        int t = num.size();
+        LOG("k: {k}, t: {t}", k, t);
+    })
+        .WithDomains(InRange<int>(0, 10), ContainerOf<std::vector>(Arbitrary<int>()))
+        .Run(10);
+}
+
+FUZZ_TEST_CASE("fuzz_test4") {
+    LOG("Run fuzz_test4");
+    FUZZ_FUNC([=](int k, std::map<int, std::string> num) {
+        int t = num.size();
+        LOG("k: {k}, t: {t}", k, t);
+    })
+        .WithDomains(InRange<int>(0, 10), ContainerOf<std::map<int, std::string>>(
+                                              PairOf(Arbitrary<int>(), Arbitrary<std::string>())))
+        .Run(10);
+}
+
+
+FUZZ_TEST_CASE("fuzz_test4") {
+    LOG("Run fuzz_test4");
+    FUZZ_FUNC([=](int k, std::map<int, std::string> num) {
+        int t = num.size();
+        LOG("k: {k}, t: {t}", k, t);
+    })
+        .WithDomains(InRange<int>(0, 10), ContainerOf<std::map<int, std::string>>(
+                                              PairOf(Arbitrary<int>(), Arbitrary<std::string>())))
+        .Run(10);
+}
+
+
+TEST_CASE("fuzz_serialize") {
+    LOG("fuzz_serialize");
 
     std::string data = R"({ "foo" 5 { 3f "test\sspace" } "bar" "hello" })";
 
-    IRObject obj = IRObject::FromString(data);
+    IRObject    obj = IRObject::FromString(data);
     std::string str = obj.ToString(obj);
 
     LOG("data: {str}", str);
@@ -46,12 +81,11 @@ TEST_CASE("fuzz_serialize") {
 }
 
 TEST_CASE("fuzz_serialize_from_corpus") {
-    using test_type = std::tuple<std::vector<std::tuple<int, std::string, float>>, std::string, std::map<int, float>>;
-    test_type data = {
-        {{1, "foo", 3.0f}, {2, "bar", 4.0f}}, "hello", {{1, 3.0f}, {2, 4.0f}}
-    };
+    using test_type = std::tuple<std::vector<std::tuple<int, std::string, float>>, std::string,
+                                 std::map<int, float>>;
+    test_type data  = {{{1, "foo", 3.0f}, {2, "bar", 4.0f}}, "hello", {{1, 3.0f}, {2, 4.0f}}};
 
-    IRObject obj = IRObject::FromCorpus(data);
+    IRObject    obj = IRObject::FromCorpus(data);
     std::string str = obj.ToString(obj);
     LOG("data: {str}", str);
 

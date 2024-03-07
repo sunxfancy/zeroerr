@@ -166,13 +166,32 @@ struct IRObject {
     }
 
     template <typename T>
-    static
-        typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value ||
-                                    std::is_same<T, std::string>::value || std::is_enum<T>::value,
-                                T>::type
-        ToCorpus(IRObject obj) {
+    static typename std::enable_if<std::is_integral<T>::value || std::is_enum<T>::value, T>::type
+    ToCorpus(IRObject obj) {
+        if (obj.type != IRObject::Int) {
+            throw std::runtime_error("Invalid type conversion.");
+        }
         return obj.GetScalar<T>();
     }
+
+    template <typename T>
+    static typename std::enable_if<std::is_floating_point<T>::value, T>::type ToCorpus(
+        IRObject obj) {
+        if (obj.type != IRObject::Float) {
+            throw std::runtime_error("Invalid type conversion.");
+        }
+        return obj.GetScalar<T>();
+    }
+
+    template <typename T>
+    static typename std::enable_if<std::is_same<T, std::string>::value, T>::type ToCorpus(
+        IRObject obj) {
+        if (obj.type != IRObject::String && obj.type != IRObject::ShortString) {
+            throw std::runtime_error("Invalid type conversion.");
+        }
+        return obj.GetScalar<T>();
+    }
+
 
     template <typename TupType, unsigned... I>
     static TupType parse_tuple(IRObject* children, detail::seq<I...>) {
@@ -184,6 +203,10 @@ struct IRObject {
     static typename std::enable_if<
         detail::is_container<T>::value && !std::is_same<T, std::string>::value, T>::type
     ToCorpus(IRObject obj) {
+        if (obj.type != IRObject::Object) {
+            throw std::runtime_error("Invalid type conversion.");
+        }
+
         auto c = obj.GetChildren();
 
         T val;
@@ -197,14 +220,20 @@ struct IRObject {
     template <typename T>
     static typename std::enable_if<detail::is_specialization<T, std::tuple>::value, T>::type
     ToCorpus(IRObject obj) {
+        if (obj.type != IRObject::Object || obj.GetChildren().size != std::tuple_size<T>::value) {
+            throw std::runtime_error("Invalid type conversion.");
+        }
         return parse_tuple<T>(obj.o + 1, detail::gen_seq<std::tuple_size<T>::value>{});
     }
 
     template <typename T>
     static typename std::enable_if<detail::is_specialization<T, std::pair>::value, T>::type
     ToCorpus(IRObject obj) {
-        return std::make_pair(ToCorpus<typename T::first_type>(obj.o[1]),
-                              ToCorpus<typename T::second_type>(obj.o[2]));
+        if (obj.type != IRObject::Object || obj.GetChildren().size != 2) {
+            throw std::runtime_error("Invalid type conversion.");
+        }
+        return std::make_pair(ToCorpus<typename T::first_type>(obj.GetChildren().children[0]),
+                              ToCorpus<typename T::second_type>(obj.GetChildren().children[1]));
     }
 
 

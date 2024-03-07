@@ -19,7 +19,7 @@ size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size,
                                unsigned int seed) {
   const std::string mutated_data = zeroerr::current_fuzz_test->MutateData(data, size, max_size, seed);
   if (mutated_data.size() > max_size) {
-    WARN("Mutated data is larger than the limit. Returning the original data");
+    WARN("Mutated data is larger than the limit({limit}). Returning the original data ({ori})", max_size, size);
     return size;
   }
   memcpy(data, mutated_data.data(), mutated_data.size());
@@ -47,7 +47,10 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
     LOG("Running fuzz test");
     
     LLVMFuzzerRunDriver(&argc, &argv_c, [](const uint8_t* data, size_t size) -> int {
-        LOG("Running RunOneTime");
+        LOG("Running RunOneTime"); 
+        if (current_fuzz_test->should_stop()) {
+            throw std::runtime_error("=============================== Fuzz Test Complete ===============================");
+        }
         current_fuzz_test->RunOneTime(data, size);
         return 0;
     });

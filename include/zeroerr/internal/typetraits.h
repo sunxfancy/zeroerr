@@ -35,6 +35,13 @@ namespace detail {
 template <typename... Ts>
 using void_t = void;
 
+// Type dependent "true"/"false".
+// Useful for SFINAE and static_asserts where we need a type dependent
+// expression that happens to be constant.
+template <typename T>
+constexpr std::false_type always_false = {};
+template <typename T>
+constexpr std::true_type always_true = {};
 
 // Some utility structs to check template specialization
 template <typename Test, template <typename...> class Ref>
@@ -63,6 +70,18 @@ template <typename T>
 struct is_container<T,
                     void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end())>>
     : std::true_type {};
+
+
+template <typename T, typename = void>
+struct is_associative_container : std::false_type {};
+
+template <typename T>
+struct is_associative_container<
+    T, void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end()),
+              decltype(std::declval<T>().find(std::declval<typename T::key_type>())),
+              decltype(std::declval<T>().insert(std::declval<typename T::value_type>()))>>
+    : std::true_type {};
+
 
 #if ZEROERR_CXX_STANDARD >= 17
 #define ZEROERR_STRING_VIEW std::is_same<T, std::string_view>::value

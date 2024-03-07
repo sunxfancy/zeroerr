@@ -27,6 +27,14 @@
             "program": "${workspaceFolder}/build/linux/test/unittest",
             "args": ["--testcase=fuzz_serialize.*"],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Linux-fuzztest",
+            "program": "${workspaceFolder}/build/linux/test/unittest",
+            "args": ["-f", "--testcase=fuzz_test.*"],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }

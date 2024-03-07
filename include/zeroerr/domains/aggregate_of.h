@@ -21,8 +21,8 @@ public:
 
 private:
     template <unsigned... I>
-    inline ValueType get_random(Rng& rng, detail::seq<I...>) {
-        return ValueType{std::get<I>(inner_domains).GetRandomValue(rng)...};
+    inline CorpusType get_random(Rng& rng, detail::seq<I...>) const {
+        return CorpusType{std::get<I>(inner_domains).GetRandomCorpus(rng)...};
     }
 
     template <unsigned... I>
@@ -32,7 +32,7 @@ private:
 
     template <unsigned... I>
     inline CorpusType from_tuple(const ValueType& v, detail::seq<I...>) const {
-        return CorpusType{std::get<I>(inner_domains).GetValue(std::get<I>(v))...};
+        return CorpusType{std::get<I>(inner_domains).FromValue(std::get<I>(v))...};
     }
 
     std::tuple<Inner...> inner_domains;
@@ -40,8 +40,7 @@ private:
 public:
     AggregateOf(Inner&&... inner) : inner_domains(std::make_tuple(std::move(inner)...)) {}
 
-
-    ValueType GetRandomValue(Rng& rng) override {
+    CorpusType GetRandomCorpus(Rng& rng) const override {
         return get_random(rng, detail::gen_seq<sizeof...(Inner)>{});
     }
 
@@ -64,7 +63,7 @@ public:
     };
 
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
-        unsigned       index = rng.bounded(sizeof...(Inner));
+        unsigned               index = rng.bounded(sizeof...(Inner));
         GetTupleDomainMapValue visitor{rng, only_shrink};
         detail::visit2_at(inner_domains, v, index, visitor);
     }
@@ -83,6 +82,12 @@ auto StructOf(Inner&&... inner) {
 template <typename... Inner>
 auto TupleOf(Inner&&... inner) {
     return AggregateOf<std::tuple<typename Inner::ValueType...>, Inner...>(std::move(inner)...);
+}
+
+template <typename K, typename V>
+auto PairOf(K&& k, V&& v) {
+    return AggregateOf<std::pair<typename K::ValueType, typename V::ValueType>, K, V>(std::move(k),
+                                                                                      std::move(v));
 }
 
 
