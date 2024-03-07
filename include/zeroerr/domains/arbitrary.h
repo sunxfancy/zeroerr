@@ -82,11 +82,24 @@ public:
 template <typename T>
 class Arbitrary<
     T, typename std::enable_if<detail::is_specialization<T, std::basic_string>::value>::type>
-    : public Arbitrary<std::vector<typename T::value_type>> {
+    : public Domain<T, std::vector<typename T::value_type>> {
+    Arbitrary<std::vector<typename T::value_type>> impl;
 public:
     using ValueType  = T;
     using CorpusType = std::vector<typename T::value_type>;
 
+    ValueType GetValue(const CorpusType& v) const override { return ValueType(v.begin(), v.end()); }
+    CorpusType FromValue(const ValueType& v) const override {
+        return CorpusType(v.begin(), v.end());
+    }
+
+    CorpusType GetRandomCorpus(Rng& rng) const override {
+        return impl.GetRandomCorpus(rng);
+    }
+
+    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+        impl.Mutate(rng, v, only_shrink);
+    }
 };
 
 
