@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-84c5fb22","path":"/zh/Namespaces/","title":"Namespaces","lang":"zh-CN","frontmatter":{"title":"Namespaces"},"headers":[],"git":{"updatedTime":null,"contributors":[]},"filePathRelative":"zh/Namespaces/index.md"}');export{e as data};

@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-6158141e","path":"/zh/Files/dir_68267d1309a1af8e8297ef4c3efbcdba.html","title":"src","lang":"zh-CN","frontmatter":{"title":"src"},"headers":[{"level":2,"title":"Files","slug":"files","link":"#files","children":[]}],"git":{"updatedTime":null,"contributors":[]},"filePathRelative":"zh/Files/dir_68267d1309a1af8e8297ef4c3efbcdba.md"}');export{e as data};

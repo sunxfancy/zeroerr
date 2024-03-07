@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-68c7e619","path":"/zh/Pages/md_docs_zh_assertion.html","title":"断言(Assertion)","lang":"zh-CN","frontmatter":{"title":"断言(Assertion)"},"headers":[],"git":{"updatedTime":null,"contributors":[]},"filePathRelative":"zh/Pages/md_docs_zh_assertion.md"}');export{t as data};

@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-6504c12c","path":"/en/Namespaces/","title":"Namespaces","lang":"en-US","frontmatter":{"title":"Namespaces"},"headers":[],"git":{"updatedTime":null,"contributors":[]},"filePathRelative":"en/Namespaces/index.md"}');export{e as data};

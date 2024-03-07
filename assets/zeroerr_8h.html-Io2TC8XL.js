@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-65db3172","path":"/zh/Files/zeroerr_8h.html","title":"include/zeroerr.h","lang":"zh-CN","frontmatter":{"title":"include/zeroerr.h"},"headers":[{"level":2,"title":"Source code","slug":"source-code","link":"#source-code","children":[]}],"git":{"updatedTime":null,"contributors":[]},"filePathRelative":"zh/Files/zeroerr_8h.md"}');export{e as data};
