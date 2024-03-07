@@ -1,6 +1,7 @@
 #include "zeroerr/unittest.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/color.h"
+#include "zeroerr/fuzztest.h"
 #include "zeroerr/internal/threadsafe.h"
 
 #include <iomanip>
@@ -85,6 +86,7 @@ void SubCase::operator<<(std::function<void(TestContext*)> op) {
     try {
         op(&local);
     } catch (const AssertionData&) {
+    } catch (const FuzzFinishedException& e) {
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
         if (local.failed_as == 0) {
@@ -246,6 +248,7 @@ int UnitTest::run() {
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
+            } catch (const FuzzFinishedException& e) {
             } catch (const std::exception& e) {
                 std::cerr << e.what() << std::endl;
                 if (context.failed_as == 0) {
@@ -782,8 +785,8 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
 }  // namespace zeroerr
 
 
-int main(int argc, const char** argv) { 
-    zeroerr::UnitTest().parseArgs(argc, argv).run(); 
+int main(int argc, const char** argv) {
+    zeroerr::UnitTest().parseArgs(argc, argv).run();
     std::_Exit(0);
     return 0;
 }

@@ -16,6 +16,7 @@
 #include <tuple>
 #include <type_traits>
 #include <vector>
+#include <exception>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -83,6 +84,11 @@ struct IFuzzTest {
 
     int  count = 0, max_count = 0;
     bool should_stop() { return count == max_count; }
+};
+
+class FuzzFinishedException : public std::exception {
+public:
+    virtual const char* what() const throw() { return "Fuzzing finished"; }
 };
 
 template <typename TargetFunction, typename FuncType>

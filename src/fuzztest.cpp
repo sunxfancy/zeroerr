@@ -50,7 +50,7 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
     LLVMFuzzerRunDriver(&argc, &argv_c, [](const uint8_t* data, size_t size) -> int {
         LOG("Running RunOneTime"); 
         if (current_fuzz_test->should_stop()) {
-            throw std::runtime_error("=============================== Fuzz Test Complete ===============================");
+            throw FuzzFinishedException();
         }
         current_fuzz_test->RunOneTime(data, size);
         return 0;
