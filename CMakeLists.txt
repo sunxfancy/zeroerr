@@ -58,7 +58,6 @@ if(ENABLE_FUZZING)
     if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         message(FATAL_ERROR "Fuzzing is only supported by Clang")
     endif()
-    add_definitions(-DZEROERR_ENABLE_FUZZING)
 endif()
 
 option(BUILD_EXAMPLES "Build examples(ON, OFF)" OFF)

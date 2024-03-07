@@ -71,6 +71,7 @@ if (ENABLE_FUZZING)
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 
+    set_target_properties(unittest PROPERTIES COMPILE_DEFINITIONS ZEROERR_ENABLE_FUZZING)
     target_compile_options(unittest PRIVATE -fsanitize=fuzzer-no-link)
     target_link_directories(unittest PRIVATE ${LIB_FUZZER_PATH})
     target_link_options(unittest PRIVATE -fsanitize=fuzzer-no-link)

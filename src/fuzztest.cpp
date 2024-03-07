@@ -3,13 +3,14 @@
 #include "zeroerr/assert.h"
 
 #include <cstring>
-
+#ifdef ZEROERR_ENABLE_FUZZING
 extern "C" int LLVMFuzzerRunDriver(int* argc, char*** argv,
                                    int (*user_callback)(const uint8_t* data,
                                                         size_t size));
 
 extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size,
                                           size_t max_size, unsigned int seed);
+#endif
 
 namespace zeroerr {
 static IFuzzTest* current_fuzz_test = nullptr;

@@ -44,9 +44,27 @@ public:
         return result;
     }
 
-    CorpusType GetRandomCorpus(Rng& rng) const override { return CorpusType{}; }
+    CorpusType GetRandomCorpus(Rng& rng) const override {
+        unsigned   E = rng.bounded(max_size - min_size + 1) + min_size;
+        CorpusType result;
+        for (unsigned i = 0; i < E; i++) {
+            result.push_back(inner_domain.GetRandomCorpus(rng));
+        }
+        return result;
+    }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {}
+    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+        int action = rng.bounded(5);
+        if (size == -1 && action == 0) {
+            if (v.size() > min_size) v.erase(v.begin() + rng.bounded(v.size()));
+
+        } else if (size == -1 && action == 1) {
+            if (v.size() < max_size) v.push_back(inner_domain.GetRandomCorpus(rng));
+
+        } else {
+            inner_domain.Mutate(rng, v[rng.bounded(v.size())], only_shrink);
+        }
+    }
 };
 
 template <typename T, typename InnerDomain>
@@ -67,9 +85,26 @@ public:
         return CorpusType(v.begin(), v.end());
     }
 
-    CorpusType GetRandomCorpus(Rng& rng) const override { return CorpusType{}; }
+    CorpusType GetRandomCorpus(Rng& rng) const override {
+        unsigned   E = rng.bounded(max_size - min_size + 1) + min_size;
+        CorpusType result;
+        for (unsigned i = 0; i < E; i++) {
+            result.push_back(inner_domain.GetRandomCorpus(rng));
+        }
+        return result;
+    }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {}
+    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+        int action = rng.bounded(5);
+        if (size == -1 && action == 0) {
+            if (v.size() > min_size) v.erase(v.begin() + rng.bounded(v.size()));
+
+        } else if (size == -1 && action == 1) {
+            if (v.size() < max_size) v.push_back(inner_domain.GetRandomCorpus(rng));
+        } else {
+            inner_domain.Mutate(rng, v[rng.bounded(v.size())], only_shrink);
+        }
+    }
 };
 
 

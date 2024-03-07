@@ -20,3 +20,7 @@ target_compile_options(zeroerr PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4>
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
 )
+
+if (ENABLE_FUZZING)
+    set_target_properties(zeroerr PROPERTIES COMPILE_DEFINITIONS ZEROERR_ENABLE_FUZZING)
+endif()
