@@ -78,22 +78,23 @@
     ZEROERR_ARG16(__VA_ARGS__, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 #define ZEROERR_TRIGGER_PARENTHESIS_(...) ,
 
-#define ZEROERR_ISEMPTY(...)                                                                               \
-    _ZEROERR_ISEMPTY(/* test if there is just one argument, eventually an empty                            \
-                one */                                                                             \
-             ZEROERR_HAS_COMMA(__VA_ARGS__), /* test if ZEROERR_TRIGGER_PARENTHESIS_ together with \
-                                        the argument adds a comma */                                                                                   \
-             ZEROERR_HAS_COMMA(                                                                    \
-                 ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__), /* test if the argument together with  \
-                                                a parenthesis adds a comma */                                                                       \
-             ZEROERR_HAS_COMMA(__VA_ARGS__(                                                        \
-                 /*empty*/)), /* test if placing it between ZEROERR_TRIGGER_PARENTHESIS_ and       \
-                                 the parenthesis adds a comma */                                   \
-             ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__(/*empty*/)))
+#define ZEROERR_ISEMPTY(...)                                                                     \
+    _ZEROERR_ISEMPTY(/* test if there is just one argument, eventually an empty                  \
+                one */                                                                           \
+                     ZEROERR_HAS_COMMA(__VA_ARGS__), /* test if ZEROERR_TRIGGER_PARENTHESIS_     \
+                                                together with the argument adds a comma */       \
+                     ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_                              \
+                                           __VA_ARGS__), /* test if the argument together with   \
+                                             a parenthesis adds a comma */                       \
+                     ZEROERR_HAS_COMMA(__VA_ARGS__(                                              \
+                         /*empty*/)), /* test if placing it between ZEROERR_TRIGGER_PARENTHESIS_ \
+                                         and the parenthesis adds a comma */                     \
+                     ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__(/*empty*/)))
 
 #define ZEROERR_PASTE5(_0, _1, _2, _3, _4) _0##_1##_2##_3##_4
-#define _ZEROERR_ISEMPTY(_0, _1, _2, _3)   ZEROERR_HAS_COMMA(ZEROERR_PASTE5(_IS_EMPTY_CASE_, _0, _1, _2, _3))
-#define _IS_EMPTY_CASE_0001        ,
+#define _ZEROERR_ISEMPTY(_0, _1, _2, _3) \
+    ZEROERR_HAS_COMMA(ZEROERR_PASTE5(_IS_EMPTY_CASE_, _0, _1, _2, _3))
+#define _IS_EMPTY_CASE_0001 ,
 
 
 // The counter is used to generate a unique name
@@ -128,7 +129,7 @@
 // == COMPILER Detector ============================================================================
 // =================================================================================================
 
-#define ZEROERR_COMPILER(MAJOR, MINOR, PATCH) ((MAJOR)*10000000 + (MINOR)*100000 + (PATCH))
+#define ZEROERR_COMPILER(MAJOR, MINOR, PATCH) ((MAJOR) * 10000000 + (MINOR) * 100000 + (PATCH))
 
 // GCC/Clang and GCC/MSVC are mutually exclusive, but Clang/MSVC are not because of clang-cl...
 #if defined(_MSC_VER) && defined(_MSC_FULL_VER)
@@ -290,6 +291,27 @@
 
 #define ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
+#define ZEROERR_SUPPRESS_VARIADIC_MACRO \
+    ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
+
+#define ZEROERR_SUPPRESS_VARIADIC_MACRO_POP ZEROERR_CLANG_SUPPRESS_WARNING_POP
+
+#define ZEROERR_SUPPRESS_COMPARE                                          \
+    ZEROERR_CLANG_SUPPRESS_WARNING_PUSH                                   \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wsign-conversion")                   \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wsign-compare")                      \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wgnu-zero-variadic-macro-arguments") \
+    ZEROERR_GCC_SUPPRESS_WARNING_PUSH                                     \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wsign-conversion")                     \
+    ZEROERR_GCC_SUPPRESS_WARNING("-Wsign-compare")                        \
+    ZEROERR_MSVC_SUPPRESS_WARNING_PUSH                                    \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4388)                                   \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4389)                                   \
+    ZEROERR_MSVC_SUPPRESS_WARNING(4018)
+
+#define ZEROERR_SUPPRESS_COMPARE_POP                                    \
+    ZEROERR_CLANG_SUPPRESS_WARNING_POP ZEROERR_GCC_SUPPRESS_WARNING_POP \
+        ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
 #if ZEROERR_CLANG || ZEROERR_GCC
 #define ZEROERR_UNUSED(x) x __attribute__((unused))
@@ -301,24 +323,6 @@
 #else
 #define ZEROERR_UNUSED(x) x
 #endif
-
-
-namespace zeroerr {
-namespace detail {
-
-// Generate sequence of integers from 0 to N-1
-// Usage: detail::gen_seq<N>  then use <size_t... I> to match it
-template <unsigned...>
-struct seq {};
-
-template <unsigned N, unsigned... Is>
-struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
-
-template <unsigned... Is>
-struct gen_seq<0, Is...> : seq<Is...> {};
-
-}  // namespace detail
-}  // namespace zeroerr
 
 #pragma once
 
@@ -720,9 +724,27 @@ using void_t = void;
 // Useful for SFINAE and static_asserts where we need a type dependent
 // expression that happens to be constant.
 template <typename T>
-constexpr std::false_type always_false = {};
+struct always_false {
+    static std::false_type value;
+};
+
 template <typename T>
-constexpr std::true_type always_true = {};
+struct always_true {
+    static std::true_type value;
+};
+
+
+// Generate sequence of integers from 0 to N-1
+// Usage: detail::gen_seq<N>  then use <size_t... I> to match it
+template <unsigned...>
+struct seq {};
+
+template <unsigned N, unsigned... Is>
+struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
+
+template <unsigned... Is>
+struct gen_seq<0, Is...> : seq<Is...> {};
+
 
 // Some utility structs to check template specialization
 template <typename Test, template <typename...> class Ref>
@@ -954,6 +976,7 @@ struct IRObject {
             return std::string(s);
         else if (type == Type::ShortString)
             return std::string(ss);
+        return "";
     }
 
     template <typename T>
@@ -975,7 +998,7 @@ struct IRObject {
 
     template <typename T>
     typename std::enable_if<std::is_same<T, std::string>::value, void>::type SetScalar(T val) {
-        unsigned size = val.size();
+        size_t size = val.size();
         if (size > 14) {
             s = alloc_str(size);
             strcpy(s, val.c_str());
@@ -1017,9 +1040,7 @@ struct IRObject {
     static typename std::enable_if<
         detail::is_container<T>::value && !std::is_same<T, std::string>::value, IRObject>::type
     FromCorpus(const T& val) {
-        unsigned size = val.size();
-
-        IRObject* children = alloc(size);
+        IRObject* children = alloc(val.size());
         IRObject  obj;
         obj.SetChildren(children);
 
@@ -1129,8 +1150,8 @@ struct IRObject {
     }
 
 
-    static char*     alloc_str(unsigned size);
-    static IRObject* alloc(unsigned size);
+    static char*     alloc_str(size_t size);
+    static IRObject* alloc(size_t size);
 
     // Serialize the object as a string.
     static std::string ToString(IRObject obj);
@@ -1369,7 +1390,7 @@ struct Printer {
     inline void print_tuple(const TupType&, unsigned, const char*, detail::seq<>) {}
 
     template <class TupType, unsigned... I>
-    inline void print_tuple(const TupType& _tup, unsigned level, const char* lb, detail::seq<I...>) {
+    inline void print_tuple(const TupType& _tup, unsigned level, const char*, detail::seq<I...>) {
         int _[] = {(os << (I == 0 ? "" : ", "), print(std::get<I>(_tup), level+1, "", rank<max_rank>{}), 0)...};
         (void)_;
     }
@@ -1442,6 +1463,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+ZEROERR_SUPPRESS_COMPARE
 
 #ifndef ZEROERR_DISABLE_COMPLEX_AND_OR
 #define AND && zeroerr::ExpressionDecomposer() <<
@@ -1737,6 +1759,7 @@ start_with(T&& s) {
 
 }  // namespace zeroerr
 
+ZEROERR_SUPPRESS_COMPARE_POP
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #pragma once
 
@@ -1774,8 +1797,8 @@ public:
      */
     using result_type = uint64_t;
 
-    static constexpr uint64_t(min)();
-    static constexpr uint64_t(max)();
+    static uint64_t min();
+    static uint64_t max();
 
     /**
      * As a safety precausion, we don't allow copying. Copying a PRNG would mean you would have
@@ -1916,7 +1939,7 @@ public:
     std::vector<uint64_t> state() const;
 
 private:
-    static constexpr uint64_t rotl(uint64_t x, unsigned k) noexcept;
+    static uint64_t rotl(uint64_t x, unsigned k) noexcept;
 
     uint64_t mX;
     uint64_t mY;
@@ -1951,9 +1974,9 @@ public:
     virtual IRObject SerializeCorpus(const CorpusType& v) const { return IRObject::FromCorpus(v); }
 
     virtual void     Mutate(Rng& rng, CorpusType& v, bool only_shrink = false) const = 0;
-    virtual void     MutateSelectedField(Rng& rng, CorpusType& v, unsigned field,
-                                         bool only_shrink = false) const {}
-    virtual unsigned CountNumberOfFields(CorpusType v) const { return 0; }
+    // virtual void     MutateSelectedField(Rng& rng, CorpusType& v, unsigned field,
+    //                                      bool only_shrink = false) const {}
+    // virtual unsigned CountNumberOfFields(CorpusType v) const { return 0; }
 };
 
 template <typename ValueType, typename CorpusType = ValueType>
@@ -2062,9 +2085,9 @@ namespace zeroerr {
 struct ContainerOfBase {
     int min_size = 0, max_size = 100, size = -1;
 
-    void WithMaxSize(unsigned max_size) { this->max_size = max_size; }
-    void WithMinSize(unsigned min_size) { this->min_size = min_size; }
-    void WithSize(unsigned size) { this->size = size; }
+    void WithMaxSize(unsigned _max_size) { this->max_size = _max_size; }
+    void WithMinSize(unsigned _min_size) { this->min_size = _min_size; }
+    void WithSize(unsigned _size) { this->size = _size; }
 };
 
 
@@ -2079,7 +2102,7 @@ public:
 
     AssociativeContainerOf(InnerDomain&& inner_domain) : inner_domain(std::move(inner_domain)) {}
 
-    virtual ValueType GetValue(const CorpusType& v) const {
+    virtual ValueType GetValue(const CorpusType& v) const override {
         ValueType result;
         for (const auto& elem : v) {
             result.insert(inner_domain.GetValue(elem));
@@ -2087,7 +2110,7 @@ public:
         return result;
     }
 
-    virtual CorpusType FromValue(const ValueType& v) const {
+    virtual CorpusType FromValue(const ValueType& v) const override {
         CorpusType result;
         for (const auto& elem : v) {
             result.push_back(inner_domain.FromValue(elem));
@@ -2107,13 +2130,15 @@ public:
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
         int action = rng.bounded(5);
         if (size == -1 && action == 0) {
-            if (v.size() > min_size) v.erase(v.begin() + rng.bounded(v.size()));
+            if (static_cast<int>(v.size()) > min_size)
+                v.erase(v.begin() + rng.bounded(static_cast<uint32_t>(v.size())));
 
         } else if (size == -1 && action == 1) {
-            if (v.size() < max_size) v.push_back(inner_domain.GetRandomCorpus(rng));
+            if (static_cast<int>(v.size()) < max_size)
+                v.push_back(inner_domain.GetRandomCorpus(rng));
 
         } else {
-            inner_domain.Mutate(rng, v[rng.bounded(v.size())], only_shrink);
+            inner_domain.Mutate(rng, v[rng.bounded(static_cast<uint32_t>(v.size()))], only_shrink);
         }
     }
 };
@@ -2148,12 +2173,13 @@ public:
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
         int action = rng.bounded(5);
         if (size == -1 && action == 0) {
-            if (v.size() > min_size) v.erase(v.begin() + rng.bounded(v.size()));
+            if (static_cast<int>(v.size()) > min_size) v.erase(v.begin() + rng.bounded(static_cast<uint32_t>(v.size())));
 
         } else if (size == -1 && action == 1) {
-            if (v.size() < max_size) v.push_back(inner_domain.GetRandomCorpus(rng));
+            if (static_cast<int>(v.size()) < max_size)
+                v.push_back(inner_domain.GetRandomCorpus(rng));
         } else {
-            inner_domain.Mutate(rng, v[rng.bounded(v.size())], only_shrink);
+            inner_domain.Mutate(rng, v[rng.bounded(static_cast<uint32_t>(v.size()))], only_shrink);
         }
     }
 };
@@ -2192,7 +2218,7 @@ ContainerOf(Inner&& inner) {
 //
 //   ContainerOf<std::vector>(Positive<int>()).WithSize(3);
 //
-template <template <typename, typename...> typename T, typename... Inner,
+template <template <typename, typename...> class T, typename... Inner,
           typename C = T<typename Inner::ValueType...>>
 auto ContainerOf(Inner... inner) -> decltype(ContainerOf<C>(std::move(inner)...)) {
     return ContainerOf<C>(std::move(inner)...);
@@ -2277,19 +2303,19 @@ public:
 #ifdef ZEROERR_ENABLE_PFR
 
 template <typename T, typename... Inner>
-auto StructOf(Inner&&... inner) {
+AggregateOfImpl<T, Inner...> StructOf(Inner&&... inner) {
     return AggregateOfImpl<T, Inner...>(std::move(inner)...);
 }
 
 #endif
 
 template <typename... Inner>
-auto TupleOf(Inner&&... inner) {
+AggregateOf<std::tuple<typename Inner::ValueType...>, Inner...> TupleOf(Inner&&... inner) {
     return AggregateOf<std::tuple<typename Inner::ValueType...>, Inner...>(std::move(inner)...);
 }
 
 template <typename K, typename V>
-auto PairOf(K&& k, V&& v) {
+AggregateOf<std::pair<typename K::ValueType, typename V::ValueType>, K, V> PairOf(K&& k, V&& v) {
     return AggregateOf<std::pair<typename K::ValueType, typename V::ValueType>, K, V>(std::move(k),
                                                                                       std::move(v));
 }
@@ -2315,7 +2341,7 @@ namespace zeroerr {
 
 template <typename T, typename = void>
 class Arbitrary {
-    static_assert(detail::always_false<T>, "No Arbitrary specialization for this type");
+    static_assert(detail::always_false<T>::value, "No Arbitrary specialization for this type");
 };
 
 template <>
@@ -2326,7 +2352,7 @@ public:
 
     CorpusType GetRandomCorpus(Rng& rng) const override { return rng.bounded(2); }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override { v = !v; }
+    void Mutate(Rng&, CorpusType& v, bool) const override { v = !v; }
 };
 
 template <typename T>
@@ -2426,11 +2452,11 @@ public:
 
 template <typename T, typename U>
 class Arbitrary<std::pair<T, U>>
-    : public AggregateOf<std::pair<std::remove_const_t<T>, std::remove_const_t<U>>> {};
+    : public AggregateOf<std::pair<typename std::remove_const<T>::type, typename std::remove_const<U>::type>> {};
 
 
 template <typename... T>
-class Arbitrary<std::tuple<T...>> : public AggregateOf<std::tuple<std::remove_const_t<T>...>> {};
+class Arbitrary<std::tuple<T...>> : public AggregateOf<std::tuple<typename std::remove_const<T>::type...>> {};
 
 template <typename T>
 class Arbitrary<const T> : public Arbitrary<T> {};
@@ -2699,18 +2725,20 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
     ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, " Assertion Failed:\n{msg}" pattern, \
                                          assertion_data.log(), __VA_ARGS__)
 #else
+ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 #define ZEROERR_PRINT_ASSERT(cond, level, pattern, ...)                                    \
     ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, " Assertion Failed:\n{msg}" pattern, \
                                          assertion_data.log(), ##__VA_ARGS__)
+ZEROERR_CLANG_SUPPRESS_WARNING_POP
 #endif
 
-#define ZEROERR_ASSERT(cond, level, throws, is_false, ...)                                       \
+#define ZEROERR_ASSERT_EXP(cond, level, throws, is_false, ...)                                   \
     ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \
         zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
                                   zeroerr::assert_throw::throws, is_false};                      \
                                                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #cond, info);                  \
-        assertion_data.setResult(std::move(zeroerr::ExpressionDecomposer() << cond));            \
+        assertion_data.setResult(zeroerr::ExpressionDecomposer() << cond);                       \
         zeroerr::detail::context_helper<                                                         \
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
@@ -2746,82 +2774,94 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #ifdef ZEROERR_NO_ASSERT
 
-#define CHECK(cond, ...)
-#define CHECK_NOT(cond, ...)
-#define REQUIRE(cond, ...)
-#define REQUIRE_NOT(cond, ...)
-#define ASSERT(cond, ...)
-#define ASSERT_NOT(cond, ...)
+#define CHECK(...)
+#define CHECK_NOT(...)
+#define REQUIRE(...)
+#define REQUIRE_NOT(...)
+#define ASSERT(...)
+#define ASSERT_NOT(...)
 
-#define CHECK_EQ(lhs, rhs, ...)
-#define CHECK_NE(lhs, rhs, ...)
-#define CHECK_LT(lhs, rhs, ...)
-#define CHECK_LE(lhs, rhs, ...)
-#define CHECK_GT(lhs, rhs, ...)
-#define CHECK_GE(lhs, rhs, ...)
+#define CHECK_EQ(...)
+#define CHECK_NE(...)
+#define CHECK_LT(...)
+#define CHECK_LE(...)
+#define CHECK_GT(...)
+#define CHECK_GE(...)
 
-#define REQUIRE_EQ(lhs, rhs, ...)
-#define REQUIRE_NE(lhs, rhs, ...)
-#define REQUIRE_LT(lhs, rhs, ...)
-#define REQUIRE_LE(lhs, rhs, ...)
-#define REQUIRE_GT(lhs, rhs, ...)
-#define REQUIRE_GE(lhs, rhs, ...)
+#define REQUIRE_EQ(...)
+#define REQUIRE_NE(...)
+#define REQUIRE_LT(...)
+#define REQUIRE_LE(...)
+#define REQUIRE_GT(...)
+#define REQUIRE_GE(...)
 
-#define ASSERT_EQ(lhs, rhs, ...)
-#define ASSERT_NE(lhs, rhs, ...)
-#define ASSERT_LT(lhs, rhs, ...)
-#define ASSERT_LE(lhs, rhs, ...)
-#define ASSERT_GT(lhs, rhs, ...)
-#define ASSERT_GE(lhs, rhs, ...)
+#define ASSERT_EQ(...)
+#define ASSERT_NE(...)
+#define ASSERT_LT(...)
+#define ASSERT_LE(...)
+#define ASSERT_GT(...)
+#define ASSERT_GE(...)
 
 #else
+// clang-format off
+ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 
-#define CHECK(cond, ...)       ZEROERR_ASSERT(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_NOT(cond, ...)   ZEROERR_ASSERT(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__)
-#define REQUIRE(cond, ...)     ZEROERR_ASSERT(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_NOT(cond, ...) ZEROERR_ASSERT(cond, ZEROERR_ERROR, throws, true, __VA_ARGS__)
-#define ASSERT(cond, ...)      ZEROERR_ASSERT(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_NOT(cond, ...)  ZEROERR_ASSERT(cond, ZEROERR_FATAL, throws, true, __VA_ARGS__)
+#define ZEROERR_CHECK(cond, ...)       ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__))
+#define ZEROERR_CHECK_NOT(cond, ...)   ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__))
+#define ZEROERR_REQUIRE(cond, ...)     ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__))
+#define ZEROERR_REQUIRE_NOT(cond, ...) ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, true, __VA_ARGS__))
+#define ZEROERR_ASSERT(cond, ...)      ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__))
+#define ZEROERR_ASSERT_NOT(cond, ...)  ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, true, __VA_ARGS__))
 
-#define CHECK_EQ(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_NE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_LT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_LE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_GT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_GE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define CHECK(...)       ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_NOT(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE(...)     ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_NOT(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT(...)      ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_NOT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 
-#define REQUIRE_EQ(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_NE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_LT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_LE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_GT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_GE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_CHECK_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
 
-#define ASSERT_EQ(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_NE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_LT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_LE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_GT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_GE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
 
+#define ZEROERR_ASSERT_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+
+#define CHECK_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_LT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_LT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_LE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_LE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_GT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_GT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_GE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_GE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_LT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_LT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_LE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_LE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_GT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_GT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_GE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_GE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_LT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_LT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_LE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_LE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_GT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_GT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_GE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_GE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+
+ZEROERR_CLANG_SUPPRESS_WARNING_POP
+// clang-format on
 #endif
 
 
@@ -2866,8 +2906,7 @@ struct AssertionData : std::exception {
         std::string cond_str(cond);
         std::string pattern = "zeroerr::ExpressionDecomposer() << ";
         size_t      pos     = cond_str.find(pattern);
-        if (pos != std::string::npos)
-            cond_str.replace(pos, pos + pattern.size(), "");
+        if (pos != std::string::npos) cond_str.replace(pos, pos + pattern.size(), "");
         this->cond = cond_str;
     }
 
@@ -3067,11 +3106,11 @@ class mutex;
 namespace zeroerr {
 
 
-#define ZEROERR_INFO(...)  ZEROERR_EXPAND(ZEROERR_INFO_(__VA_ARGS__))
-#define ZEROERR_LOG(...)   ZEROERR_EXPAND(ZEROERR_LOG_(LOG_l, __VA_ARGS__))
-#define ZEROERR_WARN(...)  ZEROERR_EXPAND(ZEROERR_LOG_(WARN_l, __VA_ARGS__))
-#define ZEROERR_ERROR(...) ZEROERR_EXPAND(ZEROERR_LOG_(ERROR_l, __VA_ARGS__))
-#define ZEROERR_FATAL(...) ZEROERR_EXPAND(ZEROERR_LOG_(FATAL_l, __VA_ARGS__))
+#define ZEROERR_INFO(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_INFO_(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ZEROERR_LOG(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(LOG_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ZEROERR_WARN(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(WARN_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ZEROERR_ERROR(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(ERROR_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ZEROERR_FATAL(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(FATAL_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 
 #ifdef ZEROERR_USE_SHORT_LOG_MACRO
 
@@ -3762,12 +3801,12 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 
 
+#include <exception>
 #include <functional>
 #include <string>
 #include <tuple>
 #include <type_traits>
 #include <vector>
-#include <exception>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -3845,8 +3884,9 @@ public:
 template <typename TargetFunction, typename FuncType>
 struct FuzzTest : IFuzzTest {
     using ValueType = typename FuncType::ValueType;
-    FuzzTest(TargetFunction func) : func(func) {}
-    FuzzTest(const FuzzTest& other) : func(other.func), seeds(other.seeds) {}
+    FuzzTest(TargetFunction func, TestContext* context) : func(func), context(context) {}
+    FuzzTest(const FuzzTest& other)
+        : func(other.func), context(other.context), seeds(other.seeds) {}
 
     template <typename... T>
     using FuzzTestWithDomainType =
@@ -3864,20 +3904,18 @@ struct FuzzTest : IFuzzTest {
         return WithDomains(TupleOf(std::forward<T>(domains)...));
     }
 
-    FuzzTest& WithSeeds(std::vector<ValueType> seeds) {
-        this->seeds.insert(this->seeds.end(), seeds.begin(), seeds.end());
+    FuzzTest& WithSeeds(std::vector<ValueType> _seeds) {
+        this->seeds.insert(this->seeds.end(), _seeds.begin(), _seeds.end());
         return *this;
     }
 
     // This should create default domains
-    virtual void        Run(int count = 1000, int seed = 0) {}
-    virtual void        RunOneTime(const uint8_t* data, size_t size) {}
-    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
-                                   unsigned int seed) {
-        return "";
-    }
+    virtual void        Run(int = 1000, int = 0) {}
+    virtual void        RunOneTime(const uint8_t*, size_t) {}
+    virtual std::string MutateData(const uint8_t*, size_t, size_t, unsigned int) { return ""; }
 
     TargetFunction         func;
+    TestContext*           context;
     std::vector<ValueType> seeds;
 };
 
@@ -3888,11 +3926,11 @@ template <typename TargetFunction, typename FuncType, typename Domain, typename 
 struct FuzzTestWithDomain : public Base {
     FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), domain(domain) {}
 
-    virtual void Run(int count = 1000, int seed = 0) override {
+    virtual void Run(int _count = 1000, int _seed = 0) override {
         Base::count     = 1;
-        Base::max_count = count;
-        rng             = new Rng(seed);
-        RunFuzzTest(*this, seed, count, 500, 1200, 1);
+        Base::max_count = _count;
+        rng             = new Rng(_seed);
+        RunFuzzTest(*this, _seed, _count, 500, 1200, 1);
         delete rng;
         rng = nullptr;
     }
@@ -3907,19 +3945,25 @@ struct FuzzTestWithDomain : public Base {
         }
     }
 
+    template <typename T, unsigned... I>
+    void apply(T args, detail::seq<I...>) {
+        this->func(std::get<I>(args)...);
+    }
+
     virtual void RunOneTime(const uint8_t* data, size_t size) override {
         Base::count++;
-        std::string                 input  = std::string((const char*)data);
+        std::string                 input  = std::string((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
         typename Domain::ValueType  value  = domain.GetValue(corpus);
-        std::apply(this->func, value);
+        apply(value, detail::gen_seq<std::tuple_size<typename Domain::ValueType>::value>{});
     }
 
     virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
                                    unsigned int seed) override {
-        std::string                 input  = std::string((const char*)data);
+        Rng                         mrng(seed);
+        std::string                 input  = std::string((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
-        domain.Mutate(*rng, corpus, false);
+        domain.Mutate(mrng, corpus, false);
         IRObject mutated_obj = domain.SerializeCorpus(corpus);
         return IRObject::ToString(mutated_obj);
     }
@@ -3931,7 +3975,7 @@ struct FuzzTestWithDomain : public Base {
 
 template <typename T>
 FuzzTest<T> FuzzFunction(T func, TestContext* context) {
-    return FuzzTest<T>(func);
+    return FuzzTest<T>(func, context);
 }
 
 template <typename T>
@@ -4563,12 +4607,12 @@ std::vector<uint64_t> Rng::state() const {
 }
 
 
-constexpr uint64_t(Rng::min)() { return 0; }
+uint64_t Rng::min() { return 0; }
 
-constexpr uint64_t(Rng::max)() { return (std::numeric_limits<uint64_t>::max)(); }
+uint64_t Rng::max() { return (std::numeric_limits<uint64_t>::max)(); }
 
 
-constexpr uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept {
+uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept {
     return (x << k) | (x >> (64U - k));
 }
 
@@ -5651,8 +5695,8 @@ std::set<TestCase>& getTestSet(TestType type) {
         case TestType::test_case: return test_set;
         case TestType::bench: return bench_set;
         case TestType::fuzz_test: return fuzz_set;
+        case TestType::sub_case: return test_set;
     }
-    return test_set;
 }
 
 static std::set<TestCase> getRegisteredTests(unsigned type) {
@@ -5700,22 +5744,22 @@ public:
                   << std::setw(7) << sum.skipped_as << std::endl;
     }
 
-    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf&) override {
         std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
                   << Reset << FgCyan << tc.name << Reset << std::endl;
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+    virtual void testCaseEnd(const TestCase&, std::stringbuf& sb, const TestContext&,
                              int type) override {
         if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
     }
 
-    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf&) override {
         std::cerr << "SUB CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
                   << Reset << FgCyan << tc.name << Reset << std::endl;
     }
 
-    virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+    virtual void subCaseEnd(const TestCase&, std::stringbuf& sb, const TestContext&,
                             int type) override {
         if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
     }
@@ -6046,29 +6090,15 @@ public:
     detail::XmlWriter xml;
 
     struct TestCaseData {
-        struct TestMessage {
-            std::string message, details, type;
-        };
-
         struct TestCase {
             std::string              filename, name;
             unsigned                 line;
             double                   time;
             TestContext              context;
-            std::vector<TestMessage> failures, errors;
         };
 
         std::vector<TestCase> testcases;
         double                total_time;
-
-        void add_failure(const std::string& message, const std::string& type,
-                         const std::string& details) {
-            testcases.back().failures.push_back({message, details, type});
-        }
-
-        void add_error(const std::string& message, const std::string& details) {
-            testcases.back().errors.push_back({message, details});
-        }
     } tc_data;
     std::vector<const TestCase*> current;
 
@@ -6077,22 +6107,22 @@ public:
     // There are a list of events
     virtual void testStart() override { xml.writeDeclaration(); }
 
-    virtual void testCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf&) override {
         current.push_back(&tc);
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                             int type) override {
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf&, const TestContext& ctx,
+                             int) override {
         tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
         current.pop_back();
     }
 
-    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf&) override {
         current.push_back(&tc);
     }
 
-    virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                            int type) override {
+    virtual void subCaseEnd(const TestCase& tc, std::stringbuf&, const TestContext& ctx,
+                            int) override {
         tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
         current.pop_back();
     }
@@ -6124,19 +6154,6 @@ public:
                 .writeAttribute("warnings", testCase.context.warning_as)
                 .writeAttribute("failed", testCase.context.failed_as)
                 .writeAttribute("skipped", testCase.context.skipped_as);
-
-            for (const auto& failure : testCase.failures) {
-                xml.scopedElement("failure")
-                    .writeAttribute("message", failure.message)
-                    .writeAttribute("type", failure.type)
-                    .writeText(failure.details, false);
-            }
-
-            for (const auto& error : testCase.errors) {
-                xml.scopedElement("error")
-                    .writeAttribute("message", error.message)
-                    .writeText(error.details);
-            }
             xml.endElement();
         }
         xml.endElement();

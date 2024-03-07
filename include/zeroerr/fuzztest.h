@@ -168,11 +168,12 @@ struct FuzzTestWithDomain : public Base {
         apply(value, detail::gen_seq<std::tuple_size<typename Domain::ValueType>::value>{});
     }
 
-    virtual std::string MutateData(const uint8_t* data, size_t size, size_t,
-                                   unsigned int) override {
+    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
+                                   unsigned int seed) override {
+        Rng                         mrng(seed);
         std::string                 input  = std::string((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
-        domain.Mutate(*rng, corpus, false);
+        domain.Mutate(mrng, corpus, false);
         IRObject mutated_obj = domain.SerializeCorpus(corpus);
         return IRObject::ToString(mutated_obj);
     }

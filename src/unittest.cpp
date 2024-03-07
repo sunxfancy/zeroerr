@@ -280,8 +280,8 @@ std::set<TestCase>& getTestSet(TestType type) {
         case TestType::test_case: return test_set;
         case TestType::bench: return bench_set;
         case TestType::fuzz_test: return fuzz_set;
+        case TestType::sub_case: return test_set;
     }
-    return test_set;
 }
 
 static std::set<TestCase> getRegisteredTests(unsigned type) {
