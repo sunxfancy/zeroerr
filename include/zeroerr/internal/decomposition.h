@@ -6,6 +6,7 @@
 #include "zeroerr/print.h"
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
+ZEROERR_SUPPRESS_COMPARE
 
 #ifndef ZEROERR_DISABLE_COMPLEX_AND_OR
 #define AND && zeroerr::ExpressionDecomposer() <<
@@ -301,4 +302,5 @@ start_with(T&& s) {
 
 }  // namespace zeroerr
 
+ZEROERR_SUPPRESS_COMPARE_POP
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

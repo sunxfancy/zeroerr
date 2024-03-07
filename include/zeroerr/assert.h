@@ -10,7 +10,6 @@
 #include <cstdint>
 #include <exception>
 #include <iostream>
-#include <regex>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -47,18 +46,20 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
     ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, " Assertion Failed:\n{msg}" pattern, \
                                          assertion_data.log(), __VA_ARGS__)
 #else
+ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 #define ZEROERR_PRINT_ASSERT(cond, level, pattern, ...)                                    \
     ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, " Assertion Failed:\n{msg}" pattern, \
                                          assertion_data.log(), ##__VA_ARGS__)
+ZEROERR_CLANG_SUPPRESS_WARNING_POP
 #endif
 
-#define ZEROERR_ASSERT(cond, level, throws, is_false, ...)                                       \
+#define ZEROERR_ASSERT_EXP(cond, level, throws, is_false, ...)                                   \
     ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \
         zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
                                   zeroerr::assert_throw::throws, is_false};                      \
                                                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #cond, info);                  \
-        assertion_data.setResult(std::move(zeroerr::ExpressionDecomposer() << cond));            \
+        assertion_data.setResult(zeroerr::ExpressionDecomposer() << cond);                       \
         zeroerr::detail::context_helper<                                                         \
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
@@ -94,84 +95,95 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #ifdef ZEROERR_NO_ASSERT
 
-#define CHECK(cond, ...)
-#define CHECK_NOT(cond, ...)
-#define REQUIRE(cond, ...)
-#define REQUIRE_NOT(cond, ...)
-#define ASSERT(cond, ...)
-#define ASSERT_NOT(cond, ...)
+#define CHECK(...)
+#define CHECK_NOT(...)
+#define REQUIRE(...)
+#define REQUIRE_NOT(...)
+#define ASSERT(...)
+#define ASSERT_NOT(...)
 
-#define CHECK_EQ(lhs, rhs, ...)
-#define CHECK_NE(lhs, rhs, ...)
-#define CHECK_LT(lhs, rhs, ...)
-#define CHECK_LE(lhs, rhs, ...)
-#define CHECK_GT(lhs, rhs, ...)
-#define CHECK_GE(lhs, rhs, ...)
+#define CHECK_EQ(...)
+#define CHECK_NE(...)
+#define CHECK_LT(...)
+#define CHECK_LE(...)
+#define CHECK_GT(...)
+#define CHECK_GE(...)
 
-#define REQUIRE_EQ(lhs, rhs, ...)
-#define REQUIRE_NE(lhs, rhs, ...)
-#define REQUIRE_LT(lhs, rhs, ...)
-#define REQUIRE_LE(lhs, rhs, ...)
-#define REQUIRE_GT(lhs, rhs, ...)
-#define REQUIRE_GE(lhs, rhs, ...)
+#define REQUIRE_EQ(...)
+#define REQUIRE_NE(...)
+#define REQUIRE_LT(...)
+#define REQUIRE_LE(...)
+#define REQUIRE_GT(...)
+#define REQUIRE_GE(...)
 
-#define ASSERT_EQ(lhs, rhs, ...)
-#define ASSERT_NE(lhs, rhs, ...)
-#define ASSERT_LT(lhs, rhs, ...)
-#define ASSERT_LE(lhs, rhs, ...)
-#define ASSERT_GT(lhs, rhs, ...)
-#define ASSERT_GE(lhs, rhs, ...)
+#define ASSERT_EQ(...)
+#define ASSERT_NE(...)
+#define ASSERT_LT(...)
+#define ASSERT_LE(...)
+#define ASSERT_GT(...)
+#define ASSERT_GE(...)
 
 #else
+// clang-format off
+ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 
-#define CHECK(cond, ...)       ZEROERR_ASSERT(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_NOT(cond, ...)   ZEROERR_ASSERT(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__)
-#define REQUIRE(cond, ...)     ZEROERR_ASSERT(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_NOT(cond, ...) ZEROERR_ASSERT(cond, ZEROERR_ERROR, throws, true, __VA_ARGS__)
-#define ASSERT(cond, ...)      ZEROERR_ASSERT(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_NOT(cond, ...)  ZEROERR_ASSERT(cond, ZEROERR_FATAL, throws, true, __VA_ARGS__)
+#define ZEROERR_CHECK(cond, ...)       ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__))
+#define ZEROERR_CHECK_NOT(cond, ...)   ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__))
+#define ZEROERR_REQUIRE(cond, ...)     ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__))
+#define ZEROERR_REQUIRE_NOT(cond, ...) ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, true, __VA_ARGS__))
+#define ZEROERR_ASSERT(cond, ...)      ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__))
+#define ZEROERR_ASSERT_NOT(cond, ...)  ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, true, __VA_ARGS__))
 
-#define CHECK_EQ(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_NE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_LT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_LE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_GT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define CHECK_GE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define CHECK(...)       ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_NOT(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE(...)     ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_NOT(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT(...)      ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_NOT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 
-#define REQUIRE_EQ(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_NE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_LT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_LE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_GT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define REQUIRE_GE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_CHECK_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
 
-#define ASSERT_EQ(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_NE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_LT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_LE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_GT(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ASSERT_GE(lhs, rhs, ...) \
-    ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
 
+#define ZEROERR_ASSERT_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+
+#define CHECK_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_LT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_LT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_LE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_LE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_GT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_GT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_GE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_GE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_LT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_LT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_LE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_LE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_GT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_GT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_GE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_GE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_LT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_LT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_LE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_LE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_GT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_GT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_GE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_GE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+
+ZEROERR_CLANG_SUPPRESS_WARNING_POP
+// clang-format on
 #endif
-
 
 
 // This symbol must be in the global namespace or anonymous namespace
@@ -212,8 +224,11 @@ struct AssertionData : std::exception {
 
     AssertionData(const char* file, unsigned line, const char* cond, assert_info info)
         : file(file), line(line), info(info) {
-        std::regex pattern("zeroerr::ExpressionDecomposer\\(\\) << ");
-        this->cond = std::regex_replace(cond, pattern, "");
+        std::string cond_str(cond);
+        std::string pattern = "zeroerr::ExpressionDecomposer() << ";
+        size_t      pos     = cond_str.find(pattern);
+        if (pos != std::string::npos) cond_str.replace(pos, pos + pattern.size(), "");
+        this->cond = cond_str;
     }
 
     void setResult(ExprResult&& result) {

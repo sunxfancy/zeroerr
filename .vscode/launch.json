@@ -7,9 +7,33 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug",
-            "program": "${workspaceFolder}/build-windows/Debug/unittest.exe",
+            "name": "Windows",
+            "program": "${workspaceFolder}/build/windows/test/Debug/unittest.exe",
             "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Linux",
+            "program": "${workspaceFolder}/build/linux/test/unittest",
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Linux-fuzz",
+            "program": "${workspaceFolder}/build/linux/test/unittest",
+            "args": ["--testcase=fuzz_serialize.*"],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Linux-fuzztest",
+            "program": "${workspaceFolder}/build/linux/test/unittest",
+            "args": ["-f", "--testcase=fuzz_test.*"],
             "cwd": "${workspaceFolder}"
         }
     ]

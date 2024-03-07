@@ -1,5 +1,6 @@
 #pragma once
 #include "zeroerr/internal/config.h"
+#include "zeroerr/internal/typetraits.h"
 
 #include "zeroerr/dbg.h"
 #include "zeroerr/format.h"
@@ -27,11 +28,11 @@ class mutex;
 namespace zeroerr {
 
 
-#define ZEROERR_INFO(...)  ZEROERR_EXPAND(ZEROERR_INFO_(__VA_ARGS__))
-#define ZEROERR_LOG(...)   ZEROERR_EXPAND(ZEROERR_LOG_(LOG_l, __VA_ARGS__))
-#define ZEROERR_WARN(...)  ZEROERR_EXPAND(ZEROERR_LOG_(WARN_l, __VA_ARGS__))
-#define ZEROERR_ERROR(...) ZEROERR_EXPAND(ZEROERR_LOG_(ERROR_l, __VA_ARGS__))
-#define ZEROERR_FATAL(...) ZEROERR_EXPAND(ZEROERR_LOG_(FATAL_l, __VA_ARGS__))
+#define ZEROERR_INFO(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_INFO_(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ZEROERR_LOG(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(LOG_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ZEROERR_WARN(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(WARN_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ZEROERR_ERROR(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(ERROR_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ZEROERR_FATAL(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(FATAL_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 
 #ifdef ZEROERR_USE_SHORT_LOG_MACRO
 
@@ -216,33 +217,6 @@ std::string gen_str(const char* msg, const T& args, seq<I...>) {
 template <typename T>
 std::string gen_str(const char* msg, const T&, seq<>) {
     return msg;
-}
-
-template <size_t I>
-struct visit_impl {
-    template <typename T, typename F>
-    static void visit(T& tup, size_t idx, F& fun) {
-        if (idx == I - 1)
-            fun(std::get<I - 1>(tup));
-        else
-            visit_impl<I - 1>::visit(tup, idx, fun);
-    }
-};
-
-template <>
-struct visit_impl<0> {
-    template <typename T, typename F>
-    static void visit(T&, size_t, F&) {}
-};
-
-template <typename F, typename... Ts>
-void visit_at(std::tuple<Ts...> const& tup, size_t idx, F& fun) {
-    visit_impl<sizeof...(Ts)>::visit(tup, idx, fun);
-}
-
-template <typename F, typename... Ts>
-void visit_at(std::tuple<Ts...>& tup, size_t idx, F& fun) {
-    visit_impl<sizeof...(Ts)>::visit(tup, idx, fun);
 }
 
 }  // namespace detail
