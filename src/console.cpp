@@ -7,6 +7,7 @@
 #endif
 
 #ifdef ZEROERR_OS_WINDOWS
+#define NOMINMAX
 #include <Windows.h>
 #endif
 

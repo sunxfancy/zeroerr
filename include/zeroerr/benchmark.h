@@ -47,6 +47,7 @@ using Clock = std::conditional<std::chrono::high_resolution_clock::is_steady,
 
 namespace detail {
 struct LinuxPerformanceCounter;
+struct WindowsPerformanceCounter;
 }
 
 /**
@@ -73,6 +74,7 @@ protected:
     PerfCountSet<bool>     _has;
 
     detail::LinuxPerformanceCounter* _perf = nullptr;
+    detail::WindowsPerformanceCounter* win_perf = nullptr;
 };
 
 /**
