@@ -184,6 +184,12 @@ Inspired by [fuzztest](https://github.com/google/fuzztest), Domain is a concept 
 
 The macro `FUZZ_TEST_CASE` will generate a test case which can connect with `libFuzzer` to run the fuzzing. Finally, we use `Run(10)` to call `libFuzzer` to run the target for 10 times.
 
+To build the test case with fuzzing, you need to use `clang++` to compile the code and with `-fsanitize=fuzzer-no-link` and link the `-lclang_rt.fuzzer_no_main-x86_64` which is a version of libFuzzer without main function. You can find this runtime library by calling `clang++ -print-runtime-dir`. Here is the complete command to build the test case with fuzzing support:
+
+```bash
+clang++ -std=c++11 -fsanitize=fuzzer-no-link -L=`clang++ -print-runtime-dir` -lclang_rt.fuzzer_no_main-x86_64  -o test_fuzz test_fuzz.cpp 
+```
+
 
 ## Other Good Features
 
