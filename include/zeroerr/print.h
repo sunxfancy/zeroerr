@@ -5,7 +5,6 @@
 #include "zeroerr/internal/typetraits.h"
 
 
-
 #ifdef __GNUG__
 #include <cxxabi.h>
 #endif
@@ -23,7 +22,6 @@
 #endif
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
-
 
 
 namespace zeroerr {
@@ -224,7 +222,8 @@ struct Printer {
 
     template <class TupType, unsigned... I>
     inline void print_tuple(const TupType& _tup, unsigned level, const char*, detail::seq<I...>) {
-        int _[] = {(os << (I == 0 ? "" : ", "), print(std::get<I>(_tup), level+1, "", rank<max_rank>{}), 0)...};
+        int _[] = {(os << (I == 0 ? "" : ", "),
+                    print(std::get<I>(_tup), level + 1, "", rank<max_rank>{}), 0)...};
         (void)_;
     }
 

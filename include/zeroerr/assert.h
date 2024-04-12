@@ -280,7 +280,7 @@ struct context_helper<T, false> {
         switch (data.info.level) {
             case assert_level::ZEROERR_FATAL_l:
             case assert_level::ZEROERR_ERROR_l: ctx->failed_as++; break;
-            case assert_level::ZEROERR_WARN_l: ctx->warning_as++; break;
+            case assert_level::ZEROERR_WARN_l:  ctx->warning_as++; break;
         }
     }
 };

@@ -29,8 +29,9 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
             const char* q = p + 1;
             while (*q && *q != '}') q++;
             if (*q == '}') {
-                names[std::string(p + 1, q)] = names.size();
-                p                            = q;
+                std::string N(p + 1, q);
+                names[N] = names.size();
+                p        = q;
             }
         }
 }
@@ -213,9 +214,9 @@ static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
 
     ss << zeroerr_color(Dim) << '[' << zeroerr_color(Reset);
     switch (msg.info->severity) {
-        case INFO_l: ss << "INFO "; break;
-        case LOG_l: ss << zeroerr_color(FgGreen) << "LOG  " << zeroerr_color(Reset); break;
-        case WARN_l: ss << zeroerr_color(FgYellow) << "WARN " << zeroerr_color(Reset); break;
+        case INFO_l:  ss << "INFO "; break;
+        case LOG_l:   ss << zeroerr_color(FgGreen) << "LOG  " << zeroerr_color(Reset); break;
+        case WARN_l:  ss << zeroerr_color(FgYellow) << "WARN " << zeroerr_color(Reset); break;
         case ERROR_l: ss << zeroerr_color(FgRed) << "ERROR" << zeroerr_color(Reset); break;
         case FATAL_l: ss << zeroerr_color(FgMagenta) << "FATAL" << zeroerr_color(Reset); break;
     }

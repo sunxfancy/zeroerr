@@ -278,9 +278,9 @@ std::set<TestCase>& getTestSet(TestType type) {
     static std::set<TestCase> test_set, bench_set, fuzz_set;
     switch (type) {
         case TestType::test_case: return test_set;
-        case TestType::bench: return bench_set;
+        case TestType::bench:     return bench_set;
         case TestType::fuzz_test: return fuzz_set;
-        case TestType::sub_case: return test_set;
+        case TestType::sub_case:  return test_set;
     }
 }
 

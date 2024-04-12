@@ -1177,7 +1177,6 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 
 
-
 #ifdef __GNUG__
 #include <cxxabi.h>
 #endif
@@ -1195,7 +1194,6 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #endif
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
-
 
 
 namespace zeroerr {
@@ -1396,7 +1394,8 @@ struct Printer {
 
     template <class TupType, unsigned... I>
     inline void print_tuple(const TupType& _tup, unsigned level, const char*, detail::seq<I...>) {
-        int _[] = {(os << (I == 0 ? "" : ", "), print(std::get<I>(_tup), level+1, "", rank<max_rank>{}), 0)...};
+        int _[] = {(os << (I == 0 ? "" : ", "),
+                    print(std::get<I>(_tup), level + 1, "", rank<max_rank>{}), 0)...};
         (void)_;
     }
 
@@ -2485,9 +2484,9 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name)                                 \
-    static void                     function(zeroerr::TestContext*);                  \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                    \
+#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name)                    \
+    static void                     function(zeroerr::TestContext*);     \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(       \
         {name, __FILE__, __LINE__, function}, zeroerr::TestType::bench); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
@@ -2519,7 +2518,7 @@ using Clock = std::conditional<std::chrono::high_resolution_clock::is_steady,
 namespace detail {
 struct LinuxPerformanceCounter;
 struct WindowsPerformanceCounter;
-}
+}  // namespace detail
 
 /**
  * @brief PerformanceCounter is a class to measure the performance of a function.
@@ -2544,7 +2543,7 @@ protected:
     PerfCountSet<uint64_t> _val;
     PerfCountSet<bool>     _has;
 
-    detail::LinuxPerformanceCounter* _perf = nullptr;
+    detail::LinuxPerformanceCounter*   _perf    = nullptr;
     detail::WindowsPerformanceCounter* win_perf = nullptr;
 };
 
@@ -2965,7 +2964,7 @@ struct context_helper<T, false> {
         switch (data.info.level) {
             case assert_level::ZEROERR_FATAL_l:
             case assert_level::ZEROERR_ERROR_l: ctx->failed_as++; break;
-            case assert_level::ZEROERR_WARN_l: ctx->warning_as++; break;
+            case assert_level::ZEROERR_WARN_l:  ctx->warning_as++; break;
         }
     }
 };
@@ -3047,40 +3046,39 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #pragma once
 
 
-#include <string>
 #include <sstream>
+#include <string>
 
-namespace zeroerr
-{
+namespace zeroerr {
 
 template <typename... T>
 std::string format(const char* fmt, T... args) {
     std::stringstream ss;
-    bool parse_name = false;
-    Printer print; 
-    print.isQuoted = false; print.isCompact = true;
-    print.line_break = "";
+    bool              parse_name = false;
+    Printer           print;
+
+    print.isQuoted         = false;
+    print.isCompact        = true;
+    print.line_break       = "";
     std::string str_args[] = {print(args)...};
+
     int j = 0;
     for (const char* i = fmt; *i != '\0'; i++) {
-        switch (*i)
-        {
-        case '{': 
-            parse_name = true; 
-            break;
-        case '}': 
-            parse_name = false; 
-            ss << str_args[j++];
-            break;
-        default:
-            if (!parse_name) ss << *i;
-            break;
+        switch (*i) {
+            case '{': parse_name = true; break;
+            case '}':
+                parse_name = false;
+                ss << str_args[j++];
+                break;
+            default:
+                if (!parse_name) ss << *i;
+                break;
         }
     }
     return ss.str();
 }
 
-} // namespace zeroerr
+}  // namespace zeroerr
 
 #pragma once
 
@@ -4007,8 +4005,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #include <stdexcept>
 #include <string>
 
-namespace zeroerr
-{
+namespace zeroerr {
 
 Rng::Rng() : mX(0), mY(0) {
     std::random_device                      rd;
@@ -4060,12 +4057,10 @@ uint64_t Rng::min() { return 0; }
 uint64_t Rng::max() { return (std::numeric_limits<uint64_t>::max)(); }
 
 
-uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept {
-    return (x << k) | (x >> (64U - k));
-}
+uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept { return (x << k) | (x >> (64U - k)); }
 
 
-} // namespace zeroerr
+}  // namespace zeroerr
 
 
 
@@ -4241,7 +4236,7 @@ bool isTerminalOutput(OutputStream stream) {
     switch (stream) {
         case STDOUT: return isatty(fileno(stdout)) != 0;
         case STDERR: return isatty(fileno(stderr)) != 0;
-        default: return false;
+        default:     return false;
     }
 }
 
@@ -4259,7 +4254,7 @@ bool isTerminalOutput(OutputStream stream) {
     switch (stream) {
         case STDOUT: return GetFileType(GetStdHandle(STD_OUTPUT_HANDLE)) == FILE_TYPE_CHAR;
         case STDERR: return GetFileType(GetStdHandle(STD_ERROR_HANDLE)) == FILE_TYPE_CHAR;
-        default: return false;
+        default:     return false;
     }
 }
 
@@ -4304,8 +4299,9 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
             const char* q = p + 1;
             while (*q && *q != '}') q++;
             if (*q == '}') {
-                names[std::string(p + 1, q)] = names.size();
-                p                            = q;
+                std::string N(p + 1, q);
+                names[N] = names.size();
+                p        = q;
             }
         }
 }
@@ -4488,9 +4484,9 @@ static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
 
     ss << zeroerr_color(Dim) << '[' << zeroerr_color(Reset);
     switch (msg.info->severity) {
-        case INFO_l: ss << "INFO "; break;
-        case LOG_l: ss << zeroerr_color(FgGreen) << "LOG  " << zeroerr_color(Reset); break;
-        case WARN_l: ss << zeroerr_color(FgYellow) << "WARN " << zeroerr_color(Reset); break;
+        case INFO_l:  ss << "INFO "; break;
+        case LOG_l:   ss << zeroerr_color(FgGreen) << "LOG  " << zeroerr_color(Reset); break;
+        case WARN_l:  ss << zeroerr_color(FgYellow) << "WARN " << zeroerr_color(Reset); break;
         case ERROR_l: ss << zeroerr_color(FgRed) << "ERROR" << zeroerr_color(Reset); break;
         case FATAL_l: ss << zeroerr_color(FgMagenta) << "FATAL" << zeroerr_color(Reset); break;
     }
@@ -5142,9 +5138,9 @@ std::set<TestCase>& getTestSet(TestType type) {
     static std::set<TestCase> test_set, bench_set, fuzz_set;
     switch (type) {
         case TestType::test_case: return test_set;
-        case TestType::bench: return bench_set;
+        case TestType::bench:     return bench_set;
         case TestType::fuzz_test: return fuzz_set;
-        case TestType::sub_case: return test_set;
+        case TestType::sub_case:  return test_set;
     }
 }
 
@@ -5635,34 +5631,35 @@ int main(int argc, const char** argv) {
 #include <cstring>
 #ifdef ZEROERR_ENABLE_FUZZING
 extern "C" int LLVMFuzzerRunDriver(int* argc, char*** argv,
-                                   int (*user_callback)(const uint8_t* data,
-                                                        size_t size));
+                                   int (*user_callback)(const uint8_t* data, size_t size));
 
-extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size,
-                                          size_t max_size, unsigned int seed);
+extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size,
+                                          unsigned int seed);
 #endif
 
 namespace zeroerr {
 static IFuzzTest* current_fuzz_test = nullptr;
 }  // namespace zeroerr
 
-size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size,
-                               unsigned int seed) {
-  const std::string mutated_data = zeroerr::current_fuzz_test->MutateData(data, size, max_size, seed);
-  if (mutated_data.size() > max_size) {
-    WARN("Mutated data is larger than the limit({limit}). Returning the original data ({ori})", max_size, size);
-    return size;
-  }
-  memcpy(data, mutated_data.data(), mutated_data.size());
-  return mutated_data.size();
+size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size, unsigned int seed) {
+    const std::string mutated_data =
+        zeroerr::current_fuzz_test->MutateData(data, size, max_size, seed);
+    if (mutated_data.size() > max_size) {
+        WARN("Mutated data is larger than the limit({limit}). Returning the original data ({ori})",
+             max_size, size);
+        return size;
+    }
+    memcpy(data, mutated_data.data(), mutated_data.size());
+    return mutated_data.size();
 }
 
 namespace zeroerr {
 
-void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int timeout, int len_control) {
+void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int timeout,
+                 int len_control) {
 #ifdef ZEROERR_ENABLE_FUZZING
-    current_fuzz_test = &fuzz_test;
-    int argc = 6;
+    current_fuzz_test  = &fuzz_test;
+    int         argc   = 6;
     std::string argv[] = {
         "fuzztest",
         "-max_len=" + std::to_string(max_len),
@@ -5676,9 +5673,9 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
         argv_c[i] = (char*)argv[i].c_str();
     }
     LOG("Running fuzz test");
-    
+
     LLVMFuzzerRunDriver(&argc, &argv_c, [](const uint8_t* data, size_t size) -> int {
-        LOG("Running RunOneTime"); 
+        LOG("Running RunOneTime");
         if (current_fuzz_test->should_stop()) {
             throw FuzzFinishedException();
         }

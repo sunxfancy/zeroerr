@@ -18,7 +18,7 @@ bool isTerminalOutput(OutputStream stream) {
     switch (stream) {
         case STDOUT: return isatty(fileno(stdout)) != 0;
         case STDERR: return isatty(fileno(stderr)) != 0;
-        default: return false;
+        default:     return false;
     }
 }
 
@@ -36,7 +36,7 @@ bool isTerminalOutput(OutputStream stream) {
     switch (stream) {
         case STDOUT: return GetFileType(GetStdHandle(STD_OUTPUT_HANDLE)) == FILE_TYPE_CHAR;
         case STDERR: return GetFileType(GetStdHandle(STD_ERROR_HANDLE)) == FILE_TYPE_CHAR;
-        default: return false;
+        default:     return false;
     }
 }
 
