@@ -69,6 +69,7 @@ void TestContext::reset() {
 static inline std::string getFileName(std::string file) {
     std::string fileName(file);
     auto        p = fileName.find_last_of('/');
+    if (p == std::string::npos) p = fileName.find_last_of('\\');
     if (p != std::string::npos) fileName = fileName.substr(p + 1);
     return fileName;
 }

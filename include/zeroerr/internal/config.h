@@ -29,6 +29,8 @@
 // If you wish to disable AND, OR macro
 // #define ZEROERR_DISABLE_COMPLEX_AND_OR
 
+// If you wish ot disable BDD style macros
+// #define ZEROERR_DISABLE_BDD
 
 // Detect C++ standard with a cross-platform way
 

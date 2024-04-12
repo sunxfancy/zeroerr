@@ -18,7 +18,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define SUB_CASE(name)                                                \
     zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
-        << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT))
+        << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
     class classname : public fixture {                                                       \
@@ -40,6 +40,12 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT->save_output();
 
+#ifndef ZEROERR_DISABLE_BDD
+#define SCENARIO(...) TEST_CASE("Scenario: " __VA_ARGS__)
+#define GIVEN(...)    SUB_CASE("given: " __VA_ARGS__)
+#define WHEN(...)     SUB_CASE("when: " __VA_ARGS__)
+#define THEN(...)     SUB_CASE("then: " __VA_ARGS__)
+#endif
 
 namespace zeroerr {
 

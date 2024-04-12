@@ -32,6 +32,8 @@
 // If you wish to disable AND, OR macro
 // #define ZEROERR_DISABLE_COMPLEX_AND_OR
 
+// If you wish ot disable BDD style macros
+// #define ZEROERR_DISABLE_BDD
 
 // Detect C++ standard with a cross-platform way
 
@@ -3625,7 +3627,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define SUB_CASE(name)                                                \
     zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
-        << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT))
+        << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
     class classname : public fixture {                                                       \
@@ -3647,6 +3649,12 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT->save_output();
 
+#ifndef ZEROERR_DISABLE_BDD
+#define SCENARIO(...) TEST_CASE("Scenario: " __VA_ARGS__)
+#define GIVEN(...)    SUB_CASE("given: " __VA_ARGS__)
+#define WHEN(...)     SUB_CASE("when: " __VA_ARGS__)
+#define THEN(...)     SUB_CASE("then: " __VA_ARGS__)
+#endif
 
 namespace zeroerr {
 
@@ -4929,6 +4937,7 @@ void TestContext::reset() {
 static inline std::string getFileName(std::string file) {
     std::string fileName(file);
     auto        p = fileName.find_last_of('/');
+    if (p == std::string::npos) p = fileName.find_last_of('\\');
     if (p != std::string::npos) fileName = fileName.substr(p + 1);
     return fileName;
 }
