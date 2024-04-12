@@ -9,9 +9,9 @@
 #include <stdexcept>
 
 
-#ifdef _WIN32
-#define ZEROERR_ETW 1
-#endif
+// #ifdef _WIN32
+// #define ZEROERR_ETW 1
+// #endif
 
 
 namespace zeroerr {
