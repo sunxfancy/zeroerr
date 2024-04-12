@@ -1,6 +1,6 @@
 #include "zeroerr/table.h"
-#include "zeroerr/log.h"
 #include "zeroerr/assert.h"
+#include "zeroerr/log.h"
 
 #include <algorithm>
 #include <map>

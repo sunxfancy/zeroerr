@@ -14,9 +14,9 @@
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name)                                 \
-    static void                     function(zeroerr::TestContext*);                  \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                    \
+#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name)                    \
+    static void                     function(zeroerr::TestContext*);     \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(       \
         {name, __FILE__, __LINE__, function}, zeroerr::TestType::bench); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
@@ -47,7 +47,8 @@ using Clock = std::conditional<std::chrono::high_resolution_clock::is_steady,
 
 namespace detail {
 struct LinuxPerformanceCounter;
-}
+struct WindowsPerformanceCounter;
+}  // namespace detail
 
 /**
  * @brief PerformanceCounter is a class to measure the performance of a function.
@@ -72,7 +73,8 @@ protected:
     PerfCountSet<uint64_t> _val;
     PerfCountSet<bool>     _has;
 
-    detail::LinuxPerformanceCounter* _perf = nullptr;
+    detail::LinuxPerformanceCounter*   _perf    = nullptr;
+    detail::WindowsPerformanceCounter* win_perf = nullptr;
 };
 
 /**

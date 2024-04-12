@@ -1,11 +1,11 @@
 #pragma once
 #include "zeroerr/internal/config.h"
 
-#include <type_traits>
 #include <ostream>
 #include <sstream>
 #include <string>
 #include <tuple>  // this should be removed
+#include <type_traits>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -223,7 +223,7 @@ void visit2_at(std::tuple<Ts...>& tup1, std::tuple<T2s...> const& tup2, size_t i
 
 }  // namespace detail
 
-} // namespace zeroerr
+}  // namespace zeroerr
 
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

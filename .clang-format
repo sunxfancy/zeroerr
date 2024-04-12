@@ -15,7 +15,12 @@ BraceWrapping:
     AfterUnion: false
     BeforeCatch: false
     BeforeElse: false
-    
+
+AlignConsecutiveShortCaseStatements:
+    Enabled: true
+    AcrossEmptyLines: true
+    AcrossComments: true
+    AlignCaseColons: false
 
 CompactNamespaces: false
 AlignConsecutiveAssignments: true

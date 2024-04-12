@@ -69,6 +69,7 @@ void TestContext::reset() {
 static inline std::string getFileName(std::string file) {
     std::string fileName(file);
     auto        p = fileName.find_last_of('/');
+    if (p == std::string::npos) p = fileName.find_last_of('\\');
     if (p != std::string::npos) fileName = fileName.substr(p + 1);
     return fileName;
 }
@@ -278,9 +279,9 @@ std::set<TestCase>& getTestSet(TestType type) {
     static std::set<TestCase> test_set, bench_set, fuzz_set;
     switch (type) {
         case TestType::test_case: return test_set;
-        case TestType::bench: return bench_set;
+        case TestType::bench:     return bench_set;
         case TestType::fuzz_test: return fuzz_set;
-        case TestType::sub_case: return test_set;
+        case TestType::sub_case:  return test_set;
     }
 }
 
@@ -676,10 +677,10 @@ public:
 
     struct TestCaseData {
         struct TestCase {
-            std::string              filename, name;
-            unsigned                 line;
-            double                   time;
-            TestContext              context;
+            std::string filename, name;
+            unsigned    line;
+            double      time;
+            TestContext context;
         };
 
         std::vector<TestCase> testcases;

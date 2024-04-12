@@ -23,9 +23,7 @@ public:
 
     CorpusType FromValue(const ValueType& v) const override {
         for (size_t i = 0; i < elements.size(); i++) {
-            if (elements[i] == v) {
-                return i;
-            }
+            if (elements[i] == v) return i;
         }
         return 0;
     }

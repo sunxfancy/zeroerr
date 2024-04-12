@@ -4,8 +4,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace zeroerr
-{
+namespace zeroerr {
 
 Rng::Rng() : mX(0), mY(0) {
     std::random_device                      rd;
@@ -57,9 +56,7 @@ uint64_t Rng::min() { return 0; }
 uint64_t Rng::max() { return (std::numeric_limits<uint64_t>::max)(); }
 
 
-uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept {
-    return (x << k) | (x >> (64U - k));
-}
+uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept { return (x << k) | (x >> (64U - k)); }
 
 
-} // namespace zeroerr
+}  // namespace zeroerr

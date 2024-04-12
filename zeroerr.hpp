@@ -5,10 +5,15 @@
 
 #define ZEROERR_VERSION_MAJOR 0
 #define ZEROERR_VERSION_MINOR 2
-#define ZEROERR_VERSION_PATCH 0
+#define ZEROERR_VERSION_PATCH 1
 #define ZEROERR_VERSION \
     (ZEROERR_VERSION_MAJOR * 10000 + ZEROERR_VERSION_MINOR * 100 + ZEROERR_VERSION_PATCH)
-#define ZEROERR_VERSION_STR "0.2.0"
+
+#define ZEROERR_STR(x) #x
+
+#define ZEROERR_VERSION_STR_BUILDER(a, b, c) ZEROERR_STR(a) "." ZEROERR_STR(b) "." ZEROERR_STR(c)
+#define ZEROERR_VERSION_STR \
+    ZEROERR_VERSION_STR_BUILDER(ZEROERR_VERSION_MAJOR, ZEROERR_VERSION_MINOR, ZEROERR_VERSION_PATCH)
 
 // If you just wish to use the color without dynamic
 // enable or disable it, you can uncomment the following line
@@ -27,6 +32,8 @@
 // If you wish to disable AND, OR macro
 // #define ZEROERR_DISABLE_COMPLEX_AND_OR
 
+// If you wish ot disable BDD style macros
+// #define ZEROERR_DISABLE_BDD
 
 // Detect C++ standard with a cross-platform way
 
@@ -686,11 +693,11 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() { retur
 #pragma once
 
 
-#include <type_traits>
 #include <ostream>
 #include <sstream>
 #include <string>
 #include <tuple>  // this should be removed
+#include <type_traits>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -908,7 +915,7 @@ void visit2_at(std::tuple<Ts...>& tup1, std::tuple<T2s...> const& tup2, size_t i
 
 }  // namespace detail
 
-} // namespace zeroerr
+}  // namespace zeroerr
 
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
@@ -1172,7 +1179,6 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 
 
-
 #ifdef __GNUG__
 #include <cxxabi.h>
 #endif
@@ -1190,7 +1196,6 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #endif
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
-
 
 
 namespace zeroerr {
@@ -1391,7 +1396,8 @@ struct Printer {
 
     template <class TupType, unsigned... I>
     inline void print_tuple(const TupType& _tup, unsigned level, const char*, detail::seq<I...>) {
-        int _[] = {(os << (I == 0 ? "" : ", "), print(std::get<I>(_tup), level+1, "", rank<max_rank>{}), 0)...};
+        int _[] = {(os << (I == 0 ? "" : ", "),
+                    print(std::get<I>(_tup), level + 1, "", rank<max_rank>{}), 0)...};
         (void)_;
     }
 
@@ -2052,9 +2058,7 @@ public:
 
     CorpusType FromValue(const ValueType& v) const override {
         for (size_t i = 0; i < elements.size(); i++) {
-            if (elements[i] == v) {
-                return i;
-            }
+            if (elements[i] == v) return i;
         }
         return 0;
     }
@@ -2410,6 +2414,7 @@ class Arbitrary<
     T, typename std::enable_if<detail::is_specialization<T, std::basic_string>::value>::type>
     : public Domain<T, std::vector<typename T::value_type>> {
     Arbitrary<std::vector<typename T::value_type>> impl;
+
 public:
     using ValueType  = T;
     using CorpusType = std::vector<typename T::value_type>;
@@ -2419,9 +2424,7 @@ public:
         return CorpusType(v.begin(), v.end());
     }
 
-    CorpusType GetRandomCorpus(Rng& rng) const override {
-        return impl.GetRandomCorpus(rng);
-    }
+    CorpusType GetRandomCorpus(Rng& rng) const override { return impl.GetRandomCorpus(rng); }
 
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
         impl.Mutate(rng, v, only_shrink);
@@ -2452,11 +2455,13 @@ public:
 
 template <typename T, typename U>
 class Arbitrary<std::pair<T, U>>
-    : public AggregateOf<std::pair<typename std::remove_const<T>::type, typename std::remove_const<U>::type>> {};
+    : public AggregateOf<
+          std::pair<typename std::remove_const<T>::type, typename std::remove_const<U>::type>> {};
 
 
 template <typename... T>
-class Arbitrary<std::tuple<T...>> : public AggregateOf<std::tuple<typename std::remove_const<T>::type...>> {};
+class Arbitrary<std::tuple<T...>>
+    : public AggregateOf<std::tuple<typename std::remove_const<T>::type...>> {};
 
 template <typename T>
 class Arbitrary<const T> : public Arbitrary<T> {};
@@ -2481,9 +2486,9 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name)                                 \
-    static void                     function(zeroerr::TestContext*);                  \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                    \
+#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name)                    \
+    static void                     function(zeroerr::TestContext*);     \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(       \
         {name, __FILE__, __LINE__, function}, zeroerr::TestType::bench); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
@@ -2514,7 +2519,8 @@ using Clock = std::conditional<std::chrono::high_resolution_clock::is_steady,
 
 namespace detail {
 struct LinuxPerformanceCounter;
-}
+struct WindowsPerformanceCounter;
+}  // namespace detail
 
 /**
  * @brief PerformanceCounter is a class to measure the performance of a function.
@@ -2539,7 +2545,8 @@ protected:
     PerfCountSet<uint64_t> _val;
     PerfCountSet<bool>     _has;
 
-    detail::LinuxPerformanceCounter* _perf = nullptr;
+    detail::LinuxPerformanceCounter*   _perf    = nullptr;
+    detail::WindowsPerformanceCounter* win_perf = nullptr;
 };
 
 /**
@@ -2959,7 +2966,7 @@ struct context_helper<T, false> {
         switch (data.info.level) {
             case assert_level::ZEROERR_FATAL_l:
             case assert_level::ZEROERR_ERROR_l: ctx->failed_as++; break;
-            case assert_level::ZEROERR_WARN_l: ctx->warning_as++; break;
+            case assert_level::ZEROERR_WARN_l:  ctx->warning_as++; break;
         }
     }
 };
@@ -3041,40 +3048,39 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #pragma once
 
 
-#include <string>
 #include <sstream>
+#include <string>
 
-namespace zeroerr
-{
+namespace zeroerr {
 
 template <typename... T>
 std::string format(const char* fmt, T... args) {
     std::stringstream ss;
-    bool parse_name = false;
-    Printer print; 
-    print.isQuoted = false; print.isCompact = true;
-    print.line_break = "";
+    bool              parse_name = false;
+    Printer           print;
+
+    print.isQuoted         = false;
+    print.isCompact        = true;
+    print.line_break       = "";
     std::string str_args[] = {print(args)...};
+
     int j = 0;
     for (const char* i = fmt; *i != '\0'; i++) {
-        switch (*i)
-        {
-        case '{': 
-            parse_name = true; 
-            break;
-        case '}': 
-            parse_name = false; 
-            ss << str_args[j++];
-            break;
-        default:
-            if (!parse_name) ss << *i;
-            break;
+        switch (*i) {
+            case '{': parse_name = true; break;
+            case '}':
+                parse_name = false;
+                ss << str_args[j++];
+                break;
+            default:
+                if (!parse_name) ss << *i;
+                break;
         }
     }
     return ss.str();
 }
 
-} // namespace zeroerr
+}  // namespace zeroerr
 
 #pragma once
 
@@ -3621,7 +3627,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define SUB_CASE(name)                                                \
     zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
-        << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT))
+        << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
     class classname : public fixture {                                                       \
@@ -3643,6 +3649,12 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT->save_output();
 
+#ifndef ZEROERR_DISABLE_BDD
+#define SCENARIO(...) TEST_CASE("Scenario: " __VA_ARGS__)
+#define GIVEN(...)    SUB_CASE("given: " __VA_ARGS__)
+#define WHEN(...)     SUB_CASE("when: " __VA_ARGS__)
+#define THEN(...)     SUB_CASE("then: " __VA_ARGS__)
+#endif
 
 namespace zeroerr {
 
@@ -3924,24 +3936,32 @@ extern void RunFuzzTest(IFuzzTest& fuzz_test, int seed = 0, int runs = 1000, int
 
 template <typename TargetFunction, typename FuncType, typename Domain, typename Base>
 struct FuzzTestWithDomain : public Base {
-    FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), domain(domain) {}
+    FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), m_domain(domain) {}
 
     virtual void Run(int _count = 1000, int _seed = 0) override {
         Base::count     = 1;
         Base::max_count = _count;
-        rng             = new Rng(_seed);
+        m_rng           = new Rng(_seed);
         RunFuzzTest(*this, _seed, _count, 500, 1200, 1);
-        delete rng;
-        rng = nullptr;
+        delete m_rng;
+        m_rng = nullptr;
+    }
+
+    typename Domain::CorpusType GetRandomCorpus() {
+        Rng& rng = *this->m_rng;
+        if (Base::seeds.size() > 0 && rng.bounded(2) == 0) {
+            return m_domain.FromValue(Base::seeds[rng() % Base::seeds.size()]);
+        }
+        return m_domain.GetRandomCorpus(rng);
     }
 
     typename Domain::CorpusType TryParse(const std::string& input) {
         try {
             IRObject obj = IRObject::FromString(input);
-            if (obj.type == IRObject::Type::Undefined) return domain.GetRandomCorpus(*rng);
-            return domain.ParseCorpus(obj);
+            if (obj.type == IRObject::Type::Undefined) return GetRandomCorpus();
+            return m_domain.ParseCorpus(obj);
         } catch (...) {
-            return domain.GetRandomCorpus(*rng);
+            return GetRandomCorpus();
         }
     }
 
@@ -3954,22 +3974,22 @@ struct FuzzTestWithDomain : public Base {
         Base::count++;
         std::string                 input  = std::string((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
-        typename Domain::ValueType  value  = domain.GetValue(corpus);
+        typename Domain::ValueType  value  = m_domain.GetValue(corpus);
         apply(value, detail::gen_seq<std::tuple_size<typename Domain::ValueType>::value>{});
     }
 
     virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
                                    unsigned int seed) override {
-        Rng                         mrng(seed);
+        Rng                         rng(seed);
         std::string                 input  = std::string((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
-        domain.Mutate(mrng, corpus, false);
-        IRObject mutated_obj = domain.SerializeCorpus(corpus);
+        m_domain.Mutate(rng, corpus, false);
+        IRObject mutated_obj = m_domain.SerializeCorpus(corpus);
         return IRObject::ToString(mutated_obj);
     }
 
-    Domain domain;
-    Rng*   rng;
+    Domain m_domain;
+    Rng*   m_rng;
 };
 
 
@@ -3989,578 +4009,11 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #ifdef ZEROERR_IMPLEMENTATION
 
 
-
-
-#include <cstring>
-#include <iostream>
-#include <random>
-#include <stdexcept>
-
-#ifdef ZEROERR_PERF
-#include <linux/perf_event.h>
-#include <sys/ioctl.h>
-#include <sys/syscall.h>
-#include <unistd.h>
-#include <map>
-#endif
-
-namespace zeroerr {
-
-#ifdef _WIN32
-namespace detail {
-struct WindowsPerformanceCounter {};
-}  // namespace detail
-#endif
-
-
-#ifdef ZEROERR_PERF
-namespace detail {
-struct LinuxPerformanceCounter {
-    inline void beginMeasure() {
-        if (mHasError) return;
-
-        mHasError = -1 == ioctl(mFd, PERF_EVENT_IOC_RESET, PERF_IOC_FLAG_GROUP);
-        if (mHasError) return;
-
-        mHasError = -1 == ioctl(mFd, PERF_EVENT_IOC_ENABLE, PERF_IOC_FLAG_GROUP);
-    }
-    inline void endMeasure() {
-        if (mHasError) return;
-
-        mHasError = (-1 == ioctl(mFd, PERF_EVENT_IOC_DISABLE, PERF_IOC_FLAG_GROUP));
-        if (mHasError) return;
-
-        auto const numBytes = sizeof(uint64_t) * mCounters.size();
-        auto       ret      = read(mFd, mCounters.data(), numBytes);
-        mHasError           = ret != static_cast<ssize_t>(numBytes);
-    }
-
-
-    // rounded integer division
-    template <typename T>
-    static inline T divRounded(T a, T divisor) {
-        return (a + divisor / 2) / divisor;
-    }
-
-    static inline uint32_t mix(uint32_t x) noexcept {
-        x ^= x << 13;
-        x ^= x >> 17;
-        x ^= x << 5;
-        return x;
-    }
-
-    template <typename Op>
-    void calibrate(Op&& op) {
-        // clear current calibration data,
-        for (auto& v : mCalibratedOverhead) {
-            v = UINT64_C(0);
-        }
-
-        // create new calibration data
-        auto newCalibration = mCalibratedOverhead;
-        for (auto& v : newCalibration) {
-            v = std::numeric_limits<uint64_t>::max();
-        }
-        for (size_t iter = 0; iter < 100; ++iter) {
-            beginMeasure();
-            op();
-            endMeasure();
-            if (mHasError) return;
-
-            for (size_t i = 0; i < newCalibration.size(); ++i) {
-                auto diff = mCounters[i];
-                if (newCalibration[i] > diff) {
-                    newCalibration[i] = diff;
-                }
-            }
-        }
-
-        mCalibratedOverhead = std::move(newCalibration);
-
-        {
-            // calibrate loop overhead. For branches & instructions this makes sense, not so much
-            // for everything else like cycles. marsaglia's xorshift: mov, sal/shr, xor. Times 3.
-            // This has the nice property that the compiler doesn't seem to be able to optimize
-            // multiple calls any further. see https://godbolt.org/z/49RVQ5
-            uint64_t const numIters = 100000U + (std::random_device{}() & 3);
-            uint64_t       n        = numIters;
-            uint32_t       x        = 1234567;
-
-            beginMeasure();
-            while (n-- > 0) {
-                x = mix(x);
-            }
-            endMeasure();
-            detail::doNotOptimizeAway(x);
-            auto measure1 = mCounters;
-
-            n = numIters;
-            beginMeasure();
-            while (n-- > 0) {
-                // we now run *twice* so we can easily calculate the overhead
-                x = mix(x);
-                x = mix(x);
-            }
-            endMeasure();
-            detail::doNotOptimizeAway(x);
-            auto measure2 = mCounters;
-
-            for (size_t i = 0; i < mCounters.size(); ++i) {
-                // factor 2 because we have two instructions per loop
-                auto m1 =
-                    measure1[i] > mCalibratedOverhead[i] ? measure1[i] - mCalibratedOverhead[i] : 0;
-                auto m2 =
-                    measure2[i] > mCalibratedOverhead[i] ? measure2[i] - mCalibratedOverhead[i] : 0;
-                auto overhead = m1 * 2 > m2 ? m1 * 2 - m2 : 0;
-
-                mLoopOverhead[i] = divRounded(overhead, numIters);
-            }
-        }
-    }
-
-
-    struct Target {
-        uint64_t* targetValue;
-        bool      correctMeasuringOverhead;
-        bool      correctLoopOverhead;
-    };
-
-    std::map<uint64_t, Target> mIdToTarget{};
-
-    // start with minimum size of 3 for read_format
-    std::vector<uint64_t> mCounters{3};
-    std::vector<uint64_t> mCalibratedOverhead{3};
-    std::vector<uint64_t> mLoopOverhead{3};
-
-    uint64_t mTimeEnabledNanos = 0;
-    uint64_t mTimeRunningNanos = 0;
-
-    int  mFd       = -1;
-    bool mHasError = false;
-
-    ~LinuxPerformanceCounter() {
-        if (mFd != -1) close(mFd);
-    }
-
-    bool monitor(perf_sw_ids swId, Target target) {
-        return monitor(PERF_TYPE_SOFTWARE, swId, target);
-    }
-
-    bool monitor(perf_hw_id hwId, Target target) {
-        return monitor(PERF_TYPE_HARDWARE, hwId, target);
-    }
-
-    bool monitor(uint32_t type, uint64_t eventid, Target target) {
-        *target.targetValue = (std::numeric_limits<uint64_t>::max)();
-        if (mHasError) return false;
-
-        auto pea = perf_event_attr();
-        std::memset(&pea, 0, sizeof(perf_event_attr));
-        pea.type           = type;
-        pea.size           = sizeof(perf_event_attr);
-        pea.config         = eventid;
-        pea.disabled       = 1;  // start counter as disabled
-        pea.exclude_kernel = 1;
-        pea.exclude_hv     = 1;
-
-        pea.read_format = PERF_FORMAT_GROUP | PERF_FORMAT_ID | PERF_FORMAT_TOTAL_TIME_ENABLED |
-                          PERF_FORMAT_TOTAL_TIME_RUNNING;
-
-        const int pid = 0;         // the current process
-        const int cpu = -1;        // all CPUs
-#if defined(PERF_FLAG_FD_CLOEXEC)  // since Linux 3.14
-        const unsigned long flags = PERF_FLAG_FD_CLOEXEC;
-#else
-        const unsigned long flags = 0;
-#endif
-
-        auto fd = static_cast<int>(syscall(__NR_perf_event_open, &pea, pid, cpu, mFd, flags));
-        if (-1 == fd) return false;
-        // first call: set to fd, and use this from now on
-        if (-1 == mFd) mFd = fd;
-
-        uint64_t id = 0;
-        if (-1 == ioctl(fd, PERF_EVENT_IOC_ID, &id)) return false;
-
-        // insert into map, rely on the fact that map's references are constant.
-        mIdToTarget.emplace(id, target);
-
-        // prepare readformat with the correct size (after the insert)
-        auto size = 3 + 2 * mIdToTarget.size();
-        mCounters.resize(size);
-        mCalibratedOverhead.resize(size);
-        mLoopOverhead.resize(size);
-
-        return true;
-    }
-
-    void updateResults(uint64_t numIters) {
-        // clear old data
-        for (auto& id_value : mIdToTarget) {
-            *id_value.second.targetValue = UINT64_C(0);
-        }
-
-        if (mHasError) return;
-
-        mTimeEnabledNanos = mCounters[1] - mCalibratedOverhead[1];
-        mTimeRunningNanos = mCounters[2] - mCalibratedOverhead[2];
-
-        for (uint64_t i = 0; i < mCounters[0]; ++i) {
-            auto idx = static_cast<size_t>(3 + i * 2 + 0);
-            auto id  = mCounters[idx + 1U];
-
-            auto it = mIdToTarget.find(id);
-            if (it != mIdToTarget.end()) {
-                auto& tgt        = it->second;
-                *tgt.targetValue = mCounters[idx];
-                if (tgt.correctMeasuringOverhead) {
-                    if (*tgt.targetValue >= mCalibratedOverhead[idx]) {
-                        *tgt.targetValue -= mCalibratedOverhead[idx];
-                    } else {
-                        *tgt.targetValue = 0U;
-                    }
-                }
-                if (tgt.correctLoopOverhead) {
-                    auto correctionVal = mLoopOverhead[idx] * numIters;
-                    if (*tgt.targetValue >= correctionVal) {
-                        *tgt.targetValue -= correctionVal;
-                    } else {
-                        *tgt.targetValue = 0U;
-                    }
-                }
-            }
-        }
-    }
-};
-}  // namespace detail
-#endif
-
-
-PerformanceCounter::PerformanceCounter() {
-    _has.timeElapsed() = true; // this should be always available
-#ifdef ZEROERR_PERF
-    _perf        = new detail::LinuxPerformanceCounter();
-    using Target = detail::LinuxPerformanceCounter::Target;
-    
-    _has.pageFaults() =
-        _perf->monitor(PERF_COUNT_SW_PAGE_FAULTS, Target{&_val.pageFaults(), true, false});
-    _has.cpuCycles() =
-        _perf->monitor(PERF_COUNT_HW_CPU_CYCLES, Target{&_val.cpuCycles(), true, false});
-    _has.contextSwitches() = _perf->monitor(PERF_COUNT_SW_CONTEXT_SWITCHES,
-                                            Target{&_val.contextSwitches(), true, false});
-    _has.instructions() =
-        _perf->monitor(PERF_COUNT_HW_INSTRUCTIONS, Target{&_val.instructions(), true, true});
-    _has.branchInstructions() = _perf->monitor(PERF_COUNT_HW_BRANCH_INSTRUCTIONS,
-                                               Target{&_val.branchInstructions(), true, false});
-    _has.branchMisses() =
-        _perf->monitor(PERF_COUNT_HW_BRANCH_MISSES, Target{&_val.branchMisses(), true, false});
-
-    _perf->calibrate([] {
-        auto before = Clock::now();
-        auto after  = Clock::now();
-        (void)before;
-        (void)after;
-    });
-
-    if (_perf->mHasError) {
-        // something failed, don't monitor anything.
-        _has = PerfCountSet<bool>{};
-    }
-#endif
-}
-PerformanceCounter::~PerformanceCounter() {
-#ifdef ZEROERR_PERF
-    delete _perf;
-#endif
-}
-
-PerformanceCounter& PerformanceCounter::inst() {
-    static PerformanceCounter counter;
-    return counter;
-}
-
-void PerformanceCounter::beginMeasure() {
-#ifdef ZEROERR_PERF
-    _perf->beginMeasure();
-#endif
-    _start = Clock::now();
-}
-void PerformanceCounter::endMeasure() {
-    elapsed = Clock::now() - _start;
-#ifdef ZEROERR_PERF
-    _perf->endMeasure();
-#endif
-}
-void PerformanceCounter::updateResults(uint64_t numIters) {
-#ifdef ZEROERR_PERF
-    _perf->updateResults(numIters);
-#endif
-}
-
-
-// determines resolution of the given clock. This is done by measuring multiple times and returning
-// the minimum time difference.
-Clock::duration calcClockResolution(size_t numEvaluations) noexcept {
-    auto              bestDuration = Clock::duration::max();
-    Clock::time_point tBegin;
-    Clock::time_point tEnd;
-    for (size_t i = 0; i < numEvaluations; ++i) {
-        tBegin = Clock::now();
-        do {
-            tEnd = Clock::now();
-        } while (tBegin == tEnd);
-        bestDuration = (std::min)(bestDuration, tEnd - tBegin);
-    }
-    return bestDuration;
-}
-
-// Calculates clock resolution once, and remembers the result
-Clock::duration clockResolution() noexcept {
-    static Clock::duration sResolution = calcClockResolution(20);
-    return sResolution;
-}
-
-// helpers to get double values
-template <typename T>
-static inline double d(T t) noexcept {
-    return static_cast<double>(t);
-}
-static inline double d(Clock::duration duration) noexcept {
-    return std::chrono::duration_cast<std::chrono::duration<double, std::nano>>(duration).count();
-}
-
-struct BenchState {
-    BenchState(Benchmark& bench) : bench(bench), stage(UnInit) {
-        targetEpochTime = clockResolution() * bench.minimalResolutionMutipler;
-        targetEpochTime = std::max(targetEpochTime, bench.mMinEpochTime);
-        targetEpochTime = std::min(targetEpochTime, bench.mMaxEpochTime);
-        numEpoch        = bench.epochs;
-        numIteration    = 0;
-        elapsed         = Clock::duration(0);
-    }
-
-    Benchmark& bench;
-
-    enum { UnInit, WarmUp, UpScaling, Measurement } stage;
-
-    Clock::duration elapsed;
-    Clock::duration targetEpochTime;
-    uint64_t        numIteration, numEpoch;
-
-    Rng mRng{1024};
-
-    bool isCloseEnoughForMeasurements() const noexcept {
-        return elapsed * 3 >= targetEpochTime * 2;
-    }
-
-
-    uint64_t calcBestNumIters() noexcept {
-        double Elapsed               = d(elapsed);
-        double TargetRuntimePerEpoch = d(targetEpochTime);
-        double NewIters              = TargetRuntimePerEpoch * d(numIteration) / Elapsed;
-
-        NewIters *= (1.0 + 0.2 * mRng.uniform01());
-
-        // +1 for correct rounding when casting and make sure there are at least 1 iteration
-        return static_cast<uint64_t>(NewIters + 1);
-    }
-
-    void upscale() {
-        if (elapsed * 10 < targetEpochTime) {
-            // we are far below the target runtime. Multiply iterations by 10 (with overflow check)
-            if (numIteration * 10 < numIteration) {
-                // overflow :-(
-                printf("iterations overflow. Maybe your code got optimized away?\n");
-                numIteration = 0;
-                return;
-            }
-            if (elapsed * 100 < targetEpochTime)
-                numIteration *= 100;
-            else
-                numIteration *= 10;
-        } else {
-            numIteration = calcBestNumIters();
-        }
-    }
-
-    void nextStage() noexcept {
-        switch (stage) {
-            case UnInit:
-                if (bench.warmup != 0) {
-                    stage        = WarmUp;
-                    numIteration = bench.warmup;
-                } else if (bench.iter_per_epoch != 0) {
-                    stage        = Measurement;
-                    numIteration = bench.iter_per_epoch;
-                } else {
-                    stage        = UpScaling;
-                    numIteration = 1;
-                }
-                break;
-            case WarmUp:
-                if (bench.iter_per_epoch != 0) {
-                    stage        = Measurement;
-                    numIteration = bench.iter_per_epoch;
-                } else if (isCloseEnoughForMeasurements()) {
-                    stage        = Measurement;
-                    numIteration = calcBestNumIters();
-                } else {
-                    stage = UpScaling;
-                    nextStage();
-                }
-                break;
-            case UpScaling:
-                if (isCloseEnoughForMeasurements()) {
-                    stage        = Measurement;
-                    numIteration = calcBestNumIters();
-                } else {
-                    stage = UpScaling;
-                    upscale();
-                }
-                break;
-            case Measurement:
-                if (numEpoch) {
-                    numEpoch--;
-                } else {
-                    numIteration = 0;
-                }
-                break;
-        }
-    }
-
-    BenchResult result;
-};
-BenchState* createBenchState(Benchmark& benchmark) { return new BenchState(benchmark); }
-void        destroyBenchState(BenchState* state) { delete state; }
-
-size_t getNumIter(BenchState* state) {
-    state->nextStage();
-    return state->numIteration;
-}
-
-void runIteration(BenchState* state) {
-    auto& pc       = PerformanceCounter::inst();
-    state->elapsed = pc.elapsed;
-    pc.updateResults(state->numIteration);
-
-    if (state->stage == BenchState::Measurement) {
-        PerfCountSet<double> pcset;
-        pcset.iterations    = d(state->numIteration);
-        pcset.timeElapsed() = d(state->elapsed) / pcset.iterations;
-
-        for (int i = 1; i < 7; ++i) {
-            if (pc.has().data[i]) {
-                pcset.data[i] = d(pc.val().data[i]) / pcset.iterations;
-            }
-        }
-
-        state->result.epoch_details.push_back(pcset);
-    }
-}
-
-void moveResult(BenchState* state, std::string name) {
-    auto& pc           = PerformanceCounter::inst();
-    state->result.name = name;
-    state->result.has  = pc.has();
-
-    state->bench.result.push_back(state->result);
-    destroyBenchState(state);
-}
-
-
-PerfCountSet<double> BenchResult::average() const {
-    PerfCountSet<double> avg;
-    for (int i = 0; i < 7; ++i) {
-        if (has.data[i]) {
-            double sum = 0;
-            for (auto& pcset : epoch_details) {
-                sum += pcset.data[i];
-            }
-            sum /= epoch_details.size();
-            avg.data[i] = sum;
-        }
-    }
-    return avg;
-}
-PerfCountSet<double> BenchResult::min() const {
-    PerfCountSet<double> min;
-    for (int i = 0; i < 7; ++i) {
-        if (has.data[i]) {
-            double min_val = std::numeric_limits<double>::max();
-            for (auto& pcset : epoch_details) {
-                min_val = std::min(min_val, pcset.data[i]);
-            }
-            min.data[i] = min_val;
-        }
-    }
-    return min;
-}
-PerfCountSet<double> BenchResult::max() const {
-    PerfCountSet<double> max;
-    for (int i = 0; i < 7; ++i) {
-        if (has.data[i]) {
-            double max_val = std::numeric_limits<double>::min();
-            for (auto& pcset : epoch_details) {
-                max_val = std::max(max_val, pcset.data[i]);
-            }
-            max.data[i] = max_val;
-        }
-    }
-    return max;
-}
-PerfCountSet<double> BenchResult::mean() const {
-    PerfCountSet<double> mean;
-
-    return mean;
-}
-
-void Benchmark::report() {
-    static const char* names[] = {
-        "elapsed(ns)", "page faults", "cpu_cycles", "ctx switch", "inst", "branch", "branch misses",
-    };
-    std::cerr << "" << title << ":" << std::endl;
-
-    std::vector<std::string> headers{""};
-    for (unsigned i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
-        if (result[0].has.data[i]) headers.push_back(names[i]);
-    }
-    Table output;
-    output.set_header(headers);
-    for (auto& row : result) {
-        auto                result = row.average();
-        std::vector<double> values;
-        for (int j = 0; j < 7; ++j)
-            if (row.has.data[j]) values.push_back(result.data[j]);
-        output.add_row(row.name, values);
-    }
-    std::cerr << output.str() << std::endl;
-}
-
-
-namespace detail {
-// Windows version of doNotOptimizeAway
-// see https://github.com/google/benchmark/blob/master/include/benchmark/benchmark.h#L307
-// see https://github.com/facebook/folly/blob/master/folly/Benchmark.h#L280
-// see https://docs.microsoft.com/en-us/cpp/preprocessor/optimize
-#if defined(_MSC_VER)
-#pragma optimize("", off)
-void doNotOptimizeAwaySink(void const*) {}
-#pragma optimize("", on)
-#endif
-
-}  // namespace detail
-
-
-}  // namespace zeroerr
-
-
-
 #include <random>
 #include <stdexcept>
 #include <string>
 
-namespace zeroerr
-{
+namespace zeroerr {
 
 Rng::Rng() : mX(0), mY(0) {
     std::random_device                      rd;
@@ -4612,12 +4065,10 @@ uint64_t Rng::min() { return 0; }
 uint64_t Rng::max() { return (std::numeric_limits<uint64_t>::max)(); }
 
 
-uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept {
-    return (x << k) | (x >> (64U - k));
-}
+uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept { return (x << k) | (x >> (64U - k)); }
 
 
-} // namespace zeroerr
+}  // namespace zeroerr
 
 
 
@@ -4782,6 +4233,7 @@ Printer& getStderrPrinter() {
 #endif
 
 #ifdef ZEROERR_OS_WINDOWS
+#define NOMINMAX
 #include <Windows.h>
 #endif
 
@@ -4792,7 +4244,7 @@ bool isTerminalOutput(OutputStream stream) {
     switch (stream) {
         case STDOUT: return isatty(fileno(stdout)) != 0;
         case STDERR: return isatty(fileno(stderr)) != 0;
-        default: return false;
+        default:     return false;
     }
 }
 
@@ -4810,7 +4262,7 @@ bool isTerminalOutput(OutputStream stream) {
     switch (stream) {
         case STDOUT: return GetFileType(GetStdHandle(STD_OUTPUT_HANDLE)) == FILE_TYPE_CHAR;
         case STDERR: return GetFileType(GetStdHandle(STD_ERROR_HANDLE)) == FILE_TYPE_CHAR;
-        default: return false;
+        default:     return false;
     }
 }
 
@@ -4855,8 +4307,9 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
             const char* q = p + 1;
             while (*q && *q != '}') q++;
             if (*q == '}') {
-                names[std::string(p + 1, q)] = names.size();
-                p                            = q;
+                std::string N(p + 1, q);
+                names[N] = names.size();
+                p        = q;
             }
         }
 }
@@ -5039,9 +4492,9 @@ static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
 
     ss << zeroerr_color(Dim) << '[' << zeroerr_color(Reset);
     switch (msg.info->severity) {
-        case INFO_l: ss << "INFO "; break;
-        case LOG_l: ss << zeroerr_color(FgGreen) << "LOG  " << zeroerr_color(Reset); break;
-        case WARN_l: ss << zeroerr_color(FgYellow) << "WARN " << zeroerr_color(Reset); break;
+        case INFO_l:  ss << "INFO "; break;
+        case LOG_l:   ss << zeroerr_color(FgGreen) << "LOG  " << zeroerr_color(Reset); break;
+        case WARN_l:  ss << zeroerr_color(FgYellow) << "WARN " << zeroerr_color(Reset); break;
         case ERROR_l: ss << zeroerr_color(FgRed) << "ERROR" << zeroerr_color(Reset); break;
         case FATAL_l: ss << zeroerr_color(FgMagenta) << "FATAL" << zeroerr_color(Reset); break;
     }
@@ -5484,6 +4937,7 @@ void TestContext::reset() {
 static inline std::string getFileName(std::string file) {
     std::string fileName(file);
     auto        p = fileName.find_last_of('/');
+    if (p == std::string::npos) p = fileName.find_last_of('\\');
     if (p != std::string::npos) fileName = fileName.substr(p + 1);
     return fileName;
 }
@@ -5693,9 +5147,9 @@ std::set<TestCase>& getTestSet(TestType type) {
     static std::set<TestCase> test_set, bench_set, fuzz_set;
     switch (type) {
         case TestType::test_case: return test_set;
-        case TestType::bench: return bench_set;
+        case TestType::bench:     return bench_set;
         case TestType::fuzz_test: return fuzz_set;
-        case TestType::sub_case: return test_set;
+        case TestType::sub_case:  return test_set;
     }
 }
 
@@ -6091,10 +5545,10 @@ public:
 
     struct TestCaseData {
         struct TestCase {
-            std::string              filename, name;
-            unsigned                 line;
-            double                   time;
-            TestContext              context;
+            std::string filename, name;
+            unsigned    line;
+            double      time;
+            TestContext context;
         };
 
         std::vector<TestCase> testcases;
@@ -6186,34 +5640,35 @@ int main(int argc, const char** argv) {
 #include <cstring>
 #ifdef ZEROERR_ENABLE_FUZZING
 extern "C" int LLVMFuzzerRunDriver(int* argc, char*** argv,
-                                   int (*user_callback)(const uint8_t* data,
-                                                        size_t size));
+                                   int (*user_callback)(const uint8_t* data, size_t size));
 
-extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size,
-                                          size_t max_size, unsigned int seed);
+extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size,
+                                          unsigned int seed);
 #endif
 
 namespace zeroerr {
 static IFuzzTest* current_fuzz_test = nullptr;
 }  // namespace zeroerr
 
-size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size,
-                               unsigned int seed) {
-  const std::string mutated_data = zeroerr::current_fuzz_test->MutateData(data, size, max_size, seed);
-  if (mutated_data.size() > max_size) {
-    WARN("Mutated data is larger than the limit({limit}). Returning the original data ({ori})", max_size, size);
-    return size;
-  }
-  memcpy(data, mutated_data.data(), mutated_data.size());
-  return mutated_data.size();
+size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size, unsigned int seed) {
+    const std::string mutated_data =
+        zeroerr::current_fuzz_test->MutateData(data, size, max_size, seed);
+    if (mutated_data.size() > max_size) {
+        WARN("Mutated data is larger than the limit({limit}). Returning the original data ({ori})",
+             max_size, size);
+        return size;
+    }
+    memcpy(data, mutated_data.data(), mutated_data.size());
+    return mutated_data.size();
 }
 
 namespace zeroerr {
 
-void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int timeout, int len_control) {
+void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int timeout,
+                 int len_control) {
 #ifdef ZEROERR_ENABLE_FUZZING
-    current_fuzz_test = &fuzz_test;
-    int argc = 6;
+    current_fuzz_test  = &fuzz_test;
+    int         argc   = 6;
     std::string argv[] = {
         "fuzztest",
         "-max_len=" + std::to_string(max_len),
@@ -6227,9 +5682,9 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
         argv_c[i] = (char*)argv[i].c_str();
     }
     LOG("Running fuzz test");
-    
+
     LLVMFuzzerRunDriver(&argc, &argv_c, [](const uint8_t* data, size_t size) -> int {
-        LOG("Running RunOneTime"); 
+        LOG("Running RunOneTime");
         if (current_fuzz_test->should_stop()) {
             throw FuzzFinishedException();
         }
@@ -6242,4 +5697,642 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
 }
 
 }  // namespace zeroerr
+
+
+
+
+#include <cstring>
+#include <iostream>
+#include <map>
+#include <random>
+#include <stdexcept>
+
+
+#ifdef _WIN32
+#define ZEROERR_ETW 1
+#endif
+
+
+namespace zeroerr {
+
+// determines resolution of the given clock. This is done by measuring multiple times and returning
+// the minimum time difference.
+Clock::duration calcClockResolution(size_t numEvaluations) noexcept {
+    auto              bestDuration = Clock::duration::max();
+    Clock::time_point tBegin;
+    Clock::time_point tEnd;
+    for (size_t i = 0; i < numEvaluations; ++i) {
+        tBegin = Clock::now();
+        do {
+            tEnd = Clock::now();
+        } while (tBegin == tEnd);
+        bestDuration = (std::min)(bestDuration, tEnd - tBegin);
+    }
+    return bestDuration;
+}
+
+// Calculates clock resolution once, and remembers the result
+Clock::duration clockResolution() noexcept {
+    static Clock::duration sResolution = calcClockResolution(20);
+    return sResolution;
+}
+
+// helpers to get double values
+template <typename T>
+static inline double d(T t) noexcept {
+    return static_cast<double>(t);
+}
+static inline double d(Clock::duration duration) noexcept {
+    return std::chrono::duration_cast<std::chrono::duration<double, std::nano>>(duration).count();
+}
+
+struct BenchState {
+    BenchState(Benchmark& bench) : bench(bench), stage(UnInit) {
+        targetEpochTime = clockResolution() * bench.minimalResolutionMutipler;
+        targetEpochTime = std::max(targetEpochTime, bench.mMinEpochTime);
+        targetEpochTime = std::min(targetEpochTime, bench.mMaxEpochTime);
+        numEpoch        = bench.epochs;
+        numIteration    = 0;
+        elapsed         = Clock::duration(0);
+    }
+
+    Benchmark& bench;
+
+    enum { UnInit, WarmUp, UpScaling, Measurement } stage;
+
+    Clock::duration elapsed;
+    Clock::duration targetEpochTime;
+    uint64_t        numIteration, numEpoch;
+
+    Rng mRng{1024};
+
+    bool isCloseEnoughForMeasurements() const noexcept {
+        return elapsed * 3 >= targetEpochTime * 2;
+    }
+
+
+    uint64_t calcBestNumIters() noexcept {
+        double Elapsed               = d(elapsed);
+        double TargetRuntimePerEpoch = d(targetEpochTime);
+        double NewIters              = TargetRuntimePerEpoch * d(numIteration) / Elapsed;
+
+        NewIters *= (1.0 + 0.2 * mRng.uniform01());
+
+        // +1 for correct rounding when casting and make sure there are at least 1 iteration
+        return static_cast<uint64_t>(NewIters + 1);
+    }
+
+    void upscale() {
+        if (elapsed * 10 < targetEpochTime) {
+            // we are far below the target runtime. Multiply iterations by 10 (with overflow check)
+            if (numIteration * 10 < numIteration) {
+                // overflow :-(
+                printf("iterations overflow. Maybe your code got optimized away?\n");
+                numIteration = 0;
+                return;
+            }
+            if (elapsed * 100 < targetEpochTime)
+                numIteration *= 100;
+            else
+                numIteration *= 10;
+        } else {
+            numIteration = calcBestNumIters();
+        }
+    }
+
+    void nextStage() noexcept {
+        switch (stage) {
+            case UnInit:
+                if (bench.warmup != 0) {
+                    stage        = WarmUp;
+                    numIteration = bench.warmup;
+                } else if (bench.iter_per_epoch != 0) {
+                    stage        = Measurement;
+                    numIteration = bench.iter_per_epoch;
+                } else {
+                    stage        = UpScaling;
+                    numIteration = 1;
+                }
+                break;
+            case WarmUp:
+                if (bench.iter_per_epoch != 0) {
+                    stage        = Measurement;
+                    numIteration = bench.iter_per_epoch;
+                } else if (isCloseEnoughForMeasurements()) {
+                    stage        = Measurement;
+                    numIteration = calcBestNumIters();
+                } else {
+                    stage = UpScaling;
+                    nextStage();
+                }
+                break;
+            case UpScaling:
+                if (isCloseEnoughForMeasurements()) {
+                    stage        = Measurement;
+                    numIteration = calcBestNumIters();
+                } else {
+                    stage = UpScaling;
+                    upscale();
+                }
+                break;
+            case Measurement:
+                if (numEpoch) {
+                    numEpoch--;
+                } else {
+                    numIteration = 0;
+                }
+                break;
+        }
+    }
+
+    BenchResult result;
+};
+BenchState* createBenchState(Benchmark& benchmark) { return new BenchState(benchmark); }
+void        destroyBenchState(BenchState* state) { delete state; }
+
+size_t getNumIter(BenchState* state) {
+    state->nextStage();
+    return state->numIteration;
+}
+
+void runIteration(BenchState* state) {
+    auto& pc       = PerformanceCounter::inst();
+    state->elapsed = pc.elapsed;
+    pc.updateResults(state->numIteration);
+
+    if (state->stage == BenchState::Measurement) {
+        PerfCountSet<double> pcset;
+        pcset.iterations    = d(state->numIteration);
+        pcset.timeElapsed() = d(state->elapsed) / pcset.iterations;
+
+        for (int i = 1; i < 7; ++i) {
+            if (pc.has().data[i]) {
+                pcset.data[i] = d(pc.val().data[i]) / pcset.iterations;
+            }
+        }
+
+        state->result.epoch_details.push_back(pcset);
+    }
+}
+
+void moveResult(BenchState* state, std::string name) {
+    auto& pc           = PerformanceCounter::inst();
+    state->result.name = name;
+    state->result.has  = pc.has();
+
+    state->bench.result.push_back(state->result);
+    destroyBenchState(state);
+}
+
+
+PerfCountSet<double> BenchResult::average() const {
+    PerfCountSet<double> avg;
+    for (int i = 0; i < 7; ++i) {
+        if (has.data[i]) {
+            double sum = 0;
+            for (auto& pcset : epoch_details) {
+                sum += pcset.data[i];
+            }
+            sum /= epoch_details.size();
+            avg.data[i] = sum;
+        }
+    }
+    return avg;
+}
+PerfCountSet<double> BenchResult::min() const {
+    PerfCountSet<double> min;
+    for (int i = 0; i < 7; ++i) {
+        if (has.data[i]) {
+            double min_val = std::numeric_limits<double>::max();
+            for (auto& pcset : epoch_details) {
+                min_val = std::min(min_val, pcset.data[i]);
+            }
+            min.data[i] = min_val;
+        }
+    }
+    return min;
+}
+PerfCountSet<double> BenchResult::max() const {
+    PerfCountSet<double> max;
+    for (int i = 0; i < 7; ++i) {
+        if (has.data[i]) {
+            double max_val = std::numeric_limits<double>::min();
+            for (auto& pcset : epoch_details) {
+                max_val = std::max(max_val, pcset.data[i]);
+            }
+            max.data[i] = max_val;
+        }
+    }
+    return max;
+}
+PerfCountSet<double> BenchResult::mean() const {
+    PerfCountSet<double> mean;
+
+    return mean;
+}
+
+void Benchmark::report() {
+    static const char* names[] = {
+        "elapsed(ns)", "page faults", "cpu_cycles", "ctx switch", "inst", "branch", "branch misses",
+    };
+    std::cerr << "" << title << ":" << std::endl;
+
+    std::vector<std::string> headers{""};
+    for (unsigned i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
+        if (result[0].has.data[i]) headers.push_back(names[i]);
+    }
+    Table output;
+    output.set_header(headers);
+    for (auto& row : result) {
+        auto                result = row.average();
+        std::vector<double> values;
+        for (int j = 0; j < 7; ++j)
+            if (row.has.data[j]) values.push_back(result.data[j]);
+        output.add_row(row.name, values);
+    }
+    std::cerr << output.str() << std::endl;
+}
+
+
+namespace detail {
+// Windows version of doNotOptimizeAway
+// see https://github.com/google/benchmark/blob/master/include/benchmark/benchmark.h#L307
+// see https://github.com/facebook/folly/blob/master/folly/Benchmark.h#L280
+// see https://docs.microsoft.com/en-us/cpp/preprocessor/optimize
+#if defined(_MSC_VER)
+#pragma optimize("", off)
+void doNotOptimizeAwaySink(void const*) {}
+#pragma optimize("", on)
+#endif
+
+}  // namespace detail
+
+#ifdef ZEROERR_PERF
+#include <linux/perf_event.h>
+#include <sys/ioctl.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+
+namespace detail {
+struct LinuxPerformanceCounter {
+    inline void beginMeasure() {
+        if (mHasError) return;
+
+        mHasError = -1 == ioctl(mFd, PERF_EVENT_IOC_RESET, PERF_IOC_FLAG_GROUP);
+        if (mHasError) return;
+
+        mHasError = -1 == ioctl(mFd, PERF_EVENT_IOC_ENABLE, PERF_IOC_FLAG_GROUP);
+    }
+    inline void endMeasure() {
+        if (mHasError) return;
+
+        mHasError = (-1 == ioctl(mFd, PERF_EVENT_IOC_DISABLE, PERF_IOC_FLAG_GROUP));
+        if (mHasError) return;
+
+        auto const numBytes = sizeof(uint64_t) * mCounters.size();
+        auto       ret      = read(mFd, mCounters.data(), numBytes);
+        mHasError           = ret != static_cast<ssize_t>(numBytes);
+    }
+
+
+    // rounded integer division
+    template <typename T>
+    static inline T divRounded(T a, T divisor) {
+        return (a + divisor / 2) / divisor;
+    }
+
+    static inline uint32_t mix(uint32_t x) noexcept {
+        x ^= x << 13;
+        x ^= x >> 17;
+        x ^= x << 5;
+        return x;
+    }
+
+    template <typename Op>
+    void calibrate(Op&& op) {
+        // clear current calibration data,
+        for (auto& v : mCalibratedOverhead) {
+            v = UINT64_C(0);
+        }
+
+        // create new calibration data
+        auto newCalibration = mCalibratedOverhead;
+        for (auto& v : newCalibration) {
+            v = std::numeric_limits<uint64_t>::max();
+        }
+        for (size_t iter = 0; iter < 100; ++iter) {
+            beginMeasure();
+            op();
+            endMeasure();
+            if (mHasError) return;
+
+            for (size_t i = 0; i < newCalibration.size(); ++i) {
+                auto diff = mCounters[i];
+                if (newCalibration[i] > diff) {
+                    newCalibration[i] = diff;
+                }
+            }
+        }
+
+        mCalibratedOverhead = std::move(newCalibration);
+
+        {
+            // calibrate loop overhead. For branches & instructions this makes sense, not so much
+            // for everything else like cycles. marsaglia's xorshift: mov, sal/shr, xor. Times 3.
+            // This has the nice property that the compiler doesn't seem to be able to optimize
+            // multiple calls any further. see https://godbolt.org/z/49RVQ5
+            uint64_t const numIters = 100000U + (std::random_device{}() & 3);
+            uint64_t       n        = numIters;
+            uint32_t       x        = 1234567;
+
+            beginMeasure();
+            while (n-- > 0) {
+                x = mix(x);
+            }
+            endMeasure();
+            detail::doNotOptimizeAway(x);
+            auto measure1 = mCounters;
+
+            n = numIters;
+            beginMeasure();
+            while (n-- > 0) {
+                // we now run *twice* so we can easily calculate the overhead
+                x = mix(x);
+                x = mix(x);
+            }
+            endMeasure();
+            detail::doNotOptimizeAway(x);
+            auto measure2 = mCounters;
+
+            for (size_t i = 0; i < mCounters.size(); ++i) {
+                // factor 2 because we have two instructions per loop
+                auto m1 =
+                    measure1[i] > mCalibratedOverhead[i] ? measure1[i] - mCalibratedOverhead[i] : 0;
+                auto m2 =
+                    measure2[i] > mCalibratedOverhead[i] ? measure2[i] - mCalibratedOverhead[i] : 0;
+                auto overhead = m1 * 2 > m2 ? m1 * 2 - m2 : 0;
+
+                mLoopOverhead[i] = divRounded(overhead, numIters);
+            }
+        }
+    }
+
+
+    struct Target {
+        uint64_t* targetValue;
+        bool      correctMeasuringOverhead;
+        bool      correctLoopOverhead;
+    };
+
+    std::map<uint64_t, Target> mIdToTarget{};
+
+    // start with minimum size of 3 for read_format
+    std::vector<uint64_t> mCounters{3};
+    std::vector<uint64_t> mCalibratedOverhead{3};
+    std::vector<uint64_t> mLoopOverhead{3};
+
+    uint64_t mTimeEnabledNanos = 0;
+    uint64_t mTimeRunningNanos = 0;
+
+    int  mFd       = -1;
+    bool mHasError = false;
+
+    ~LinuxPerformanceCounter() {
+        if (mFd != -1) close(mFd);
+    }
+
+    bool monitor(perf_sw_ids swId, Target target) {
+        return monitor(PERF_TYPE_SOFTWARE, swId, target);
+    }
+
+    bool monitor(perf_hw_id hwId, Target target) {
+        return monitor(PERF_TYPE_HARDWARE, hwId, target);
+    }
+
+    bool monitor(uint32_t type, uint64_t eventid, Target target) {
+        *target.targetValue = (std::numeric_limits<uint64_t>::max)();
+        if (mHasError) return false;
+
+        auto pea = perf_event_attr();
+        std::memset(&pea, 0, sizeof(perf_event_attr));
+        pea.type           = type;
+        pea.size           = sizeof(perf_event_attr);
+        pea.config         = eventid;
+        pea.disabled       = 1;  // start counter as disabled
+        pea.exclude_kernel = 1;
+        pea.exclude_hv     = 1;
+
+        pea.read_format = PERF_FORMAT_GROUP | PERF_FORMAT_ID | PERF_FORMAT_TOTAL_TIME_ENABLED |
+                          PERF_FORMAT_TOTAL_TIME_RUNNING;
+
+        const int pid = 0;         // the current process
+        const int cpu = -1;        // all CPUs
+#if defined(PERF_FLAG_FD_CLOEXEC)  // since Linux 3.14
+        const unsigned long flags = PERF_FLAG_FD_CLOEXEC;
+#else
+        const unsigned long flags = 0;
+#endif
+
+        auto fd = static_cast<int>(syscall(__NR_perf_event_open, &pea, pid, cpu, mFd, flags));
+        if (-1 == fd) return false;
+        // first call: set to fd, and use this from now on
+        if (-1 == mFd) mFd = fd;
+
+        uint64_t id = 0;
+        if (-1 == ioctl(fd, PERF_EVENT_IOC_ID, &id)) return false;
+
+        // insert into map, rely on the fact that map's references are constant.
+        mIdToTarget.emplace(id, target);
+
+        // prepare readformat with the correct size (after the insert)
+        auto size = 3 + 2 * mIdToTarget.size();
+        mCounters.resize(size);
+        mCalibratedOverhead.resize(size);
+        mLoopOverhead.resize(size);
+
+        return true;
+    }
+
+    void updateResults(uint64_t numIters) {
+        // clear old data
+        for (auto& id_value : mIdToTarget) {
+            *id_value.second.targetValue = UINT64_C(0);
+        }
+
+        if (mHasError) return;
+
+        mTimeEnabledNanos = mCounters[1] - mCalibratedOverhead[1];
+        mTimeRunningNanos = mCounters[2] - mCalibratedOverhead[2];
+
+        for (uint64_t i = 0; i < mCounters[0]; ++i) {
+            auto idx = static_cast<size_t>(3 + i * 2 + 0);
+            auto id  = mCounters[idx + 1U];
+
+            auto it = mIdToTarget.find(id);
+            if (it != mIdToTarget.end()) {
+                auto& tgt        = it->second;
+                *tgt.targetValue = mCounters[idx];
+                if (tgt.correctMeasuringOverhead) {
+                    if (*tgt.targetValue >= mCalibratedOverhead[idx]) {
+                        *tgt.targetValue -= mCalibratedOverhead[idx];
+                    } else {
+                        *tgt.targetValue = 0U;
+                    }
+                }
+                if (tgt.correctLoopOverhead) {
+                    auto correctionVal = mLoopOverhead[idx] * numIters;
+                    if (*tgt.targetValue >= correctionVal) {
+                        *tgt.targetValue -= correctionVal;
+                    } else {
+                        *tgt.targetValue = 0U;
+                    }
+                }
+            }
+        }
+    }
+};
+}  // namespace detail
+#endif
+
+
+#ifdef ZEROERR_ETW
+#define INITGUID
+#define NOMINMAX
+#include <Windows.h>
+#include <evntrace.h>
+#include <wmistr.h>
+
+namespace detail {
+struct WindowsPerformanceCounter {
+    TRACEHANDLE             mTraceHandle;
+    std::string             name = "ZeroErr ETW";
+    PEVENT_TRACE_PROPERTIES traceProperties;
+
+    inline void beginMeasure() {
+        size_t buffersize = sizeof(EVENT_TRACE_PROPERTIES) + sizeof(KERNEL_LOGGER_NAME);
+
+        traceProperties = (PEVENT_TRACE_PROPERTIES)malloc(buffersize);
+        ZeroMemory(traceProperties, buffersize);
+
+        traceProperties->Wnode.BufferSize    = buffersize;
+        traceProperties->Wnode.Flags         = WNODE_FLAG_TRACED_GUID;
+        traceProperties->Wnode.Guid          = SystemTraceControlGuid;
+        traceProperties->Wnode.ClientContext = 1;  // QPC clock resolution
+
+        traceProperties->BufferSize     = 32;  // 32 KB
+        traceProperties->MinimumBuffers = 32;  // 32 buffers
+        traceProperties->MaximumBuffers = 32;  // 32 buffers
+
+        traceProperties->LogFileMode = EVENT_TRACE_BUFFERING_MODE;
+        traceProperties->EnableFlags = EVENT_TRACE_FLAG_CSWITCH;
+
+        traceProperties->LoggerNameOffset = sizeof(EVENT_TRACE_PROPERTIES);
+
+        ULONG status = StartTrace(&mTraceHandle, KERNEL_LOGGER_NAME, traceProperties);
+
+        if (ERROR_SUCCESS != status) {
+            if (ERROR_ALREADY_EXISTS == status) {
+                printf("The NT Kernel Logger session is already in use.\n");
+            } else {
+                printf("EnableTrace() failed with %lu\n", status);
+            }
+            goto cleanup;
+        }
+
+        // I got those values from here:
+        // https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/ke/profobj/kprofile_source.htm
+        // TotalIssues TotalCycles CacheMisses BranchMispredictions
+        unsigned long perf_counter[4] = {0x02, 0x13, 0x0A, 0x0B};
+        TraceSetInformation(mTraceHandle, TracePmcCounterListInfo, perf_counter, sizeof(perf_counter));
+
+    cleanup:
+        if (mTraceHandle) {
+            status = ControlTrace(mTraceHandle, KERNEL_LOGGER_NAME, traceProperties,
+                                  EVENT_TRACE_CONTROL_STOP);
+
+            if (ERROR_SUCCESS != status) printf("ControlTrace(stop) failed with %lu\n", status);
+        }
+        if (traceProperties) {
+            free(traceProperties);
+            traceProperties = nullptr;
+        }
+    }
+
+    inline void endMeasure() {
+        StopTrace(mTraceHandle, KERNEL_LOGGER_NAME, traceProperties);
+        if (traceProperties) {
+            free(traceProperties);
+            traceProperties = nullptr;
+        }
+    }
+};
+}  // namespace detail
+#endif
+
+
+PerformanceCounter::PerformanceCounter() {
+    _has.timeElapsed() = true;  // this should be always available
+#ifdef ZEROERR_PERF
+    _perf        = new detail::LinuxPerformanceCounter();
+    using Target = detail::LinuxPerformanceCounter::Target;
+
+    // clang-format off
+    _has.pageFaults()         = _perf->monitor(PERF_COUNT_SW_PAGE_FAULTS,         Target{&_val.pageFaults(),         true, false});
+    _has.cpuCycles()          = _perf->monitor(PERF_COUNT_HW_CPU_CYCLES,          Target{&_val.cpuCycles(),          true, false});
+    _has.contextSwitches()    = _perf->monitor(PERF_COUNT_SW_CONTEXT_SWITCHES,    Target{&_val.contextSwitches(),    true, false});
+    _has.instructions()       = _perf->monitor(PERF_COUNT_HW_INSTRUCTIONS,        Target{&_val.instructions(),       true, true });
+    _has.branchInstructions() = _perf->monitor(PERF_COUNT_HW_BRANCH_INSTRUCTIONS, Target{&_val.branchInstructions(), true, false});
+    _has.branchMisses()       = _perf->monitor(PERF_COUNT_HW_BRANCH_MISSES,       Target{&_val.branchMisses(),       true, false});
+    // clang-format on
+
+    _perf->calibrate([] {
+        auto before = Clock::now();
+        auto after  = Clock::now();
+        (void)before;
+        (void)after;
+    });
+
+    if (_perf->mHasError) {
+        // something failed, don't monitor anything.
+        _has = PerfCountSet<bool>{};
+    }
+#endif
+
+#ifdef ZEROERR_ETW
+    win_perf = new detail::WindowsPerformanceCounter();
+
+#endif
+}
+PerformanceCounter::~PerformanceCounter() {
+#ifdef ZEROERR_PERF
+    delete _perf;
+#endif
+}
+
+PerformanceCounter& PerformanceCounter::inst() {
+    static PerformanceCounter counter;
+    return counter;
+}
+
+void PerformanceCounter::beginMeasure() {
+#ifdef ZEROERR_PERF
+    _perf->beginMeasure();
+#endif
+    _start = Clock::now();
+}
+void PerformanceCounter::endMeasure() {
+    elapsed = Clock::now() - _start;
+#ifdef ZEROERR_PERF
+    _perf->endMeasure();
+#endif
+}
+void PerformanceCounter::updateResults(uint64_t numIters) {
+#ifdef ZEROERR_PERF
+    _perf->updateResults(numIters);
+#endif
+}
+
+
+}  // namespace zeroerr
+
 #endif // ZEROERR_IMPLEMENTATION

@@ -8,7 +8,7 @@ Hope you get 0 errors and 0 warnings everyday!
 ![](./docs/fig/zeroerr.jpg)
 
 
-ZeroErr is a smart assert library, a lightweight unit test framework and a quick logging framework. It integrates those features and provided an unite and clear interface for seperate using or joint using. 
+ZeroErr is a smart assertion library, a lightweight unit testing framework and a structure logging framework. It integrates those features and provided an unite and clear interface for separated usage or combined usage. 
 
 [English Documentation](https://sunxfancy.github.io/zeroerr/en/) | [项目文档](https://sunxfancy.github.io/zeroerr/zh/)
 
@@ -21,7 +21,7 @@ The current popular unit testing frameworks, e.g. Catch2, doctest, Boost.Test an
 
 ### 1. Generic Printing
 
-Most unit testing frameworks and logger libraries can not provide a generic printing for user customized type. Especially, when using containers, struct and pointers (including smart pointers), user have to manualy write code to generate the log message or print those information during unit testing failed cases. 
+Most unit testing frameworks and logger libraries can not provide a generic printing for user customized types. Especially, when using containers, structures and pointers (including smart pointers), user have to manually write code to generate the log message or print those information during unit testing failed cases. 
 
 This library `zeroerr` gives you an ability to print generically for all types:
 
@@ -36,7 +36,7 @@ Similar to other C++ unit testing frameworks, `zeroerr` will convert this piece 
 
 ![case1](docs/fig/case1.png)
 
-For the custom struct type with override `std::ostream& operator<<(std::ostream&, Type)` stream output, you can use it not only for this type but also all contains using this type, including multiple recurisve contains:
+For the custom struct type with override `std::ostream& operator<<(std::ostream&, Type)` stream output, you can use it not only for this type but also all contains using this type, including multiple recursive contains:
 
 ```c++
 struct Node {
@@ -94,9 +94,9 @@ This functin `PrintExt` will match all the class who's base class is `Value` and
 
 ![case3-llvm](./docs/fig/case3.png)
 
-### 2. Joint using of assert, log and unit testing
+### 2. Combined usage of assert, log and unit testing
 
-If you use a logger, an unit testing framework and a smart assert libary, you can joint use them and some macros may conflict. In `zeroerr`, if an assertion is failed, the logger will recevie an event and stored in your log file. If you are using an assertion in unit testing, the assertion can be recorded and reported in the end. 
+If you use one logging framework, an unit testing framework and an assertion library, it's not a easy work to combine them together. There is a lot of benefits to use assertion, logging and unit testing together. In `zeroerr`, if an assertion is failed, the logger will receive an event and stored the event in your log file. If you are using an assertion in unit testing, the assertion failure, logged fatal events can be recorded and reported.
 
 ```c++
 int fib(int n) {
@@ -121,13 +121,33 @@ TEST_CASE("fib function test") {
 
 ![joint1](docs/fig/joint1.png)
 
-Further more, the unit testing can check the log result matches the previous running result to avoid writing code to check it.
+For the logging system, the unit testing can access the log data to ensure that the function has executed the expected logic and results.
+
+```c++
+118 static void function() {
+119    int k = system_call();
+120    LOG_IF(k != 0, "System call failed, error code = {k}", k);
+121 }
+...
+
+TEST_CASE("access log in Test case") {
+    zeroerr::suspendLog();
+    function();
+    CHECK(LOG_GET(function, 120, k, int) == ERROR_CODE);
+    zeroerr::resumeLog();
+}
+```
+
+In order to access the log, we need to pause the log system first, to avoid the data being output to the file, then call the function, access the data in the log through the `LOG_GET` macro, and finally resume the log system. (Currently experimental, only the first call of each log point can be accessed)
+
+
+Further more, the unit testing can check the logged result if it matches the previous running result (a golden file) to avoid writing any code in the test case.
 
 ```c++
 TEST_CASE("match ostream") {
     // match output can be done in the following workflow
-    // 1. user mark the test case which are comparing output use 'have_same_output'
-    // 2. If the output is not exist, the result has been used as a correct verifier.
+    // 1. user mark the test case which are comparing output use 'ZEROERR_HAVE_SAME_OUTPUT'
+    // 2. If the output is not exist, the result will be store to the disk.
     // 3. If the output is exist, compare with it and report error if output is not match.
     std::cerr << "a = 100" << std::endl;
 
@@ -138,54 +158,63 @@ TEST_CASE("match ostream") {
 Once you set `ZEROERR_HAVE_SAME_OUTPUT` marco, the system will check the output stream and save the first run result into a file. Then, the next run will compare the result to see if it the same. (Currently experimental)
 
 
-Finally, for the log system, the unit testing can access the log data to ensure that the function has executed the expected logic and results.
+## 3. Fuzzing Support
+
+Most Unit Testing frameworks do not support fuzzing. However, it's a powerful feature to automatically detect faults in the software and can greatly reduce the work to write test cases.
+
+Different than other fuzzing framework, `zeroerr` can also support logging and assertion in the code, so the fuzzing result not only contains corpus but also with the logging and assertion information.
+
+Here is an example of using `zeroerr` to do structured fuzzing:
 
 ```c++
-118 static void function() {
-119    LOG("function log {i}", 1);  
-120    LOG("function log {sum}, {i}", 10, 1);
-121 }
-...
-
-TEST_CASE("access log in Test case") {
-    zeroerr::suspendLog();
-    function();
-    CHECK(LOG_GET(function, 119, i, int) == 1);
-    CHECK(LOG_GET(function, 120, sum, int) == 10);
-    CHECK(LOG_GET(function, 120, i, int) == 1);
-    zeroerr::resumeLog();
+FUZZ_TEST_CASE("fuzz_test") {
+    LOG("Run fuzz_test");
+    FUZZ_FUNC([=](int k, std::string num) {
+        int t = atoi(num.c_str());
+        LOG("k: {k}, num:{num}, t: {t}", k, num, t);
+        REQUIRE(k == t);
+    })
+        .WithDomains(InRange<int>(0, 10), Arbitrary<std::string>())
+        .WithSeeds({{5, "Foo"}, {10, "Bar"}})
+        .Run(10);
 }
 ```
 
-In order to access the log, we need to pause the log system first, to avoid the data being output to the file, then call the function, access the data in the log through the `LOG_GET` macro, and finally resume the log system. (Currently experimental, only the first call of each log point can be accessed)
+Inspired by [fuzztest](https://github.com/google/fuzztest), Domain is a concept to specify the input data range (or patterns) for the target function. Here, we use `InRange` to specify the range of `k` is 0 to 10, and `Arbitrary` to specify the data of `num` can be any random string. Then, we use `WithSeeds` to specify the initial seeds for the fuzzing. 
+
+The macro `FUZZ_TEST_CASE` will generate a test case which can connect with `libFuzzer` to run the fuzzing. Finally, we use `Run(10)` to call `libFuzzer` to run the target for 10 times.
+
+To build the test case with fuzzing, you need to use `clang++` to compile the code and with `-fsanitize=fuzzer-no-link` and link the `-lclang_rt.fuzzer_no_main-x86_64` which is a version of libFuzzer without main function. You can find this runtime library by calling `clang++ -print-runtime-dir`. Here is the complete command to build the test case with fuzzing support:
+
+```bash
+clang++ -std=c++11 -fsanitize=fuzzer-no-link -L=`clang++ -print-runtime-dir` -lclang_rt.fuzzer_no_main-x86_64  -o test_fuzz test_fuzz.cpp 
+```
 
 
+## Other Good Features
 
-## Features
 
+Here are a list of features we provided:
 
-Using ZeroErr, you can catch your assert error, log fatal event in the unit testing.
-The fatal condition will be recorded and printed. Here are a list of features we provided:
-
-1. Minimal Requirement
-You can only include what you need. If you need assert but no unit testing, no problem.
+1. Partially include
+You can only include what you need. If you need only assertion but no unit testing, no problem.
 
 2. Optional thread safety 
-You can choose to build with/without thread safety. For some simple single thread program, log is no need to be multithread safed.
+You can choose to build with/without thread safety.
 
 3. Fastest log
-Using a lock-free queue for logging and multiple level of log writing policies. You can choose to only write to disk with the most important events.
+Multiple level of log writing policies. You can choose to only write to disk with the most important events.
 
 4. Customized print / log / assert printing format
-You can customize your printing format for everything. There is a callback function for the printing.
+You can customize your printing format for everything. There is a templated callback function for the printing.
 
 5. Quickly debug something
-You can use dbg macro to quickly see the output, it can print the expression also.
+You can use dbg macro to quickly see the output, it can be applied to any expression.
 
 6. Colorful output
-You can have default colorful output to terminal and no color for file 
+You can have default colorful output to terminal and no color for file output
 
-7. Print struct/stl/special library data structure
+7. Print struct/stl/pointers without any extra code
 
 8. Doctest like assertion and unit test feature
 You can use your unit test as a documentation of function behavior. The output of unittest can be a documented report.
@@ -194,13 +223,13 @@ You can use your unit test as a documentation of function behavior. The output o
 After assertion failed, the logging result will print automatically even if you didn't redirect to your error stream
 
 10. Logging Category 
-Logging information can have customized category and only display one categroy based on your assertion or configuration
+Logging information can have customized category and only display one category based on your assertion or configuration
 
 11. Logging for Unit Testing
-You can use a correct logging result as your unit testing comparsion. So you just need to manually verify your log once and setup it as baseline comparsion. The unit testing framework will use that as the result to verify unit testing
+You can use a correct logging result as your unit testing golden file. So you just need to manually verify your log once and save it. The unit testing framework will use the golden file to verify your unit testing result.
 
 12. Structured Logging
-We can support output structured information directly into plain text, json, logfmt, or other custom format
+We can support output structured information directly into plain text or lisp format (json, logfmt, or other custom format should be the next step to support)
 
 13. Automatic Tracing with logging
 While logging at the end, we can record the time consuming for this function.
@@ -210,7 +239,7 @@ While logging at the end, we can record the time consuming for this function.
 * dbg
 * print (without use extern functions)
 * assert
-* color (if always enable)
+* color (if always enabled)
 
 
 ## The logo generation

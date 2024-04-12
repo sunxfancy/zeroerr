@@ -53,5 +53,5 @@ file(APPEND zeroerr.hpp "${config}\n${color}\n${console}\n${debugbreak}\n${threa
 file(APPEND zeroerr.hpp "${domain}\n${in_range}\n${element_of}\n${container_of}\n${aggregate_of}\n${arbitrary}\n")
 file(APPEND zeroerr.hpp "${benchmark}\n${assert}\n${dbg}\n${format}\n${log}\n${table}\n${profiler}\n${unittest}\n${fuzztest}\n")
 file(APPEND zeroerr.hpp "#ifdef ZEROERR_IMPLEMENTATION\n")
-file(APPEND zeroerr.hpp "${benchmark_cpp}\n${rng_cpp}\n${color_cpp}\n${print_cpp}\n${console_cpp}\n${log_cpp}\n${table_cpp}\n${unittest_cpp}\n${fuzztest_cpp}\n")
+file(APPEND zeroerr.hpp "${rng_cpp}\n${color_cpp}\n${print_cpp}\n${console_cpp}\n${log_cpp}\n${table_cpp}\n${unittest_cpp}\n${fuzztest_cpp}\n${benchmark_cpp}\n")
 file(APPEND zeroerr.hpp "#endif // ZEROERR_IMPLEMENTATION\n")

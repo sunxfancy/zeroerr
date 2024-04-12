@@ -134,24 +134,32 @@ extern void RunFuzzTest(IFuzzTest& fuzz_test, int seed = 0, int runs = 1000, int
 
 template <typename TargetFunction, typename FuncType, typename Domain, typename Base>
 struct FuzzTestWithDomain : public Base {
-    FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), domain(domain) {}
+    FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), m_domain(domain) {}
 
     virtual void Run(int _count = 1000, int _seed = 0) override {
         Base::count     = 1;
         Base::max_count = _count;
-        rng             = new Rng(_seed);
+        m_rng           = new Rng(_seed);
         RunFuzzTest(*this, _seed, _count, 500, 1200, 1);
-        delete rng;
-        rng = nullptr;
+        delete m_rng;
+        m_rng = nullptr;
+    }
+
+    typename Domain::CorpusType GetRandomCorpus() {
+        Rng& rng = *this->m_rng;
+        if (Base::seeds.size() > 0 && rng.bounded(2) == 0) {
+            return m_domain.FromValue(Base::seeds[rng() % Base::seeds.size()]);
+        }
+        return m_domain.GetRandomCorpus(rng);
     }
 
     typename Domain::CorpusType TryParse(const std::string& input) {
         try {
             IRObject obj = IRObject::FromString(input);
-            if (obj.type == IRObject::Type::Undefined) return domain.GetRandomCorpus(*rng);
-            return domain.ParseCorpus(obj);
+            if (obj.type == IRObject::Type::Undefined) return GetRandomCorpus();
+            return m_domain.ParseCorpus(obj);
         } catch (...) {
-            return domain.GetRandomCorpus(*rng);
+            return GetRandomCorpus();
         }
     }
 
@@ -164,22 +172,22 @@ struct FuzzTestWithDomain : public Base {
         Base::count++;
         std::string                 input  = std::string((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
-        typename Domain::ValueType  value  = domain.GetValue(corpus);
+        typename Domain::ValueType  value  = m_domain.GetValue(corpus);
         apply(value, detail::gen_seq<std::tuple_size<typename Domain::ValueType>::value>{});
     }
 
     virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
                                    unsigned int seed) override {
-        Rng                         mrng(seed);
+        Rng                         rng(seed);
         std::string                 input  = std::string((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
-        domain.Mutate(mrng, corpus, false);
-        IRObject mutated_obj = domain.SerializeCorpus(corpus);
+        m_domain.Mutate(rng, corpus, false);
+        IRObject mutated_obj = m_domain.SerializeCorpus(corpus);
         return IRObject::ToString(mutated_obj);
     }
 
-    Domain domain;
-    Rng*   rng;
+    Domain m_domain;
+    Rng*   m_rng;
 };
 
 
