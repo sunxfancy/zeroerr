@@ -5,10 +5,15 @@
 
 #define ZEROERR_VERSION_MAJOR 0
 #define ZEROERR_VERSION_MINOR 2
-#define ZEROERR_VERSION_PATCH 0
+#define ZEROERR_VERSION_PATCH 1
 #define ZEROERR_VERSION \
     (ZEROERR_VERSION_MAJOR * 10000 + ZEROERR_VERSION_MINOR * 100 + ZEROERR_VERSION_PATCH)
-#define ZEROERR_VERSION_STR "0.2.0"
+
+#define ZEROERR_STR(x) #x
+
+#define ZEROERR_VERSION_STR_BUILDER(a, b, c) ZEROERR_STR(a) "." ZEROERR_STR(b) "." ZEROERR_STR(c)
+#define ZEROERR_VERSION_STR \
+    ZEROERR_VERSION_STR_BUILDER(ZEROERR_VERSION_MAJOR, ZEROERR_VERSION_MINOR, ZEROERR_VERSION_PATCH)
 
 // If you just wish to use the color without dynamic
 // enable or disable it, you can uncomment the following line
@@ -686,11 +691,11 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() { retur
 #pragma once
 
 
-#include <type_traits>
 #include <ostream>
 #include <sstream>
 #include <string>
 #include <tuple>  // this should be removed
+#include <type_traits>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -908,7 +913,7 @@ void visit2_at(std::tuple<Ts...>& tup1, std::tuple<T2s...> const& tup2, size_t i
 
 }  // namespace detail
 
-} // namespace zeroerr
+}  // namespace zeroerr
 
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
@@ -2052,9 +2057,7 @@ public:
 
     CorpusType FromValue(const ValueType& v) const override {
         for (size_t i = 0; i < elements.size(); i++) {
-            if (elements[i] == v) {
-                return i;
-            }
+            if (elements[i] == v) return i;
         }
         return 0;
     }
@@ -2410,6 +2413,7 @@ class Arbitrary<
     T, typename std::enable_if<detail::is_specialization<T, std::basic_string>::value>::type>
     : public Domain<T, std::vector<typename T::value_type>> {
     Arbitrary<std::vector<typename T::value_type>> impl;
+
 public:
     using ValueType  = T;
     using CorpusType = std::vector<typename T::value_type>;
@@ -2419,9 +2423,7 @@ public:
         return CorpusType(v.begin(), v.end());
     }
 
-    CorpusType GetRandomCorpus(Rng& rng) const override {
-        return impl.GetRandomCorpus(rng);
-    }
+    CorpusType GetRandomCorpus(Rng& rng) const override { return impl.GetRandomCorpus(rng); }
 
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
         impl.Mutate(rng, v, only_shrink);
@@ -2452,11 +2454,13 @@ public:
 
 template <typename T, typename U>
 class Arbitrary<std::pair<T, U>>
-    : public AggregateOf<std::pair<typename std::remove_const<T>::type, typename std::remove_const<U>::type>> {};
+    : public AggregateOf<
+          std::pair<typename std::remove_const<T>::type, typename std::remove_const<U>::type>> {};
 
 
 template <typename... T>
-class Arbitrary<std::tuple<T...>> : public AggregateOf<std::tuple<typename std::remove_const<T>::type...>> {};
+class Arbitrary<std::tuple<T...>>
+    : public AggregateOf<std::tuple<typename std::remove_const<T>::type...>> {};
 
 template <typename T>
 class Arbitrary<const T> : public Arbitrary<T> {};
@@ -3926,24 +3930,32 @@ extern void RunFuzzTest(IFuzzTest& fuzz_test, int seed = 0, int runs = 1000, int
 
 template <typename TargetFunction, typename FuncType, typename Domain, typename Base>
 struct FuzzTestWithDomain : public Base {
-    FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), domain(domain) {}
+    FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), m_domain(domain) {}
 
     virtual void Run(int _count = 1000, int _seed = 0) override {
         Base::count     = 1;
         Base::max_count = _count;
-        rng             = new Rng(_seed);
+        m_rng           = new Rng(_seed);
         RunFuzzTest(*this, _seed, _count, 500, 1200, 1);
-        delete rng;
-        rng = nullptr;
+        delete m_rng;
+        m_rng = nullptr;
+    }
+
+    typename Domain::CorpusType GetRandomCorpus() {
+        Rng& rng = *this->m_rng;
+        if (Base::seeds.size() > 0 && rng.bounded(2) == 0) {
+            return m_domain.FromValue(Base::seeds[rng() % Base::seeds.size()]);
+        }
+        return m_domain.GetRandomCorpus(rng);
     }
 
     typename Domain::CorpusType TryParse(const std::string& input) {
         try {
             IRObject obj = IRObject::FromString(input);
-            if (obj.type == IRObject::Type::Undefined) return domain.GetRandomCorpus(*rng);
-            return domain.ParseCorpus(obj);
+            if (obj.type == IRObject::Type::Undefined) return GetRandomCorpus();
+            return m_domain.ParseCorpus(obj);
         } catch (...) {
-            return domain.GetRandomCorpus(*rng);
+            return GetRandomCorpus();
         }
     }
 
@@ -3956,22 +3968,22 @@ struct FuzzTestWithDomain : public Base {
         Base::count++;
         std::string                 input  = std::string((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
-        typename Domain::ValueType  value  = domain.GetValue(corpus);
+        typename Domain::ValueType  value  = m_domain.GetValue(corpus);
         apply(value, detail::gen_seq<std::tuple_size<typename Domain::ValueType>::value>{});
     }
 
     virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
                                    unsigned int seed) override {
-        Rng                         mrng(seed);
+        Rng                         rng(seed);
         std::string                 input  = std::string((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
-        domain.Mutate(mrng, corpus, false);
-        IRObject mutated_obj = domain.SerializeCorpus(corpus);
+        m_domain.Mutate(rng, corpus, false);
+        IRObject mutated_obj = m_domain.SerializeCorpus(corpus);
         return IRObject::ToString(mutated_obj);
     }
 
-    Domain domain;
-    Rng*   rng;
+    Domain m_domain;
+    Rng*   m_rng;
 };
 
 
@@ -5528,10 +5540,10 @@ public:
 
     struct TestCaseData {
         struct TestCase {
-            std::string              filename, name;
-            unsigned                 line;
-            double                   time;
-            TestContext              context;
+            std::string filename, name;
+            unsigned    line;
+            double      time;
+            TestContext context;
         };
 
         std::vector<TestCase> testcases;

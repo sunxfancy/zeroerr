@@ -84,6 +84,7 @@ class Arbitrary<
     T, typename std::enable_if<detail::is_specialization<T, std::basic_string>::value>::type>
     : public Domain<T, std::vector<typename T::value_type>> {
     Arbitrary<std::vector<typename T::value_type>> impl;
+
 public:
     using ValueType  = T;
     using CorpusType = std::vector<typename T::value_type>;
@@ -93,9 +94,7 @@ public:
         return CorpusType(v.begin(), v.end());
     }
 
-    CorpusType GetRandomCorpus(Rng& rng) const override {
-        return impl.GetRandomCorpus(rng);
-    }
+    CorpusType GetRandomCorpus(Rng& rng) const override { return impl.GetRandomCorpus(rng); }
 
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
         impl.Mutate(rng, v, only_shrink);
@@ -126,11 +125,13 @@ public:
 
 template <typename T, typename U>
 class Arbitrary<std::pair<T, U>>
-    : public AggregateOf<std::pair<typename std::remove_const<T>::type, typename std::remove_const<U>::type>> {};
+    : public AggregateOf<
+          std::pair<typename std::remove_const<T>::type, typename std::remove_const<U>::type>> {};
 
 
 template <typename... T>
-class Arbitrary<std::tuple<T...>> : public AggregateOf<std::tuple<typename std::remove_const<T>::type...>> {};
+class Arbitrary<std::tuple<T...>>
+    : public AggregateOf<std::tuple<typename std::remove_const<T>::type...>> {};
 
 template <typename T>
 class Arbitrary<const T> : public Arbitrary<T> {};

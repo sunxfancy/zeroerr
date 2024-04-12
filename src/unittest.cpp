@@ -676,10 +676,10 @@ public:
 
     struct TestCaseData {
         struct TestCase {
-            std::string              filename, name;
-            unsigned                 line;
-            double                   time;
-            TestContext              context;
+            std::string filename, name;
+            unsigned    line;
+            double      time;
+            TestContext context;
         };
 
         std::vector<TestCase> testcases;
