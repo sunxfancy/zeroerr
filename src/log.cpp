@@ -1,6 +1,9 @@
 #include "zeroerr/log.h"
 #include "zeroerr/internal/threadsafe.h"
 
+#include <unordered_set>
+#include <iomanip>
+
 const char* ZEROERR_LOG_CATEGORY = "default";
 
 

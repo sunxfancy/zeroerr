@@ -3093,14 +3093,8 @@ std::string format(const char* fmt, T... args) {
 
 
 #include <chrono>
-#include <cstdlib>
-#include <deque>
-#include <iomanip>
-#include <iostream>
 #include <map>
-#include <sstream>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -4310,6 +4304,9 @@ TerminalSize getTerminalWidth() {
 }  // namespace zeroerr
 
 
+
+#include <unordered_set>
+#include <iomanip>
 
 const char* ZEROERR_LOG_CATEGORY = "default";
 
