@@ -14,7 +14,7 @@ ZeroErr可以采用两种方式引用，其一是直接下载 `zeroerr.hpp` 文�
 
 下面我们用一些简单的示例来说明如何使用框架。
 
-### 单元测试
+### 单元测试和断言
 
 `TEST_CASE` 宏是最基础的定义单元测试的宏，如果您熟悉 catch2 或 doctest, 您应该对这种写法非常熟悉。我们给该测试一个名字，然后在接下来的函数体中编写测试代码。
 
@@ -60,6 +60,9 @@ TEST_CASE("fib function test") {
 - CHECK_GE(a, b) 判断是否大于等于 `>=`
 
 
+所有的断言宏，不但可以在单元测试中使用，也可以在任意函数中使用。
+
+
 ### log 日志系统
 
 日志系统提供了一组宏：
@@ -102,8 +105,73 @@ LOG_IF_EVERY_(N, condition, "message {n1} {n2}", data1, ...)
 
 
 
-`LOG_FIRST` 只记录首次运行到此
+`LOG_FIRST` 只记录首次运行到此的事件信息
 
 ```
 LOG_FIRST("message {n1} {n2}", data1, ...)
 ```
+
+
+`LOG` 系列的宏会自动将日志写到标准错误流（stderr）中，如果您希望其输出到文件，可以使用 `setFileLogger` 函数进行设置：
+
+```
+zeroerr::LogStream::getDefault().setFileLogger("log.txt");
+```
+
+您也可以在任意时刻将日志再重新定向到标准错误流：
+
+```
+zeroerr::LogStream::getDefault().setStderrLogger();
+```
+
+
+您也可以创建多个`LogStream`对象，在LOG时指定输出流，每个对象可以有自己的日志文件，这样可以实现多个日志文件的输出。
+
+```
+zeroerr::LogStream log1;
+log1.setFileLogger("log1.txt");
+
+LOG("message {n1} {n2}", log1, data1, data2);
+```
+
+### 开启Fuzzing支持
+
+Fuzzing是一种常用的自动化测试手段，通过不断随机生成测试数据，来测试程序的稳定性。ZeroErr提供了一种简单的libfuzzer集成方式，只需要使用 `clang++` 编译代码，并使用 `-fsanitize=fuzzer-no-link` 并链接 `-lclang_rt.fuzzer_no_main-x86_64`，这是一个没有main函数的libFuzzer版本。您可以通过调用 `clang++ -print-runtime-dir` 来找到这个运行时库。
+
+```
+> clang++ -print-runtime-dir                                                                                                            /mnt/h/Workspace/zeroerr(dev✗)@xiaofan-pc
+/usr/lib/llvm-14/lib/clang/14.0.0/lib/linux
+```
+
+类似于 `TEST_CASE` 宏，我们提供了 `FUZZ_TEST_CASE` 宏，用于定义一个fuzzing测试用例，您可以在其中使用 `FUZZ_FUNC` 宏，来定义一个fuzzing测试的函数，该函数接受一个或多个参数，这些参数可以通过 `WithDomains` 来指定，`WithSeeds` 来指定初始种子，`Run` 来指定运行次数。
+
+
+```
+// test_fuzz.cpp 
+
+#define ZEROERR_IMPLEMENTATION
+#include "zeroerr.hpp"
+
+
+FUZZ_TEST_CASE("fuzz_test") {
+    LOG("Run fuzz_test");
+    FUZZ_FUNC([=](int k, std::string num) {
+        int t = atoi(num.c_str());
+        LOG("k: {k}, num:{num}, t: {t}", k, num, t);
+        REQUIRE(k == t);
+    })
+        .WithDomains(InRange<int>(0, 10), Arbitrary<std::string>())
+        .WithSeeds({{5, "Foo"}, {10, "Bar"}})
+        .Run(10);
+}
+```
+
+
+以下是带有fuzzing支持的测试用例的完整构建命令：
+
+```
+clang++ -std=c++11 -I<path of zeroerr.hpp> -fsanitize=fuzzer-no-link -L=`clang++ -print-runtime-dir` -lclang_rt.fuzzer_no_main-x86_64  -o test_fuzz test_fuzz.cpp 
+```
+
+
+

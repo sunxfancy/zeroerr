@@ -147,3 +147,36 @@ TEST_CASE("access log in Test case") {
 ```
 
 为了访问log，我们首先要暂停log系统，避免数据被输出到文件中，然后调用函数，通过`LOG_GET`宏访问log中的数据，最后再恢复log系统的运行。(目前，暂时仅能获取到每个Log点第一次调用的数据，仍是实验功能)。
+
+
+#### 3. Fuzzing的支持
+
+大多数单元测试框架不支持fuzzing。然而，Fuzzing功能强大，可以自动检测软件中的错误，并且可以大大减少编写测试用例的工作量。
+
+不同于其他fuzzing框架，`zeroerr`可以支持在代码中使用日志和断言，因此fuzzing的结果不仅包含了输入数据，还包含了日志和断言的信息。
+
+使用方法：
+
+```
+FUZZ_TEST_CASE("fuzz_test") {
+    LOG("Run fuzz_test");
+    FUZZ_FUNC([=](int k, std::string num) {
+        int t = atoi(num.c_str());
+        LOG("k: {k}, num:{num}, t: {t}", k, num, t);
+        REQUIRE(k == t);
+    })
+        .WithDomains(InRange<int>(0, 10), Arbitrary<std::string>())
+        .WithSeeds({{5, "Foo"}, {10, "Bar"}})
+        .Run(10);
+}
+```
+
+受到 [fuzztest](https://github.com/google/fuzztest)的启发，我们使用Domain这个概念，用于指定目标函数的输入数据范围（或模式）。在这里，我们使用 `InRange` 来指定 `k` 的范围是0到10，使用 `Arbitrary` 来指定 `num` 的数据可以是任意随机字符串。然后，我们使用 `WithSeeds` 来指定fuzzing的初始种子。最后，我们使用 `Run` 来指定fuzzing的次数。
+
+宏 `FUZZ_TEST_CASE` 会生成一个测试用例，可以连接到 `libFuzzer` 来运行fuzzing。最后，我们使用 `Run(10)` 来调用 `libFuzzer` 来运行目标10次。
+
+为了构建带有fuzzing的测试用例，您需要使用 `clang++` 编译代码，并使用 `-fsanitize=fuzzer-no-link` 并链接 `-lclang_rt.fuzzer_no_main-x86_64`，这是一个没有main函数的libFuzzer版本。您可以通过调用 `clang++ -print-runtime-dir` 来找到这个运行时库。以下是带有fuzzing支持的测试用例的完整构建命令：
+
+```
+clang++ -std=c++11 -fsanitize=fuzzer-no-link -L=`clang++ -print-runtime-dir` -lclang_rt.fuzzer_no_main-x86_64  -o test_fuzz test_fuzz.cpp 
+```
