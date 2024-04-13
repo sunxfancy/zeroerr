@@ -36,5 +36,14 @@
             "args": ["-f", "--testcase=fuzz_test.*"],
             "cwd": "${workspaceFolder}"
         }
+        ,
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Linux-speed",
+            "program": "${workspaceFolder}/build/linux/test/unittest",
+            "args": ["-b", "--testcase=speedtest"],
+            "cwd": "${workspaceFolder}"
+        }
     ]
 }

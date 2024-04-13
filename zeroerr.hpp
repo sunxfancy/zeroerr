@@ -3113,12 +3113,13 @@ class mutex;
 
 namespace zeroerr {
 
-
+// clang-format off
 #define ZEROERR_INFO(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_INFO_(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define ZEROERR_LOG(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(LOG_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define ZEROERR_WARN(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(WARN_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define ZEROERR_ERROR(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(ERROR_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define ZEROERR_FATAL(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(FATAL_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+// clang-format on
 
 #ifdef ZEROERR_USE_SHORT_LOG_MACRO
 
@@ -3241,22 +3242,21 @@ extern int _ZEROERR_G_VERBOSE;
 
 #define ZEROERR_VERBOSE(v) if (zeroerr::_ZEROERR_G_VERBOSE >= (v))
 
-#define ZEROERR_LOG_(severity, message, ...)                              \
-    do {                                                                  \
-        ZEROERR_G_CONTEXT_SCOPE(true);                                    \
-        auto msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);    \
-                                                                          \
-        static zeroerr::LogInfo log_info{__FILE__,                        \
-                                         __func__,                        \
-                                         message,                         \
-                                         ZEROERR_LOG_CATEGORY,            \
-                                         __LINE__,                        \
-                                         msg.size,                        \
-                                         zeroerr::LogSeverity::severity}; \
-        msg.log->info = &log_info;                                        \
-        if (zeroerr::LogStream::getDefault().flush_mode ==                \
-            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)                 \
-            zeroerr::LogStream::getDefault().flush();                     \
+#define ZEROERR_LOG_(severity, message, ...)                                       \
+    do {                                                                           \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                             \
+        auto msg = zeroerr::log(__VA_ARGS__);                                      \
+                                                                                   \
+        static zeroerr::LogInfo log_info{__FILE__,                                 \
+                                         __func__,                                 \
+                                         message,                                  \
+                                         ZEROERR_LOG_CATEGORY,                     \
+                                         __LINE__,                                 \
+                                         msg.size,                                 \
+                                         zeroerr::LogSeverity::severity};          \
+        msg.log->info = &log_info;                                                 \
+        if (msg.stream.flush_mode == zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE) \
+            msg.stream.flush();                                                    \
     } while (0)
 
 #define ZEROERR_INFO_(...) \
@@ -3379,21 +3379,24 @@ struct LogMessageImpl : LogMessage {
 };
 
 struct DataBlock;
+class LogStream;
+
 class Logger {
 public:
     virtual ~Logger()              = default;
     virtual void flush(DataBlock*) = 0;
 };
 
+struct PushResult {
+    LogMessage* log;
+    unsigned    size;
+    LogStream&  stream;
+};
+
 class LogStream {
 public:
     LogStream();
     virtual ~LogStream();
-
-    struct PushResult {
-        LogMessage* log;
-        unsigned    size;
-    };
 
     enum FlushMode { FLUSH_AT_ONCE, FLUSH_WHEN_FULL, FLUSH_MANUALLY };
     enum LogMode { ASYNC, SYNC };
@@ -3413,7 +3416,7 @@ public:
         else
             p = alloc_block(size);
         LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
-        return {msg, size};
+        return {msg, size, *this};
     }
 
     template <typename T>
@@ -3447,6 +3450,17 @@ private:
     void* alloc_block(unsigned size);
     void* alloc_block_lockfree(unsigned size);
 };
+
+
+template <typename... T>
+PushResult log(T&&... args) {
+    return LogStream::getDefault().push(std::forward<T>(args)...);
+}
+
+template <typename... T>
+PushResult log(LogStream& stream, T&&... args) {
+    return stream.push(std::forward<T>(args)...);
+}
 
 
 /**
@@ -4387,21 +4401,20 @@ void* LogStream::alloc_block_lockfree(unsigned size) {
     DataBlock* last = m_last.load();
     while (true) {
         size_t p = last->size.load();
-        if (p <= (LogStreamMaxSize - size))
-            if (last->size.compare_exchange_strong(p, p + size))
-                return last->data + p;
-            else {
-                if (m_last.compare_exchange_strong(last, prepare)) {
-                    if (flush_mode == FLUSH_WHEN_FULL) {
-                        logger->flush(last);
-                        last->size = 0;
-                        prepare    = last;
-                    } else {
-                        prepare->next = last;
-                        prepare       = new DataBlock();
-                    }
+        if (p <= (LogStreamMaxSize - size)) {
+            if (last->size.compare_exchange_strong(p, p + size)) return last->data + p;
+        } else {
+            if (m_last.compare_exchange_strong(last, prepare)) {
+                if (flush_mode == FLUSH_WHEN_FULL) {
+                    logger->flush(last);
+                    last->size = 0;
+                    prepare    = last;
+                } else {
+                    prepare->next = last;
+                    prepare       = new DataBlock();
                 }
             }
+        }
     }
 }
 

@@ -99,21 +99,20 @@ void* LogStream::alloc_block_lockfree(unsigned size) {
     DataBlock* last = m_last.load();
     while (true) {
         size_t p = last->size.load();
-        if (p <= (LogStreamMaxSize - size))
-            if (last->size.compare_exchange_strong(p, p + size))
-                return last->data + p;
-            else {
-                if (m_last.compare_exchange_strong(last, prepare)) {
-                    if (flush_mode == FLUSH_WHEN_FULL) {
-                        logger->flush(last);
-                        last->size = 0;
-                        prepare    = last;
-                    } else {
-                        prepare->next = last;
-                        prepare       = new DataBlock();
-                    }
+        if (p <= (LogStreamMaxSize - size)) {
+            if (last->size.compare_exchange_strong(p, p + size)) return last->data + p;
+        } else {
+            if (m_last.compare_exchange_strong(last, prepare)) {
+                if (flush_mode == FLUSH_WHEN_FULL) {
+                    logger->flush(last);
+                    last->size = 0;
+                    prepare    = last;
+                } else {
+                    prepare->next = last;
+                    prepare       = new DataBlock();
                 }
             }
+        }
     }
 }
 

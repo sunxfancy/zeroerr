@@ -46,18 +46,20 @@ BENCHMARK("speedtest") {
     FILE*     oldstderr = stderr;
     stdout = stderr = file;
 #endif
-    // zeroerr::LogStream::getDefault().flush_mode = zeroerr::LogStream::FlushMode::FLUSH_WHEN_FULL;
+    zeroerr::LogStream::getDefault().flush_mode = zeroerr::LogStream::FlushMode::FLUSH_MANUALLY;
+    std::stringstream ss;
     Benchmark bench("log speed test");
     bench
+        .run("spdlog", [] { spdlog::info("hello world {:03.2f}", 1.1); })
         .run("stringstream",
-             [] {
-                 std::stringstream ss;
+             [&] {
                  ss << "hello world " << 1.1;
                  doNotOptimizeAway(ss);
              })
         .run("log", [] { LOG("hello world {value}", 1.1); })
-        .run("spdlog", [] { spdlog::info("hello world {:03.2f}", 1.1); })
         .report();
+    zeroerr::LogStream::getDefault().flush_mode = zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE;
+    
 #ifdef ZEROERR_OS_UNIX
     stdout = oldstdout; stderr = oldstderr;
     fclose(file);
@@ -132,4 +134,13 @@ TEST_CASE("access log in Test case") {
     CHECK(LOG_GET(function, 120, sum, int) == 9);
     CHECK(LOG_GET(function, 120, i, int) == 2);
     zeroerr::resumeLog();
+}
+
+TEST_CASE("multiple log stream") {
+    zeroerr::LogStream stream1, stream2;
+    stream1.setFileLogger("log1.txt");
+    stream2.setFileLogger("log2.txt");
+
+    LOG("log stream {i}", stream1, 1);
+    LOG("log stream {i}", stream2, 2);
 }
