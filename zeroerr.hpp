@@ -4,8 +4,8 @@
 #pragma once
 
 #define ZEROERR_VERSION_MAJOR 0
-#define ZEROERR_VERSION_MINOR 2
-#define ZEROERR_VERSION_PATCH 1
+#define ZEROERR_VERSION_MINOR 3
+#define ZEROERR_VERSION_PATCH 0
 #define ZEROERR_VERSION \
     (ZEROERR_VERSION_MAJOR * 10000 + ZEROERR_VERSION_MINOR * 100 + ZEROERR_VERSION_PATCH)
 
@@ -3090,6 +3090,8 @@ std::string format(const char* fmt, T... args) {
 
 
 
+
+
 #include <chrono>
 #include <cstdlib>
 #include <deque>
@@ -3404,9 +3406,13 @@ public:
 
     template <typename... T>
     PushResult push(T&&... args) {
-        unsigned    size = sizeof(LogMessageImpl<T...>);
-        void*       p    = alloc_block(size);
-        LogMessage* msg  = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
+        unsigned size = sizeof(LogMessageImpl<T...>);
+        void*    p;
+        if (use_lock_free)
+            p = alloc_block_lockfree(size);
+        else
+            p = alloc_block(size);
+        LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
         return {msg, size};
     }
 
@@ -3429,13 +3435,17 @@ public:
     LogMode           log_mode   = SYNC;
     DirMode           dir_mode   = SINGLE_FILE;
 
+    bool use_lock_free = true;
+
 private:
-    DataBlock *first, *last;
-    Logger*    logger = nullptr;
+    DataBlock *first, *prepare;
+    ZEROERR_ATOMIC(DataBlock*) m_last;
+    Logger* logger = nullptr;
 #ifndef ZEROERR_NO_THREAD_SAFE
     std::mutex* mutex;
 #endif
     void* alloc_block(unsigned size);
+    void* alloc_block_lockfree(unsigned size);
 };
 
 
@@ -4315,19 +4325,22 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
 }
 
 
-constexpr size_t LogStreamMaxSize = 1024 * 1024 - 16;
+constexpr size_t LogStreamMaxSize = 1 * 1024 - 16;
 
 struct DataBlock {
-    size_t     size = 0;
+    ZEROERR_ATOMIC(size_t) size;
     DataBlock* next = nullptr;
     char       data[LogStreamMaxSize];
+
+    DataBlock() : size(0) {}
 
     LogMessage* begin() { return (LogMessage*)data; }
     LogMessage* end() { return (LogMessage*)&data[size]; }
 };
 
 LogStream::LogStream() {
-    first = last = new DataBlock();
+    first = m_last = new DataBlock();
+    prepare        = new DataBlock();
 #ifndef ZEROERR_NO_THREAD_SAFE
     mutex = new std::mutex();
 #endif
@@ -4352,6 +4365,7 @@ void* LogStream::alloc_block(unsigned size) {
         throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
     }
     ZEROERR_LOCK(*mutex);
+    auto* last = m_last.load();
     if (last->size + size > LogStreamMaxSize) {
         if (flush_mode == FLUSH_WHEN_FULL) {
             logger->flush(last);
@@ -4366,8 +4380,34 @@ void* LogStream::alloc_block(unsigned size) {
     return p;
 }
 
+void* LogStream::alloc_block_lockfree(unsigned size) {
+    if (size > LogStreamMaxSize) {
+        throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
+    }
+    DataBlock* last = m_last.load();
+    while (true) {
+        size_t p = last->size.load();
+        if (p <= (LogStreamMaxSize - size))
+            if (last->size.compare_exchange_strong(p, p + size))
+                return last->data + p;
+            else {
+                if (m_last.compare_exchange_strong(last, prepare)) {
+                    if (flush_mode == FLUSH_WHEN_FULL) {
+                        logger->flush(last);
+                        last->size = 0;
+                        prepare    = last;
+                    } else {
+                        prepare->next = last;
+                        prepare       = new DataBlock();
+                    }
+                }
+            }
+    }
+}
+
 void LogStream::flush() {
     ZEROERR_LOCK(*mutex);
+    DataBlock* last = m_last.load();
     for (DataBlock* p = first; p != last; p = p->next) {
         logger->flush(p);
         delete p;
@@ -5708,9 +5748,9 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
 #include <stdexcept>
 
 
-#ifdef _WIN32
-#define ZEROERR_ETW 1
-#endif
+// #ifdef _WIN32
+// #define ZEROERR_ETW 1
+// #endif
 
 
 namespace zeroerr {

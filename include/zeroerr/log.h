@@ -1,5 +1,7 @@
 #pragma once
 #include "zeroerr/internal/config.h"
+
+#include "zeroerr/internal/threadsafe.h"
 #include "zeroerr/internal/typetraits.h"
 
 #include "zeroerr/dbg.h"
@@ -320,9 +322,13 @@ public:
 
     template <typename... T>
     PushResult push(T&&... args) {
-        unsigned    size = sizeof(LogMessageImpl<T...>);
-        void*       p    = alloc_block(size);
-        LogMessage* msg  = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
+        unsigned size = sizeof(LogMessageImpl<T...>);
+        void*    p;
+        if (use_lock_free)
+            p = alloc_block_lockfree(size);
+        else
+            p = alloc_block(size);
+        LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
         return {msg, size};
     }
 
@@ -345,13 +351,17 @@ public:
     LogMode           log_mode   = SYNC;
     DirMode           dir_mode   = SINGLE_FILE;
 
+    bool use_lock_free = true;
+
 private:
-    DataBlock *first, *last;
-    Logger*    logger = nullptr;
+    DataBlock *first, *prepare;
+    ZEROERR_ATOMIC(DataBlock*) m_last;
+    Logger* logger = nullptr;
 #ifndef ZEROERR_NO_THREAD_SAFE
     std::mutex* mutex;
 #endif
     void* alloc_block(unsigned size);
+    void* alloc_block_lockfree(unsigned size);
 };
 
 

@@ -33,6 +33,19 @@ linux-test: linux
 windows-test: windows
 	cd build/windows/test && ./Debug/unittest.exe
 
+
+build/linux-release/Makefile: Makefile
+	mkdir -p build/linux-release
+	cmake -B build/linux-release -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=11 \
+		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON -DENABLE_FUZZING=ON \
+		-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
+
+linux-release: build/linux-release/Makefile
+	cmake --build build/linux-release -j `nproc`
+
+bench: linux-release
+	cd build/linux-release/test && ./unittest -b --testcase=speedtest
+
 doc-dev:
 	yarn run cmake:dev
 

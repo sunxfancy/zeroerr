@@ -38,7 +38,7 @@ TEST_CASE("lazy evaluation") {
     }
 }
 #ifdef ZEROERR_ENABLE_SPEED_TEST
-BENCHMARK("speed test") {
+BENCHMARK("speedtest") {
 #ifdef ZEROERR_OS_UNIX
     uint64_t* data      = new uint64_t[1000000];
     FILE*     file      = fmemopen(data, 1000000 * sizeof(uint64_t), "w");
@@ -46,6 +46,7 @@ BENCHMARK("speed test") {
     FILE*     oldstderr = stderr;
     stdout = stderr = file;
 #endif
+    // zeroerr::LogStream::getDefault().flush_mode = zeroerr::LogStream::FlushMode::FLUSH_WHEN_FULL;
     Benchmark bench("log speed test");
     bench
         .run("stringstream",

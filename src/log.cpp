@@ -37,19 +37,22 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
 }
 
 
-constexpr size_t LogStreamMaxSize = 1024 * 1024 - 16;
+constexpr size_t LogStreamMaxSize = 1 * 1024 - 16;
 
 struct DataBlock {
-    size_t     size = 0;
+    ZEROERR_ATOMIC(size_t) size;
     DataBlock* next = nullptr;
     char       data[LogStreamMaxSize];
+
+    DataBlock() : size(0) {}
 
     LogMessage* begin() { return (LogMessage*)data; }
     LogMessage* end() { return (LogMessage*)&data[size]; }
 };
 
 LogStream::LogStream() {
-    first = last = new DataBlock();
+    first = m_last = new DataBlock();
+    prepare        = new DataBlock();
 #ifndef ZEROERR_NO_THREAD_SAFE
     mutex = new std::mutex();
 #endif
@@ -74,6 +77,7 @@ void* LogStream::alloc_block(unsigned size) {
         throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
     }
     ZEROERR_LOCK(*mutex);
+    auto* last = m_last.load();
     if (last->size + size > LogStreamMaxSize) {
         if (flush_mode == FLUSH_WHEN_FULL) {
             logger->flush(last);
@@ -88,8 +92,34 @@ void* LogStream::alloc_block(unsigned size) {
     return p;
 }
 
+void* LogStream::alloc_block_lockfree(unsigned size) {
+    if (size > LogStreamMaxSize) {
+        throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
+    }
+    DataBlock* last = m_last.load();
+    while (true) {
+        size_t p = last->size.load();
+        if (p <= (LogStreamMaxSize - size))
+            if (last->size.compare_exchange_strong(p, p + size))
+                return last->data + p;
+            else {
+                if (m_last.compare_exchange_strong(last, prepare)) {
+                    if (flush_mode == FLUSH_WHEN_FULL) {
+                        logger->flush(last);
+                        last->size = 0;
+                        prepare    = last;
+                    } else {
+                        prepare->next = last;
+                        prepare       = new DataBlock();
+                    }
+                }
+            }
+    }
+}
+
 void LogStream::flush() {
     ZEROERR_LOCK(*mutex);
+    DataBlock* last = m_last.load();
     for (DataBlock* p = first; p != last; p = p->next) {
         logger->flush(p);
         delete p;
