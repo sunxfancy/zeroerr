@@ -141,6 +141,13 @@ void* LogStream::getRawLog(std::string func, unsigned line, std::string name) {
     return nullptr;
 }
 
+void* LogStream::getRawLog(std::string func, std::string msg, std::string name) {
+    for (DataBlock* p = first; p; p = p->next)
+        for (auto q = p->begin(); q < p->end(); q = moveBytes(q, q->info->size))
+            if (msg == q->info->message && func == q->info->function) return q->getRawLog(name);
+    return nullptr;
+}
+
 class FileLogger : public Logger {
 public:
     FileLogger(std::string name) { file = fopen(name.c_str(), "w"); }

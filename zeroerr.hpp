@@ -3289,8 +3289,8 @@ extern int _ZEROERR_G_VERBOSE;
 
 
 // This macro can access the log in memory
-#define LOG_GET(func, line, name, type) \
-    zeroerr::LogStream::getDefault().getLog<type>(#func, line, #name)
+#define LOG_GET(func, id, name, type) \
+    zeroerr::LogStream::getDefault().getLog<type>(#func, id, #name)
 
 
 namespace detail {
@@ -3426,7 +3426,15 @@ public:
         return T{};
     }
 
+    template <typename T>
+    T getLog(std::string func, std::string msg, std::string name) {
+        void* data = getRawLog(func, msg, name);
+        if (data) return *(T*)(data);
+        return T{};
+    }
+
     void* getRawLog(std::string func, unsigned line, std::string name);
+    void* getRawLog(std::string func, std::string msg, std::string name);
 
     void flush();
     void setFileLogger(std::string name);
@@ -4440,6 +4448,13 @@ void* LogStream::getRawLog(std::string func, unsigned line, std::string name) {
     for (DataBlock* p = first; p; p = p->next)
         for (auto q = p->begin(); q < p->end(); q = moveBytes(q, q->info->size))
             if (line == q->info->line && func == q->info->function) return q->getRawLog(name);
+    return nullptr;
+}
+
+void* LogStream::getRawLog(std::string func, std::string msg, std::string name) {
+    for (DataBlock* p = first; p; p = p->next)
+        for (auto q = p->begin(); q < p->end(); q = moveBytes(q, q->info->size))
+            if (msg == q->info->message && func == q->info->function) return q->getRawLog(name);
     return nullptr;
 }
 

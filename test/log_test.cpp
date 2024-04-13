@@ -126,13 +126,26 @@ static void function() {
 TEST_CASE("access log in Test case") {
     zeroerr::suspendLog();
     function();
-    std::cerr << LOG_GET(function, 119, i, int) << std::endl;
-    std::cerr << LOG_GET(function, 120, sum, int) << std::endl;
-    std::cerr << LOG_GET(function, 120, i, int) << std::endl;
+    std::cerr << LOG_GET(function, 122, i, int) << std::endl;
+    std::cerr << LOG_GET(function, 123, sum, int) << std::endl;
+    std::cerr << LOG_GET(function, 123, i, int) << std::endl;
 
-    CHECK(LOG_GET(function, 119, i, int) == 1);
-    CHECK(LOG_GET(function, 120, sum, int) == 9);
-    CHECK(LOG_GET(function, 120, i, int) == 2);
+    CHECK(LOG_GET(function, 122, i, int) == 1);
+    CHECK(LOG_GET(function, 123, sum, int) == 9);
+    CHECK(LOG_GET(function, 123, i, int) == 2);
+    zeroerr::resumeLog();
+}
+
+TEST_CASE("access log in Test case") {
+    zeroerr::suspendLog();
+    function();
+    std::cerr << LOG_GET(function, "function log {i}", i, int) << std::endl;
+    std::cerr << LOG_GET(function, "function log {sum}, {i}", sum, int) << std::endl;
+    std::cerr << LOG_GET(function, "function log {sum}, {i}", i, int) << std::endl;
+
+    CHECK(LOG_GET(function, "function log {i}", i, int) == 1);
+    CHECK(LOG_GET(function, "function log {sum}, {i}", sum, int) == 9);
+    CHECK(LOG_GET(function, "function log {sum}, {i}", i, int) == 2);
     zeroerr::resumeLog();
 }
 
