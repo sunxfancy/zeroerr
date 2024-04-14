@@ -48,9 +48,8 @@ BENCHMARK("speedtest") {
 #endif
     zeroerr::LogStream::getDefault().flush_mode = zeroerr::LogStream::FlushMode::FLUSH_MANUALLY;
     std::stringstream ss;
-    Benchmark bench("log speed test");
-    bench
-        .run("spdlog", [] { spdlog::info("hello world {:03.2f}", 1.1); })
+    Benchmark         bench("log speed test");
+    bench.run("spdlog", [] { spdlog::info("hello world {:03.2f}", 1.1); })
         .run("stringstream",
              [&] {
                  ss << "hello world " << 1.1;
@@ -59,9 +58,10 @@ BENCHMARK("speedtest") {
         .run("log", [] { LOG("hello world {value}", 1.1); })
         .report();
     zeroerr::LogStream::getDefault().flush_mode = zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE;
-    
+
 #ifdef ZEROERR_OS_UNIX
-    stdout = oldstdout; stderr = oldstderr;
+    stdout = oldstdout;
+    stderr = oldstderr;
     fclose(file);
     delete[] data;
 #endif
@@ -89,7 +89,7 @@ static void test_feature(int k) {
 TEST_CASE("cross function info") {
     int k = 0;
     INFO("k = ", k);
-    
+
     test_feature(k);
     k = 1;
     test_feature(k);
@@ -101,7 +101,7 @@ TEST_CASE("cross function info") {
 TEST_CASE("debug log") {
     int sum = 0;
     DLOG(LOG_FIRST, sum < 5, "debug log i = {i}", 1);
-    DLOG(WARN_IF,sum < 5, "debug log i = {i}, sum = {sum}", 2, sum);
+    DLOG(WARN_IF, sum < 5, "debug log i = {i}, sum = {sum}", 2, sum);
 }
 
 TEST_CASE("log to file") {
@@ -159,8 +159,9 @@ TEST_CASE("multiple log stream") {
 }
 
 TEST_CASE("log to dir") {
-    zeroerr::LogStream::getDefault().dir_mode = 1;
-    zeroerr::LogStream::getDefault().setFileLogger("./logdir");
+    zeroerr::LogStream::getDefault().setFileLogger("./logdir", LogStream::SPLIT_BY_CATEGORY,
+                                                   LogStream::SPLIT_BY_SEVERITY,
+                                                   LogStream::DAILY_FILE);
     LOG("log to dir {i}", 1);
     WARN("warn log to dir {i}", 2);
     zeroerr::LogStream::getDefault().setStderrLogger();

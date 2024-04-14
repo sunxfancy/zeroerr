@@ -178,7 +178,6 @@ protected:
 };
 
 
-
 #ifdef _WIN32
 static char split = '\\';
 #else
@@ -187,9 +186,8 @@ static char split = '/';
 
 static void make_dir(std::string path) {
     size_t pos = 0;
-    do
-    {
-        pos = path.find_first_of(split, pos + 1);
+    do {
+        pos             = path.find_first_of(split, pos + 1);
         std::string sub = path.substr(0, pos);
 #ifdef _WIN32
         CreateDirectory(sub.c_str(), NULL);
@@ -213,7 +211,7 @@ struct FileCache {
     FILE* get(const std::string& name) {
         auto it = files.find(name);
         if (it != files.end()) return it->second;
-        auto p = name.find_last_of(split);
+        auto        p    = name.find_last_of(split);
         std::string path = name.substr(0, p);
         make_dir(path.c_str());
 
@@ -276,12 +274,11 @@ public:
     }
 
 protected:
-    
     std::string to_string(LogSeverity severity) {
         switch (severity) {
-            case INFO_l: return "INFO";
-            case LOG_l: return "LOG";
-            case WARN_l: return "WARN";
+            case INFO_l:  return "INFO";
+            case LOG_l:   return "LOG";
+            case WARN_l:  return "WARN";
             case ERROR_l: return "ERROR";
             case FATAL_l: return "FATAL";
         }
@@ -321,14 +318,13 @@ LogStream& LogStream::getDefault() {
     return stream;
 }
 
-void LogStream::setFileLogger(std::string name) {
+void LogStream::setFileLogger(std::string name, DirMode mode1, DirMode mode2, DirMode mode3) {
     if (logger) delete logger;
 
-    if (dir_mode == SINGLE_FILE)
+    if (mode1 == 0 || mode2 == 0 || mode3 == 0)
         logger = new FileLogger(name);
     else {
-        LogStream::DirMode dir_mode_group[3] = {LogStream::DAILY_FILE, LogStream::SPLIT_BY_SEVERITY,
-                                                LogStream::SPLIT_BY_CATEGORY};
+        LogStream::DirMode dir_mode_group[3] = {mode1, mode2, mode3};
 
         logger = new DirectoryLogger(name, dir_mode_group);
     }

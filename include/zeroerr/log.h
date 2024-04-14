@@ -347,14 +347,14 @@ public:
     void* getRawLog(std::string func, std::string msg, std::string name);
 
     void flush();
-    void setFileLogger(std::string name);
+    void setFileLogger(std::string name, DirMode mode1 = SINGLE_FILE, DirMode mode2 = SINGLE_FILE,
+                       DirMode mode3 = SINGLE_FILE);
     void setStdoutLogger();
     void setStderrLogger();
 
     static LogStream& getDefault();
     FlushMode         flush_mode = FLUSH_AT_ONCE;
     LogMode           log_mode   = SYNC;
-    uint32_t          dir_mode   = SINGLE_FILE;
 
     bool use_lock_free = true;
 
