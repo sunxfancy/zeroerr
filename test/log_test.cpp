@@ -157,3 +157,11 @@ TEST_CASE("multiple log stream") {
     LOG("log stream {i}", stream1, 1);
     LOG("log stream {i}", stream2, 2);
 }
+
+TEST_CASE("log to dir") {
+    zeroerr::LogStream::getDefault().dir_mode = 1;
+    zeroerr::LogStream::getDefault().setFileLogger("./logdir");
+    LOG("log to dir {i}", 1);
+    WARN("warn log to dir {i}", 2);
+    zeroerr::LogStream::getDefault().setStderrLogger();
+}

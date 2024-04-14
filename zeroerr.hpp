@@ -3438,7 +3438,7 @@ public:
     static LogStream& getDefault();
     FlushMode         flush_mode = FLUSH_AT_ONCE;
     LogMode           log_mode   = SYNC;
-    DirMode           dir_mode   = SINGLE_FILE;
+    uint32_t          dir_mode   = SINGLE_FILE;
 
     bool use_lock_free = true;
 
@@ -4305,8 +4305,14 @@ TerminalSize getTerminalWidth() {
 
 
 
-#include <unordered_set>
 #include <iomanip>
+#include <unordered_set>
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <sys/stat.h>
+#endif
 
 const char* ZEROERR_LOG_CATEGORY = "default";
 
@@ -4475,6 +4481,129 @@ protected:
     FILE* file;
 };
 
+
+
+#ifdef _WIN32
+static char split = '\\';
+#else
+static char split = '/';
+#endif
+
+static void make_dir(std::string path) {
+    size_t pos = 0;
+    do
+    {
+        pos = path.find_first_of(split, pos + 1);
+        std::string sub = path.substr(0, pos);
+#ifdef _WIN32
+        CreateDirectory(sub.c_str(), NULL);
+#else
+        struct stat st;
+        if (stat(sub.c_str(), &st) == -1) {
+            mkdir(sub.c_str(), 0755);
+        }
+#endif
+    } while (pos != std::string::npos);
+}
+
+struct FileCache {
+    std::map<std::string, FILE*> files;
+    ~FileCache() {
+        for (auto& p : files) {
+            fclose(p.second);
+        }
+    }
+
+    FILE* get(const std::string& name) {
+        auto it = files.find(name);
+        if (it != files.end()) return it->second;
+        auto p = name.find_last_of(split);
+        std::string path = name.substr(0, p);
+        make_dir(path.c_str());
+
+        FILE* file = fopen(name.c_str(), "w");
+        if (file) {
+            files[name] = file;
+            return file;
+        }
+        return nullptr;
+    }
+};
+
+
+class DirectoryLogger : public Logger {
+public:
+    DirectoryLogger(std::string path, LogStream::DirMode dir_mode[3]) : dirpath(path) {
+        make_dir(path.c_str());
+        for (int i = 0; i < 3; i++) {
+            this->dir_mode[i] = dir_mode[i];
+        }
+    }
+    ~DirectoryLogger() {}
+
+    void flush(DataBlock* msg) override {
+        FileCache cache;
+        for (auto p = msg->begin(); p < msg->end(); p = moveBytes(p, p->info->size)) {
+            auto ss = log_custom_callback(*p, false);
+
+            std::stringstream path;
+            path << dirpath;
+            if (dirpath.back() != split) path << split;
+
+            int last = 0;
+            for (int i = 0; i < 3; i++) {
+                if (last != 0 && dir_mode[i] != 0) path << split;
+                switch (dir_mode[i]) {
+                    case LogStream::DAILY_FILE: {
+                        std::time_t t  = std::chrono::system_clock::to_time_t(p->time);
+                        std::tm     tm = *std::localtime(&t);
+                        path << std::put_time(&tm, "%Y-%m-%d");
+                        break;
+                    }
+                    case LogStream::SPLIT_BY_SEVERITY: {
+                        path << to_string(p->info->severity);
+                        break;
+                    }
+                    case LogStream::SPLIT_BY_CATEGORY: {
+                        path << to_category(p->info->category);
+                        break;
+                    }
+                    default: continue;
+                }
+                last = 1;
+            }
+            std::cerr << path.str() << std::endl;
+
+            FILE* file = cache.get(path.str());
+            fwrite(ss.c_str(), ss.size(), 1, file);
+        }
+    }
+
+protected:
+    
+    std::string to_string(LogSeverity severity) {
+        switch (severity) {
+            case INFO_l: return "INFO";
+            case LOG_l: return "LOG";
+            case WARN_l: return "WARN";
+            case ERROR_l: return "ERROR";
+            case FATAL_l: return "FATAL";
+        }
+        return "";
+    }
+
+    std::string to_category(const char* category) {
+        std::string cat = category;
+        for (auto& c : cat) {
+            if (c == '/') c = split;
+        }
+        return cat;
+    }
+
+    LogStream::DirMode dir_mode[3];
+    std::string        dirpath;
+};
+
 class OStreamLogger : public Logger {
 public:
     OStreamLogger(std::ostream& os) : os(os) {}
@@ -4498,7 +4627,15 @@ LogStream& LogStream::getDefault() {
 
 void LogStream::setFileLogger(std::string name) {
     if (logger) delete logger;
-    logger = new FileLogger(name);
+
+    if (dir_mode == SINGLE_FILE)
+        logger = new FileLogger(name);
+    else {
+        LogStream::DirMode dir_mode_group[3] = {LogStream::DAILY_FILE, LogStream::SPLIT_BY_SEVERITY,
+                                                LogStream::SPLIT_BY_CATEGORY};
+
+        logger = new DirectoryLogger(name, dir_mode_group);
+    }
 }
 
 void LogStream::setStdoutLogger() {

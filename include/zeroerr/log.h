@@ -354,7 +354,7 @@ public:
     static LogStream& getDefault();
     FlushMode         flush_mode = FLUSH_AT_ONCE;
     LogMode           log_mode   = SYNC;
-    DirMode           dir_mode   = SINGLE_FILE;
+    uint32_t          dir_mode   = SINGLE_FILE;
 
     bool use_lock_free = true;
 
