@@ -46,7 +46,7 @@ BENCHMARK("speedtest") {
     FILE*     oldstderr = stderr;
     stdout = stderr = file;
 #endif
-    zeroerr::LogStream::getDefault().flush_mode = zeroerr::LogStream::FlushMode::FLUSH_MANUALLY;
+    zeroerr::LogStream::getDefault().setFlushManually();
     std::stringstream ss;
     Benchmark         bench("log speed test");
     bench.run("spdlog", [] { spdlog::info("hello world {:03.2f}", 1.1); })
@@ -57,7 +57,7 @@ BENCHMARK("speedtest") {
              })
         .run("log", [] { LOG("hello world {value}", 1.1); })
         .report();
-    zeroerr::LogStream::getDefault().flush_mode = zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE;
+    zeroerr::LogStream::getDefault().setFlushAtOnce();
 
 #ifdef ZEROERR_OS_UNIX
     stdout = oldstdout;

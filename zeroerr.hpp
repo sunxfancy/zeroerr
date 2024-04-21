@@ -3236,21 +3236,21 @@ extern int _ZEROERR_G_VERBOSE;
 
 #define ZEROERR_VERBOSE(v) if (zeroerr::_ZEROERR_G_VERBOSE >= (v))
 
-#define ZEROERR_LOG_(severity, message, ...)                                       \
-    do {                                                                           \
-        ZEROERR_G_CONTEXT_SCOPE(true);                                             \
-        auto msg = zeroerr::log(__VA_ARGS__);                                      \
-                                                                                   \
-        static zeroerr::LogInfo log_info{__FILE__,                                 \
-                                         __func__,                                 \
-                                         message,                                  \
-                                         ZEROERR_LOG_CATEGORY,                     \
-                                         __LINE__,                                 \
-                                         msg.size,                                 \
-                                         zeroerr::LogSeverity::severity};          \
-        msg.log->info = &log_info;                                                 \
-        if (msg.stream.flush_mode == zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE) \
-            msg.stream.flush();                                                    \
+#define ZEROERR_LOG_(severity, message, ...)                                           \
+    do {                                                                               \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                                 \
+        auto msg = zeroerr::log(__VA_ARGS__);                                          \
+                                                                                       \
+        static zeroerr::LogInfo log_info{__FILE__,                                     \
+                                         __func__,                                     \
+                                         message,                                      \
+                                         ZEROERR_LOG_CATEGORY,                         \
+                                         __LINE__,                                     \
+                                         msg.size,                                     \
+                                         zeroerr::LogSeverity::severity};              \
+        msg.log->info = &log_info;                                                     \
+        if (msg.stream.getFlushMode() == zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE) \
+            msg.stream.flush();                                                        \
     } while (0)
 
 #define ZEROERR_INFO_(...) \
@@ -3437,15 +3437,26 @@ public:
     void setStderrLogger();
 
     static LogStream& getDefault();
-    FlushMode         flush_mode = FLUSH_AT_ONCE;
-    LogMode           log_mode   = SYNC;
+
+    void setFlushAtOnce() { flush_mode = FLUSH_AT_ONCE; }
+    void setFlushWhenFull() { flush_mode = FLUSH_WHEN_FULL; }
+    void setFlushManually() { flush_mode = FLUSH_MANUALLY; }
+    void setAsyncLog() { log_mode = ASYNC; }
+    void setSyncLog() { log_mode = SYNC; }
+
+    FlushMode getFlushMode() const { return flush_mode; }
+    void      setFlushMode(FlushMode mode) { flush_mode = mode; }
+    LogMode   getLogMode() const { return log_mode; }
+    void      setLogMode(LogMode mode) { log_mode = mode; }
 
     bool use_lock_free = true;
 
 private:
     DataBlock *first, *prepare;
     ZEROERR_ATOMIC(DataBlock*) m_last;
-    Logger* logger = nullptr;
+    Logger*   logger     = nullptr;
+    FlushMode flush_mode = FLUSH_AT_ONCE;
+    LogMode   log_mode   = SYNC;
 #ifndef ZEROERR_NO_THREAD_SAFE
     std::mutex* mutex;
 #endif
@@ -4673,12 +4684,12 @@ void setLogCategory(const char* categories) {
 static LogStream::FlushMode saved_flush_mode;
 
 void suspendLog() {
-    saved_flush_mode                   = LogStream::getDefault().flush_mode;
-    LogStream::getDefault().flush_mode = LogStream::FLUSH_MANUALLY;
+    saved_flush_mode = LogStream::getDefault().getFlushMode();
+    LogStream::getDefault().setFlushMode(LogStream::FLUSH_MANUALLY);
 }
 
 void resumeLog() {
-    LogStream::getDefault().flush_mode = saved_flush_mode;
+    LogStream::getDefault().setFlushMode(saved_flush_mode);
     LogStream::getDefault().flush();
 }
 

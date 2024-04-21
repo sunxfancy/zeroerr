@@ -369,12 +369,12 @@ void setLogCategory(const char* categories) {
 static LogStream::FlushMode saved_flush_mode;
 
 void suspendLog() {
-    saved_flush_mode                   = LogStream::getDefault().flush_mode;
-    LogStream::getDefault().flush_mode = LogStream::FLUSH_MANUALLY;
+    saved_flush_mode = LogStream::getDefault().getFlushMode();
+    LogStream::getDefault().setFlushMode(LogStream::FLUSH_MANUALLY);
 }
 
 void resumeLog() {
-    LogStream::getDefault().flush_mode = saved_flush_mode;
+    LogStream::getDefault().setFlushMode(saved_flush_mode);
     LogStream::getDefault().flush();
 }
 
