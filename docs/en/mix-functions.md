@@ -6,23 +6,66 @@ Mix Assertion, Logging, Unit Testing and Fuzzing
 Almost every project needs unit testing. This is most important way to build a strong software but it sometimes may be hard to check boundary cases. Let's consider an example:
 
 ```c++
-
-bool target(int x, int y) 
+Object* create(int param) 
 {
-    if (x < 0) {
-        LOG(ERROR) << "The x can not smaller than 0";
-        return false;
+    Object* obj = NULL;
+    // try create using method A
+    // do sth.
+    obj = ...;
+    if (obj) {
+        return obj
     }
-    if (x+y < 0) {
-        LOG(ERROR) << "x+y = " << x+y << " , which can not smaller than 0";
-        return false;
+
+    // try create using method B
+    // do sth.
+    obj = ...;
+    if (obj) {
+        return obj;
     }
+    return obj;
 }
 ```
 
+The function `create` try to create object using different ways, if one is failed and then try another. But how should we write test cases to check it. You didn't know this is from method A or B and the output looks the same.
+
+A good news is we can add log. This is a way to know some information for the function we just ran:
+
+```c++
+Object* create(int param) 
+{
+    Object* obj = NULL;
+    // try create using method A
+    // do sth.
+    obj = ...;
+    if (obj) {
+        LOG(INFO) << "create object using method A.";
+        return obj
+    }
+
+    // try create using method B
+    // do sth.
+    obj = ...;
+    if (obj) {
+        LOG(INFO) << "create object using method B.";
+        return obj;
+    }
+    return obj;
+}
+```
+
+After running the function, we can see the output to know where it came from. However, there is no way to check the log in the unit testing. 
+Yes, maybe you could read the file and see what output it wrote to the file but it's very complicated and not realiable.
+
+I am thinking, maybe we could let the log data become **accessable**.
+
+## Structure Logging
+
+There is way to log the data, 
 
 
 
+
+## Another problem with assertion
 
 It may also conflict with assertion in the function.
 
