@@ -30,6 +30,9 @@ fuzz: linux
 linux-test: linux
 	cd build/linux/test && ./unittest
 
+reporter: linux
+	cd build/linux/test && ./unittest --reporters=xml
+
 windows-test: windows
 	cd build/windows/test && ./Debug/unittest.exe
 

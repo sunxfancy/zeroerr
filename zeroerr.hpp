@@ -5758,6 +5758,7 @@ public:
             unsigned    line;
             double      time;
             TestContext context;
+            std::string output;
         };
 
         std::vector<TestCase> testcases;
@@ -5774,9 +5775,9 @@ public:
         current.push_back(&tc);
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf&, const TestContext& ctx,
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
                              int) override {
-        tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
+        tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx, sb.str()});
         current.pop_back();
     }
 
@@ -5784,9 +5785,9 @@ public:
         current.push_back(&tc);
     }
 
-    virtual void subCaseEnd(const TestCase& tc, std::stringbuf&, const TestContext& ctx,
+    virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
                             int) override {
-        tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
+        tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx, sb.str()});
         current.pop_back();
     }
 
@@ -5817,6 +5818,8 @@ public:
                 .writeAttribute("warnings", testCase.context.warning_as)
                 .writeAttribute("failed", testCase.context.failed_as)
                 .writeAttribute("skipped", testCase.context.skipped_as);
+            xml.scopedElement("Output")
+                .writeText(testCase.output);
             xml.endElement();
         }
         xml.endElement();
