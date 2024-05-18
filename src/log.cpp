@@ -157,6 +157,24 @@ void* LogStream::getRawLog(std::string func, std::string msg, std::string name) 
     return nullptr;
 }
 
+LogIterator::LogIterator(LogStream& stream) : p(stream.first), q(stream.first->begin()) {}
+
+LogIterator& LogIterator::operator++() {
+    if (q < p->end()) {
+        q = moveBytes(q, q->info->size);
+        return *this;
+    } else {
+        p = p->next;
+        if (p) {
+            q = p->begin();
+            return *this;
+        } else {
+            q = nullptr;
+            return *this;
+        }
+    }
+}
+
 class FileLogger : public Logger {
 public:
     FileLogger(std::string name) { file = fopen(name.c_str(), "w"); }

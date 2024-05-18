@@ -149,6 +149,21 @@ TEST_CASE("access log in Test case") {
     zeroerr::resumeLog();
 }
 
+TEST_CASE("iterate log stream") {
+    zeroerr::suspendLog();
+    function();
+
+    auto& stream = zeroerr::LogStream::getDefault();
+    for (auto p = stream.begin(); p != stream.end(); ++p) {
+        if (p->info->function == std::string("function") && p->info->line == 122) {
+            std::cerr << "p.get<int>(\"i\") = " << p.get<int>("i") << std::endl;
+        }
+    }
+
+    zeroerr::resumeLog();
+}
+
+
 TEST_CASE("multiple log stream") {
     zeroerr::LogStream stream1, stream2;
     stream1.setFileLogger("log1.txt");

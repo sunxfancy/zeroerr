@@ -64,7 +64,9 @@ namespace zeroerr {
 #define FATAL(...) ZEROERR_FATAL(__VA_ARGS__)
 #define VERBOSE(v) ZEROERR_VERBOSE(v)
 
-#endif
+#define LOG_GET(func, id, name, type)  ZEROERR_LOG_GET(func, id, name, type)
+
+#endif  // ZEROERR_USE_SHORT_LOG_MACRO
 
 #define ZEROERR_LOG_IF(condition, ACTION, ...) \
     do {                                       \
@@ -199,7 +201,7 @@ extern int _ZEROERR_G_VERBOSE;
 
 
 // This macro can access the log in memory
-#define LOG_GET(func, id, name, type) \
+#define ZEROERR_LOG_GET(func, id, name, type) \
     zeroerr::LogStream::getDefault().getLog<type>(#func, id, #name)
 
 
@@ -303,6 +305,40 @@ struct PushResult {
     LogStream&  stream;
 };
 
+struct LogIterator {
+    DataBlock*  p;
+    LogMessage* q;
+
+    LogIterator() : p(nullptr), q(nullptr) {}
+    LogIterator(LogStream& stream);
+    LogIterator(const LogIterator& rhs) : p(rhs.p), q(rhs.q) {}
+    LogIterator& operator=(const LogIterator& rhs) {
+        p = rhs.p;
+        q = rhs.q;
+        return *this;
+    }
+
+    LogIterator& operator++();
+    LogIterator  operator++(int) {
+        LogIterator tmp = *this;
+        ++*this;
+        return tmp;
+    }
+
+    template <typename T>
+    T get(std::string name) {
+        void* data = q->getRawLog(name);
+        if (data) return *(T*)(data);
+        return T{};
+    }
+
+    bool operator==(const LogIterator& rhs) const { return p == rhs.p && q == rhs.q; }
+    bool operator!=(const LogIterator& rhs) const { return !(*this == rhs); }
+
+    LogMessage& operator*() { return *q; }
+    LogMessage* operator->() { return q; }
+};
+
 class LogStream {
 public:
     LogStream();
@@ -346,6 +382,9 @@ public:
     void* getRawLog(std::string func, unsigned line, std::string name);
     void* getRawLog(std::string func, std::string msg, std::string name);
 
+    LogIterator begin() { return LogIterator(*this); }
+    LogIterator end() { return LogIterator(); }
+
     void flush();
     void setFileLogger(std::string name, DirMode mode1 = SINGLE_FILE, DirMode mode2 = SINGLE_FILE,
                        DirMode mode3 = SINGLE_FILE);
@@ -366,6 +405,8 @@ public:
     void      setLogMode(LogMode mode) { log_mode = mode; }
 
     bool use_lock_free = true;
+
+    friend struct LogIterator;
 
 private:
     DataBlock *first, *prepare;
