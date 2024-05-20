@@ -157,22 +157,41 @@ void* LogStream::getRawLog(std::string func, std::string msg, std::string name) 
     return nullptr;
 }
 
-LogIterator::LogIterator(LogStream& stream) : p(stream.first), q(stream.first->begin()) {}
+LogIterator::LogIterator(LogStream& stream, std::string message, std::string function_name,
+                         int line)
+    : p(stream.first),
+      q(stream.first->begin()),
+      message_filter(message),
+      function_name_filter(function_name),
+      line_filter(line) {
+    while (!check_filter() && p) next();
+}
 
-LogIterator& LogIterator::operator++() {
+void LogIterator::next() {
     if (q < p->end()) {
         q = moveBytes(q, q->info->size);
-        return *this;
+        if (q >= p->end()) next();
     } else {
         p = p->next;
-        if (p) {
+        if (p)
             q = p->begin();
-            return *this;
-        } else {
+        else
             q = nullptr;
-            return *this;
-        }
     }
+}
+
+LogIterator& LogIterator::operator++() {
+    do {
+        next();
+    } while (p && !check_filter());
+    return *this;
+}
+
+bool LogIterator::check_filter() {
+    if (!message_filter.empty() && q->info->message != message_filter) return false;
+    if (!function_name_filter.empty() && q->info->function != function_name_filter) return false;
+    if (line_filter != -1 && q->info->line != line_filter) return false;
+    return true;
 }
 
 class FileLogger : public Logger {

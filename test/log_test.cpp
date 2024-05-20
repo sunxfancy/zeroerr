@@ -152,12 +152,22 @@ TEST_CASE("access log in Test case") {
 TEST_CASE("iterate log stream") {
     zeroerr::suspendLog();
     function();
+    function();
+    function();
 
     auto& stream = zeroerr::LogStream::getDefault();
     for (auto p = stream.begin(); p != stream.end(); ++p) {
         if (p->info->function == std::string("function") && p->info->line == 122) {
             std::cerr << "p.get<int>(\"i\") = " << p.get<int>("i") << std::endl;
+            CHECK(p.get<int>("i") == 1);
         }
+    }
+
+    for (auto p = stream.begin("function log {sum}, {i}"); p != stream.end(); ++p) {
+        std::cerr << "p.get<int>(\"sum\") = " << p.get<int>("sum") << std::endl;
+        std::cerr << "p.get<int>(\"i\") = " << p.get<int>("i") << std::endl;
+        CHECK(p.get<int>("sum") == 10);
+        CHECK(p.get<int>("i") == 1);
     }
 
     zeroerr::resumeLog();

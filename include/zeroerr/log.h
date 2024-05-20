@@ -64,7 +64,7 @@ namespace zeroerr {
 #define FATAL(...) ZEROERR_FATAL(__VA_ARGS__)
 #define VERBOSE(v) ZEROERR_VERBOSE(v)
 
-#define LOG_GET(func, id, name, type)  ZEROERR_LOG_GET(func, id, name, type)
+#define LOG_GET(func, id, name, type) ZEROERR_LOG_GET(func, id, name, type)
 
 #endif  // ZEROERR_USE_SHORT_LOG_MACRO
 
@@ -305,12 +305,11 @@ struct PushResult {
     LogStream&  stream;
 };
 
-struct LogIterator {
-    DataBlock*  p;
-    LogMessage* q;
-
+class LogIterator {
+public:
     LogIterator() : p(nullptr), q(nullptr) {}
-    LogIterator(LogStream& stream);
+    LogIterator(LogStream& stream, std::string message = "", std::string function_name = "",
+                int line = -1);
     LogIterator(const LogIterator& rhs) : p(rhs.p), q(rhs.q) {}
     LogIterator& operator=(const LogIterator& rhs) {
         p = rhs.p;
@@ -337,6 +336,17 @@ struct LogIterator {
 
     LogMessage& operator*() { return *q; }
     LogMessage* operator->() { return q; }
+
+protected:
+    bool check_filter();
+    void next();
+
+    DataBlock*  p;
+    LogMessage* q;
+
+    std::string function_name_filter;
+    std::string message_filter;
+    int         line_filter = -1;
 };
 
 class LogStream {
@@ -382,7 +392,9 @@ public:
     void* getRawLog(std::string func, unsigned line, std::string name);
     void* getRawLog(std::string func, std::string msg, std::string name);
 
-    LogIterator begin() { return LogIterator(*this); }
+    LogIterator begin(std::string message = "", std::string function_name = "", int line = -1) {
+        return LogIterator(*this, message, function_name, line);
+    }
     LogIterator end() { return LogIterator(); }
 
     void flush();
@@ -406,7 +418,7 @@ public:
 
     bool use_lock_free = true;
 
-    friend struct LogIterator;
+    friend class LogIterator;
 
 private:
     DataBlock *first, *prepare;
