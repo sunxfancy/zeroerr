@@ -245,10 +245,10 @@ void Benchmark::report() {
     Table output;
     output.set_header(headers);
     for (auto& row : result) {
-        auto                result = row.average();
+        auto                row_avg = row.average();
         std::vector<double> values;
         for (int j = 0; j < 7; ++j)
-            if (row.has.data[j]) values.push_back(result.data[j]);
+            if (row.has.data[j]) values.push_back(row_avg.data[j]);
         output.add_row(row.name, values);
     }
     std::cerr << output.str() << std::endl;
@@ -544,7 +544,8 @@ struct WindowsPerformanceCounter {
         // https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/ke/profobj/kprofile_source.htm
         // TotalIssues TotalCycles CacheMisses BranchMispredictions
         unsigned long perf_counter[4] = {0x02, 0x13, 0x0A, 0x0B};
-        TraceSetInformation(mTraceHandle, TracePmcCounterListInfo, perf_counter, sizeof(perf_counter));
+        TraceSetInformation(mTraceHandle, TracePmcCounterListInfo, perf_counter,
+                            sizeof(perf_counter));
 
     cleanup:
         if (mTraceHandle) {
@@ -630,6 +631,8 @@ void PerformanceCounter::endMeasure() {
 void PerformanceCounter::updateResults(uint64_t numIters) {
 #ifdef ZEROERR_PERF
     _perf->updateResults(numIters);
+#else
+    (void)numIters;
 #endif
 }
 

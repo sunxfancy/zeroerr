@@ -39,7 +39,7 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
             while (*q && *q != '}') q++;
             if (*q == '}') {
                 std::string N(p + 1, q);
-                names[N] = names.size();
+                names[N] = static_cast<int>(names.size());
                 p        = q;
             }
         }
@@ -190,7 +190,7 @@ LogIterator& LogIterator::operator++() {
 bool LogIterator::check_filter() {
     if (!message_filter.empty() && q->info->message != message_filter) return false;
     if (!function_name_filter.empty() && q->info->function != function_name_filter) return false;
-    if (line_filter != -1 && q->info->line != line_filter) return false;
+    if (line_filter != -1 && static_cast<int>(q->info->line) != line_filter) return false;
     return true;
 }
 

@@ -271,7 +271,7 @@ inline std::string _rept(unsigned k, std::string j, Table::Style&) {
 }
 
 #define rep(k, t) _rept(k, t, s)
-#define remain(k) (col_width[i] - k.size())
+#define remain(k) (col_width[i] - static_cast<unsigned>(k.size()))
 
 std::string Table::str(Config c, Table::Style s) {
     std::stringstream ss;
@@ -282,12 +282,12 @@ std::string Table::str(Config c, Table::Style s) {
 
     if (col_width.size() == 0) {
         for (size_t i = 0; i < header.size(); ++i) {
-            unsigned max_width = 0;
+            size_t max_width = 0;
             for (auto& row : cells) {
-                max_width = std::max<unsigned>(row[i].size(), max_width);
+                max_width = std::max<size_t>(row[i].size(), max_width);
             }
-            max_width = std::max<unsigned>(max_width, header[i].size());
-            col_width.push_back(max_width);
+            max_width = std::max<size_t>(max_width, header[i].size());
+            col_width.push_back(static_cast<unsigned>(max_width));
         }
     }
 
