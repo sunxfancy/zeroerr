@@ -36,7 +36,7 @@ FUZZ_TEST_CASE("fuzz_test2") {
 FUZZ_TEST_CASE("fuzz_test3") {
     LOG("Run fuzz_test3");
     FUZZ_FUNC([=](int k, std::vector<int> num) {
-        int t = num.size();
+        int t = static_cast<int>(num.size());
         LOG("k: {k}, t: {t}", k, t);
     })
         .WithDomains(InRange<int>(0, 10), ContainerOf<std::vector>(Arbitrary<int>()))
@@ -46,7 +46,7 @@ FUZZ_TEST_CASE("fuzz_test3") {
 FUZZ_TEST_CASE("fuzz_test4") {
     LOG("Run fuzz_test4");
     FUZZ_FUNC([=](int k, std::map<int, std::string> num) {
-        int t = num.size();
+        int t = static_cast<int>(num.size());
         LOG("k: {k}, t: {t}", k, t);
     })
         .WithDomains(InRange<int>(0, 10), ContainerOf<std::map<int, std::string>>(
@@ -58,7 +58,7 @@ FUZZ_TEST_CASE("fuzz_test4") {
 FUZZ_TEST_CASE("fuzz_test4") {
     LOG("Run fuzz_test4");
     FUZZ_FUNC([=](int k, std::map<int, std::string> num) {
-        int t = num.size();
+        int t = static_cast<int>(num.size());
         LOG("k: {k}, t: {t}", k, t);
     })
         .WithDomains(InRange<int>(0, 10), ContainerOf<std::map<int, std::string>>(

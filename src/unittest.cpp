@@ -87,7 +87,7 @@ void SubCase::operator<<(std::function<void(TestContext*)> op) {
     try {
         op(&local);
     } catch (const AssertionData&) {
-    } catch (const FuzzFinishedException& e) {
+    } catch (const FuzzFinishedException&) {
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
         if (local.failed_as == 0) {
@@ -249,7 +249,7 @@ int UnitTest::run() {
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
-            } catch (const FuzzFinishedException& e) {
+            } catch (const FuzzFinishedException&) {
             } catch (const std::exception& e) {
                 std::cerr << e.what() << std::endl;
                 if (context.failed_as == 0) {
@@ -283,6 +283,7 @@ std::set<TestCase>& getTestSet(TestType type) {
         case TestType::fuzz_test: return fuzz_set;
         case TestType::sub_case:  return test_set;
     }
+    throw std::runtime_error("Invalid test type");
 }
 
 static std::set<TestCase> getRegisteredTests(unsigned type) {
@@ -765,5 +766,4 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
 int main(int argc, const char** argv) {
     zeroerr::UnitTest().parseArgs(argc, argv).run();
     std::_Exit(0);
-    return 0;
 }
