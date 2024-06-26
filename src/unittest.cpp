@@ -161,6 +161,10 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         if (arg == "list-test-cases") {
             this->list_test_cases = true;
         }
+        if (arg == "no-color") {
+            this->no_color = true;
+            disableColorOutput();
+        }
         if (arg.substr(0, 9) == "reporters") {
             this->reporter_name = arg.substr(10);
             return true;

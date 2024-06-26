@@ -73,6 +73,7 @@ struct UnitTest {
     bool             run_bench       = false;
     bool             run_fuzz        = false;
     bool             list_test_cases = false;
+    bool             no_color        = false;
     std::string      correct_output_path;
     std::string      reporter_name = "console";
     std::string      binary;
