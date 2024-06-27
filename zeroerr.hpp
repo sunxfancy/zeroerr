@@ -2772,13 +2772,17 @@ ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 ZEROERR_CLANG_SUPPRESS_WARNING_POP
 #endif
 
-#define ZEROERR_ASSERT_EXP(cond, level, throws, is_false, ...)                                   \
+#define ZEROERR_ASSERT_EXP(cond, level, expect_throw, is_false, ...)                             \
     ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \
         zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
-                                  zeroerr::assert_throw::throws, is_false};                      \
+                                  zeroerr::assert_throw::expect_throw, is_false};                \
                                                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #cond, info);                  \
-        assertion_data.setResult(zeroerr::ExpressionDecomposer() << cond);                       \
+        try {                                                                                    \
+            if (zeroerr::assert_throw::expect_throw == zeroerr::assert_throw::no_throw)          \
+                assertion_data.setResult(zeroerr::ExpressionDecomposer() << cond);               \
+        } catch (const std::exception& e) {                                                      \
+        }                                                                                        \
         zeroerr::detail::context_helper<                                                         \
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
@@ -2816,10 +2820,13 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
 
 #define CHECK(...)
 #define CHECK_NOT(...)
+#define CHECK_THROWS(...)
 #define REQUIRE(...)
 #define REQUIRE_NOT(...)
+#define REQUIRE_THROWS(...)
 #define ASSERT(...)
 #define ASSERT_NOT(...)
+#define ASSERT_THROWS(...)
 
 #define CHECK_EQ(...)
 #define CHECK_NE(...)
@@ -2846,19 +2853,25 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
 // clang-format off
 ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 
-#define ZEROERR_CHECK(cond, ...)       ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__))
-#define ZEROERR_CHECK_NOT(cond, ...)   ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__))
-#define ZEROERR_REQUIRE(cond, ...)     ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__))
-#define ZEROERR_REQUIRE_NOT(cond, ...) ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, true, __VA_ARGS__))
-#define ZEROERR_ASSERT(cond, ...)      ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__))
-#define ZEROERR_ASSERT_NOT(cond, ...)  ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, true, __VA_ARGS__))
+#define ZEROERR_CHECK(cond, ...)          ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__))
+#define ZEROERR_CHECK_NOT(cond, ...)      ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__))
+#define ZEROERR_CHECK_THROWS(cond, ...)   ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, throws, false, __VA_ARGS__))
+#define ZEROERR_REQUIRE(cond, ...)        ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, no_throw, false, __VA_ARGS__))
+#define ZEROERR_REQUIRE_NOT(cond, ...)    ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, no_throw, true, __VA_ARGS__))
+#define ZEROERR_REQUIRE_THROWS(cond, ...) ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__))
+#define ZEROERR_ASSERT(cond, ...)         ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, no_throw, false, __VA_ARGS__))
+#define ZEROERR_ASSERT_NOT(cond, ...)     ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, no_throw, true, __VA_ARGS__))
+#define ZEROERR_ASSERT_THROWS(cond, ...)  ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__))
 
-#define CHECK(...)       ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
-#define CHECK_NOT(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
-#define REQUIRE(...)     ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
-#define REQUIRE_NOT(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
-#define ASSERT(...)      ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
-#define ASSERT_NOT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK(...)          ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_NOT(...)      ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_THROWS(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_THROWS(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE(...)        ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_NOT(...)    ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_THROWS(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_THROWS(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT(...)         ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_NOT(...)     ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_THROWS(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_THROWS(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 
 #define ZEROERR_CHECK_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
 #define ZEROERR_CHECK_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
@@ -2867,19 +2880,19 @@ ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 #define ZEROERR_CHECK_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
 #define ZEROERR_CHECK_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
 
-#define ZEROERR_REQUIRE_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define ZEROERR_REQUIRE_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define ZEROERR_REQUIRE_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define ZEROERR_REQUIRE_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define ZEROERR_REQUIRE_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define ZEROERR_REQUIRE_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
 
-#define ZEROERR_ASSERT_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ZEROERR_ASSERT_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ZEROERR_ASSERT_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ZEROERR_ASSERT_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ZEROERR_ASSERT_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ZEROERR_ASSERT_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
 
 #define CHECK_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define CHECK_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
@@ -2973,7 +2986,7 @@ struct AssertionData : std::exception {
         if (shouldThrow()) throw *this;
     }
 
-    bool shouldThrow() { return info.throw_type == assert_throw::throws; }
+    bool shouldThrow() { return info.level != assert_level::ZEROERR_WARN_l; }
 };
 
 namespace detail {
