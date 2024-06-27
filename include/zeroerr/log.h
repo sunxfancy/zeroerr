@@ -296,6 +296,11 @@ struct LogMessageImpl final : LogMessage {
         Printer print;
         std::string name;
 
+        PrintTupleData() : print() {
+            print.isCompact = true;
+            print.line_break = "";
+        }
+
         template <typename H>
         void operator()(H& v) {
             data[name] = print(v);

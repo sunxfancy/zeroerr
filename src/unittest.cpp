@@ -390,7 +390,7 @@ public:
         ScopedElement& operator=(ScopedElement&& other) noexcept;
         ~ScopedElement();
 
-        ScopedElement& writeText(const std::string& text, bool indent = true);
+        ScopedElement& writeText(const std::string& text, bool indent = true, bool new_line = true);
 
         template <typename T>
         ScopedElement& writeAttribute(const std::string& name, const T& attribute) {
@@ -423,9 +423,9 @@ public:
         return writeAttribute(name, rss.str());
     }
 
-    XmlWriter& writeText(const std::string& text, bool indent = true);
+    XmlWriter& writeText(const std::string& text, bool indent = true, bool new_line = true);
 
-    void ensureTagClosed();
+    void ensureTagClosed(bool new_line = true);
     void writeDeclaration();
 
 private:
@@ -433,6 +433,7 @@ private:
 
     bool                     m_tagIsOpen    = false;
     bool                     m_needsNewline = false;
+    bool                     m_needsIndent  = false;
     std::vector<std::string> m_tags;
     std::string              m_indent;
     std::ostream&            m_os;
@@ -591,8 +592,8 @@ XmlWriter::ScopedElement::~ScopedElement() {
 }
 
 XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text,
-                                                              bool               indent) {
-    m_writer->writeText(text, indent);
+                                                              bool               indent, bool new_line) {
+    m_writer->writeText(text, indent, new_line);
     return *this;
 }
 
@@ -625,7 +626,9 @@ XmlWriter& XmlWriter::endElement() {
         m_os << "/>";
         m_tagIsOpen = false;
     } else {
-        m_os << m_indent << "</" << m_tags.back() << ">";
+        if (m_needsIndent) m_os << m_indent;
+        else m_needsIndent = true;
+        m_os << "</" << m_tags.back() << ">";
     }
     m_os << std::endl;
     m_tags.pop_back();
@@ -649,20 +652,22 @@ XmlWriter& XmlWriter::writeAttribute(const std::string& name, bool attribute) {
     return *this;
 }
 
-XmlWriter& XmlWriter::writeText(const std::string& text, bool indent) {
+XmlWriter& XmlWriter::writeText(const std::string& text, bool indent, bool new_line) {
     if (!text.empty()) {
         bool tagWasOpen = m_tagIsOpen;
-        ensureTagClosed();
+        ensureTagClosed(new_line);
         if (tagWasOpen && indent) m_os << m_indent;
         m_os << XmlEncode(text);
-        m_needsNewline = true;
+        m_needsNewline = new_line;
+        m_needsIndent = new_line;
     }
     return *this;
 }
 
-void XmlWriter::ensureTagClosed() {
+void XmlWriter::ensureTagClosed(bool new_line) {
     if (m_tagIsOpen) {
-        m_os << ">" << std::endl;
+        m_os << ">";
+        if (new_line) m_os << std::endl;
         m_tagIsOpen = false;
     }
 }
@@ -704,18 +709,17 @@ public:
 
     virtual void testCaseStart(const TestCase& tc, std::stringbuf&) override {
         current.push_back({&tc});
-        xml.startElement("TestCase");
+        xml.startElement("TestCase")
+            .writeAttribute("name", tc.name)
+            .writeAttribute("filename", tc.file)
+            .writeAttribute("line", tc.line)
+            .writeAttribute("skipped", "false");
         if (ut.log_to_report) suspendLog();
     }
 
     virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
                              int) override {
         current.pop_back();
-
-        xml.writeAttribute("name", tc.name)
-            .writeAttribute("filename", tc.file)
-            .writeAttribute("line", tc.line)
-            .writeAttribute("skipped", "false");
         xml.scopedElement("Result")
             .writeAttribute("time", 0)
             .writeAttribute("passed", ctx.passed)
@@ -741,7 +745,7 @@ public:
                     .writeAttribute("category", p->info->category)
                     .writeAttribute("severity", p->info->severity);
                 for (auto pair : p->getData()) {
-                    xml.scopedElement(pair.first).writeText(pair.second);
+                    xml.scopedElement(pair.first).writeText(pair.second, false, false);
                 }
                 xml.endElement();
             }

@@ -824,6 +824,35 @@ struct ele_type_is_pair<
     T, void_t<typename T::value_type, decltype(std::declval<typename T::value_type>().first),
               decltype(std::declval<typename T::value_type>().second)>> : std::true_type {};
 
+template <typename T, typename V = void>
+struct to_store_type {
+    using type = T;
+};
+
+template <>
+struct to_store_type<const char*> {
+    using type = std::string;
+};
+
+template <>
+struct to_store_type<const char(&)[]> {
+    using type = std::string;
+};
+
+
+template <typename T>
+struct to_store_type<T&, typename std::enable_if<!std::is_array<T>::value>::type> {
+    using type = T;
+};
+
+template <typename T>
+struct to_store_type<T&&> {
+    using type = T;
+};
+
+template <typename T>
+using to_store_type_t = typename to_store_type<T>::type;
+
 
 template <size_t I>
 struct visit_impl {
@@ -1423,7 +1452,11 @@ struct Printer {
 #endif
     }
 
-    std::string str() const { return static_cast<std::stringstream&>(os).str(); }
+    std::string str() const {
+        if (use_stringstream == false)
+            throw std::runtime_error("Printer is not using stringstream");
+        return static_cast<std::stringstream&>(os).str();
+    }
     operator std::string() const { return str(); }
 
     friend std::ostream& operator<<(std::ostream& os, const Printer& P) {
@@ -3341,6 +3374,8 @@ struct LogMessage {
     virtual std::string str() const                       = 0;
     virtual void*       getRawLog(std::string name) const = 0;
 
+    virtual std::map<std::string, std::string> getData() const = 0;
+
     // meta data of this log message
     const LogInfo* info;
 
@@ -3349,17 +3384,8 @@ struct LogMessage {
 };
 
 
-// This is a helper class to get the raw pointer of the tuple
-struct GetTuplePtr {
-    void* ptr = nullptr;
-    template <typename H>
-    void operator()(H& v) {
-        ptr = (void*)&v;
-    }
-};
-
 template <typename... T>
-struct LogMessageImpl : LogMessage {
+struct LogMessageImpl final : LogMessage {
     std::tuple<T...> args;
     LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
@@ -3367,10 +3393,44 @@ struct LogMessageImpl : LogMessage {
         return gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
     }
 
+    // This is a helper class to get the raw pointer of the tuple
+    struct GetTuplePtr {
+        void* ptr = nullptr;
+        template <typename H>
+        void operator()(H& v) {
+            ptr = (void*)&v;
+        }
+    };
+
     void* getRawLog(std::string name) const override {
         GetTuplePtr f;
         detail::visit_at(args, info->names.at(name), f);
         return f.ptr;
+    }
+
+    struct PrintTupleData {
+        std::map<std::string, std::string> data;
+        Printer print;
+        std::string name;
+
+        PrintTupleData() : print() {
+            print.isCompact = true;
+            print.line_break = "";
+        }
+
+        template <typename H>
+        void operator()(H& v) {
+            data[name] = print(v);
+        }
+    };
+
+    std::map<std::string, std::string> getData() const override {
+        PrintTupleData printer;
+        for (auto it = info->names.begin(); it != info->names.end(); ++it) {
+            printer.name = it->first;
+            detail::visit_at(args, it->second, printer);
+        }
+        return printer.data;
     }
 };
 
@@ -3418,8 +3478,13 @@ public:
     bool operator==(const LogIterator& rhs) const { return p == rhs.p && q == rhs.q; }
     bool operator!=(const LogIterator& rhs) const { return !(*this == rhs); }
 
-    LogMessage& operator*() { return *q; }
-    LogMessage* operator->() { return q; }
+    LogMessage& get() const { return *q; }
+    LogMessage& operator*() const { return *q; }
+    LogMessage* operator->() const { return q; }
+
+    void check_at_safe_pos(); 
+
+    friend class LogStream;
 
 protected:
     bool check_filter();
@@ -3449,13 +3514,15 @@ public:
 
     template <typename... T>
     PushResult push(T&&... args) {
-        unsigned size = sizeof(LogMessageImpl<T...>);
+        // unsigned size = sizeof(LogMessageImpl<T...>);
+        unsigned size = sizeof(LogMessageImpl<detail::to_store_type_t<T>...>);
         void*    p;
         if (use_lock_free)
             p = alloc_block_lockfree(size);
         else
             p = alloc_block(size);
-        LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
+        // LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
+        LogMessage* msg = new (p) LogMessageImpl<detail::to_store_type_t<T>...>(args...);
         return {msg, size, *this};
     }
 
@@ -3480,6 +3547,7 @@ public:
         return LogIterator(*this, message, function_name, line);
     }
     LogIterator end() { return LogIterator(); }
+    LogIterator current(std::string message = "", std::string function_name = "", int line = -1);
 
     void flush();
     void setFileLogger(std::string name, DirMode mode1 = SINGLE_FILE, DirMode mode2 = SINGLE_FILE,
@@ -3767,15 +3835,17 @@ struct TestCase;
 struct UnitTest {
     UnitTest&        parseArgs(int argc, const char** argv);
     int              run();
-    bool             run_filiter(const TestCase& tc);
+    bool             run_filter(const TestCase& tc);
     bool             silent          = false;
     bool             run_bench       = false;
     bool             run_fuzz        = false;
     bool             list_test_cases = false;
+    bool             no_color        = false;
+    bool             log_to_report   = false;
     std::string      correct_output_path;
     std::string      reporter_name = "console";
     std::string      binary;
-    struct Filiters* filiters;
+    struct Filters* filters;
 };
 
 struct TestCase {
@@ -4400,14 +4470,15 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
       category(category),
       line(line),
       size(size),
-      severity(severity) {
+      severity(severity),
+      names() {
     for (const char* p = message; *p; p++)
         if (*p == '{') {
             const char* q = p + 1;
             while (*q && *q != '}') q++;
             if (*q == '}') {
-                std::string N(p + 1, q);
-                names[N] = names.size();
+                std::string N(p + 1, (size_t)(q-p-1));
+                names[N] = static_cast<int>(names.size());
                 p        = q;
             }
         }
@@ -4492,6 +4563,13 @@ void* LogStream::alloc_block_lockfree(unsigned size) {
         }
     }
 }
+LogIterator LogStream::current(std::string message, std::string function_name, int line) {
+    LogIterator iter(*this, message, function_name, line);
+    DataBlock*  last = m_last.load();
+    iter.p           = last;
+    iter.q           = (LogMessage*)last->data[last->size.load()];
+    return iter;
+}
 
 void LogStream::flush() {
     ZEROERR_LOCK(*mutex);
@@ -4535,6 +4613,13 @@ LogIterator::LogIterator(LogStream& stream, std::string message, std::string fun
     while (!check_filter() && p) next();
 }
 
+void LogIterator::check_at_safe_pos() {
+    if (static_cast<size_t>((char*)q - p->data) >= p->size.load()) {
+        p = p->next;
+        q = (LogMessage*)p->data;
+    }
+}
+
 void LogIterator::next() {
     if (q < p->end()) {
         q = moveBytes(q, q->info->size);
@@ -4558,7 +4643,7 @@ LogIterator& LogIterator::operator++() {
 bool LogIterator::check_filter() {
     if (!message_filter.empty() && q->info->message != message_filter) return false;
     if (!function_name_filter.empty() && q->info->function != function_name_filter) return false;
-    if (line_filter != -1 && q->info->line != line_filter) return false;
+    if (line_filter != -1 && static_cast<int>(q->info->line) != line_filter) return false;
     return true;
 }
 
@@ -4771,7 +4856,7 @@ void setLogCategory(const char* categories) {
     }
 }
 
-static LogStream::FlushMode saved_flush_mode;
+static LogStream::FlushMode saved_flush_mode = LogStream::FlushMode::FLUSH_AT_ONCE;
 
 void suspendLog() {
     saved_flush_mode = LogStream::getDefault().getFlushMode();
@@ -5088,7 +5173,7 @@ inline std::string _rept(unsigned k, std::string j, Table::Style&) {
 }
 
 #define rep(k, t) _rept(k, t, s)
-#define remain(k) (col_width[i] - k.size())
+#define remain(k) (col_width[i] - static_cast<unsigned>(k.size()))
 
 std::string Table::str(Config c, Table::Style s) {
     std::stringstream ss;
@@ -5099,12 +5184,12 @@ std::string Table::str(Config c, Table::Style s) {
 
     if (col_width.size() == 0) {
         for (size_t i = 0; i < header.size(); ++i) {
-            unsigned max_width = 0;
+            size_t max_width = 0;
             for (auto& row : cells) {
-                max_width = std::max<unsigned>(row[i].size(), max_width);
+                max_width = std::max<size_t>(row[i].size(), max_width);
             }
-            max_width = std::max<unsigned>(max_width, header[i].size());
-            col_width.push_back(max_width);
+            max_width = std::max<size_t>(max_width, header[i].size());
+            col_width.push_back(static_cast<unsigned>(max_width));
         }
     }
 
@@ -5164,6 +5249,7 @@ std::string Table::str(Config c, Table::Style s) {
 #undef remain
 
 }  // namespace zeroerr
+
 
 
 
@@ -5254,7 +5340,7 @@ void SubCase::operator<<(std::function<void(TestContext*)> op) {
     try {
         op(&local);
     } catch (const AssertionData&) {
-    } catch (const FuzzFinishedException& e) {
+    } catch (const FuzzFinishedException&) {
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
         if (local.failed_as == 0) {
@@ -5267,13 +5353,13 @@ void SubCase::operator<<(std::function<void(TestContext*)> op) {
     context->reporter.subCaseEnd(*this, new_buf, local, type);
 }
 
-struct Filiters {
+struct Filters {
     std::vector<std::regex> name, name_exclude;
     std::vector<std::regex> file, file_exclude;
 };
 
 UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
-    filiters            = new Filiters();
+    filters             = new Filters();
     auto convert_to_vec = [=]() {
         std::vector<std::string> result;
         for (int i = 1; i < argc; i++) {
@@ -5328,24 +5414,31 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         if (arg == "list-test-cases") {
             this->list_test_cases = true;
         }
+        if (arg == "no-color") {
+            this->no_color = true;
+            disableColorOutput();
+        }
+        if (arg == "log-to-report") {
+            this->log_to_report = true;
+        }
         if (arg.substr(0, 9) == "reporters") {
             this->reporter_name = arg.substr(10);
             return true;
         }
         if (arg.substr(0, 8) == "testcase") {
-            filiters->name.push_back(std::regex(arg.substr(9)));
+            filters->name.push_back(std::regex(arg.substr(9)));
             return true;
         }
         if (arg.substr(0, 14) == "testcase-exclude") {
-            filiters->name_exclude.push_back(std::regex(arg.substr(15)));
+            filters->name_exclude.push_back(std::regex(arg.substr(15)));
             return true;
         }
         if (arg.substr(0, 5) == "file") {
-            filiters->file.push_back(std::regex(arg.substr(6)));
+            filters->file.push_back(std::regex(arg.substr(6)));
             return true;
         }
         if (arg.substr(0, 11) == "file-exclude") {
-            filiters->file_exclude.push_back(std::regex(arg.substr(12)));
+            filters->file_exclude.push_back(std::regex(arg.substr(12)));
             return true;
         }
         return false;
@@ -5381,15 +5474,15 @@ static std::string insertIndentation(std::string str) {
     return result.str();
 }
 
-bool UnitTest::run_filiter(const TestCase& tc) {
-    if (filiters == nullptr) return true;
-    for (auto& r : filiters->name)
+bool UnitTest::run_filter(const TestCase& tc) {
+    if (filters == nullptr) return true;
+    for (auto& r : filters->name)
         if (!std::regex_match(tc.name, r)) return false;
-    for (auto& r : filiters->name_exclude)
+    for (auto& r : filters->name_exclude)
         if (std::regex_match(tc.name, r)) return false;
-    for (auto& r : filiters->file)
+    for (auto& r : filters->file)
         if (!std::regex_match(tc.file, r)) return false;
-    for (auto& r : filiters->file_exclude)
+    for (auto& r : filters->file_exclude)
         if (std::regex_match(tc.file, r)) return false;
     return true;
 }
@@ -5397,6 +5490,7 @@ bool UnitTest::run_filiter(const TestCase& tc) {
 int UnitTest::run() {
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
+
     TestContext context(*reporter), sum(*reporter);
     reporter->testStart();
     std::stringbuf new_buf;
@@ -5404,10 +5498,10 @@ int UnitTest::run() {
     unsigned types = TestType::test_case;
     if (run_bench) types |= TestType::bench;
     if (run_fuzz) types |= TestType::fuzz_test;
-    std::set<TestCase> testcases = detail::getRegisteredTests(types);
+    std::set<TestCase> test_cases = detail::getRegisteredTests(types);
 
-    for (auto& tc : testcases) {
-        if (!run_filiter(tc)) continue;
+    for (auto& tc : test_cases) {
+        if (!run_filter(tc)) continue;
         reporter->testCaseStart(tc, new_buf);
         if (!list_test_cases) {
             std::streambuf* orig_buf = std::cerr.rdbuf();
@@ -5416,7 +5510,7 @@ int UnitTest::run() {
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
-            } catch (const FuzzFinishedException& e) {
+            } catch (const FuzzFinishedException&) {
             } catch (const std::exception& e) {
                 std::cerr << e.what() << std::endl;
                 if (context.failed_as == 0) {
@@ -5450,6 +5544,7 @@ std::set<TestCase>& getTestSet(TestType type) {
         case TestType::fuzz_test: return fuzz_set;
         case TestType::sub_case:  return test_set;
     }
+    throw std::runtime_error("Invalid test type");
 }
 
 static std::set<TestCase> getRegisteredTests(unsigned type) {
@@ -5529,9 +5624,9 @@ namespace detail {
 class XmlEncode {
 public:
     enum ForWhat { ForTextNodes, ForAttributes };
-    XmlEncode(std::string const& str, ForWhat forWhat = ForTextNodes);
+    XmlEncode(const std::string& str, ForWhat forWhat = ForTextNodes);
     void                 encodeTo(std::ostream& os) const;
-    friend std::ostream& operator<<(std::ostream& os, XmlEncode const& xmlEncode);
+    friend std::ostream& operator<<(std::ostream& os, const XmlEncode& xmlEncode);
 
 private:
     std::string m_str;
@@ -5547,10 +5642,10 @@ public:
         ScopedElement& operator=(ScopedElement&& other) noexcept;
         ~ScopedElement();
 
-        ScopedElement& writeText(std::string const& text, bool indent = true);
+        ScopedElement& writeText(const std::string& text, bool indent = true, bool new_line = true);
 
         template <typename T>
-        ScopedElement& writeAttribute(std::string const& name, T const& attribute) {
+        ScopedElement& writeAttribute(const std::string& name, const T& attribute) {
             m_writer->writeAttribute(name, attribute);
             return *this;
         }
@@ -5562,27 +5657,27 @@ public:
     XmlWriter(std::ostream& os = std::cerr);
     ~XmlWriter();
 
-    XmlWriter(XmlWriter const&)            = delete;
-    XmlWriter& operator=(XmlWriter const&) = delete;
+    XmlWriter(const XmlWriter&)            = delete;
+    XmlWriter& operator=(const XmlWriter&) = delete;
 
-    XmlWriter&    startElement(std::string const& name);
-    ScopedElement scopedElement(std::string const& name);
+    XmlWriter&    startElement(const std::string& name);
+    ScopedElement scopedElement(const std::string& name);
     XmlWriter&    endElement();
 
-    XmlWriter& writeAttribute(std::string const& name, std::string const& attribute);
-    XmlWriter& writeAttribute(std::string const& name, const char* attribute);
-    XmlWriter& writeAttribute(std::string const& name, bool attribute);
+    XmlWriter& writeAttribute(const std::string& name, const std::string& attribute);
+    XmlWriter& writeAttribute(const std::string& name, const char* attribute);
+    XmlWriter& writeAttribute(const std::string& name, bool attribute);
 
     template <typename T>
-    XmlWriter& writeAttribute(std::string const& name, T const& attribute) {
+    XmlWriter& writeAttribute(const std::string& name, const T& attribute) {
         std::stringstream rss;
         rss << attribute;
         return writeAttribute(name, rss.str());
     }
 
-    XmlWriter& writeText(std::string const& text, bool indent = true);
+    XmlWriter& writeText(const std::string& text, bool indent = true, bool new_line = true);
 
-    void ensureTagClosed();
+    void ensureTagClosed(bool new_line = true);
     void writeDeclaration();
 
 private:
@@ -5590,6 +5685,7 @@ private:
 
     bool                     m_tagIsOpen    = false;
     bool                     m_needsNewline = false;
+    bool                     m_needsIndent  = false;
     std::vector<std::string> m_tags;
     std::string              m_indent;
     std::ostream&            m_os;
@@ -5630,7 +5726,7 @@ static void hexEscapeChar(std::ostream& os, unsigned char c) {
     os.flags(f);
 }
 
-XmlEncode::XmlEncode(std::string const& str, ForWhat forWhat) : m_str(str), m_forWhat(forWhat) {}
+XmlEncode::XmlEncode(const std::string& str, ForWhat forWhat) : m_str(str), m_forWhat(forWhat) {}
 
 void XmlEncode::encodeTo(std::ostream& os) const {
     // Apostrophe escaping not necessary if we always use " to write attributes
@@ -5723,7 +5819,7 @@ void XmlEncode::encodeTo(std::ostream& os) const {
     }
 }
 
-std::ostream& operator<<(std::ostream& os, XmlEncode const& xmlEncode) {
+std::ostream& operator<<(std::ostream& os, const XmlEncode& xmlEncode) {
     xmlEncode.encodeTo(os);
     return os;
 }
@@ -5747,9 +5843,9 @@ XmlWriter::ScopedElement::~ScopedElement() {
     if (m_writer) m_writer->endElement();
 }
 
-XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(std::string const& text,
-                                                              bool               indent) {
-    m_writer->writeText(text, indent);
+XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text,
+                                                              bool               indent, bool new_line) {
+    m_writer->writeText(text, indent, new_line);
     return *this;
 }
 
@@ -5759,7 +5855,7 @@ XmlWriter::~XmlWriter() {
     while (!m_tags.empty()) endElement();
 }
 
-XmlWriter& XmlWriter::startElement(std::string const& name) {
+XmlWriter& XmlWriter::startElement(const std::string& name) {
     ensureTagClosed();
     newlineIfNecessary();
     m_os << m_indent << '<' << name;
@@ -5769,7 +5865,7 @@ XmlWriter& XmlWriter::startElement(std::string const& name) {
     return *this;
 }
 
-XmlWriter::ScopedElement XmlWriter::scopedElement(std::string const& name) {
+XmlWriter::ScopedElement XmlWriter::scopedElement(const std::string& name) {
     ScopedElement scoped(this);
     startElement(name);
     return scoped;
@@ -5782,44 +5878,48 @@ XmlWriter& XmlWriter::endElement() {
         m_os << "/>";
         m_tagIsOpen = false;
     } else {
-        m_os << m_indent << "</" << m_tags.back() << ">";
+        if (m_needsIndent) m_os << m_indent;
+        else m_needsIndent = true;
+        m_os << "</" << m_tags.back() << ">";
     }
     m_os << std::endl;
     m_tags.pop_back();
     return *this;
 }
 
-XmlWriter& XmlWriter::writeAttribute(std::string const& name, std::string const& attribute) {
+XmlWriter& XmlWriter::writeAttribute(const std::string& name, const std::string& attribute) {
     if (!name.empty() && !attribute.empty())
         m_os << ' ' << name << "=\"" << XmlEncode(attribute, XmlEncode::ForAttributes) << '"';
     return *this;
 }
 
-XmlWriter& XmlWriter::writeAttribute(std::string const& name, const char* attribute) {
+XmlWriter& XmlWriter::writeAttribute(const std::string& name, const char* attribute) {
     if (!name.empty() && attribute && attribute[0] != '\0')
         m_os << ' ' << name << "=\"" << XmlEncode(attribute, XmlEncode::ForAttributes) << '"';
     return *this;
 }
 
-XmlWriter& XmlWriter::writeAttribute(std::string const& name, bool attribute) {
+XmlWriter& XmlWriter::writeAttribute(const std::string& name, bool attribute) {
     m_os << ' ' << name << "=\"" << (attribute ? "true" : "false") << '"';
     return *this;
 }
 
-XmlWriter& XmlWriter::writeText(std::string const& text, bool indent) {
+XmlWriter& XmlWriter::writeText(const std::string& text, bool indent, bool new_line) {
     if (!text.empty()) {
         bool tagWasOpen = m_tagIsOpen;
-        ensureTagClosed();
+        ensureTagClosed(new_line);
         if (tagWasOpen && indent) m_os << m_indent;
         m_os << XmlEncode(text);
-        m_needsNewline = true;
+        m_needsNewline = new_line;
+        m_needsIndent = new_line;
     }
     return *this;
 }
 
-void XmlWriter::ensureTagClosed() {
+void XmlWriter::ensureTagClosed(bool new_line) {
     if (m_tagIsOpen) {
-        m_os << ">" << std::endl;
+        m_os << ">";
+        if (new_line) m_os << std::endl;
         m_tagIsOpen = false;
     }
 }
@@ -5842,77 +5942,89 @@ class XmlReporter : public IReporter {
 public:
     detail::XmlWriter xml;
 
-    struct TestCaseData {
-        struct TestCase {
-            std::string filename, name;
-            unsigned    line;
-            double      time;
-            TestContext context;
-            std::string output;
-        };
+    struct TestCaseTemp {
+        const TestCase* tc;
+    };
 
-        std::vector<TestCase> testcases;
-        double                total_time;
-    } tc_data;
-    std::vector<const TestCase*> current;
+    std::vector<TestCaseTemp> current;
 
     virtual std::string getName() const override { return "xml"; }
 
     // There are a list of events
-    virtual void testStart() override { xml.writeDeclaration(); }
+    virtual void testStart() override {
+        xml.writeDeclaration();
+        xml.startElement("ZeroErr")
+            .writeAttribute("binary", ut.binary)
+            .writeAttribute("version", ZEROERR_VERSION_STR);
+        xml.startElement("TestSuite");
+    }
 
     virtual void testCaseStart(const TestCase& tc, std::stringbuf&) override {
-        current.push_back(&tc);
+        current.push_back({&tc});
+        xml.startElement("TestCase")
+            .writeAttribute("name", tc.name)
+            .writeAttribute("filename", tc.file)
+            .writeAttribute("line", tc.line)
+            .writeAttribute("skipped", "false");
+        if (ut.log_to_report) suspendLog();
     }
 
     virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
                              int) override {
-        tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx, sb.str()});
         current.pop_back();
+        xml.scopedElement("Result")
+            .writeAttribute("time", 0)
+            .writeAttribute("passed", ctx.passed)
+            .writeAttribute("warnings", ctx.warning)
+            .writeAttribute("failed", ctx.failed)
+            .writeAttribute("skipped", ctx.skipped);
+        xml.scopedElement("ResultAsserts")
+            .writeAttribute("passed", ctx.passed_as)
+            .writeAttribute("warnings", ctx.warning_as)
+            .writeAttribute("failed", ctx.failed_as)
+            .writeAttribute("skipped", ctx.skipped_as);
+        xml.scopedElement("Output").writeText(sb.str());
+
+        if (ut.log_to_report) {
+            xml.startElement("Log");
+            LogIterator begin = LogStream::getDefault().begin();
+            LogIterator end   = LogStream::getDefault().end();
+            for (auto p = begin; p != end; ++p) {
+                xml.startElement("LogEntry")
+                    .writeAttribute("function", p->info->function)
+                    .writeAttribute("line", p->info->line)
+                    .writeAttribute("message", p->info->message)
+                    .writeAttribute("category", p->info->category)
+                    .writeAttribute("severity", p->info->severity);
+                for (auto pair : p->getData()) {
+                    xml.scopedElement(pair.first).writeText(pair.second, false, false);
+                }
+                xml.endElement();
+            }
+            xml.endElement();
+            resumeLog();
+        }
+        xml.endElement();
     }
 
-    virtual void subCaseStart(const TestCase& tc, std::stringbuf&) override {
-        current.push_back(&tc);
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+        testCaseStart(tc, sb);
     }
 
     virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
                             int) override {
-        tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx, sb.str()});
-        current.pop_back();
+        testCaseEnd(tc, sb, ctx, 0);
     }
 
     virtual void testEnd(const TestContext& tc) override {
-        xml.startElement("ZeroErr")
-            .writeAttribute("binary", ut.binary)
-            .writeAttribute("version", ZEROERR_VERSION_STR);
+        xml.endElement();
+
         xml.startElement("OverallResults")
             .writeAttribute("errors", tc.failed_as)
             .writeAttribute("failures", tc.failed)
             .writeAttribute("tests", tc.passed + tc.failed + tc.warning);
         xml.endElement();
-        xml.startElement("TestSuite");
-        for (const auto& testCase : tc_data.testcases) {
-            xml.startElement("TestCase")
-                .writeAttribute("name", testCase.name)
-                .writeAttribute("filename", testCase.filename)
-                .writeAttribute("line", testCase.line)
-                .writeAttribute("skipped", "false");
-            xml.scopedElement("Result")
-                .writeAttribute("time", testCase.time)
-                .writeAttribute("passed", testCase.context.passed)
-                .writeAttribute("warnings", testCase.context.warning)
-                .writeAttribute("failed", testCase.context.failed)
-                .writeAttribute("skipped", testCase.context.skipped);
-            xml.scopedElement("ResultAsserts")
-                .writeAttribute("passed", testCase.context.passed_as)
-                .writeAttribute("warnings", testCase.context.warning_as)
-                .writeAttribute("failed", testCase.context.failed_as)
-                .writeAttribute("skipped", testCase.context.skipped_as);
-            xml.scopedElement("Output")
-                .writeText(testCase.output);
-            xml.endElement();
-        }
-        xml.endElement();
+
         xml.endElement();
     }
 
@@ -5932,7 +6044,6 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
 int main(int argc, const char** argv) {
     zeroerr::UnitTest().parseArgs(argc, argv).run();
     std::_Exit(0);
-    return 0;
 }
 
 
@@ -6246,10 +6357,10 @@ void Benchmark::report() {
     Table output;
     output.set_header(headers);
     for (auto& row : result) {
-        auto                result = row.average();
+        auto                row_avg = row.average();
         std::vector<double> values;
         for (int j = 0; j < 7; ++j)
-            if (row.has.data[j]) values.push_back(result.data[j]);
+            if (row.has.data[j]) values.push_back(row_avg.data[j]);
         output.add_row(row.name, values);
     }
     std::cerr << output.str() << std::endl;
@@ -6545,7 +6656,8 @@ struct WindowsPerformanceCounter {
         // https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/ke/profobj/kprofile_source.htm
         // TotalIssues TotalCycles CacheMisses BranchMispredictions
         unsigned long perf_counter[4] = {0x02, 0x13, 0x0A, 0x0B};
-        TraceSetInformation(mTraceHandle, TracePmcCounterListInfo, perf_counter, sizeof(perf_counter));
+        TraceSetInformation(mTraceHandle, TracePmcCounterListInfo, perf_counter,
+                            sizeof(perf_counter));
 
     cleanup:
         if (mTraceHandle) {
@@ -6631,6 +6743,8 @@ void PerformanceCounter::endMeasure() {
 void PerformanceCounter::updateResults(uint64_t numIters) {
 #ifdef ZEROERR_PERF
     _perf->updateResults(numIters);
+#else
+    (void)numIters;
 #endif
 }
 
