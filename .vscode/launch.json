@@ -15,9 +15,25 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Windows reporter",
+            "program": "${workspaceFolder}/build/windows/test/Debug/unittest.exe",
+            "args": ["--no-color", "--log-to-report", "--reporters=xml"],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Linux",
             "program": "${workspaceFolder}/build/linux/test/unittest",
             "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Linux reporter",
+            "program": "${workspaceFolder}/build/linux/test/unittest",
+            "args": ["--no-color", "--log-to-report", "--reporters=xml"],
             "cwd": "${workspaceFolder}"
         },
         {

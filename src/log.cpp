@@ -32,13 +32,14 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
       category(category),
       line(line),
       size(size),
-      severity(severity) {
+      severity(severity),
+      names() {
     for (const char* p = message; *p; p++)
         if (*p == '{') {
             const char* q = p + 1;
             while (*q && *q != '}') q++;
             if (*q == '}') {
-                std::string N(p + 1, q);
+                std::string N(p + 1, (size_t)(q-p-1));
                 names[N] = static_cast<int>(names.size());
                 p        = q;
             }
@@ -124,6 +125,13 @@ void* LogStream::alloc_block_lockfree(unsigned size) {
         }
     }
 }
+LogIterator LogStream::current(std::string message, std::string function_name, int line) {
+    LogIterator iter(*this, message, function_name, line);
+    DataBlock*  last = m_last.load();
+    iter.p           = last;
+    iter.q           = (LogMessage*)last->data[last->size.load()];
+    return iter;
+}
 
 void LogStream::flush() {
     ZEROERR_LOCK(*mutex);
@@ -165,6 +173,13 @@ LogIterator::LogIterator(LogStream& stream, std::string message, std::string fun
       function_name_filter(function_name),
       line_filter(line) {
     while (!check_filter() && p) next();
+}
+
+void LogIterator::check_at_safe_pos() {
+    if (static_cast<size_t>((char*)q - p->data) >= p->size.load()) {
+        p = p->next;
+        q = (LogMessage*)p->data;
+    }
 }
 
 void LogIterator::next() {
@@ -403,7 +418,7 @@ void setLogCategory(const char* categories) {
     }
 }
 
-static LogStream::FlushMode saved_flush_mode;
+static LogStream::FlushMode saved_flush_mode = LogStream::FlushMode::FLUSH_AT_ONCE;
 
 void suspendLog() {
     saved_flush_mode = LogStream::getDefault().getFlushMode();

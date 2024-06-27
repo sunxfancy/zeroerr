@@ -31,7 +31,7 @@ linux-test: linux
 	cd build/linux/test && ./unittest
 
 reporter: linux
-	cd build/linux/test && ./unittest --no-color --reporters=xml
+	cd build/linux/test && ./unittest --no-color --log-to-report --reporters=xml
 
 windows-test: windows
 	cd build/windows/test && ./Debug/unittest.exe

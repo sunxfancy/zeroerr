@@ -68,16 +68,17 @@ struct TestCase;
 struct UnitTest {
     UnitTest&        parseArgs(int argc, const char** argv);
     int              run();
-    bool             run_filiter(const TestCase& tc);
+    bool             run_filter(const TestCase& tc);
     bool             silent          = false;
     bool             run_bench       = false;
     bool             run_fuzz        = false;
     bool             list_test_cases = false;
     bool             no_color        = false;
+    bool             log_to_report   = false;
     std::string      correct_output_path;
     std::string      reporter_name = "console";
     std::string      binary;
-    struct Filiters* filiters;
+    struct Filters* filters;
 };
 
 struct TestCase {

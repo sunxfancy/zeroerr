@@ -257,6 +257,8 @@ struct LogMessage {
     virtual std::string str() const                       = 0;
     virtual void*       getRawLog(std::string name) const = 0;
 
+    virtual std::map<std::string, std::string> getData() const = 0;
+
     // meta data of this log message
     const LogInfo* info;
 
@@ -265,17 +267,8 @@ struct LogMessage {
 };
 
 
-// This is a helper class to get the raw pointer of the tuple
-struct GetTuplePtr {
-    void* ptr = nullptr;
-    template <typename H>
-    void operator()(H& v) {
-        ptr = (void*)&v;
-    }
-};
-
 template <typename... T>
-struct LogMessageImpl : LogMessage {
+struct LogMessageImpl final : LogMessage {
     std::tuple<T...> args;
     LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
@@ -283,10 +276,39 @@ struct LogMessageImpl : LogMessage {
         return gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
     }
 
+    // This is a helper class to get the raw pointer of the tuple
+    struct GetTuplePtr {
+        void* ptr = nullptr;
+        template <typename H>
+        void operator()(H& v) {
+            ptr = (void*)&v;
+        }
+    };
+
     void* getRawLog(std::string name) const override {
         GetTuplePtr f;
         detail::visit_at(args, info->names.at(name), f);
         return f.ptr;
+    }
+
+    struct PrintTupleData {
+        std::map<std::string, std::string> data;
+        Printer print;
+        std::string name;
+
+        template <typename H>
+        void operator()(H& v) {
+            data[name] = print(v);
+        }
+    };
+
+    std::map<std::string, std::string> getData() const override {
+        PrintTupleData printer;
+        for (auto it = info->names.begin(); it != info->names.end(); ++it) {
+            printer.name = it->first;
+            detail::visit_at(args, it->second, printer);
+        }
+        return printer.data;
     }
 };
 
@@ -334,8 +356,13 @@ public:
     bool operator==(const LogIterator& rhs) const { return p == rhs.p && q == rhs.q; }
     bool operator!=(const LogIterator& rhs) const { return !(*this == rhs); }
 
-    LogMessage& operator*() { return *q; }
-    LogMessage* operator->() { return q; }
+    LogMessage& get() const { return *q; }
+    LogMessage& operator*() const { return *q; }
+    LogMessage* operator->() const { return q; }
+
+    void check_at_safe_pos(); 
+
+    friend class LogStream;
 
 protected:
     bool check_filter();
@@ -365,13 +392,15 @@ public:
 
     template <typename... T>
     PushResult push(T&&... args) {
-        unsigned size = sizeof(LogMessageImpl<T...>);
+        // unsigned size = sizeof(LogMessageImpl<T...>);
+        unsigned size = sizeof(LogMessageImpl<detail::to_store_type_t<T>...>);
         void*    p;
         if (use_lock_free)
             p = alloc_block_lockfree(size);
         else
             p = alloc_block(size);
-        LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
+        // LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
+        LogMessage* msg = new (p) LogMessageImpl<detail::to_store_type_t<T>...>(args...);
         return {msg, size, *this};
     }
 
@@ -396,6 +425,7 @@ public:
         return LogIterator(*this, message, function_name, line);
     }
     LogIterator end() { return LogIterator(); }
+    LogIterator current(std::string message = "", std::string function_name = "", int line = -1);
 
     void flush();
     void setFileLogger(std::string name, DirMode mode1 = SINGLE_FILE, DirMode mode2 = SINGLE_FILE,
