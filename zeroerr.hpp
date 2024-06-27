@@ -4567,7 +4567,7 @@ LogIterator LogStream::current(std::string message, std::string function_name, i
     LogIterator iter(*this, message, function_name, line);
     DataBlock*  last = m_last.load();
     iter.p           = last;
-    iter.q           = (LogMessage*)last->data[last->size.load()];
+    iter.q           = reinterpret_cast<LogMessage*>(&(last->data[last->size.load()]));
     return iter;
 }
 
@@ -4616,7 +4616,7 @@ LogIterator::LogIterator(LogStream& stream, std::string message, std::string fun
 void LogIterator::check_at_safe_pos() {
     if (static_cast<size_t>((char*)q - p->data) >= p->size.load()) {
         p = p->next;
-        q = (LogMessage*)p->data;
+        q = reinterpret_cast<LogMessage*>(p->data);
     }
 }
 
