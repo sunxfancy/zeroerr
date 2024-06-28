@@ -293,11 +293,11 @@ struct LogMessageImpl final : LogMessage {
 
     struct PrintTupleData {
         std::map<std::string, std::string> data;
-        Printer print;
-        std::string name;
+        Printer                            print;
+        std::string                        name;
 
         PrintTupleData() : print() {
-            print.isCompact = true;
+            print.isCompact  = true;
             print.line_break = "";
         }
 
@@ -365,7 +365,7 @@ public:
     LogMessage& operator*() const { return *q; }
     LogMessage* operator->() const { return q; }
 
-    void check_at_safe_pos(); 
+    void check_at_safe_pos();
 
     friend class LogStream;
 
