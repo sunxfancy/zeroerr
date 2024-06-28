@@ -679,11 +679,14 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() { retur
 #define ZEROERR_MUTEX(x)
 #define ZEROERR_LOCK(x)
 #define ZEROERR_ATOMIC(x) x
+#define ZEROERR_LOAD(x)   x
+
 #else
 
 #define ZEROERR_MUTEX(x)  static std::mutex x;
 #define ZEROERR_LOCK(x)   std::lock_guard<std::mutex> lock(x);
 #define ZEROERR_ATOMIC(x) std::atomic<x>
+#define ZEROERR_LOAD(x)   x.load()
 
 #include <atomic>
 #include <mutex>
@@ -4546,7 +4549,7 @@ void* LogStream::alloc_block(unsigned size) {
         throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
     }
     ZEROERR_LOCK(*mutex);
-    auto* last = m_last.load();
+    auto* last = ZEROERR_LOAD(m_last);
     if (last->size + size > LogStreamMaxSize) {
         if (flush_mode == FLUSH_WHEN_FULL) {
             logger->flush(last);
@@ -4562,10 +4565,11 @@ void* LogStream::alloc_block(unsigned size) {
 }
 
 void* LogStream::alloc_block_lockfree(unsigned size) {
+#ifndef ZEROERR_NO_THREAD_SAFE
     if (size > LogStreamMaxSize) {
         throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
     }
-    DataBlock* last = m_last.load();
+    DataBlock* last = ZEROERR_LOAD(m_last);
     while (true) {
         size_t p = last->size.load();
         if (p <= (LogStreamMaxSize - size)) {
@@ -4583,18 +4587,21 @@ void* LogStream::alloc_block_lockfree(unsigned size) {
             }
         }
     }
+#else
+    return alloc_block(size);
+#endif
 }
 LogIterator LogStream::current(std::string message, std::string function_name, int line) {
     LogIterator iter(*this, message, function_name, line);
-    DataBlock*  last = m_last.load();
+    DataBlock*  last = ZEROERR_LOAD(m_last);
     iter.p           = last;
-    iter.q           = reinterpret_cast<LogMessage*>(&(last->data[last->size.load()]));
+    iter.q           = reinterpret_cast<LogMessage*>(&(last->data[ZEROERR_LOAD(last->size)]));
     return iter;
 }
 
 void LogStream::flush() {
     ZEROERR_LOCK(*mutex);
-    DataBlock* last = m_last.load();
+    DataBlock* last = ZEROERR_LOAD(m_last);
     for (DataBlock* p = first; p != last; p = p->next) {
         logger->flush(p);
         delete p;
@@ -4635,7 +4642,7 @@ LogIterator::LogIterator(LogStream& stream, std::string message, std::string fun
 }
 
 void LogIterator::check_at_safe_pos() {
-    if (static_cast<size_t>((char*)q - p->data) >= p->size.load()) {
+    if (static_cast<size_t>((char*)q - p->data) >= ZEROERR_LOAD(p->size)) {
         p = p->next;
         q = reinterpret_cast<LogMessage*>(p->data);
     }
