@@ -2779,9 +2779,9 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
                                                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #cond, info);                  \
         try {                                                                                    \
-            if (zeroerr::assert_throw::expect_throw == zeroerr::assert_throw::no_throw)          \
-                assertion_data.setResult(zeroerr::ExpressionDecomposer() << cond);               \
+            assertion_data.setResult(zeroerr::ExpressionDecomposer() << cond);                   \
         } catch (const std::exception& e) {                                                      \
+            assertion_data.setException(e);                                                      \
         }                                                                                        \
         zeroerr::detail::context_helper<                                                         \
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
@@ -2795,15 +2795,19 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
     ZEROERR_FUNC_SCOPE_END
 
 
-#define ZEROERR_ASSERT_CMP(lhs, op, rhs, level, throws, is_false, ...)                           \
+#define ZEROERR_ASSERT_CMP(lhs, op, rhs, level, expect_throw, is_false, ...)                     \
     ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \
         zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
-                                  zeroerr::assert_throw::throws, is_false};                      \
+                                  zeroerr::assert_throw::expect_throw, is_false};                \
                                                                                                  \
         zeroerr::Printer print;                                                                  \
         print.isQuoted = false;                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #lhs " " #op " " #rhs, info);  \
-        assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                          \
+        try {                                                                                    \
+            assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                      \
+        } catch (const std::exception& e) {                                                      \
+            assertion_data.setException(e);                                                      \
+        }                                                                                        \
         zeroerr::detail::context_helper<                                                         \
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
@@ -2956,9 +2960,9 @@ struct AssertionData : std::exception {
 
     AssertionData(const char* file, unsigned line, const char* cond, assert_info info)
         : file(file), line(line), info(info) {
-        std::string cond_str(cond);
-        std::string pattern = "zeroerr::ExpressionDecomposer() << ";
-        size_t      pos     = cond_str.find(pattern);
+        static std::string pattern = "zeroerr::ExpressionDecomposer() << ";
+        std::string        cond_str(cond);
+        size_t             pos = cond_str.find(pattern);
         if (pos != std::string::npos) cond_str.replace(pos, pos + pattern.size(), "");
         this->cond = cond_str;
     }
@@ -2972,13 +2976,17 @@ struct AssertionData : std::exception {
         message = r.decomp;
     }
 
+    void setException(const std::exception& e) {
+        passed  = info.throw_type == assert_throw::throws;
+        message = e.what();
+    }
+
     std::string log() {
         std::stringstream ss;
         ss << "    " << cond << "  expands to  " << message << std::endl;
         ss << Dim << "(" << file << ":" << line << ")" << Reset << std::endl;
         return ss.str();
     }
-
 
     // throw the exception
     void operator()() {
