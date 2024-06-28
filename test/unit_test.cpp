@@ -66,6 +66,21 @@ TEST_CASE("assert in if") {
     }
 }
 
+int f() {
+    throw std::runtime_error("error");
+    return 0;
+}
+
+int g() {
+    return 0;
+}
+
+
+TEST_CASE("check exception") {
+    REQUIRE_THROWS(f());
+    CHECK_THROWS(g());
+}
+
 
 class test_fixture {
 public:

@@ -4,8 +4,8 @@
 #pragma once
 
 #define ZEROERR_VERSION_MAJOR 0
-#define ZEROERR_VERSION_MINOR 2
-#define ZEROERR_VERSION_PATCH 1
+#define ZEROERR_VERSION_MINOR 3
+#define ZEROERR_VERSION_PATCH 0
 #define ZEROERR_VERSION \
     (ZEROERR_VERSION_MAJOR * 10000 + ZEROERR_VERSION_MINOR * 100 + ZEROERR_VERSION_PATCH)
 
@@ -679,11 +679,14 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() { retur
 #define ZEROERR_MUTEX(x)
 #define ZEROERR_LOCK(x)
 #define ZEROERR_ATOMIC(x) x
+#define ZEROERR_LOAD(x)   x
+
 #else
 
 #define ZEROERR_MUTEX(x)  static std::mutex x;
 #define ZEROERR_LOCK(x)   std::lock_guard<std::mutex> lock(x);
 #define ZEROERR_ATOMIC(x) std::atomic<x>
+#define ZEROERR_LOAD(x)   x.load()
 
 #include <atomic>
 #include <mutex>
@@ -823,6 +826,35 @@ template <typename T>
 struct ele_type_is_pair<
     T, void_t<typename T::value_type, decltype(std::declval<typename T::value_type>().first),
               decltype(std::declval<typename T::value_type>().second)>> : std::true_type {};
+
+template <typename T, typename V = void>
+struct to_store_type {
+    using type = T;
+};
+
+template <>
+struct to_store_type<const char*> {
+    using type = std::string;
+};
+
+template <>
+struct to_store_type<const char(&)[]> {
+    using type = std::string;
+};
+
+
+template <typename T>
+struct to_store_type<T&, typename std::enable_if<!std::is_array<T>::value>::type> {
+    using type = T;
+};
+
+template <typename T>
+struct to_store_type<T&&> {
+    using type = T;
+};
+
+template <typename T>
+using to_store_type_t = typename to_store_type<T>::type;
 
 
 template <size_t I>
@@ -1423,7 +1455,11 @@ struct Printer {
 #endif
     }
 
-    std::string str() const { return static_cast<std::stringstream&>(os).str(); }
+    std::string str() const {
+        if (use_stringstream == false)
+            throw std::runtime_error("Printer is not using stringstream");
+        return static_cast<std::stringstream&>(os).str();
+    }
     operator std::string() const { return str(); }
 
     friend std::ostream& operator<<(std::ostream& os, const Printer& P) {
@@ -2739,13 +2775,17 @@ ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 ZEROERR_CLANG_SUPPRESS_WARNING_POP
 #endif
 
-#define ZEROERR_ASSERT_EXP(cond, level, throws, is_false, ...)                                   \
+#define ZEROERR_ASSERT_EXP(cond, level, expect_throw, is_false, ...)                             \
     ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \
         zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
-                                  zeroerr::assert_throw::throws, is_false};                      \
+                                  zeroerr::assert_throw::expect_throw, is_false};                \
                                                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #cond, info);                  \
-        assertion_data.setResult(zeroerr::ExpressionDecomposer() << cond);                       \
+        try {                                                                                    \
+            assertion_data.setResult(zeroerr::ExpressionDecomposer() << cond);                   \
+        } catch (const std::exception& e) {                                                      \
+            assertion_data.setException(e);                                                      \
+        }                                                                                        \
         zeroerr::detail::context_helper<                                                         \
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
@@ -2758,15 +2798,19 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
     ZEROERR_FUNC_SCOPE_END
 
 
-#define ZEROERR_ASSERT_CMP(lhs, op, rhs, level, throws, is_false, ...)                           \
+#define ZEROERR_ASSERT_CMP(lhs, op, rhs, level, expect_throw, is_false, ...)                     \
     ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \
         zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \
-                                  zeroerr::assert_throw::throws, is_false};                      \
+                                  zeroerr::assert_throw::expect_throw, is_false};                \
                                                                                                  \
         zeroerr::Printer print;                                                                  \
         print.isQuoted = false;                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #lhs " " #op " " #rhs, info);  \
-        assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                          \
+        try {                                                                                    \
+            assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                      \
+        } catch (const std::exception& e) {                                                      \
+            assertion_data.setException(e);                                                      \
+        }                                                                                        \
         zeroerr::detail::context_helper<                                                         \
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
@@ -2783,10 +2827,13 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
 
 #define CHECK(...)
 #define CHECK_NOT(...)
+#define CHECK_THROWS(...)
 #define REQUIRE(...)
 #define REQUIRE_NOT(...)
+#define REQUIRE_THROWS(...)
 #define ASSERT(...)
 #define ASSERT_NOT(...)
+#define ASSERT_THROWS(...)
 
 #define CHECK_EQ(...)
 #define CHECK_NE(...)
@@ -2813,19 +2860,25 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
 // clang-format off
 ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 
-#define ZEROERR_CHECK(cond, ...)       ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__))
-#define ZEROERR_CHECK_NOT(cond, ...)   ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__))
-#define ZEROERR_REQUIRE(cond, ...)     ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__))
-#define ZEROERR_REQUIRE_NOT(cond, ...) ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, true, __VA_ARGS__))
-#define ZEROERR_ASSERT(cond, ...)      ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__))
-#define ZEROERR_ASSERT_NOT(cond, ...)  ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, true, __VA_ARGS__))
+#define ZEROERR_CHECK(cond, ...)          ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__))
+#define ZEROERR_CHECK_NOT(cond, ...)      ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__))
+#define ZEROERR_CHECK_THROWS(cond, ...)   ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, throws, false, __VA_ARGS__))
+#define ZEROERR_REQUIRE(cond, ...)        ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, no_throw, false, __VA_ARGS__))
+#define ZEROERR_REQUIRE_NOT(cond, ...)    ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, no_throw, true, __VA_ARGS__))
+#define ZEROERR_REQUIRE_THROWS(cond, ...) ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__))
+#define ZEROERR_ASSERT(cond, ...)         ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, no_throw, false, __VA_ARGS__))
+#define ZEROERR_ASSERT_NOT(cond, ...)     ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, no_throw, true, __VA_ARGS__))
+#define ZEROERR_ASSERT_THROWS(cond, ...)  ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__))
 
-#define CHECK(...)       ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
-#define CHECK_NOT(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
-#define REQUIRE(...)     ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
-#define REQUIRE_NOT(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
-#define ASSERT(...)      ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
-#define ASSERT_NOT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK(...)          ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_NOT(...)      ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define CHECK_THROWS(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_THROWS(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE(...)        ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_NOT(...)    ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define REQUIRE_THROWS(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_THROWS(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT(...)         ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_NOT(...)     ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+#define ASSERT_THROWS(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_THROWS(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 
 #define ZEROERR_CHECK_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
 #define ZEROERR_CHECK_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
@@ -2834,19 +2887,19 @@ ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 #define ZEROERR_CHECK_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
 #define ZEROERR_CHECK_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
 
-#define ZEROERR_REQUIRE_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define ZEROERR_REQUIRE_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define ZEROERR_REQUIRE_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define ZEROERR_REQUIRE_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define ZEROERR_REQUIRE_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
-#define ZEROERR_REQUIRE_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_ERROR, throws, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
+#define ZEROERR_REQUIRE_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
 
-#define ZEROERR_ASSERT_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ZEROERR_ASSERT_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ZEROERR_ASSERT_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ZEROERR_ASSERT_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ZEROERR_ASSERT_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
-#define ZEROERR_ASSERT_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_FATAL, throws, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_ASSERT_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)
 
 #define CHECK_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define CHECK_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
@@ -2910,9 +2963,9 @@ struct AssertionData : std::exception {
 
     AssertionData(const char* file, unsigned line, const char* cond, assert_info info)
         : file(file), line(line), info(info) {
-        std::string cond_str(cond);
-        std::string pattern = "zeroerr::ExpressionDecomposer() << ";
-        size_t      pos     = cond_str.find(pattern);
+        static std::string pattern = "zeroerr::ExpressionDecomposer() << ";
+        std::string        cond_str(cond);
+        size_t             pos = cond_str.find(pattern);
         if (pos != std::string::npos) cond_str.replace(pos, pos + pattern.size(), "");
         this->cond = cond_str;
     }
@@ -2926,6 +2979,11 @@ struct AssertionData : std::exception {
         message = r.decomp;
     }
 
+    void setException(const std::exception& e) {
+        passed  = info.throw_type == assert_throw::throws;
+        message = e.what();
+    }
+
     std::string log() {
         std::stringstream ss;
         ss << "    " << cond << "  expands to  " << message << std::endl;
@@ -2933,14 +2991,13 @@ struct AssertionData : std::exception {
         return ss.str();
     }
 
-
     // throw the exception
     void operator()() {
         if (passed) return;
         if (shouldThrow()) throw *this;
     }
 
-    bool shouldThrow() { return info.throw_type == assert_throw::throws; }
+    bool shouldThrow() { return info.level != assert_level::ZEROERR_WARN_l; }
 };
 
 namespace detail {
@@ -3090,15 +3147,11 @@ std::string format(const char* fmt, T... args) {
 
 
 
+
+
 #include <chrono>
-#include <cstdlib>
-#include <deque>
-#include <iomanip>
-#include <iostream>
 #include <map>
-#include <sstream>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -3111,12 +3164,13 @@ class mutex;
 
 namespace zeroerr {
 
-
+// clang-format off
 #define ZEROERR_INFO(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_INFO_(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define ZEROERR_LOG(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(LOG_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define ZEROERR_WARN(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(WARN_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define ZEROERR_ERROR(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(ERROR_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define ZEROERR_FATAL(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_LOG_(FATAL_l, __VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
+// clang-format on
 
 #ifdef ZEROERR_USE_SHORT_LOG_MACRO
 
@@ -3151,7 +3205,9 @@ namespace zeroerr {
 #define FATAL(...) ZEROERR_FATAL(__VA_ARGS__)
 #define VERBOSE(v) ZEROERR_VERBOSE(v)
 
-#endif
+#define LOG_GET(func, id, name, type) ZEROERR_LOG_GET(func, id, name, type)
+
+#endif  // ZEROERR_USE_SHORT_LOG_MACRO
 
 #define ZEROERR_LOG_IF(condition, ACTION, ...) \
     do {                                       \
@@ -3239,22 +3295,21 @@ extern int _ZEROERR_G_VERBOSE;
 
 #define ZEROERR_VERBOSE(v) if (zeroerr::_ZEROERR_G_VERBOSE >= (v))
 
-#define ZEROERR_LOG_(severity, message, ...)                              \
-    do {                                                                  \
-        ZEROERR_G_CONTEXT_SCOPE(true);                                    \
-        auto msg = zeroerr::LogStream::getDefault().push(__VA_ARGS__);    \
-                                                                          \
-        static zeroerr::LogInfo log_info{__FILE__,                        \
-                                         __func__,                        \
-                                         message,                         \
-                                         ZEROERR_LOG_CATEGORY,            \
-                                         __LINE__,                        \
-                                         msg.size,                        \
-                                         zeroerr::LogSeverity::severity}; \
-        msg.log->info = &log_info;                                        \
-        if (zeroerr::LogStream::getDefault().flush_mode ==                \
-            zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE)                 \
-            zeroerr::LogStream::getDefault().flush();                     \
+#define ZEROERR_LOG_(severity, message, ...)                                           \
+    do {                                                                               \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                                 \
+        auto msg = zeroerr::log(__VA_ARGS__);                                          \
+                                                                                       \
+        static zeroerr::LogInfo log_info{__FILE__,                                     \
+                                         __func__,                                     \
+                                         message,                                      \
+                                         ZEROERR_LOG_CATEGORY,                         \
+                                         __LINE__,                                     \
+                                         msg.size,                                     \
+                                         zeroerr::LogSeverity::severity};              \
+        msg.log->info = &log_info;                                                     \
+        if (msg.stream.getFlushMode() == zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE) \
+            msg.stream.flush();                                                        \
     } while (0)
 
 #define ZEROERR_INFO_(...) \
@@ -3287,8 +3342,8 @@ extern int _ZEROERR_G_VERBOSE;
 
 
 // This macro can access the log in memory
-#define LOG_GET(func, line, name, type) \
-    zeroerr::LogStream::getDefault().getLog<type>(#func, line, #name)
+#define ZEROERR_LOG_GET(func, id, name, type) \
+    zeroerr::LogStream::getDefault().getLog<type>(#func, id, #name)
 
 
 namespace detail {
@@ -3343,6 +3398,8 @@ struct LogMessage {
     virtual std::string str() const                       = 0;
     virtual void*       getRawLog(std::string name) const = 0;
 
+    virtual std::map<std::string, std::string> getData() const = 0;
+
     // meta data of this log message
     const LogInfo* info;
 
@@ -3351,17 +3408,8 @@ struct LogMessage {
 };
 
 
-// This is a helper class to get the raw pointer of the tuple
-struct GetTuplePtr {
-    void* ptr = nullptr;
-    template <typename H>
-    void operator()(H& v) {
-        ptr = (void*)&v;
-    }
-};
-
 template <typename... T>
-struct LogMessageImpl : LogMessage {
+struct LogMessageImpl final : LogMessage {
     std::tuple<T...> args;
     LogMessageImpl(T... args) : LogMessage(), args(args...) {}
 
@@ -3369,29 +3417,115 @@ struct LogMessageImpl : LogMessage {
         return gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
     }
 
+    // This is a helper class to get the raw pointer of the tuple
+    struct GetTuplePtr {
+        void* ptr = nullptr;
+        template <typename H>
+        void operator()(H& v) {
+            ptr = (void*)&v;
+        }
+    };
+
     void* getRawLog(std::string name) const override {
         GetTuplePtr f;
         detail::visit_at(args, info->names.at(name), f);
         return f.ptr;
     }
+
+    struct PrintTupleData {
+        std::map<std::string, std::string> data;
+        Printer print;
+        std::string name;
+
+        PrintTupleData() : print() {
+            print.isCompact = true;
+            print.line_break = "";
+        }
+
+        template <typename H>
+        void operator()(H& v) {
+            data[name] = print(v);
+        }
+    };
+
+    std::map<std::string, std::string> getData() const override {
+        PrintTupleData printer;
+        for (auto it = info->names.begin(); it != info->names.end(); ++it) {
+            printer.name = it->first;
+            detail::visit_at(args, it->second, printer);
+        }
+        return printer.data;
+    }
 };
 
 struct DataBlock;
+class LogStream;
+
 class Logger {
 public:
     virtual ~Logger()              = default;
     virtual void flush(DataBlock*) = 0;
 };
 
+struct PushResult {
+    LogMessage* log;
+    unsigned    size;
+    LogStream&  stream;
+};
+
+class LogIterator {
+public:
+    LogIterator() : p(nullptr), q(nullptr) {}
+    LogIterator(LogStream& stream, std::string message = "", std::string function_name = "",
+                int line = -1);
+    LogIterator(const LogIterator& rhs) : p(rhs.p), q(rhs.q) {}
+    LogIterator& operator=(const LogIterator& rhs) {
+        p = rhs.p;
+        q = rhs.q;
+        return *this;
+    }
+
+    LogIterator& operator++();
+    LogIterator  operator++(int) {
+        LogIterator tmp = *this;
+        ++*this;
+        return tmp;
+    }
+
+    template <typename T>
+    T get(std::string name) {
+        void* data = q->getRawLog(name);
+        if (data) return *(T*)(data);
+        return T{};
+    }
+
+    bool operator==(const LogIterator& rhs) const { return p == rhs.p && q == rhs.q; }
+    bool operator!=(const LogIterator& rhs) const { return !(*this == rhs); }
+
+    LogMessage& get() const { return *q; }
+    LogMessage& operator*() const { return *q; }
+    LogMessage* operator->() const { return q; }
+
+    void check_at_safe_pos(); 
+
+    friend class LogStream;
+
+protected:
+    bool check_filter();
+    void next();
+
+    DataBlock*  p;
+    LogMessage* q;
+
+    std::string function_name_filter;
+    std::string message_filter;
+    int         line_filter = -1;
+};
+
 class LogStream {
 public:
     LogStream();
     virtual ~LogStream();
-
-    struct PushResult {
-        LogMessage* log;
-        unsigned    size;
-    };
 
     enum FlushMode { FLUSH_AT_ONCE, FLUSH_WHEN_FULL, FLUSH_MANUALLY };
     enum LogMode { ASYNC, SYNC };
@@ -3404,10 +3538,16 @@ public:
 
     template <typename... T>
     PushResult push(T&&... args) {
-        unsigned    size = sizeof(LogMessageImpl<T...>);
-        void*       p    = alloc_block(size);
-        LogMessage* msg  = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
-        return {msg, size};
+        // unsigned size = sizeof(LogMessageImpl<T...>);
+        unsigned size = sizeof(LogMessageImpl<detail::to_store_type_t<T>...>);
+        void*    p;
+        if (use_lock_free)
+            p = alloc_block_lockfree(size);
+        else
+            p = alloc_block(size);
+        // LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
+        LogMessage* msg = new (p) LogMessageImpl<detail::to_store_type_t<T>...>(args...);
+        return {msg, size, *this};
     }
 
     template <typename T>
@@ -3417,26 +3557,68 @@ public:
         return T{};
     }
 
+    template <typename T>
+    T getLog(std::string func, std::string msg, std::string name) {
+        void* data = getRawLog(func, msg, name);
+        if (data) return *(T*)(data);
+        return T{};
+    }
+
     void* getRawLog(std::string func, unsigned line, std::string name);
+    void* getRawLog(std::string func, std::string msg, std::string name);
+
+    LogIterator begin(std::string message = "", std::string function_name = "", int line = -1) {
+        return LogIterator(*this, message, function_name, line);
+    }
+    LogIterator end() { return LogIterator(); }
+    LogIterator current(std::string message = "", std::string function_name = "", int line = -1);
 
     void flush();
-    void setFileLogger(std::string name);
+    void setFileLogger(std::string name, DirMode mode1 = SINGLE_FILE, DirMode mode2 = SINGLE_FILE,
+                       DirMode mode3 = SINGLE_FILE);
     void setStdoutLogger();
     void setStderrLogger();
 
     static LogStream& getDefault();
-    FlushMode         flush_mode = FLUSH_AT_ONCE;
-    LogMode           log_mode   = SYNC;
-    DirMode           dir_mode   = SINGLE_FILE;
+
+    void setFlushAtOnce() { flush_mode = FLUSH_AT_ONCE; }
+    void setFlushWhenFull() { flush_mode = FLUSH_WHEN_FULL; }
+    void setFlushManually() { flush_mode = FLUSH_MANUALLY; }
+    void setAsyncLog() { log_mode = ASYNC; }
+    void setSyncLog() { log_mode = SYNC; }
+
+    FlushMode getFlushMode() const { return flush_mode; }
+    void      setFlushMode(FlushMode mode) { flush_mode = mode; }
+    LogMode   getLogMode() const { return log_mode; }
+    void      setLogMode(LogMode mode) { log_mode = mode; }
+
+    bool use_lock_free = true;
+
+    friend class LogIterator;
 
 private:
-    DataBlock *first, *last;
-    Logger*    logger = nullptr;
+    DataBlock *first, *prepare;
+    ZEROERR_ATOMIC(DataBlock*) m_last;
+    Logger*   logger     = nullptr;
+    FlushMode flush_mode = FLUSH_AT_ONCE;
+    LogMode   log_mode   = SYNC;
 #ifndef ZEROERR_NO_THREAD_SAFE
     std::mutex* mutex;
 #endif
     void* alloc_block(unsigned size);
+    void* alloc_block_lockfree(unsigned size);
 };
+
+
+template <typename... T>
+PushResult log(T&&... args) {
+    return LogStream::getDefault().push(std::forward<T>(args)...);
+}
+
+template <typename... T>
+PushResult log(LogStream& stream, T&&... args) {
+    return stream.push(std::forward<T>(args)...);
+}
 
 
 /**
@@ -3677,15 +3859,17 @@ struct TestCase;
 struct UnitTest {
     UnitTest&        parseArgs(int argc, const char** argv);
     int              run();
-    bool             run_filiter(const TestCase& tc);
+    bool             run_filter(const TestCase& tc);
     bool             silent          = false;
     bool             run_bench       = false;
     bool             run_fuzz        = false;
     bool             list_test_cases = false;
+    bool             no_color        = false;
+    bool             log_to_report   = false;
     std::string      correct_output_path;
     std::string      reporter_name = "console";
     std::string      binary;
-    struct Filiters* filiters;
+    struct Filters* filters;
 };
 
 struct TestCase {
@@ -4279,6 +4463,15 @@ TerminalSize getTerminalWidth() {
 
 
 
+#include <iomanip>
+#include <unordered_set>
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <sys/stat.h>
+#endif
+
 const char* ZEROERR_LOG_CATEGORY = "default";
 
 
@@ -4301,33 +4494,37 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
       category(category),
       line(line),
       size(size),
-      severity(severity) {
+      severity(severity),
+      names() {
     for (const char* p = message; *p; p++)
         if (*p == '{') {
             const char* q = p + 1;
             while (*q && *q != '}') q++;
             if (*q == '}') {
-                std::string N(p + 1, q);
-                names[N] = names.size();
+                std::string N(p + 1, (size_t)(q-p-1));
+                names[N] = static_cast<int>(names.size());
                 p        = q;
             }
         }
 }
 
 
-constexpr size_t LogStreamMaxSize = 1024 * 1024 - 16;
+constexpr size_t LogStreamMaxSize = 1 * 1024 - 16;
 
 struct DataBlock {
-    size_t     size = 0;
+    ZEROERR_ATOMIC(size_t) size;
     DataBlock* next = nullptr;
     char       data[LogStreamMaxSize];
+
+    DataBlock() : size(0) {}
 
     LogMessage* begin() { return (LogMessage*)data; }
     LogMessage* end() { return (LogMessage*)&data[size]; }
 };
 
 LogStream::LogStream() {
-    first = last = new DataBlock();
+    first = m_last = new DataBlock();
+    prepare        = new DataBlock();
 #ifndef ZEROERR_NO_THREAD_SAFE
     mutex = new std::mutex();
 #endif
@@ -4352,6 +4549,7 @@ void* LogStream::alloc_block(unsigned size) {
         throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
     }
     ZEROERR_LOCK(*mutex);
+    auto* last = ZEROERR_LOAD(m_last);
     if (last->size + size > LogStreamMaxSize) {
         if (flush_mode == FLUSH_WHEN_FULL) {
             logger->flush(last);
@@ -4366,8 +4564,44 @@ void* LogStream::alloc_block(unsigned size) {
     return p;
 }
 
+void* LogStream::alloc_block_lockfree(unsigned size) {
+#ifndef ZEROERR_NO_THREAD_SAFE
+    if (size > LogStreamMaxSize) {
+        throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
+    }
+    DataBlock* last = ZEROERR_LOAD(m_last);
+    while (true) {
+        size_t p = last->size.load();
+        if (p <= (LogStreamMaxSize - size)) {
+            if (last->size.compare_exchange_strong(p, p + size)) return last->data + p;
+        } else {
+            if (m_last.compare_exchange_strong(last, prepare)) {
+                if (flush_mode == FLUSH_WHEN_FULL) {
+                    logger->flush(last);
+                    last->size = 0;
+                    prepare    = last;
+                } else {
+                    prepare->next = last;
+                    prepare       = new DataBlock();
+                }
+            }
+        }
+    }
+#else
+    return alloc_block(size);
+#endif
+}
+LogIterator LogStream::current(std::string message, std::string function_name, int line) {
+    LogIterator iter(*this, message, function_name, line);
+    DataBlock*  last = ZEROERR_LOAD(m_last);
+    iter.p           = last;
+    iter.q           = reinterpret_cast<LogMessage*>(&(last->data[ZEROERR_LOAD(last->size)]));
+    return iter;
+}
+
 void LogStream::flush() {
     ZEROERR_LOCK(*mutex);
+    DataBlock* last = ZEROERR_LOAD(m_last);
     for (DataBlock* p = first; p != last; p = p->next) {
         logger->flush(p);
         delete p;
@@ -4390,6 +4624,57 @@ void* LogStream::getRawLog(std::string func, unsigned line, std::string name) {
     return nullptr;
 }
 
+void* LogStream::getRawLog(std::string func, std::string msg, std::string name) {
+    for (DataBlock* p = first; p; p = p->next)
+        for (auto q = p->begin(); q < p->end(); q = moveBytes(q, q->info->size))
+            if (msg == q->info->message && func == q->info->function) return q->getRawLog(name);
+    return nullptr;
+}
+
+LogIterator::LogIterator(LogStream& stream, std::string message, std::string function_name,
+                         int line)
+    : p(stream.first),
+      q(stream.first->begin()),
+      message_filter(message),
+      function_name_filter(function_name),
+      line_filter(line) {
+    while (!check_filter() && p) next();
+}
+
+void LogIterator::check_at_safe_pos() {
+    if (static_cast<size_t>((char*)q - p->data) >= ZEROERR_LOAD(p->size)) {
+        p = p->next;
+        q = reinterpret_cast<LogMessage*>(p->data);
+    }
+}
+
+void LogIterator::next() {
+    if (q < p->end()) {
+        q = moveBytes(q, q->info->size);
+        if (q >= p->end()) next();
+    } else {
+        p = p->next;
+        if (p)
+            q = p->begin();
+        else
+            q = nullptr;
+    }
+}
+
+LogIterator& LogIterator::operator++() {
+    do {
+        next();
+    } while (p && !check_filter());
+    return *this;
+}
+
+bool LogIterator::check_filter() {
+    if (!message_filter.empty() && q->info->message != message_filter) return false;
+    if (!function_name_filter.empty() && q->info->function != function_name_filter) return false;
+    if (line_filter != -1 && static_cast<int>(q->info->line) != line_filter) return false;
+    return true;
+}
+
 class FileLogger : public Logger {
 public:
     FileLogger(std::string name) { file = fopen(name.c_str(), "w"); }
@@ -4408,6 +4693,126 @@ public:
 
 protected:
     FILE* file;
+};
+
+
+#ifdef _WIN32
+static char split = '\\';
+#else
+static char split = '/';
+#endif
+
+static void make_dir(std::string path) {
+    size_t pos = 0;
+    do {
+        pos             = path.find_first_of(split, pos + 1);
+        std::string sub = path.substr(0, pos);
+#ifdef _WIN32
+        CreateDirectory(sub.c_str(), NULL);
+#else
+        struct stat st;
+        if (stat(sub.c_str(), &st) == -1) {
+            mkdir(sub.c_str(), 0755);
+        }
+#endif
+    } while (pos != std::string::npos);
+}
+
+struct FileCache {
+    std::map<std::string, FILE*> files;
+    ~FileCache() {
+        for (auto& p : files) {
+            fclose(p.second);
+        }
+    }
+
+    FILE* get(const std::string& name) {
+        auto it = files.find(name);
+        if (it != files.end()) return it->second;
+        auto        p    = name.find_last_of(split);
+        std::string path = name.substr(0, p);
+        make_dir(path.c_str());
+
+        FILE* file = fopen(name.c_str(), "w");
+        if (file) {
+            files[name] = file;
+            return file;
+        }
+        return nullptr;
+    }
+};
+
+
+class DirectoryLogger : public Logger {
+public:
+    DirectoryLogger(std::string path, LogStream::DirMode dir_mode[3]) : dirpath(path) {
+        make_dir(path.c_str());
+        for (int i = 0; i < 3; i++) {
+            this->dir_mode[i] = dir_mode[i];
+        }
+    }
+    ~DirectoryLogger() {}
+
+    void flush(DataBlock* msg) override {
+        FileCache cache;
+        for (auto p = msg->begin(); p < msg->end(); p = moveBytes(p, p->info->size)) {
+            auto ss = log_custom_callback(*p, false);
+
+            std::stringstream path;
+            path << dirpath;
+            if (dirpath.back() != split) path << split;
+
+            int last = 0;
+            for (int i = 0; i < 3; i++) {
+                if (last != 0 && dir_mode[i] != 0) path << split;
+                switch (dir_mode[i]) {
+                    case LogStream::DAILY_FILE: {
+                        std::time_t t  = std::chrono::system_clock::to_time_t(p->time);
+                        std::tm     tm = *std::localtime(&t);
+                        path << std::put_time(&tm, "%Y-%m-%d");
+                        break;
+                    }
+                    case LogStream::SPLIT_BY_SEVERITY: {
+                        path << to_string(p->info->severity);
+                        break;
+                    }
+                    case LogStream::SPLIT_BY_CATEGORY: {
+                        path << to_category(p->info->category);
+                        break;
+                    }
+                    default: continue;
+                }
+                last = 1;
+            }
+            std::cerr << path.str() << std::endl;
+
+            FILE* file = cache.get(path.str());
+            fwrite(ss.c_str(), ss.size(), 1, file);
+        }
+    }
+
+protected:
+    std::string to_string(LogSeverity severity) {
+        switch (severity) {
+            case INFO_l:  return "INFO";
+            case LOG_l:   return "LOG";
+            case WARN_l:  return "WARN";
+            case ERROR_l: return "ERROR";
+            case FATAL_l: return "FATAL";
+        }
+        return "";
+    }
+
+    std::string to_category(const char* category) {
+        std::string cat = category;
+        for (auto& c : cat) {
+            if (c == '/') c = split;
+        }
+        return cat;
+    }
+
+    LogStream::DirMode dir_mode[3];
+    std::string        dirpath;
 };
 
 class OStreamLogger : public Logger {
@@ -4431,9 +4836,16 @@ LogStream& LogStream::getDefault() {
     return stream;
 }
 
-void LogStream::setFileLogger(std::string name) {
+void LogStream::setFileLogger(std::string name, DirMode mode1, DirMode mode2, DirMode mode3) {
     if (logger) delete logger;
-    logger = new FileLogger(name);
+
+    if (mode1 == 0 || mode2 == 0 || mode3 == 0)
+        logger = new FileLogger(name);
+    else {
+        LogStream::DirMode dir_mode_group[3] = {mode1, mode2, mode3};
+
+        logger = new DirectoryLogger(name, dir_mode_group);
+    }
 }
 
 void LogStream::setStdoutLogger() {
@@ -4472,15 +4884,15 @@ void setLogCategory(const char* categories) {
     }
 }
 
-static LogStream::FlushMode saved_flush_mode;
+static LogStream::FlushMode saved_flush_mode = LogStream::FlushMode::FLUSH_AT_ONCE;
 
 void suspendLog() {
-    saved_flush_mode                   = LogStream::getDefault().flush_mode;
-    LogStream::getDefault().flush_mode = LogStream::FLUSH_MANUALLY;
+    saved_flush_mode = LogStream::getDefault().getFlushMode();
+    LogStream::getDefault().setFlushMode(LogStream::FLUSH_MANUALLY);
 }
 
 void resumeLog() {
-    LogStream::getDefault().flush_mode = saved_flush_mode;
+    LogStream::getDefault().setFlushMode(saved_flush_mode);
     LogStream::getDefault().flush();
 }
 
@@ -4789,7 +5201,7 @@ inline std::string _rept(unsigned k, std::string j, Table::Style&) {
 }
 
 #define rep(k, t) _rept(k, t, s)
-#define remain(k) (col_width[i] - k.size())
+#define remain(k) (col_width[i] - static_cast<unsigned>(k.size()))
 
 std::string Table::str(Config c, Table::Style s) {
     std::stringstream ss;
@@ -4800,12 +5212,12 @@ std::string Table::str(Config c, Table::Style s) {
 
     if (col_width.size() == 0) {
         for (size_t i = 0; i < header.size(); ++i) {
-            unsigned max_width = 0;
+            size_t max_width = 0;
             for (auto& row : cells) {
-                max_width = std::max<unsigned>(row[i].size(), max_width);
+                max_width = std::max<size_t>(row[i].size(), max_width);
             }
-            max_width = std::max<unsigned>(max_width, header[i].size());
-            col_width.push_back(max_width);
+            max_width = std::max<size_t>(max_width, header[i].size());
+            col_width.push_back(static_cast<unsigned>(max_width));
         }
     }
 
@@ -4865,6 +5277,7 @@ std::string Table::str(Config c, Table::Style s) {
 #undef remain
 
 }  // namespace zeroerr
+
 
 
 
@@ -4955,7 +5368,7 @@ void SubCase::operator<<(std::function<void(TestContext*)> op) {
     try {
         op(&local);
     } catch (const AssertionData&) {
-    } catch (const FuzzFinishedException& e) {
+    } catch (const FuzzFinishedException&) {
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
         if (local.failed_as == 0) {
@@ -4968,13 +5381,13 @@ void SubCase::operator<<(std::function<void(TestContext*)> op) {
     context->reporter.subCaseEnd(*this, new_buf, local, type);
 }
 
-struct Filiters {
+struct Filters {
     std::vector<std::regex> name, name_exclude;
     std::vector<std::regex> file, file_exclude;
 };
 
 UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
-    filiters            = new Filiters();
+    filters             = new Filters();
     auto convert_to_vec = [=]() {
         std::vector<std::string> result;
         for (int i = 1; i < argc; i++) {
@@ -5029,24 +5442,31 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         if (arg == "list-test-cases") {
             this->list_test_cases = true;
         }
+        if (arg == "no-color") {
+            this->no_color = true;
+            disableColorOutput();
+        }
+        if (arg == "log-to-report") {
+            this->log_to_report = true;
+        }
         if (arg.substr(0, 9) == "reporters") {
             this->reporter_name = arg.substr(10);
             return true;
         }
         if (arg.substr(0, 8) == "testcase") {
-            filiters->name.push_back(std::regex(arg.substr(9)));
+            filters->name.push_back(std::regex(arg.substr(9)));
             return true;
         }
         if (arg.substr(0, 14) == "testcase-exclude") {
-            filiters->name_exclude.push_back(std::regex(arg.substr(15)));
+            filters->name_exclude.push_back(std::regex(arg.substr(15)));
             return true;
         }
         if (arg.substr(0, 5) == "file") {
-            filiters->file.push_back(std::regex(arg.substr(6)));
+            filters->file.push_back(std::regex(arg.substr(6)));
             return true;
         }
         if (arg.substr(0, 11) == "file-exclude") {
-            filiters->file_exclude.push_back(std::regex(arg.substr(12)));
+            filters->file_exclude.push_back(std::regex(arg.substr(12)));
             return true;
         }
         return false;
@@ -5082,15 +5502,15 @@ static std::string insertIndentation(std::string str) {
     return result.str();
 }
 
-bool UnitTest::run_filiter(const TestCase& tc) {
-    if (filiters == nullptr) return true;
-    for (auto& r : filiters->name)
+bool UnitTest::run_filter(const TestCase& tc) {
+    if (filters == nullptr) return true;
+    for (auto& r : filters->name)
         if (!std::regex_match(tc.name, r)) return false;
-    for (auto& r : filiters->name_exclude)
+    for (auto& r : filters->name_exclude)
         if (std::regex_match(tc.name, r)) return false;
-    for (auto& r : filiters->file)
+    for (auto& r : filters->file)
         if (!std::regex_match(tc.file, r)) return false;
-    for (auto& r : filiters->file_exclude)
+    for (auto& r : filters->file_exclude)
         if (std::regex_match(tc.file, r)) return false;
     return true;
 }
@@ -5098,6 +5518,7 @@ bool UnitTest::run_filiter(const TestCase& tc) {
 int UnitTest::run() {
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
+
     TestContext context(*reporter), sum(*reporter);
     reporter->testStart();
     std::stringbuf new_buf;
@@ -5105,10 +5526,10 @@ int UnitTest::run() {
     unsigned types = TestType::test_case;
     if (run_bench) types |= TestType::bench;
     if (run_fuzz) types |= TestType::fuzz_test;
-    std::set<TestCase> testcases = detail::getRegisteredTests(types);
+    std::set<TestCase> test_cases = detail::getRegisteredTests(types);
 
-    for (auto& tc : testcases) {
-        if (!run_filiter(tc)) continue;
+    for (auto& tc : test_cases) {
+        if (!run_filter(tc)) continue;
         reporter->testCaseStart(tc, new_buf);
         if (!list_test_cases) {
             std::streambuf* orig_buf = std::cerr.rdbuf();
@@ -5117,7 +5538,7 @@ int UnitTest::run() {
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
-            } catch (const FuzzFinishedException& e) {
+            } catch (const FuzzFinishedException&) {
             } catch (const std::exception& e) {
                 std::cerr << e.what() << std::endl;
                 if (context.failed_as == 0) {
@@ -5151,6 +5572,7 @@ std::set<TestCase>& getTestSet(TestType type) {
         case TestType::fuzz_test: return fuzz_set;
         case TestType::sub_case:  return test_set;
     }
+    throw std::runtime_error("Invalid test type");
 }
 
 static std::set<TestCase> getRegisteredTests(unsigned type) {
@@ -5230,9 +5652,9 @@ namespace detail {
 class XmlEncode {
 public:
     enum ForWhat { ForTextNodes, ForAttributes };
-    XmlEncode(std::string const& str, ForWhat forWhat = ForTextNodes);
+    XmlEncode(const std::string& str, ForWhat forWhat = ForTextNodes);
     void                 encodeTo(std::ostream& os) const;
-    friend std::ostream& operator<<(std::ostream& os, XmlEncode const& xmlEncode);
+    friend std::ostream& operator<<(std::ostream& os, const XmlEncode& xmlEncode);
 
 private:
     std::string m_str;
@@ -5248,10 +5670,10 @@ public:
         ScopedElement& operator=(ScopedElement&& other) noexcept;
         ~ScopedElement();
 
-        ScopedElement& writeText(std::string const& text, bool indent = true);
+        ScopedElement& writeText(const std::string& text, bool indent = true, bool new_line = true);
 
         template <typename T>
-        ScopedElement& writeAttribute(std::string const& name, T const& attribute) {
+        ScopedElement& writeAttribute(const std::string& name, const T& attribute) {
             m_writer->writeAttribute(name, attribute);
             return *this;
         }
@@ -5263,27 +5685,27 @@ public:
     XmlWriter(std::ostream& os = std::cerr);
     ~XmlWriter();
 
-    XmlWriter(XmlWriter const&)            = delete;
-    XmlWriter& operator=(XmlWriter const&) = delete;
+    XmlWriter(const XmlWriter&)            = delete;
+    XmlWriter& operator=(const XmlWriter&) = delete;
 
-    XmlWriter&    startElement(std::string const& name);
-    ScopedElement scopedElement(std::string const& name);
+    XmlWriter&    startElement(const std::string& name);
+    ScopedElement scopedElement(const std::string& name);
     XmlWriter&    endElement();
 
-    XmlWriter& writeAttribute(std::string const& name, std::string const& attribute);
-    XmlWriter& writeAttribute(std::string const& name, const char* attribute);
-    XmlWriter& writeAttribute(std::string const& name, bool attribute);
+    XmlWriter& writeAttribute(const std::string& name, const std::string& attribute);
+    XmlWriter& writeAttribute(const std::string& name, const char* attribute);
+    XmlWriter& writeAttribute(const std::string& name, bool attribute);
 
     template <typename T>
-    XmlWriter& writeAttribute(std::string const& name, T const& attribute) {
+    XmlWriter& writeAttribute(const std::string& name, const T& attribute) {
         std::stringstream rss;
         rss << attribute;
         return writeAttribute(name, rss.str());
     }
 
-    XmlWriter& writeText(std::string const& text, bool indent = true);
+    XmlWriter& writeText(const std::string& text, bool indent = true, bool new_line = true);
 
-    void ensureTagClosed();
+    void ensureTagClosed(bool new_line = true);
     void writeDeclaration();
 
 private:
@@ -5291,6 +5713,7 @@ private:
 
     bool                     m_tagIsOpen    = false;
     bool                     m_needsNewline = false;
+    bool                     m_needsIndent  = false;
     std::vector<std::string> m_tags;
     std::string              m_indent;
     std::ostream&            m_os;
@@ -5331,7 +5754,7 @@ static void hexEscapeChar(std::ostream& os, unsigned char c) {
     os.flags(f);
 }
 
-XmlEncode::XmlEncode(std::string const& str, ForWhat forWhat) : m_str(str), m_forWhat(forWhat) {}
+XmlEncode::XmlEncode(const std::string& str, ForWhat forWhat) : m_str(str), m_forWhat(forWhat) {}
 
 void XmlEncode::encodeTo(std::ostream& os) const {
     // Apostrophe escaping not necessary if we always use " to write attributes
@@ -5424,7 +5847,7 @@ void XmlEncode::encodeTo(std::ostream& os) const {
     }
 }
 
-std::ostream& operator<<(std::ostream& os, XmlEncode const& xmlEncode) {
+std::ostream& operator<<(std::ostream& os, const XmlEncode& xmlEncode) {
     xmlEncode.encodeTo(os);
     return os;
 }
@@ -5448,9 +5871,9 @@ XmlWriter::ScopedElement::~ScopedElement() {
     if (m_writer) m_writer->endElement();
 }
 
-XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(std::string const& text,
-                                                              bool               indent) {
-    m_writer->writeText(text, indent);
+XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text,
+                                                              bool               indent, bool new_line) {
+    m_writer->writeText(text, indent, new_line);
     return *this;
 }
 
@@ -5460,7 +5883,7 @@ XmlWriter::~XmlWriter() {
     while (!m_tags.empty()) endElement();
 }
 
-XmlWriter& XmlWriter::startElement(std::string const& name) {
+XmlWriter& XmlWriter::startElement(const std::string& name) {
     ensureTagClosed();
     newlineIfNecessary();
     m_os << m_indent << '<' << name;
@@ -5470,7 +5893,7 @@ XmlWriter& XmlWriter::startElement(std::string const& name) {
     return *this;
 }
 
-XmlWriter::ScopedElement XmlWriter::scopedElement(std::string const& name) {
+XmlWriter::ScopedElement XmlWriter::scopedElement(const std::string& name) {
     ScopedElement scoped(this);
     startElement(name);
     return scoped;
@@ -5483,44 +5906,48 @@ XmlWriter& XmlWriter::endElement() {
         m_os << "/>";
         m_tagIsOpen = false;
     } else {
-        m_os << m_indent << "</" << m_tags.back() << ">";
+        if (m_needsIndent) m_os << m_indent;
+        else m_needsIndent = true;
+        m_os << "</" << m_tags.back() << ">";
     }
     m_os << std::endl;
     m_tags.pop_back();
     return *this;
 }
 
-XmlWriter& XmlWriter::writeAttribute(std::string const& name, std::string const& attribute) {
+XmlWriter& XmlWriter::writeAttribute(const std::string& name, const std::string& attribute) {
     if (!name.empty() && !attribute.empty())
         m_os << ' ' << name << "=\"" << XmlEncode(attribute, XmlEncode::ForAttributes) << '"';
     return *this;
 }
 
-XmlWriter& XmlWriter::writeAttribute(std::string const& name, const char* attribute) {
+XmlWriter& XmlWriter::writeAttribute(const std::string& name, const char* attribute) {
     if (!name.empty() && attribute && attribute[0] != '\0')
         m_os << ' ' << name << "=\"" << XmlEncode(attribute, XmlEncode::ForAttributes) << '"';
     return *this;
 }
 
-XmlWriter& XmlWriter::writeAttribute(std::string const& name, bool attribute) {
+XmlWriter& XmlWriter::writeAttribute(const std::string& name, bool attribute) {
     m_os << ' ' << name << "=\"" << (attribute ? "true" : "false") << '"';
     return *this;
 }
 
-XmlWriter& XmlWriter::writeText(std::string const& text, bool indent) {
+XmlWriter& XmlWriter::writeText(const std::string& text, bool indent, bool new_line) {
     if (!text.empty()) {
         bool tagWasOpen = m_tagIsOpen;
-        ensureTagClosed();
+        ensureTagClosed(new_line);
         if (tagWasOpen && indent) m_os << m_indent;
         m_os << XmlEncode(text);
-        m_needsNewline = true;
+        m_needsNewline = new_line;
+        m_needsIndent = new_line;
     }
     return *this;
 }
 
-void XmlWriter::ensureTagClosed() {
+void XmlWriter::ensureTagClosed(bool new_line) {
     if (m_tagIsOpen) {
-        m_os << ">" << std::endl;
+        m_os << ">";
+        if (new_line) m_os << std::endl;
         m_tagIsOpen = false;
     }
 }
@@ -5543,74 +5970,89 @@ class XmlReporter : public IReporter {
 public:
     detail::XmlWriter xml;
 
-    struct TestCaseData {
-        struct TestCase {
-            std::string filename, name;
-            unsigned    line;
-            double      time;
-            TestContext context;
-        };
+    struct TestCaseTemp {
+        const TestCase* tc;
+    };
 
-        std::vector<TestCase> testcases;
-        double                total_time;
-    } tc_data;
-    std::vector<const TestCase*> current;
+    std::vector<TestCaseTemp> current;
 
     virtual std::string getName() const override { return "xml"; }
 
     // There are a list of events
-    virtual void testStart() override { xml.writeDeclaration(); }
-
-    virtual void testCaseStart(const TestCase& tc, std::stringbuf&) override {
-        current.push_back(&tc);
-    }
-
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf&, const TestContext& ctx,
-                             int) override {
-        tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
-        current.pop_back();
-    }
-
-    virtual void subCaseStart(const TestCase& tc, std::stringbuf&) override {
-        current.push_back(&tc);
-    }
-
-    virtual void subCaseEnd(const TestCase& tc, std::stringbuf&, const TestContext& ctx,
-                            int) override {
-        tc_data.testcases.push_back({tc.file, tc.name, tc.line, 0.0, ctx});
-        current.pop_back();
-    }
-
-    virtual void testEnd(const TestContext& tc) override {
+    virtual void testStart() override {
+        xml.writeDeclaration();
         xml.startElement("ZeroErr")
             .writeAttribute("binary", ut.binary)
             .writeAttribute("version", ZEROERR_VERSION_STR);
+        xml.startElement("TestSuite");
+    }
+
+    virtual void testCaseStart(const TestCase& tc, std::stringbuf&) override {
+        current.push_back({&tc});
+        xml.startElement("TestCase")
+            .writeAttribute("name", tc.name)
+            .writeAttribute("filename", tc.file)
+            .writeAttribute("line", tc.line)
+            .writeAttribute("skipped", "false");
+        if (ut.log_to_report) suspendLog();
+    }
+
+    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+                             int) override {
+        current.pop_back();
+        xml.scopedElement("Result")
+            .writeAttribute("time", 0)
+            .writeAttribute("passed", ctx.passed)
+            .writeAttribute("warnings", ctx.warning)
+            .writeAttribute("failed", ctx.failed)
+            .writeAttribute("skipped", ctx.skipped);
+        xml.scopedElement("ResultAsserts")
+            .writeAttribute("passed", ctx.passed_as)
+            .writeAttribute("warnings", ctx.warning_as)
+            .writeAttribute("failed", ctx.failed_as)
+            .writeAttribute("skipped", ctx.skipped_as);
+        xml.scopedElement("Output").writeText(sb.str());
+
+        if (ut.log_to_report) {
+            xml.startElement("Log");
+            LogIterator begin = LogStream::getDefault().begin();
+            LogIterator end   = LogStream::getDefault().end();
+            for (auto p = begin; p != end; ++p) {
+                xml.startElement("LogEntry")
+                    .writeAttribute("function", p->info->function)
+                    .writeAttribute("line", p->info->line)
+                    .writeAttribute("message", p->info->message)
+                    .writeAttribute("category", p->info->category)
+                    .writeAttribute("severity", p->info->severity);
+                for (auto pair : p->getData()) {
+                    xml.scopedElement(pair.first).writeText(pair.second, false, false);
+                }
+                xml.endElement();
+            }
+            xml.endElement();
+            resumeLog();
+        }
+        xml.endElement();
+    }
+
+    virtual void subCaseStart(const TestCase& tc, std::stringbuf& sb) override {
+        testCaseStart(tc, sb);
+    }
+
+    virtual void subCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
+                            int) override {
+        testCaseEnd(tc, sb, ctx, 0);
+    }
+
+    virtual void testEnd(const TestContext& tc) override {
+        xml.endElement();
+
         xml.startElement("OverallResults")
             .writeAttribute("errors", tc.failed_as)
             .writeAttribute("failures", tc.failed)
             .writeAttribute("tests", tc.passed + tc.failed + tc.warning);
         xml.endElement();
-        xml.startElement("TestSuite");
-        for (const auto& testCase : tc_data.testcases) {
-            xml.startElement("TestCase")
-                .writeAttribute("name", testCase.name)
-                .writeAttribute("filename", testCase.filename)
-                .writeAttribute("line", testCase.line)
-                .writeAttribute("skipped", "false");
-            xml.scopedElement("Result")
-                .writeAttribute("time", testCase.time)
-                .writeAttribute("passed", testCase.context.passed)
-                .writeAttribute("warnings", testCase.context.warning)
-                .writeAttribute("failed", testCase.context.failed)
-                .writeAttribute("skipped", testCase.context.skipped);
-            xml.scopedElement("ResultAsserts")
-                .writeAttribute("passed", testCase.context.passed_as)
-                .writeAttribute("warnings", testCase.context.warning_as)
-                .writeAttribute("failed", testCase.context.failed_as)
-                .writeAttribute("skipped", testCase.context.skipped_as);
-            xml.endElement();
-        }
-        xml.endElement();
+
         xml.endElement();
     }
 
@@ -5630,7 +6072,6 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
 int main(int argc, const char** argv) {
     zeroerr::UnitTest().parseArgs(argc, argv).run();
     std::_Exit(0);
-    return 0;
 }
 
 
@@ -5708,9 +6149,9 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
 #include <stdexcept>
 
 
-#ifdef _WIN32
-#define ZEROERR_ETW 1
-#endif
+// #ifdef _WIN32
+// #define ZEROERR_ETW 1
+// #endif
 
 
 namespace zeroerr {
@@ -5944,10 +6385,10 @@ void Benchmark::report() {
     Table output;
     output.set_header(headers);
     for (auto& row : result) {
-        auto                result = row.average();
+        auto                row_avg = row.average();
         std::vector<double> values;
         for (int j = 0; j < 7; ++j)
-            if (row.has.data[j]) values.push_back(result.data[j]);
+            if (row.has.data[j]) values.push_back(row_avg.data[j]);
         output.add_row(row.name, values);
     }
     std::cerr << output.str() << std::endl;
@@ -6243,7 +6684,8 @@ struct WindowsPerformanceCounter {
         // https://www.geoffchappell.com/studies/windows/km/ntoskrnl/api/ke/profobj/kprofile_source.htm
         // TotalIssues TotalCycles CacheMisses BranchMispredictions
         unsigned long perf_counter[4] = {0x02, 0x13, 0x0A, 0x0B};
-        TraceSetInformation(mTraceHandle, TracePmcCounterListInfo, perf_counter, sizeof(perf_counter));
+        TraceSetInformation(mTraceHandle, TracePmcCounterListInfo, perf_counter,
+                            sizeof(perf_counter));
 
     cleanup:
         if (mTraceHandle) {
@@ -6329,6 +6771,8 @@ void PerformanceCounter::endMeasure() {
 void PerformanceCounter::updateResults(uint64_t numIters) {
 #ifdef ZEROERR_PERF
     _perf->updateResults(numIters);
+#else
+    (void)numIters;
 #endif
 }
 

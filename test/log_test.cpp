@@ -38,7 +38,7 @@ TEST_CASE("lazy evaluation") {
     }
 }
 #ifdef ZEROERR_ENABLE_SPEED_TEST
-BENCHMARK("speed test") {
+BENCHMARK("speedtest") {
 #ifdef ZEROERR_OS_UNIX
     uint64_t* data      = new uint64_t[1000000];
     FILE*     file      = fmemopen(data, 1000000 * sizeof(uint64_t), "w");
@@ -46,19 +46,22 @@ BENCHMARK("speed test") {
     FILE*     oldstderr = stderr;
     stdout = stderr = file;
 #endif
-    Benchmark bench("log speed test");
-    bench
+    zeroerr::LogStream::getDefault().setFlushManually();
+    std::stringstream ss;
+    Benchmark         bench("log speed test");
+    bench.run("spdlog", [] { spdlog::info("hello world {:03.2f}", 1.1); })
         .run("stringstream",
-             [] {
-                 std::stringstream ss;
+             [&] {
                  ss << "hello world " << 1.1;
                  doNotOptimizeAway(ss);
              })
         .run("log", [] { LOG("hello world {value}", 1.1); })
-        .run("spdlog", [] { spdlog::info("hello world {:03.2f}", 1.1); })
         .report();
+    zeroerr::LogStream::getDefault().setFlushAtOnce();
+
 #ifdef ZEROERR_OS_UNIX
-    stdout = oldstdout; stderr = oldstderr;
+    stdout = oldstdout;
+    stderr = oldstderr;
     fclose(file);
     delete[] data;
 #endif
@@ -86,7 +89,7 @@ static void test_feature(int k) {
 TEST_CASE("cross function info") {
     int k = 0;
     INFO("k = ", k);
-    
+
     test_feature(k);
     k = 1;
     test_feature(k);
@@ -98,7 +101,7 @@ TEST_CASE("cross function info") {
 TEST_CASE("debug log") {
     int sum = 0;
     DLOG(LOG_FIRST, sum < 5, "debug log i = {i}", 1);
-    DLOG(WARN_IF,sum < 5, "debug log i = {i}, sum = {sum}", 2, sum);
+    DLOG(WARN_IF, sum < 5, "debug log i = {i}, sum = {sum}", 2, sum);
 }
 
 TEST_CASE("log to file") {
@@ -123,12 +126,68 @@ static void function() {
 TEST_CASE("access log in Test case") {
     zeroerr::suspendLog();
     function();
-    std::cerr << LOG_GET(function, 119, i, int) << std::endl;
-    std::cerr << LOG_GET(function, 120, sum, int) << std::endl;
-    std::cerr << LOG_GET(function, 120, i, int) << std::endl;
+    std::cerr << LOG_GET(function, 122, i, int) << std::endl;
+    std::cerr << LOG_GET(function, 123, sum, int) << std::endl;
+    std::cerr << LOG_GET(function, 123, i, int) << std::endl;
 
-    CHECK(LOG_GET(function, 119, i, int) == 1);
-    CHECK(LOG_GET(function, 120, sum, int) == 9);
-    CHECK(LOG_GET(function, 120, i, int) == 2);
+    CHECK(LOG_GET(function, 122, i, int) == 1);
+    CHECK(LOG_GET(function, 123, sum, int) == 9);
+    CHECK(LOG_GET(function, 123, i, int) == 2);
     zeroerr::resumeLog();
+}
+
+TEST_CASE("access log in Test case") {
+    zeroerr::suspendLog();
+    function();
+    std::cerr << LOG_GET(function, "function log {i}", i, int) << std::endl;
+    std::cerr << LOG_GET(function, "function log {sum}, {i}", sum, int) << std::endl;
+    std::cerr << LOG_GET(function, "function log {sum}, {i}", i, int) << std::endl;
+
+    CHECK(LOG_GET(function, "function log {i}", i, int) == 1);
+    CHECK(LOG_GET(function, "function log {sum}, {i}", sum, int) == 9);
+    CHECK(LOG_GET(function, "function log {sum}, {i}", i, int) == 2);
+    zeroerr::resumeLog();
+}
+
+TEST_CASE("iterate log stream") {
+    zeroerr::suspendLog();
+    function();
+    function();
+    function();
+
+    auto& stream = zeroerr::LogStream::getDefault();
+    for (auto p = stream.begin(); p != stream.end(); ++p) {
+        if (p->info->function == std::string("function") && p->info->line == 122) {
+            std::cerr << "p.get<int>(\"i\") = " << p.get<int>("i") << std::endl;
+            CHECK(p.get<int>("i") == 1);
+        }
+    }
+
+    for (auto p = stream.begin("function log {sum}, {i}"); p != stream.end(); ++p) {
+        std::cerr << "p.get<int>(\"sum\") = " << p.get<int>("sum") << std::endl;
+        std::cerr << "p.get<int>(\"i\") = " << p.get<int>("i") << std::endl;
+        CHECK(p.get<int>("sum") == 10);
+        CHECK(p.get<int>("i") == 1);
+    }
+
+    zeroerr::resumeLog();
+}
+
+
+TEST_CASE("multiple log stream") {
+    zeroerr::LogStream stream1, stream2;
+    stream1.setFileLogger("log1.txt");
+    stream2.setFileLogger("log2.txt");
+
+    LOG("log stream {i}", stream1, 1);
+    LOG("log stream {i}", stream2, 2);
+}
+
+TEST_CASE("log to dir") {
+    zeroerr::LogStream::getDefault().setFileLogger("./logdir", LogStream::SPLIT_BY_CATEGORY,
+                                                   LogStream::SPLIT_BY_SEVERITY,
+                                                   LogStream::DAILY_FILE);
+    LOG("log to dir {i}", 1);
+    WARN("warn log to dir {i}", 2);
+    zeroerr::LogStream::getDefault().setStderrLogger();
 }

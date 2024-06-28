@@ -42,3 +42,5 @@ MaxEmptyLinesToKeep: 2
 
 SortIncludes: true
 SortUsingDeclarations: true
+
+QualifierAlignment: Left

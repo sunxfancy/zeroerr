@@ -132,6 +132,35 @@ struct ele_type_is_pair<
     T, void_t<typename T::value_type, decltype(std::declval<typename T::value_type>().first),
               decltype(std::declval<typename T::value_type>().second)>> : std::true_type {};
 
+template <typename T, typename V = void>
+struct to_store_type {
+    using type = T;
+};
+
+template <>
+struct to_store_type<const char*> {
+    using type = std::string;
+};
+
+template <>
+struct to_store_type<const char(&)[]> {
+    using type = std::string;
+};
+
+
+template <typename T>
+struct to_store_type<T&, typename std::enable_if<!std::is_array<T>::value>::type> {
+    using type = T;
+};
+
+template <typename T>
+struct to_store_type<T&&> {
+    using type = T;
+};
+
+template <typename T>
+using to_store_type_t = typename to_store_type<T>::type;
+
 
 template <size_t I>
 struct visit_impl {

@@ -1,0 +1,62 @@
+ZeroErr: Simplifying Fuzz Testing in C++
+===========================================
+
+Fuzz testing is a critical technique in software development, designed to uncover hidden bugs and vulnerabilities by providing random, unexpected, or invalid inputs to a program. [ZeroErr](https://github.com/sunxfancy/zeroerr/blob/master/Readme.en.md), a lightweight C++ framework, significantly simplifies the implementation of fuzz testing, integrating it seamlessly with its assertion and logging functionalities.
+
+Key Features of ZeroErr Fuzz Testing
+* Easy Setup and Integration: ZeroErr allows developers to quickly set up fuzz tests using its intuitive macros. The framework handles the complexities of random input generation and test execution, letting you focus on defining the behavior you want to test.
+
+* Flexible Input Domains: The framework supports defining specific input domains, such as ranges of integers or arbitrary strings, ensuring that fuzz tests cover a wide variety of scenarios. For instance, you can specify integer ranges or create complex data structures like vectors and maps filled with random values.
+
+* Seeding for Reproducibility: ZeroErr allows you to seed your fuzz tests with specific values. This is useful for ensuring that particular edge cases are always tested, enhancing the reliability of your tests.
+
+* Comprehensive Logging: Integrated logging captures detailed information about each test case, including input values and the results of assertions. This makes it easier to diagnose and fix issues when they arise.
+
+* Error Detection and Reporting: ZeroErr's assertions work in tandem with fuzz testing, immediately identifying and reporting mismatches or unexpected behaviors. This combination ensures that even subtle bugs are detected and logged.
+
+### Example Fuzz Test Case
+
+```cpp
+#include "zeroerr/fuzztest.h"
+#include "zeroerr/assert.h"
+#include "zeroerr/log.h"
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace zeroerr;
+
+FUZZ_TEST_CASE("fuzz_test") {
+    LOG("Run fuzz_test");
+    FUZZ_FUNC([=](int k, std::string num) {
+        int t = atoi(num.c_str());
+        LOG("k: {k}, num: {num}, t: {t}", k, num, t);
+        REQUIRE(k == t);
+    })
+    .WithDomains(InRange<int>(0, 10), Arbitrary<std::string>())
+    .WithSeeds({{5, "Foo"}, {10, "Bar"}})
+    .Run(10);
+}
+
+FUZZ_TEST_CASE("fuzz_test2") {
+    LOG("Run fuzz_test2");
+    FUZZ_FUNC([=](int k, std::vector<int> num) {
+        int t = num.size();
+        LOG("k: {k}, t: {t}", k, t);
+    })
+    .WithDomains(InRange<int>(0, 10), ContainerOf<std::vector>(Arbitrary<int>()))
+    .Run(10);
+}
+```
+
+In the examples above, ZeroErr defines fuzz tests that handle different data types, including integers, strings, vectors, and maps. The framework's flexibility and powerful logging capabilities make it an invaluable tool for C++ developers aiming to improve code quality through effective fuzz testing.
+
+For more information and to get started with ZeroErr, visit the [ZeroErr GitHub repository](https://github.com/sunxfancy/zeroerr/blob/master/Readme.en.md).
+
+
+
+
+
+
+
+

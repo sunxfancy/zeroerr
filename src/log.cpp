@@ -1,6 +1,15 @@
 #include "zeroerr/log.h"
 #include "zeroerr/internal/threadsafe.h"
 
+#include <iomanip>
+#include <unordered_set>
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <sys/stat.h>
+#endif
+
 const char* ZEROERR_LOG_CATEGORY = "default";
 
 
@@ -23,33 +32,37 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
       category(category),
       line(line),
       size(size),
-      severity(severity) {
+      severity(severity),
+      names() {
     for (const char* p = message; *p; p++)
         if (*p == '{') {
             const char* q = p + 1;
             while (*q && *q != '}') q++;
             if (*q == '}') {
-                std::string N(p + 1, q);
-                names[N] = names.size();
+                std::string N(p + 1, (size_t)(q-p-1));
+                names[N] = static_cast<int>(names.size());
                 p        = q;
             }
         }
 }
 
 
-constexpr size_t LogStreamMaxSize = 1024 * 1024 - 16;
+constexpr size_t LogStreamMaxSize = 1 * 1024 - 16;
 
 struct DataBlock {
-    size_t     size = 0;
+    ZEROERR_ATOMIC(size_t) size;
     DataBlock* next = nullptr;
     char       data[LogStreamMaxSize];
+
+    DataBlock() : size(0) {}
 
     LogMessage* begin() { return (LogMessage*)data; }
     LogMessage* end() { return (LogMessage*)&data[size]; }
 };
 
 LogStream::LogStream() {
-    first = last = new DataBlock();
+    first = m_last = new DataBlock();
+    prepare        = new DataBlock();
 #ifndef ZEROERR_NO_THREAD_SAFE
     mutex = new std::mutex();
 #endif
@@ -74,6 +87,7 @@ void* LogStream::alloc_block(unsigned size) {
         throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
     }
     ZEROERR_LOCK(*mutex);
+    auto* last = ZEROERR_LOAD(m_last);
     if (last->size + size > LogStreamMaxSize) {
         if (flush_mode == FLUSH_WHEN_FULL) {
             logger->flush(last);
@@ -88,8 +102,44 @@ void* LogStream::alloc_block(unsigned size) {
     return p;
 }
 
+void* LogStream::alloc_block_lockfree(unsigned size) {
+#ifndef ZEROERR_NO_THREAD_SAFE
+    if (size > LogStreamMaxSize) {
+        throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
+    }
+    DataBlock* last = ZEROERR_LOAD(m_last);
+    while (true) {
+        size_t p = last->size.load();
+        if (p <= (LogStreamMaxSize - size)) {
+            if (last->size.compare_exchange_strong(p, p + size)) return last->data + p;
+        } else {
+            if (m_last.compare_exchange_strong(last, prepare)) {
+                if (flush_mode == FLUSH_WHEN_FULL) {
+                    logger->flush(last);
+                    last->size = 0;
+                    prepare    = last;
+                } else {
+                    prepare->next = last;
+                    prepare       = new DataBlock();
+                }
+            }
+        }
+    }
+#else
+    return alloc_block(size);
+#endif
+}
+LogIterator LogStream::current(std::string message, std::string function_name, int line) {
+    LogIterator iter(*this, message, function_name, line);
+    DataBlock*  last = ZEROERR_LOAD(m_last);
+    iter.p           = last;
+    iter.q           = reinterpret_cast<LogMessage*>(&(last->data[ZEROERR_LOAD(last->size)]));
+    return iter;
+}
+
 void LogStream::flush() {
     ZEROERR_LOCK(*mutex);
+    DataBlock* last = ZEROERR_LOAD(m_last);
     for (DataBlock* p = first; p != last; p = p->next) {
         logger->flush(p);
         delete p;
@@ -112,6 +162,57 @@ void* LogStream::getRawLog(std::string func, unsigned line, std::string name) {
     return nullptr;
 }
 
+void* LogStream::getRawLog(std::string func, std::string msg, std::string name) {
+    for (DataBlock* p = first; p; p = p->next)
+        for (auto q = p->begin(); q < p->end(); q = moveBytes(q, q->info->size))
+            if (msg == q->info->message && func == q->info->function) return q->getRawLog(name);
+    return nullptr;
+}
+
+LogIterator::LogIterator(LogStream& stream, std::string message, std::string function_name,
+                         int line)
+    : p(stream.first),
+      q(stream.first->begin()),
+      message_filter(message),
+      function_name_filter(function_name),
+      line_filter(line) {
+    while (!check_filter() && p) next();
+}
+
+void LogIterator::check_at_safe_pos() {
+    if (static_cast<size_t>((char*)q - p->data) >= ZEROERR_LOAD(p->size)) {
+        p = p->next;
+        q = reinterpret_cast<LogMessage*>(p->data);
+    }
+}
+
+void LogIterator::next() {
+    if (q < p->end()) {
+        q = moveBytes(q, q->info->size);
+        if (q >= p->end()) next();
+    } else {
+        p = p->next;
+        if (p)
+            q = p->begin();
+        else
+            q = nullptr;
+    }
+}
+
+LogIterator& LogIterator::operator++() {
+    do {
+        next();
+    } while (p && !check_filter());
+    return *this;
+}
+
+bool LogIterator::check_filter() {
+    if (!message_filter.empty() && q->info->message != message_filter) return false;
+    if (!function_name_filter.empty() && q->info->function != function_name_filter) return false;
+    if (line_filter != -1 && static_cast<int>(q->info->line) != line_filter) return false;
+    return true;
+}
+
 class FileLogger : public Logger {
 public:
     FileLogger(std::string name) { file = fopen(name.c_str(), "w"); }
@@ -130,6 +231,126 @@ public:
 
 protected:
     FILE* file;
+};
+
+
+#ifdef _WIN32
+static char split = '\\';
+#else
+static char split = '/';
+#endif
+
+static void make_dir(std::string path) {
+    size_t pos = 0;
+    do {
+        pos             = path.find_first_of(split, pos + 1);
+        std::string sub = path.substr(0, pos);
+#ifdef _WIN32
+        CreateDirectory(sub.c_str(), NULL);
+#else
+        struct stat st;
+        if (stat(sub.c_str(), &st) == -1) {
+            mkdir(sub.c_str(), 0755);
+        }
+#endif
+    } while (pos != std::string::npos);
+}
+
+struct FileCache {
+    std::map<std::string, FILE*> files;
+    ~FileCache() {
+        for (auto& p : files) {
+            fclose(p.second);
+        }
+    }
+
+    FILE* get(const std::string& name) {
+        auto it = files.find(name);
+        if (it != files.end()) return it->second;
+        auto        p    = name.find_last_of(split);
+        std::string path = name.substr(0, p);
+        make_dir(path.c_str());
+
+        FILE* file = fopen(name.c_str(), "w");
+        if (file) {
+            files[name] = file;
+            return file;
+        }
+        return nullptr;
+    }
+};
+
+
+class DirectoryLogger : public Logger {
+public:
+    DirectoryLogger(std::string path, LogStream::DirMode dir_mode[3]) : dirpath(path) {
+        make_dir(path.c_str());
+        for (int i = 0; i < 3; i++) {
+            this->dir_mode[i] = dir_mode[i];
+        }
+    }
+    ~DirectoryLogger() {}
+
+    void flush(DataBlock* msg) override {
+        FileCache cache;
+        for (auto p = msg->begin(); p < msg->end(); p = moveBytes(p, p->info->size)) {
+            auto ss = log_custom_callback(*p, false);
+
+            std::stringstream path;
+            path << dirpath;
+            if (dirpath.back() != split) path << split;
+
+            int last = 0;
+            for (int i = 0; i < 3; i++) {
+                if (last != 0 && dir_mode[i] != 0) path << split;
+                switch (dir_mode[i]) {
+                    case LogStream::DAILY_FILE: {
+                        std::time_t t  = std::chrono::system_clock::to_time_t(p->time);
+                        std::tm     tm = *std::localtime(&t);
+                        path << std::put_time(&tm, "%Y-%m-%d");
+                        break;
+                    }
+                    case LogStream::SPLIT_BY_SEVERITY: {
+                        path << to_string(p->info->severity);
+                        break;
+                    }
+                    case LogStream::SPLIT_BY_CATEGORY: {
+                        path << to_category(p->info->category);
+                        break;
+                    }
+                    default: continue;
+                }
+                last = 1;
+            }
+            std::cerr << path.str() << std::endl;
+
+            FILE* file = cache.get(path.str());
+            fwrite(ss.c_str(), ss.size(), 1, file);
+        }
+    }
+
+protected:
+    std::string to_string(LogSeverity severity) {
+        switch (severity) {
+            case INFO_l:  return "INFO";
+            case LOG_l:   return "LOG";
+            case WARN_l:  return "WARN";
+            case ERROR_l: return "ERROR";
+            case FATAL_l: return "FATAL";
+        }
+        return "";
+    }
+
+    std::string to_category(const char* category) {
+        std::string cat = category;
+        for (auto& c : cat) {
+            if (c == '/') c = split;
+        }
+        return cat;
+    }
+
+    LogStream::DirMode dir_mode[3];
+    std::string        dirpath;
 };
 
 class OStreamLogger : public Logger {
@@ -153,9 +374,16 @@ LogStream& LogStream::getDefault() {
     return stream;
 }
 
-void LogStream::setFileLogger(std::string name) {
+void LogStream::setFileLogger(std::string name, DirMode mode1, DirMode mode2, DirMode mode3) {
     if (logger) delete logger;
-    logger = new FileLogger(name);
+
+    if (mode1 == 0 || mode2 == 0 || mode3 == 0)
+        logger = new FileLogger(name);
+    else {
+        LogStream::DirMode dir_mode_group[3] = {mode1, mode2, mode3};
+
+        logger = new DirectoryLogger(name, dir_mode_group);
+    }
 }
 
 void LogStream::setStdoutLogger() {
@@ -194,15 +422,15 @@ void setLogCategory(const char* categories) {
     }
 }
 
-static LogStream::FlushMode saved_flush_mode;
+static LogStream::FlushMode saved_flush_mode = LogStream::FlushMode::FLUSH_AT_ONCE;
 
 void suspendLog() {
-    saved_flush_mode                   = LogStream::getDefault().flush_mode;
-    LogStream::getDefault().flush_mode = LogStream::FLUSH_MANUALLY;
+    saved_flush_mode = LogStream::getDefault().getFlushMode();
+    LogStream::getDefault().setFlushMode(LogStream::FLUSH_MANUALLY);
 }
 
 void resumeLog() {
-    LogStream::getDefault().flush_mode = saved_flush_mode;
+    LogStream::getDefault().setFlushMode(saved_flush_mode);
     LogStream::getDefault().flush();
 }
 

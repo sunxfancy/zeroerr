@@ -249,7 +249,11 @@ struct Printer {
 #endif
     }
 
-    std::string str() const { return static_cast<std::stringstream&>(os).str(); }
+    std::string str() const {
+        if (use_stringstream == false)
+            throw std::runtime_error("Printer is not using stringstream");
+        return static_cast<std::stringstream&>(os).str();
+    }
     operator std::string() const { return str(); }
 
     friend std::ostream& operator<<(std::ostream& os, const Printer& P) {
