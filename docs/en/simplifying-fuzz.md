@@ -1,4 +1,4 @@
-ZeroErr: Simplifying Fuzz Testing in C++
+Simplifying Fuzz Testing in C++
 ===========================================
 
 Fuzz testing is a critical technique in software development, designed to uncover hidden bugs and vulnerabilities by providing random, unexpected, or invalid inputs to a program. [ZeroErr](https://github.com/sunxfancy/zeroerr/blob/master/Readme.en.md), a lightweight C++ framework, significantly simplifies the implementation of fuzz testing, integrating it seamlessly with its assertion and logging functionalities.
