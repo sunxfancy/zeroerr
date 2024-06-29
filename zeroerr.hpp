@@ -1233,8 +1233,19 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 namespace zeroerr {
 
 
-struct Printer;
-
+/**
+ * @brief rank is a helper class for Printer to define the priority of overloaded functions.
+ * @tparam N the priority of the rule. 0 is the lowest priority. The maximum priority is max_rank.
+ *
+ * You can define a rule by adding it as a function parameter with rank<N> where N is the priority.
+ * For example:
+ * template<typename T>
+ * void Foo(T v, rank<0>); // lowest priority
+ * void Foo(int v, rank<1>); // higher priority
+ *
+ * Even though in the first rule, type T can be an int, the second function will still be called due
+ * to the priority.
+ */
 template <unsigned N>
 struct rank : rank<N - 1> {};
 template <>
@@ -1242,10 +1253,15 @@ struct rank<0> {};
 constexpr unsigned max_rank = 5;
 
 
+struct Printer;
 template <typename T>
 void PrinterExt(Printer&, T, unsigned, const char*, rank<0>);
 
 namespace detail {
+
+/**
+ * @brief has_extension is a type trait to check if user defined PrinterExt for a type
+ */
 template <typename T, typename = void>
 struct has_extension : std::false_type {};
 
@@ -3110,6 +3126,21 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 namespace zeroerr {
 
+
+/**
+ * @brief Format a string with arguments
+ * @param fmt The format string
+ * @param args The arguments
+ * @return std::string The formatted string
+ * 
+ * This function is used to format a string with arguments. The format string
+ * is a string with placeholders in the form of `{}`. You can pass any type of
+ * arguments to this function and it will format the string accordingly.
+ * 
+ * Example:
+ *    format("Hello, {name}!", "John") -> "Hello, John!"
+ * 
+ */
 template <typename... T>
 std::string format(const char* fmt, T... args) {
     std::stringstream ss;
@@ -3369,6 +3400,31 @@ enum LogSeverity {
     FATAL_l,  // it will contain a stack trace
 };
 
+/**
+ * @brief LogInfo is a struct to store the meta data of the log message.
+ * @details LogInfo is a struct to store the meta data of the log message. 
+ * It contains filename, function, message, category, line number, size, and severity.
+ * Those data is initialized when the first log message is created using a static
+ * local variable in the function where the log message is put.
+ * 
+ * For example:
+ *   void foo() {
+ *     log("Hello, {name}!", "John");
+ *   }
+ * 
+ * The inner implementation could be considered as (not exactly 
+ * since message is allocated from a pool):
+ *   void foo() {
+ *      static LogInfo log_info{ 
+ *          __FILE__, __func__, "Hello, {name}!", 
+ *          ZEROERR_LOG_CATEGORY, 
+ *          __LINE__, 
+ *          sizeof("Hello, world!"), 
+ *          LogSeverity::INFO_l);
+ *      LogMessage* logdata = new LogMessageImpl<std::string>("John");
+ *      logdata->info = &log_info;
+ *    }
+ */
 struct LogInfo {
     const char*                filename;
     const char*                function;
@@ -3386,18 +3442,52 @@ struct LogInfo {
 struct LogMessage;
 typedef std::string (*LogCustomCallback)(const LogMessage&, bool colorful);
 
+/**
+ * @brief set the log level
+ */
 extern void setLogLevel(LogSeverity level);
+
+/**
+ * @brief set the log category
+ */
 extern void setLogCategory(const char* categories);
+
+/**
+ * @brief set the log custom callback, this can support custom format of the log message
+ */
 extern void setLogCustomCallback(LogCustomCallback callback);
+
+/**
+ * @brief suspend the log to flush to the file
+ */
 extern void suspendLog();
+
+/**
+ * @brief resume the log to flush to the file
+ */
 extern void resumeLog();
 
+/**
+ * @brief LogMessage is a class to store the log message.
+ * @details LogMessage is a class to store the log message and a base class
+ * for all the messages implementation. You can create a log message with any
+ * type of arguments and it will store the arguments in a tuple.
+ * The log message can be converted to a string with the str() function.
+ * You can also get the raw pointer of the arguments with the getRawLog() function.
+ */
 struct LogMessage {
+    // time is assigned when the log message is created
     LogMessage() { time = std::chrono::system_clock::now(); }
 
-    virtual std::string str() const                       = 0;
-    virtual void*       getRawLog(std::string name) const = 0;
+    // convert the log message to a string
+    virtual std::string str() const = 0;
 
+    // get the raw data pointer of the field with the name
+    virtual void* getRawLog(std::string name) const = 0;
+
+    // a map of the data indexing by the field name
+    // for example: log("print {i}", 1);
+    // a map of {"i": "1"} will be returned
     virtual std::map<std::string, std::string> getData() const = 0;
 
     // meta data of this log message
@@ -3408,6 +3498,12 @@ struct LogMessage {
 };
 
 
+/**
+ * @brief LogMessageImpl is the implementation of the LogMessage.
+ * @details LogMessageImpl is the implementation of the LogMessage. It stores
+ * the arguments in a tuple and provides the str() function to convert the log
+ * message to a string. All fields could be accessed by getRawLog() or getData().
+ */
 template <typename... T>
 struct LogMessageImpl final : LogMessage {
     std::tuple<T...> args;
@@ -3434,11 +3530,11 @@ struct LogMessageImpl final : LogMessage {
 
     struct PrintTupleData {
         std::map<std::string, std::string> data;
-        Printer print;
-        std::string name;
+        Printer                            print;
+        std::string                        name;
 
         PrintTupleData() : print() {
-            print.isCompact = true;
+            print.isCompact  = true;
             print.line_break = "";
         }
 
@@ -3473,6 +3569,24 @@ struct PushResult {
     LogStream&  stream;
 };
 
+/**
+ * @brief LogIterator is a class to iterate the log messages.
+ * @details LogIterator is a class to iterate the log messages. You can also filter
+ * the log messages by message, function name, and line number.
+ *
+ * An example of using LogIterator:
+ *    for (int i = 0; i < 10; ++i)
+ *      log("i = {i}", i);
+ *
+ *    LogIterator it = LogStream::getDefault().begin("Hello, world!");
+ *    LogIterator end = LogStream::getDefault().end();
+ *
+ *    for (; it != end; ++it) {
+ *      LogMessage& msg = *it;
+ *      std::cout << msg.str() << std::endl;   // "i = {i}"
+ *      std::cout << it.get<int>("i") << std::endl; // "0", "1", "2", ...
+ *    }
+ */
 class LogIterator {
 public:
     LogIterator() : p(nullptr), q(nullptr) {}
@@ -3506,7 +3620,7 @@ public:
     LogMessage& operator*() const { return *q; }
     LogMessage* operator->() const { return q; }
 
-    void check_at_safe_pos(); 
+    void check_at_safe_pos();
 
     friend class LogStream;
 
@@ -3522,6 +3636,14 @@ protected:
     int         line_filter = -1;
 };
 
+/**
+ * @brief LogStream is a class to manage the log messages.
+ * @details LogStream is a class to manage the log messages. It can be used to
+ * create log messages and push them to the logger. A default LogStream is
+ * created when the first time you call getDefault() function (or first log happens).
+ * You can also adjust the way to flush the messages and how the log messages are
+ * written to the log file.
+ */
 class LogStream {
 public:
     LogStream();
@@ -3536,6 +3658,28 @@ public:
         SPLIT_BY_CATEGORY = 1 << 2
     };
 
+
+    /**
+     * @brief push a log message to the stream
+     * @tparam T The types of the arguments
+     * @param args The arguments
+     * @return PushResult The result of the push
+     *
+     * This function is used to push a log message to the stream. You can pass
+     * any type of arguments to this function and it will create a log message
+     * with the arguments. The log message is not written to the log file until
+     * the stream is flushed.
+     *
+     * The log message is structured as a tuple of the arguments in the inner
+     * implementation class LogMessageImpl. After the log message is created, it
+     * used type erasure to return a LogMessage pointer to the caller.
+     * 
+     * The stored data type is determined by the to_store_type_t<T> template.
+     * For all the string type in raw pointer like const char* or char[],
+     * it will be converted to std::string.
+     * All reference type (including right value reference) will be converted 
+     * to the original type.
+     */
     template <typename... T>
     PushResult push(T&&... args) {
         // unsigned size = sizeof(LogMessageImpl<T...>);
@@ -3550,6 +3694,18 @@ public:
         return {msg, size, *this};
     }
 
+
+    /**
+     * @brief get a log message from the stream
+     * @tparam T The type of the log message
+     * @param func The function name of the log message
+     * @param line The line number of the log message
+     * @param name The name of field you want to get
+     *
+     * This function is used to get a log message from the stream and extract
+     * the field with the name. The function will return the field with the type
+     * T. However, this type must be specified by the caller.
+     */
     template <typename T>
     T getLog(std::string func, unsigned line, std::string name) {
         void* data = getRawLog(func, line, name);
@@ -3557,15 +3713,23 @@ public:
         return T{};
     }
 
+    /**
+     * @brief get a log message from the stream
+     * @tparam T The type of the log message
+     * @param func The function name of the log message
+     * @param msg The message of the log message
+     * @param name The name of field you want to get
+     *
+     * This function is used to get a log message from the stream and extract
+     * the field with the name. The function will return the field with the type
+     * T. However, this type must be specified by the caller.
+     */
     template <typename T>
     T getLog(std::string func, std::string msg, std::string name) {
         void* data = getRawLog(func, msg, name);
         if (data) return *(T*)(data);
         return T{};
     }
-
-    void* getRawLog(std::string func, unsigned line, std::string name);
-    void* getRawLog(std::string func, std::string msg, std::string name);
 
     LogIterator begin(std::string message = "", std::string function_name = "", int line = -1) {
         return LogIterator(*this, message, function_name, line);
@@ -3605,8 +3769,15 @@ private:
 #ifndef ZEROERR_NO_THREAD_SAFE
     std::mutex* mutex;
 #endif
+
+    // The implementation of alloc objects by giving a size
     void* alloc_block(unsigned size);
     void* alloc_block_lockfree(unsigned size);
+
+    // The implementation of getLog which returns a raw pointer
+    // This way can reduce the overhead of code generation by template
+    void* getRawLog(std::string func, unsigned line, std::string name);
+    void* getRawLog(std::string func, std::string msg, std::string name);
 };
 
 
@@ -3841,53 +4012,149 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 namespace zeroerr {
 
 class IReporter;
+struct TestCase;
+
+/**
+ * @brief TestContext is a class that holds the test results and reporter context.
+ * There are 8 different matrices that are used to store the test results.
+ * * passed    : Number of passed tests
+ * * warning   : Number of tests that passed with warning
+ * * failed    : Number of failed tests
+ * * skipped   : Number of skipped tests
+ * * passed_as : Number of passed tests in assertion
+ * * warning_as: Number of tests that passed with warning in assertion
+ * * failed_as : Number of failed tests in assertion
+ * * skipped_as: Number of skipped tests in assertion
+ */
 class TestContext {
 public:
     unsigned passed = 0, warning = 0, failed = 0, skipped = 0;
     unsigned passed_as = 0, warning_as = 0, failed_as = 0, skipped_as = 0;
 
     IReporter& reporter;
-    int        add(TestContext& local);
-    void       reset();
-    void       save_output();
 
+    /**
+     * @brief Add the subtest results to the matrices.
+     * @param local The local test context that will be added to the global context.
+     * @return int  0 if the test passed, 1 if the test passed with warning, 2 if the test failed.
+     */
+    int add(TestContext& local);
+
+    /**
+     * @brief Reset the matrices to 0.
+     */
+    void reset();
+
+    /**
+     * @brief Save the output of the test to the correct_output_path as a golden file.
+     */
+    void save_output();
+
+    /**
+     * @brief Construct a new Test Context object
+     * @param reporter The reporter object that will be used to report the test results.
+     */
     TestContext(IReporter& reporter) : reporter(reporter) {}
     ~TestContext() = default;
 };
 
-struct TestCase;
+/**
+ * @brief UnitTest is a class that holds the test configuration.
+ * There are several options that can be set to configure the test.
+ * * silent          : If true, the test will not print the test results.
+ * * run_bench       : If true, the test will run the benchmark tests.
+ * * run_fuzz        : If true, the test will run the fuzz tests.
+ * * list_test_cases : If true, the test will list the test cases.
+ * * no_color        : If true, the test will not print the test results with color.
+ * * log_to_report   : If true, the test will log the test results to the report.
+ * * correct_output_path : The path that the golden files will be saved.
+ * * reporter_name   : The name of the reporter that will be used to report the test results.
+ * * binary          : The binary name that will be used to run the test.
+ * * filters         : The filters that will be used to filter the test cases.
+ */
 struct UnitTest {
-    UnitTest&        parseArgs(int argc, const char** argv);
-    int              run();
-    bool             run_filter(const TestCase& tc);
-    bool             silent          = false;
-    bool             run_bench       = false;
-    bool             run_fuzz        = false;
-    bool             list_test_cases = false;
-    bool             no_color        = false;
-    bool             log_to_report   = false;
-    std::string      correct_output_path;
-    std::string      reporter_name = "console";
-    std::string      binary;
+    /**
+     * @brief Parse the arguments to configure the test.
+     * @param argc The number of arguments.
+     * @param argv The arguments.
+     * @return UnitTest& The test configuration.
+     */
+    UnitTest& parseArgs(int argc, const char** argv);
+
+    /**
+     * @brief Run the test.
+     * @return int 0 if the test passed.
+     */
+    int run();
+
+    /**
+     * @brief Run the test with the given filter.
+     * @param tc The test case that will be run.
+     * @return true If the test passed.
+     * @return false If the test failed.
+     */
+    bool run_filter(const TestCase& tc);
+
+    bool            silent          = false;
+    bool            run_bench       = false;
+    bool            run_fuzz        = false;
+    bool            list_test_cases = false;
+    bool            no_color        = false;
+    bool            log_to_report   = false;
+    std::string     correct_output_path;
+    std::string     reporter_name = "console";
+    std::string     binary;
     struct Filters* filters;
 };
 
+/**
+ * @brief TestCase is a class that holds the test case information.
+ * There are several fields that are used to store the test case information.
+ * * name : The name of the test case.
+ * * file : The file that the test case is defined.
+ * * line : The line that the test case is defined.
+ * * func : The function that will be run to test the test case.
+ * * subcases : The subcases that are defined in the test case.
+ */
 struct TestCase {
     std::string                       name;
     std::string                       file;
     unsigned                          line;
     std::function<void(TestContext*)> func;
-    bool                              operator<(const TestCase& rhs) const;
+    std::vector<TestCase*>            subcases;
 
-    std::vector<TestCase*> subcases;
+    /**
+     * @brief Compare the test cases.
+     * @param rhs The test case that will be compared.
+     * @return true If the test case is less than the rhs, otherwise false.
+     */
+    bool operator<(const TestCase& rhs) const;
 
+    /**
+     * @brief Construct a new Test Case object
+     * @param name The name of the test case.
+     * @param file The file that the test case is defined.
+     * @param line The line that the test case is defined.
+     */
     TestCase(std::string name, std::string file, unsigned line)
         : name(name), file(file), line(line) {}
+
+    /**
+     * @brief Construct a new Test Case object
+     * @param name The name of the test case.
+     * @param file The file that the test case is defined.
+     * @param line The line that the test case is defined.
+     * @param func The function that will be run to test the test case.
+     */
     TestCase(std::string name, std::string file, unsigned line,
              std::function<void(TestContext*)> func)
         : name(name), file(file), line(line), func(func) {}
 };
 
+
+/**
+ * @brief SubCase is a class that holds the subcase information.
+ */
 struct SubCase : TestCase {
     SubCase(std::string name, std::string file, unsigned line, TestContext* context);
     ~SubCase() = default;
@@ -3903,6 +4170,17 @@ struct TestedObjects {
 };
 
 
+/**
+ * @brief IReporter is an interface that is used to report the test results.
+ * You can create a new reporter by inheriting this class and implementing the virtual functions.
+ * The following events will be called once it happens during testing.
+ * * testStart     : called when the test starts.
+ * * testCaseStart : called when the test case starts.
+ * * testCaseEnd   : called when the test case ends.
+ * * subCaseStart  : called when the subcase starts.
+ * * subCaseEnd    : called when the subcase ends.
+ * * testEnd       : called when the test ends.
+ */
 class IReporter {
 public:
     virtual ~IReporter() = default;
@@ -3919,6 +4197,11 @@ public:
                             int type)                                  = 0;
     virtual void testEnd(const TestContext& tc)                        = 0;
 
+    /**
+     * @brief Create the reporter object with the given name.
+     * @param name The name of the reporter. Available reporters are: console, xml.
+     * @param ut The unit test object that will be used to configure the test.
+    */
     static IReporter* create(const std::string& name, UnitTest& ut);
 
     IReporter(UnitTest& ut) : ut(ut) {}
@@ -3927,20 +4210,44 @@ protected:
     UnitTest& ut;
 };
 
-
+/**
+ * @brief TestType is a enum describe the type of the test case.
+ */
 enum TestType { test_case = 1, sub_case = 1 << 1, bench = 1 << 2, fuzz_test = 1 << 3 };
 
 namespace detail {
+
+/**
+ * @brief regTest is a class that is used to register the test case.
+ * It will be used as global variables and the constructor will be called to register the test case.
+ */
 struct regTest {
     explicit regTest(const TestCase& tc, TestType type = test_case);
 };
 
+/**
+ * @brief regReporter is a class that is used to register the reporter.
+ * It will be used as global variables and the constructor will be called to register the reporter.
+ */
 struct regReporter {
     explicit regReporter(IReporter*);
 };
 }  // namespace detail
 
 
+/**
+ * @brief CombinationalTest is a class that is used to cross test a few lists of arguments.
+ * One example to use:
+ *   TestArgs<int> a{1, 2, 3};
+ *   TestArgs<int> b{4, 5, 6};
+ *   CombinationalTest test([&]{
+ *       CHECK(targetFunc(a, b) == (a+b));
+ *   });
+ *   test(a, b);
+ *
+ * This will test the targetFunc with all the combinations of a and b, e.g. (1,4), (1,5), (1,6),
+ * (2,4), (2,5) ... etc.
+ */
 class CombinationalTest {
 public:
     CombinationalTest(std::function<void()> func) : func(func) {}
@@ -3963,6 +4270,10 @@ public:
     }
 };
 
+
+/**
+ * @brief TestArgs is a class that is used to store the test arguments.
+ */
 template <typename T>
 class TestArgs {
 public:

@@ -6,6 +6,21 @@
 
 namespace zeroerr {
 
+
+/**
+ * @brief Format a string with arguments
+ * @param fmt The format string
+ * @param args The arguments
+ * @return std::string The formatted string
+ * 
+ * This function is used to format a string with arguments. The format string
+ * is a string with placeholders in the form of `{}`. You can pass any type of
+ * arguments to this function and it will format the string accordingly.
+ * 
+ * Example:
+ *    format("Hello, {name}!", "John") -> "Hello, John!"
+ * 
+ */
 template <typename... T>
 std::string format(const char* fmt, T... args) {
     std::stringstream ss;

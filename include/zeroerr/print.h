@@ -27,8 +27,19 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 namespace zeroerr {
 
 
-struct Printer;
-
+/**
+ * @brief rank is a helper class for Printer to define the priority of overloaded functions.
+ * @tparam N the priority of the rule. 0 is the lowest priority. The maximum priority is max_rank.
+ *
+ * You can define a rule by adding it as a function parameter with rank<N> where N is the priority.
+ * For example:
+ * template<typename T>
+ * void Foo(T v, rank<0>); // lowest priority
+ * void Foo(int v, rank<1>); // higher priority
+ *
+ * Even though in the first rule, type T can be an int, the second function will still be called due
+ * to the priority.
+ */
 template <unsigned N>
 struct rank : rank<N - 1> {};
 template <>
@@ -36,10 +47,15 @@ struct rank<0> {};
 constexpr unsigned max_rank = 5;
 
 
+struct Printer;
 template <typename T>
 void PrinterExt(Printer&, T, unsigned, const char*, rank<0>);
 
 namespace detail {
+
+/**
+ * @brief has_extension is a type trait to check if user defined PrinterExt for a type
+ */
 template <typename T, typename = void>
 struct has_extension : std::false_type {};
 
