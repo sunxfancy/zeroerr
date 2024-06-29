@@ -26,9 +26,6 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
-struct Printer;
-template <typename T>
-void PrinterExt(Printer&, T, unsigned, const char*, rank<0>);
 
 /**
  * @brief rank is a helper class for Printer to define the priority of overloaded functions.
@@ -48,6 +45,11 @@ struct rank : rank<N - 1> {};
 template <>
 struct rank<0> {};
 constexpr unsigned max_rank = 5;
+
+
+struct Printer;
+template <typename T>
+void PrinterExt(Printer&, T, unsigned, const char*, rank<0>);
 
 namespace detail {
 
