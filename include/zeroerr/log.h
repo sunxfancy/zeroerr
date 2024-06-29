@@ -228,6 +228,31 @@ enum LogSeverity {
     FATAL_l,  // it will contain a stack trace
 };
 
+/**
+ * @brief LogInfo is a struct to store the meta data of the log message.
+ * @details LogInfo is a struct to store the meta data of the log message. 
+ * It contains filename, function, message, category, line number, size, and severity.
+ * Those data is initialized when the first log message is created using a static
+ * local variable in the function where the log message is put.
+ * 
+ * For example:
+ *   void foo() {
+ *     log("Hello, {name}!", "John");
+ *   }
+ * 
+ * The inner implementation could be considered as (not exactly 
+ * since message is allocated from a pool):
+ *   void foo() {
+ *      static LogInfo log_info{ 
+ *          __FILE__, __func__, "Hello, {name}!", 
+ *          ZEROERR_LOG_CATEGORY, 
+ *          __LINE__, 
+ *          sizeof("Hello, world!"), 
+ *          LogSeverity::INFO_l);
+ *      LogMessage* logdata = new LogMessageImpl<std::string>("John");
+ *      logdata->info = &log_info;
+ *    }
+ */
 struct LogInfo {
     const char*                filename;
     const char*                function;
@@ -245,18 +270,52 @@ struct LogInfo {
 struct LogMessage;
 typedef std::string (*LogCustomCallback)(const LogMessage&, bool colorful);
 
+/**
+ * @brief set the log level
+ */
 extern void setLogLevel(LogSeverity level);
+
+/**
+ * @brief set the log category
+ */
 extern void setLogCategory(const char* categories);
+
+/**
+ * @brief set the log custom callback, this can support custom format of the log message
+ */
 extern void setLogCustomCallback(LogCustomCallback callback);
+
+/**
+ * @brief suspend the log to flush to the file
+ */
 extern void suspendLog();
+
+/**
+ * @brief resume the log to flush to the file
+ */
 extern void resumeLog();
 
+/**
+ * @brief LogMessage is a class to store the log message.
+ * @details LogMessage is a class to store the log message and a base class
+ * for all the messages implementation. You can create a log message with any
+ * type of arguments and it will store the arguments in a tuple.
+ * The log message can be converted to a string with the str() function.
+ * You can also get the raw pointer of the arguments with the getRawLog() function.
+ */
 struct LogMessage {
+    // time is assigned when the log message is created
     LogMessage() { time = std::chrono::system_clock::now(); }
 
-    virtual std::string str() const                       = 0;
-    virtual void*       getRawLog(std::string name) const = 0;
+    // convert the log message to a string
+    virtual std::string str() const = 0;
 
+    // get the raw data pointer of the field with the name
+    virtual void* getRawLog(std::string name) const = 0;
+
+    // a map of the data indexing by the field name
+    // for example: log("print {i}", 1);
+    // a map of {"i": "1"} will be returned
     virtual std::map<std::string, std::string> getData() const = 0;
 
     // meta data of this log message
@@ -267,6 +326,12 @@ struct LogMessage {
 };
 
 
+/**
+ * @brief LogMessageImpl is the implementation of the LogMessage.
+ * @details LogMessageImpl is the implementation of the LogMessage. It stores
+ * the arguments in a tuple and provides the str() function to convert the log
+ * message to a string. All fields could be accessed by getRawLog() or getData().
+ */
 template <typename... T>
 struct LogMessageImpl final : LogMessage {
     std::tuple<T...> args;
@@ -332,6 +397,24 @@ struct PushResult {
     LogStream&  stream;
 };
 
+/**
+ * @brief LogIterator is a class to iterate the log messages.
+ * @details LogIterator is a class to iterate the log messages. You can also filter
+ * the log messages by message, function name, and line number.
+ *
+ * An example of using LogIterator:
+ *    for (int i = 0; i < 10; ++i)
+ *      log("i = {i}", i);
+ *
+ *    LogIterator it = LogStream::getDefault().begin("Hello, world!");
+ *    LogIterator end = LogStream::getDefault().end();
+ *
+ *    for (; it != end; ++it) {
+ *      LogMessage& msg = *it;
+ *      std::cout << msg.str() << std::endl;   // "i = {i}"
+ *      std::cout << it.get<int>("i") << std::endl; // "0", "1", "2", ...
+ *    }
+ */
 class LogIterator {
 public:
     LogIterator() : p(nullptr), q(nullptr) {}
@@ -381,6 +464,14 @@ protected:
     int         line_filter = -1;
 };
 
+/**
+ * @brief LogStream is a class to manage the log messages.
+ * @details LogStream is a class to manage the log messages. It can be used to
+ * create log messages and push them to the logger. A default LogStream is
+ * created when the first time you call getDefault() function (or first log happens).
+ * You can also adjust the way to flush the messages and how the log messages are
+ * written to the log file.
+ */
 class LogStream {
 public:
     LogStream();
@@ -395,6 +486,28 @@ public:
         SPLIT_BY_CATEGORY = 1 << 2
     };
 
+
+    /**
+     * @brief push a log message to the stream
+     * @tparam T The types of the arguments
+     * @param args The arguments
+     * @return PushResult The result of the push
+     *
+     * This function is used to push a log message to the stream. You can pass
+     * any type of arguments to this function and it will create a log message
+     * with the arguments. The log message is not written to the log file until
+     * the stream is flushed.
+     *
+     * The log message is structured as a tuple of the arguments in the inner
+     * implementation class LogMessageImpl. After the log message is created, it
+     * used type erasure to return a LogMessage pointer to the caller.
+     * 
+     * The stored data type is determined by the to_store_type_t<T> template.
+     * For all the string type in raw pointer like const char* or char[],
+     * it will be converted to std::string.
+     * All reference type (including right value reference) will be converted 
+     * to the original type.
+     */
     template <typename... T>
     PushResult push(T&&... args) {
         // unsigned size = sizeof(LogMessageImpl<T...>);
@@ -409,6 +522,18 @@ public:
         return {msg, size, *this};
     }
 
+
+    /**
+     * @brief get a log message from the stream
+     * @tparam T The type of the log message
+     * @param func The function name of the log message
+     * @param line The line number of the log message
+     * @param name The name of field you want to get
+     *
+     * This function is used to get a log message from the stream and extract
+     * the field with the name. The function will return the field with the type
+     * T. However, this type must be specified by the caller.
+     */
     template <typename T>
     T getLog(std::string func, unsigned line, std::string name) {
         void* data = getRawLog(func, line, name);
@@ -416,15 +541,23 @@ public:
         return T{};
     }
 
+    /**
+     * @brief get a log message from the stream
+     * @tparam T The type of the log message
+     * @param func The function name of the log message
+     * @param msg The message of the log message
+     * @param name The name of field you want to get
+     *
+     * This function is used to get a log message from the stream and extract
+     * the field with the name. The function will return the field with the type
+     * T. However, this type must be specified by the caller.
+     */
     template <typename T>
     T getLog(std::string func, std::string msg, std::string name) {
         void* data = getRawLog(func, msg, name);
         if (data) return *(T*)(data);
         return T{};
     }
-
-    void* getRawLog(std::string func, unsigned line, std::string name);
-    void* getRawLog(std::string func, std::string msg, std::string name);
 
     LogIterator begin(std::string message = "", std::string function_name = "", int line = -1) {
         return LogIterator(*this, message, function_name, line);
@@ -464,8 +597,15 @@ private:
 #ifndef ZEROERR_NO_THREAD_SAFE
     std::mutex* mutex;
 #endif
+
+    // The implementation of alloc objects by giving a size
     void* alloc_block(unsigned size);
     void* alloc_block_lockfree(unsigned size);
+
+    // The implementation of getLog which returns a raw pointer
+    // This way can reduce the overhead of code generation by template
+    void* getRawLog(std::string func, unsigned line, std::string name);
+    void* getRawLog(std::string func, std::string msg, std::string name);
 };
 
 
