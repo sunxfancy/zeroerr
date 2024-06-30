@@ -29,10 +29,13 @@ public:
     void Mutate(Rng&, CorpusType& v, bool) const override { v = !v; }
 };
 
+
 template <typename T>
-class Arbitrary<
-    T, typename std::enable_if<std::is_integral<T>::value && !std::numeric_limits<T>::is_signed,
-                               void>::type> : public DomainConvertable<T> {
+using is_unsigned_int =
+    typename std::enable_if<std::is_integral<T>::value && !std::numeric_limits<T>::is_signed,
+                            void>::type;
+template <typename T>
+class Arbitrary<T, is_unsigned_int<T>> : public DomainConvertable<T> {
 public:
     using ValueType  = T;
     using CorpusType = T;
@@ -44,11 +47,13 @@ public:
     }
 };
 
+template <typename T>
+using is_signed_int =
+    typename std::enable_if<std::is_integral<T>::value && std::numeric_limits<T>::is_signed,
+                            void>::type;
 
 template <typename T>
-class Arbitrary<T, typename std::enable_if<
-                       std::is_integral<T>::value && std::numeric_limits<T>::is_signed, void>::type>
-    : public DomainConvertable<T> {
+class Arbitrary<T, is_signed_int<T>> : public DomainConvertable<T> {
 public:
     using ValueType  = T;
     using CorpusType = T;
@@ -61,10 +66,10 @@ public:
     }
 };
 
-
 template <typename T>
-class Arbitrary<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
-    : public DomainConvertable<T> {
+using is_float_point = typename std::enable_if<std::is_floating_point<T>::value, void>::type;
+template <typename T>
+class Arbitrary<T, is_float_point<T>> : public DomainConvertable<T> {
 public:
     using ValueType  = T;
     using CorpusType = T;
@@ -80,9 +85,11 @@ public:
 
 
 template <typename T>
-class Arbitrary<
-    T, typename std::enable_if<detail::is_specialization<T, std::basic_string>::value>::type>
-    : public Domain<T, std::vector<typename T::value_type>> {
+using is_string =
+    typename std::enable_if<detail::is_specialization<T, std::basic_string>::value>::type;
+
+template <typename T>
+class Arbitrary<T, is_string<T>> : public Domain<T, std::vector<typename T::value_type>> {
     Arbitrary<std::vector<typename T::value_type>> impl;
 
 public:
@@ -103,19 +110,21 @@ public:
 
 
 template <typename T>
-class Arbitrary<
-    T, typename std::enable_if<!detail::is_specialization<T, std::basic_string>::value,
-                               decltype(
-                                   // Iterable
-                                   T().begin(), T().end(), T().size(),
-                                   // Values are mutable
-                                   // This rejects associative containers, for example
-                                   // *T().begin() = std::declval<value_type_t<T>>(),
-                                   // Can insert and erase elements
-                                   T().insert(T().end(), std::declval<typename T::value_type>()),
-                                   T().erase(T().begin()),
-                                   //
-                                   (void)0)>::type>
+using is_modifable =
+    typename std::enable_if<!detail::is_specialization<T, std::basic_string>::value,
+                            decltype(
+                                // Iterable
+                                T().begin(), T().end(), T().size(),
+                                // Values are mutable
+                                // This rejects associative containers, for example
+                                // *T().begin() = std::declval<value_type_t<T>>(),
+                                // Can insert and erase elements
+                                T().insert(T().end(), std::declval<typename T::value_type>()),
+                                T().erase(T().begin()),
+                                //
+                                (void)0)>::type;
+template <typename T>
+class Arbitrary<T, is_modifable<T>>
     : public SequenceContainerOf<T, Arbitrary<typename T::value_type>> {
 public:
     Arbitrary()

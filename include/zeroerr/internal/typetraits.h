@@ -71,34 +71,40 @@ struct is_specialization<Ref<Args...>, Ref> : std::true_type {};
 
 // Check if a type is stream writable, i.e., std::cout << foo;
 // Usage: is_streamable<std::ostream, int>::value
+template <typename S, typename T>
+using has_stream_operator = void_t<decltype(std::declval<S&>() << std::declval<T>())>;
+
 template <typename S, typename T, typename = void>
 struct is_streamable : std::false_type {};
 
 template <typename S, typename T>
-struct is_streamable<S, T, void_t<decltype(std::declval<S&>() << std::declval<T>())>>
-    : std::true_type {};
+struct is_streamable<S, T, has_stream_operator<S, T>> : std::true_type {};
 
 
 // Check if a type is a container type
 // Usage: is_container<std::vector<int>>::value
+template <typename T>
+using has_begin_end =
+    void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end())>;
+
 template <typename T, typename = void>
 struct is_container : std::false_type {};
 
 template <typename T>
-struct is_container<T,
-                    void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end())>>
-    : std::true_type {};
+struct is_container<T, has_begin_end<T>> : std::true_type {};
 
+
+template <typename T>
+using has_begin_end_find_insert =
+    void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end()),
+           decltype(std::declval<T>().find(std::declval<typename T::key_type>())),
+           decltype(std::declval<T>().insert(std::declval<typename T::value_type>()))>;
 
 template <typename T, typename = void>
 struct is_associative_container : std::false_type {};
 
 template <typename T>
-struct is_associative_container<
-    T, void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end()),
-              decltype(std::declval<T>().find(std::declval<typename T::key_type>())),
-              decltype(std::declval<T>().insert(std::declval<typename T::value_type>()))>>
-    : std::true_type {};
+struct is_associative_container<T, has_begin_end_find_insert<T>> : std::true_type {};
 
 
 #if ZEROERR_CXX_STANDARD >= 17
@@ -124,13 +130,15 @@ struct is_array<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
 
 
 // Check if a type has the element type as std::pair
+template <typename T>
+using has_pair_type =
+    void_t<typename T::value_type, decltype(std::declval<typename T::value_type>().first),
+           decltype(std::declval<typename T::value_type>().second)>;
 template <typename T, typename = void>
 struct ele_type_is_pair : std::false_type {};
 
 template <typename T>
-struct ele_type_is_pair<
-    T, void_t<typename T::value_type, decltype(std::declval<typename T::value_type>().first),
-              decltype(std::declval<typename T::value_type>().second)>> : std::true_type {};
+struct ele_type_is_pair<T, has_pair_type<T>> : std::true_type {};
 
 template <typename T, typename V = void>
 struct to_store_type {
@@ -143,13 +151,14 @@ struct to_store_type<const char*> {
 };
 
 template <>
-struct to_store_type<const char(&)[]> {
+struct to_store_type<const char (&)[]> {
     using type = std::string;
 };
 
-
 template <typename T>
-struct to_store_type<T&, typename std::enable_if<!std::is_array<T>::value>::type> {
+using is_not_array = typename std::enable_if<!std::is_array<T>::value>::type;
+template <typename T>
+struct to_store_type<T&, is_not_array<T>> {
     using type = T;
 };
 
@@ -180,7 +189,7 @@ struct visit_impl<0> {
 };
 
 template <typename F, typename... Ts>
-void visit_at(std::tuple<Ts...> const& tup, size_t idx, F&& fun) {
+void visit_at(const std::tuple<Ts...>& tup, size_t idx, F&& fun) {
     visit_impl<sizeof...(Ts)>::visit(tup, idx, std::forward<F>(fun));
 }
 
@@ -208,7 +217,7 @@ struct visit2_impl<0> {
 };
 
 template <typename F, typename... Ts, typename... T2s>
-void visit2_at(std::tuple<Ts...> const& tup1, std::tuple<T2s...> const& tup2, size_t idx, F&& fun) {
+void visit2_at(const std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
     visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
 }
 
@@ -218,12 +227,12 @@ void visit2_at(std::tuple<Ts...>& tup1, std::tuple<T2s...>& tup2, size_t idx, F&
 }
 
 template <typename F, typename... Ts, typename... T2s>
-void visit2_at(std::tuple<Ts...> const& tup1, std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
+void visit2_at(const std::tuple<Ts...>& tup1, std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
     visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
 }
 
 template <typename F, typename... Ts, typename... T2s>
-void visit2_at(std::tuple<Ts...>& tup1, std::tuple<T2s...> const& tup2, size_t idx, F&& fun) {
+void visit2_at(std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
     visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
 }
 

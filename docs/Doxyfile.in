@@ -3,19 +3,17 @@ PROJECT_NAME = "ZeroErr"
 GENERATE_LATEX = NO
 BUILTIN_STL_SUPPORT = YES
 
-# output
-GENERATE_XML = YES
-OUTPUT_LANGUAGE = Chinese
-XML_OUTPUT = zh
-OUTPUT_DIRECTORY = @CMAKE_CURRENT_BINARY_DIR@/doc_doxygen/
-EXCLUDE_SYMBOLS = @7 std ContainerOf
-
 # input
 FULL_PATH_NAMES = YES
 STRIP_FROM_PATH = @CMAKE_SOURCE_DIR@
 RECURSIVE = YES
-INPUT = @CMAKE_SOURCE_DIR@/src/  @CMAKE_SOURCE_DIR@/include/  @CMAKE_SOURCE_DIR@/docs/zh
+INPUT = @CMAKE_SOURCE_DIR@/src/  @CMAKE_SOURCE_DIR@/include/  @CMAKE_SOURCE_DIR@/docs/pages/zh
 FILE_PATTERNS = *.h *.hpp *.cpp *.md
+PREDEFINED = ZEROERR_USE_SHORT_LOG_MACRO
+
+# output
+OUTPUT_LANGUAGE  = Chinese
+OUTPUT_DIRECTORY = @CMAKE_CURRENT_BINARY_DIR@/doc_doxygen/zh/
 
 # examples
 EXAMPLE_PATH = @CMAKE_SOURCE_DIR@/examples
@@ -24,7 +22,26 @@ EXAMPLE_PATTERNS = *.cpp
 # Html related stuff, optional
 SHOW_NAMESPACES = YES
 EXTRACT_ALL = YES
-GENERATE_HTML = NO
+GENERATE_HTML = YES
 
 # images
 IMAGE_PATH = @CMAKE_SOURCE_DIR@/docs/fig
+
+# for awesome theme
+GENERATE_TREEVIEW      = YES # optional. Also works without treeview
+DISABLE_INDEX          = NO
+FULL_SIDEBAR           = NO
+HTML_COLORSTYLE        = LIGHT 
+HTML_HEADER            = @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-custom/header.html
+HTML_EXTRA_STYLESHEET  = @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-awesome.css \
+                         @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-custom/custom.css \
+                         @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-awesome-sidebar-only.css \
+                         @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-awesome-sidebar-only-darkmode-toggle.css \
+                         @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-custom/custom-alternative.css
+                         
+HTML_EXTRA_FILES       = @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-awesome-darkmode-toggle.js \
+                         @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-awesome-fragment-copy-button.js \
+                         @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-awesome-paragraph-link.js \
+                         @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-custom/toggle-alternative-theme.js \
+                         @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-awesome-interactive-toc.js \
+                         @CMAKE_SOURCE_DIR@/docs/doxygen-awesome-css/doxygen-awesome-tabs.js

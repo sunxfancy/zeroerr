@@ -60,10 +60,12 @@ template <typename T, typename = void>
 struct has_extension : std::false_type {};
 
 template <typename T>
-struct has_extension<
-    T, void_t<decltype(zeroerr::PrinterExt(std::declval<zeroerr::Printer&>(), std::declval<T&>(), 0,
-                                           nullptr, zeroerr::rank<zeroerr::max_rank>()))>>
-    : std::true_type {};
+using has_printer_ext =
+    void_t<decltype(zeroerr::PrinterExt(std::declval<zeroerr::Printer&>(), std::declval<T&>(), 0,
+                                        nullptr, zeroerr::rank<zeroerr::max_rank>()))>;
+
+template <typename T>
+struct has_extension<T, has_printer_ext<T>> : std::true_type {};
 
 }  // namespace detail
 
