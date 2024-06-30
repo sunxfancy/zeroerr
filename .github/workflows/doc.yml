@@ -22,30 +22,8 @@ jobs:
       - name: Install doxygen
         run: sudo apt-get install -y doxygen graphviz
 
-      - name: Set permission
-        run: chmod a+x docs/.doxybook/doxybook2
-
       - name: Build project
-        run: make doc-build
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          # 选择要使用的 node 版本
-          node-version: 20
-          # 缓存 yarn 依赖
-          cache: yarn
-
-      - name: Setup yarn
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install 
-
-      # 运行构建脚本
-      - name: Build production bundle
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: run cmake:docs # will run `yarn run build` command
+        run: make doc
 
       # 查看 workflow 的文档来获取更多信息
       # @see https://github.com/crazy-max/ghaction-github-pages
@@ -55,7 +33,7 @@ jobs:
           # 部署到 gh-pages 分支
           target_branch: gh-pages
           # 部署目录为 VuePress 的默认输出目录
-          build_dir: build-linux-doc/docs/.vuepress/dist
+          build_dir: build-linux-doc/doc_doxygen
         env:
           # @see https://docs.github.com/cn/actions/reference/authentication-in-a-workflow#about-the-github_token-secret
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

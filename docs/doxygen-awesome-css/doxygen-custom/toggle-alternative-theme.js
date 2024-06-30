@@ -10,3 +10,13 @@ function toggle_alternative_theme() {
         original_theme_active = true;
     }
 }
+
+function switch_language() {
+    const currentUrl = window.location.href;
+    let isEn = currentUrl.match(/\/en\//);
+    if (isEn) {
+        window.location.href = currentUrl.replace(/\/en\//, '/zh/'); 
+    } else {
+        window.location.href = currentUrl.replace(/\/zh\//, '/en/');
+    }
+}

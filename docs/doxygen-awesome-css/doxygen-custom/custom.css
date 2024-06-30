@@ -55,3 +55,13 @@ html.dark-mode .bordered_image object[type="image/svg+xml"] /* doxygen 1.9.3 */ 
 .title_screenshot .caption {
     display: none;
 }
+
+.languageSwitch {
+    float: right;
+    margin-top: -33px;
+}
+
+.languageSwitch button {
+    border-radius: 20px;
+    padding: var(--spacing-small) var(--spacing-medium);
+}
