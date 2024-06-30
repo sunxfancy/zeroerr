@@ -5,7 +5,7 @@ cd $SCRIPTPATH/../
 
 set -e
 
-CMD_TO_RUN="make && make test && make doc-build && cp build/linux/zeroerr.hpp ./zeroerr.hpp"
+CMD_TO_RUN="make && make test && make doc && cp build/linux/zeroerr.hpp ./zeroerr.hpp"
 if [ -f "/etc/wsl.conf" ]; then
     bash -c "$CMD_TO_RUN"
 else

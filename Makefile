@@ -1,4 +1,4 @@
-.PHONY: all linux windows test linux-test windows-test doc-build doc-dev doc copy clean
+.PHONY: all linux windows test linux-test windows-test doc clean
 
 all: linux windows
 
@@ -49,20 +49,11 @@ linux-release: build/linux-release/Makefile
 bench: linux-release
 	cd build/linux-release/test && ./unittest -b --testcase=speedtest
 
-doc-dev:
-	yarn run cmake:dev
-
-doc-build:
+doc:
 	mkdir -p build-linux-doc
 	cd build-linux-doc && cmake .. -DCMAKE_BUILD_TYPE=Debug \
 		-DBUILD_EXAMPLES=ON -DBUILD_DOC=ON && \
 		cmake --build . --target doxy -j `nproc`
-
-doc: doc-build
-	yarn run cmake:docs
-
-copy:
-	cp -r docs/.vuepress  build-linux-doc/docs/
 
 clean:
 	rm -rf build

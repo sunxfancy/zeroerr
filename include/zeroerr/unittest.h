@@ -275,14 +275,16 @@ struct regReporter {
 
 /**
  * @brief CombinationalTest is a class that is used to cross test a few lists of arguments.
- * One example to use:
+ * One example
+ * ```cpp
  *   TestArgs<int> a{1, 2, 3};
  *   TestArgs<int> b{4, 5, 6};
  *   CombinationalTest test([&]{
  *       CHECK(targetFunc(a, b) == (a+b));
  *   });
  *   test(a, b);
- *
+ * ```
+ * 
  * This will test the targetFunc with all the combinations of a and b, e.g. (1,4), (1,5), (1,6),
  * (2,4), (2,5) ... etc.
  */

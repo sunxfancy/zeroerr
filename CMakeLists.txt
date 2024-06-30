@@ -137,37 +137,14 @@ if(MAIN_PROJECT)
             COMMENT "Generating API documentation with Doxygen"
             VERBATIM)
 
-        add_custom_target(doxybook2
-            COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/docs/zh
-            COMMAND ${CMAKE_SOURCE_DIR}/docs/.doxybook/doxybook2
-            --config ${CMAKE_SOURCE_DIR}/docs/.doxybook/config.json
-            --input ${CMAKE_CURRENT_BINARY_DIR}/doc_doxygen/zh
-            --output ${CMAKE_CURRENT_BINARY_DIR}/docs/zh
-            DEPENDS doc_doxygen
-        )
-
-        add_custom_target(doxybook2-en
-            COMMAND mkdir -p ${CMAKE_CURRENT_BINARY_DIR}/docs/en
-            COMMAND ${CMAKE_SOURCE_DIR}/docs/.doxybook/doxybook2
-            --config ${CMAKE_SOURCE_DIR}/docs/.doxybook/config.en.json
-            --input ${CMAKE_CURRENT_BINARY_DIR}/doc_doxygen/en
-            --output ${CMAKE_CURRENT_BINARY_DIR}/docs/en
-            DEPENDS doc_doxygen_en
-        )
-
         if(BUILD_DOC)
             set(config_build_doc ALL)
         else()
             set(config_build_doc "")
         endif()
 
-        add_custom_target(doxy ${config_build_doc} DEPENDS doxybook2 doxybook2-en
-            COMMAND cp -r ${CMAKE_SOURCE_DIR}/docs/.vuepress ${CMAKE_CURRENT_BINARY_DIR}/docs
-            COMMAND cp -r ${CMAKE_SOURCE_DIR}/docs/fig ${CMAKE_CURRENT_BINARY_DIR}/docs/zh
-            COMMAND cp -r ${CMAKE_SOURCE_DIR}/docs/fig ${CMAKE_CURRENT_BINARY_DIR}/docs/en
-            COMMAND cp ${CMAKE_SOURCE_DIR}/docs/en/index.md ${CMAKE_CURRENT_BINARY_DIR}/docs/en/index.md
-            COMMAND cp ${CMAKE_SOURCE_DIR}/docs/zh/index.md ${CMAKE_CURRENT_BINARY_DIR}/docs/zh/index.md
-        )
+        add_custom_target(doxy ${config_build_doc} DEPENDS doc_doxygen doc_doxygen_en
+            COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/docs/fig ${CMAKE_CURRENT_BINARY_DIR}/doc_doxygen/fig)
 
     else(DOXYGEN_FOUND)
         message("Doxygen need to be installed to generate the doxygen documentation")
