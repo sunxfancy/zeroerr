@@ -15,8 +15,8 @@ function switch_language() {
     const currentUrl = window.location.href;
     let isEn = currentUrl.match(/\/en\//);
     if (isEn) {
-        window.location.href = currentUrl.replace(/\/en\//, '/zh/'); 
+        window.location.href = currentUrl.replace(/\/en\//, '/zh/').replace(/_en_/, '_zh_'); 
     } else {
-        window.location.href = currentUrl.replace(/\/zh\//, '/en/');
+        window.location.href = currentUrl.replace(/\/zh\//, '/en/').replace(/_zh_/, '_en_');
     }
 }

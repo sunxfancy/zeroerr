@@ -64,4 +64,9 @@ html.dark-mode .bordered_image object[type="image/svg+xml"] /* doxygen 1.9.3 */ 
 .languageSwitch button {
     border-radius: 20px;
     padding: var(--spacing-small) var(--spacing-medium);
+    cursor: pointer;
+}
+
+.languageSwitch button:hover {
+    background: var(--primary-light-color);
 }
