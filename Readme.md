@@ -11,7 +11,7 @@ Hope you get 0 errors and 0 warnings everyday!
 
 ZeroErr is a smart assertion library, a lightweight unit testing framework and a structure logging framework. It integrates those features and provided an unite and clear interface for separated usage or combined usage. 
 
-[English Documentation](https://sunxfancy.github.io/zeroerr/en/) | [项目文档](https://sunxfancy.github.io/zeroerr/zh/)
+[English Documentation](https://sunxfancy.github.io/zeroerr/en/html/) | [项目文档](https://sunxfancy.github.io/zeroerr/zh/html/)
 
 Note: The project is currently in the experimental stage, and the API may change significantly. It is not recommended to use it in a production environment.
 
