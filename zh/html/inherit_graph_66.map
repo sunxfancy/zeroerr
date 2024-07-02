@@ -1,0 +1,4 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="node1" href="$structzeroerr_1_1LogMessage.html" title="LogMessage is a class to store the log message." alt="" coords="5,5,163,32"/>
+<area shape="rect" id="node2" href="$structzeroerr_1_1LogMessageImpl.html" title="LogMessageImpl is the implementation of the LogMessage." alt="" coords="211,5,435,32"/>
+</map>

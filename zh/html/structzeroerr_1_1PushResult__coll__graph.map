@@ -1,0 +1,9 @@
+<map id="zeroerr::PushResult" name="zeroerr::PushResult">
+<area shape="rect" id="node1" title=" " alt="" coords="145,468,293,495"/>
+<area shape="rect" id="node2" href="$structzeroerr_1_1LogMessage.html" title="LogMessage is a class to store the log message." alt="" coords="8,379,165,405"/>
+<area shape="rect" id="node3" href="$structzeroerr_1_1LogInfo.html" title="LogInfo is a struct to store the meta data of the log message." alt="" coords="25,289,149,316"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,185,168,227"/>
+<area shape="rect" id="node5" title=" " alt="" coords="43,96,130,123"/>
+<area shape="rect" id="node6" title=" " alt="" coords="17,5,156,47"/>
+<area shape="rect" id="node7" href="$classzeroerr_1_1LogStream.html" title="LogStream is a class to manage the log messages." alt="" coords="189,379,336,405"/>
+</map>

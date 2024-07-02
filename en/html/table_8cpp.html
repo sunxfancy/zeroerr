@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.1"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: src/table.cpp File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.1 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('table_8cpp.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle">
+<div class="title">table.cpp File Reference</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="table_8h_source.html">zeroerr/table.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="assert_8h_source.html">zeroerr/assert.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="log_8h_source.html">zeroerr/log.h</a>&quot;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;map&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for table.cpp:</div>
+<div class="dyncontent">
+<div class="center"><img src="table_8cpp__incl.png" border="0" usemap="#asrc_2table_8cpp" alt=""/></div>
+<map name="asrc_2table_8cpp" id="asrc_2table_8cpp">
+<area shape="rect" title=" " alt="" coords="1533,5,1639,32"/>
+<area shape="rect" href="table_8h.html" title=" " alt="" coords="929,155,1046,181"/>
+<area shape="rect" title=" " alt="" coords="1715,453,1790,480"/>
+<area shape="rect" href="assert_8h.html" title=" " alt="" coords="449,80,573,107"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="1297,155,1401,181"/>
+<area shape="rect" title=" " alt="" coords="1841,229,1891,256"/>
+<area shape="rect" title=" " alt="" coords="1966,80,2051,107"/>
+<area shape="rect" href="dbg_8h.html" title=" " alt="" coords="689,229,797,256"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="748,453,925,480"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="881,304,995,331"/>
+<area shape="rect" title=" " alt="" coords="1116,453,1192,480"/>
+<area shape="rect" title=" " alt="" coords="1407,453,1466,480"/>
+<area shape="rect" title=" " alt="" coords="1076,229,1139,256"/>
+<area shape="rect" href="color_8h.html" title=" " alt="" coords="779,379,894,405"/>
+<area shape="rect" title=" " alt="" coords="1016,453,1071,480"/>
+<area shape="rect" title=" " alt="" coords="625,304,705,331"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="1172,379,1373,405"/>
+<area shape="rect" title=" " alt="" coords="1227,453,1319,480"/>
+<area shape="rect" href="format_8h.html" title=" " alt="" coords="1689,229,1817,256"/>
+<area shape="rect" href="debugbreak_8h.html" title=" " alt="" coords="5,155,220,181"/>
+<area shape="rect" href="decomposition_8h.html" title=" " alt="" coords="582,155,817,181"/>
+<area shape="rect" title=" " alt="" coords="245,155,311,181"/>
+<area shape="rect" title=" " alt="" coords="336,155,423,181"/>
+<area shape="rect" title=" " alt="" coords="125,229,199,256"/>
+<area shape="rect" title=" " alt="" coords="28,229,101,256"/>
+<area shape="rect" href="threadsafe_8h.html" title=" " alt="" coords="1457,229,1665,256"/>
+<area shape="rect" title=" " alt="" coords="1315,229,1382,256"/>
+<area shape="rect" title=" " alt="" coords="1558,304,1625,331"/>
+<area shape="rect" title=" " alt="" coords="1470,304,1534,331"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1StyleManager.html">zeroerr::StyleManager</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacezeroerr"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a428f8207615465afdfcf1d31547ffef3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a428f8207615465afdfcf1d31547ffef3">left</a>&#160;&#160;&#160;(c.show_lr_border ? s.m_args[p] : &quot;&quot;)</td></tr>
+<tr class="separator:a428f8207615465afdfcf1d31547ffef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4452d769b760cabbdf6acbfaf8826320"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a4452d769b760cabbdf6acbfaf8826320">space</a>&#160;&#160;&#160;s.m_args[p + 1]</td></tr>
+<tr class="separator:a4452d769b760cabbdf6acbfaf8826320"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d5b153eb806e86d4bf91a3cd15fc043"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a7d5b153eb806e86d4bf91a3cd15fc043">bar</a>&#160;&#160;&#160;(c.show_col_split ? s.m_args[p + 2] : s.m_args[p + 1])</td></tr>
+<tr class="separator:a7d5b153eb806e86d4bf91a3cd15fc043"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae545bf658b2c876abbbae55a7d12875f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#ae545bf658b2c876abbbae55a7d12875f">right</a>&#160;&#160;&#160;(c.show_lr_border ? s.m_args[p + 3] : &quot;&quot;)</td></tr>
+<tr class="separator:ae545bf658b2c876abbbae55a7d12875f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66d3fd8f1383b174b0226daecfb6c487"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a66d3fd8f1383b174b0226daecfb6c487">last</a>&#160;&#160;&#160;(i == header.size() - 1)</td></tr>
+<tr class="separator:a66d3fd8f1383b174b0226daecfb6c487"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cc5731012321f47c611df9bd65ea7e9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a4cc5731012321f47c611df9bd65ea7e9">for_row</a></td></tr>
+<tr class="separator:a4cc5731012321f47c611df9bd65ea7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cfcc50e0d455a2d6602d9218cc8c43b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a2cfcc50e0d455a2d6602d9218cc8c43b">rep</a>(k,  t)&#160;&#160;&#160;_rept(k, t, s)</td></tr>
+<tr class="separator:a2cfcc50e0d455a2d6602d9218cc8c43b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a167a622ca5db934eb13fff8f07993401"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a167a622ca5db934eb13fff8f07993401">remain</a>(k)&#160;&#160;&#160;(col_width[i] - static_cast&lt;unsigned&gt;(k.size()))</td></tr>
+<tr class="separator:a167a622ca5db934eb13fff8f07993401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a80ae33f2d450e4b9d5dc2dd910503a96"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a80ae33f2d450e4b9d5dc2dd910503a96">zeroerr::_rept</a> (unsigned k, std::string j, Table::Style &amp;)</td></tr>
+<tr class="separator:a80ae33f2d450e4b9d5dc2dd910503a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a7d5b153eb806e86d4bf91a3cd15fc043"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d5b153eb806e86d4bf91a3cd15fc043">&#9670;&nbsp;</a></span>bar</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define bar&#160;&#160;&#160;(c.show_col_split ? s.m_args[p + 2] : s.m_args[p + 1])</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4cc5731012321f47c611df9bd65ea7e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cc5731012321f47c611df9bd65ea7e9">&#9670;&nbsp;</a></span>for_row</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define for_row</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">if</span> (!skip_lb)        \</div>
+<div class="line">        ss &lt;&lt; std::endl; \</div>
+<div class="line">    else                 \</div>
+<div class="line">        skip_lb = <span class="keyword">false</span>; \</div>
+<div class="line">    ss &lt;&lt; <a class="code" href="table_8cpp.html#a428f8207615465afdfcf1d31547ffef3">left</a>;          \</div>
+<div class="line">    for (<span class="keywordtype">size_t</span> i = 0; i &lt; header.size(); ++i)</div>
+<div class="ttc" id="atable_8cpp_html_a428f8207615465afdfcf1d31547ffef3"><div class="ttname"><a href="table_8cpp.html#a428f8207615465afdfcf1d31547ffef3">left</a></div><div class="ttdeci">#define left</div><div class="ttdef"><b>Definition:</b> table.cpp:250</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a66d3fd8f1383b174b0226daecfb6c487"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66d3fd8f1383b174b0226daecfb6c487">&#9670;&nbsp;</a></span>last</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define last&#160;&#160;&#160;(i == header.size() - 1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a428f8207615465afdfcf1d31547ffef3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a428f8207615465afdfcf1d31547ffef3">&#9670;&nbsp;</a></span>left</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define left&#160;&#160;&#160;(c.show_lr_border ? s.m_args[p] : &quot;&quot;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a167a622ca5db934eb13fff8f07993401"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a167a622ca5db934eb13fff8f07993401">&#9670;&nbsp;</a></span>remain</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define remain</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">k</td><td>)</td>
+          <td>&#160;&#160;&#160;(col_width[i] - static_cast&lt;unsigned&gt;(k.size()))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2cfcc50e0d455a2d6602d9218cc8c43b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cfcc50e0d455a2d6602d9218cc8c43b">&#9670;&nbsp;</a></span>rep</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define rep</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">k, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">t&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;_rept(k, t, s)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae545bf658b2c876abbbae55a7d12875f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae545bf658b2c876abbbae55a7d12875f">&#9670;&nbsp;</a></span>right</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define right&#160;&#160;&#160;(c.show_lr_border ? s.m_args[p + 3] : &quot;&quot;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4452d769b760cabbdf6acbfaf8826320"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4452d769b760cabbdf6acbfaf8826320">&#9670;&nbsp;</a></span>space</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define space&#160;&#160;&#160;s.m_args[p + 1]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="table_8cpp.html">table.cpp</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+  </ul>
+</div>
+</body>
+</html>

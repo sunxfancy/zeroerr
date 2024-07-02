@@ -1,0 +1,10 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="node1" href="$classzeroerr_1_1Domain.html" title=" " alt="" coords="5,221,217,262"/>
+<area shape="rect" id="node2" href="$classzeroerr_1_1DomainConvertable.html" title=" " alt="" coords="265,167,509,193"/>
+<area shape="rect" id="node7" href="$classzeroerr_1_1DomainConvertable.html" title=" " alt="" coords="284,250,491,291"/>
+<area shape="rect" id="node3" href="$classzeroerr_1_1Arbitrary_3_01T_00_01is__float__point_3_01T_01_4_01_4.html" title=" " alt="" coords="583,5,723,61"/>
+<area shape="rect" id="node4" href="$classzeroerr_1_1Arbitrary_3_01T_00_01is__signed__int_3_01T_01_4_01_4.html" title=" " alt="" coords="557,86,748,127"/>
+<area shape="rect" id="node5" href="$classzeroerr_1_1Arbitrary_3_01T_00_01is__unsigned__int_3_01T_01_4_01_4.html" title=" " alt="" coords="575,152,730,208"/>
+<area shape="rect" id="node6" href="$classzeroerr_1_1InRange.html" title=" " alt="" coords="569,232,736,259"/>
+<area shape="rect" id="node8" href="$classzeroerr_1_1Arbitrary_3_01bool_01_4.html" title=" " alt="" coords="586,283,719,325"/>
+</map>
