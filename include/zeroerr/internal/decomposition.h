@@ -9,7 +9,15 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 ZEROERR_SUPPRESS_COMPARE
 
 #ifndef ZEROERR_DISABLE_COMPLEX_AND_OR
-#define AND && zeroerr::ExpressionDecomposer() <<
+/**
+ * AND and OR are used to combine expressions in a more readable way.
+ * For example:
+ *   CHECK(1 == 1 AND 2 == 2);
+ *
+ * In its implementation, the expression is decomposed to
+ *   ExpressionDecomposer() << 1 == 1 && ExpressionDecomposer() << 2 == 2
+ */
+#define AND &&zeroerr::ExpressionDecomposer() <<
 #define OR  || zeroerr::ExpressionDecomposer() <<
 #endif
 
@@ -27,8 +35,8 @@ struct deferred_false {
 
 #define ZEROERR_EXPRESSION_COMPARISON(op, op_name)                                                 \
     template <typename R>                                                                          \
-    ZEROERR_SFINAE_OP(Expression<R>, op)                                \
-    operator op(R&& rhs) {                                                                         \
+    ZEROERR_SFINAE_OP(Expression<R>, op)                                                           \
+    operator op(R && rhs) {                                                                        \
         std::stringstream ss;                                                                      \
         Printer           print(ss);                                                               \
         print.isCompact  = true;                                                                   \
@@ -44,8 +52,8 @@ struct deferred_false {
     }                                                                                              \
     template <typename R,                                                                          \
               typename std::enable_if<!std::is_rvalue_reference<R>::value, void>::type* = nullptr> \
-    ZEROERR_SFINAE_OP(Expression<const R&>, op)                                \
-    operator op(const R& rhs) {                                                                    \
+    ZEROERR_SFINAE_OP(Expression<const R&>, op)                                                    \
+    operator op(const R & rhs) {                                                                   \
         std::stringstream ss;                                                                      \
         Printer           print(ss);                                                               \
         print.isCompact  = true;                                                                   \
@@ -107,17 +115,15 @@ struct ExprResult {
 };
 
 namespace details {
-    template <typename T>
-    typename std::enable_if<std::is_convertible<T, bool>::value, bool>::type
-    getBool(T&& lhs) {
-        return static_cast<bool>(lhs);
-    }
+template <typename T>
+typename std::enable_if<std::is_convertible<T, bool>::value, bool>::type getBool(T&& lhs) {
+    return static_cast<bool>(lhs);
+}
 
-    template <typename T>
-    typename std::enable_if<!std::is_convertible<T, bool>::value, bool>::type
-    getBool(T&&) {
-        return true;
-    }
+template <typename T>
+typename std::enable_if<!std::is_convertible<T, bool>::value, bool>::type getBool(T&&) {
+    return true;
+}
 }  // namespace details
 
 template <typename L>
@@ -129,7 +135,7 @@ struct Expression {
     explicit Expression(L&& in) : lhs(static_cast<L&&>(in)) { res = details::getBool(lhs); }
     explicit Expression(L&& in, bool res, std::string&& decomp)
         : lhs(static_cast<L&&>(in)), res(res), decomp(static_cast<std::string&&>(decomp)) {}
-    
+
     operator ExprResult() {
         if (decomp.empty()) {
             Printer print;
@@ -169,6 +175,10 @@ struct Expression {
     ZEROERR_FORBIT_EXPRESSION(Expression, <<)
     ZEROERR_FORBIT_EXPRESSION(Expression, >>)
 };
+
+#undef ZEROERR_EXPRESSION_COMPARISON
+#undef ZEROERR_EXPRESSION_ANDOR
+#undef ZEROERR_FORBIT_EXPRESSION
 
 struct ExpressionDecomposer {
     // The right operator for capturing expressions is "<=" instead of "<<" (based on the
@@ -219,7 +229,6 @@ public:
     ~IMatcherRef() {
         if (p) delete p;
     }
-
 
     IMatcherRef operator&&(IMatcherRef&& other);
     IMatcherRef operator||(IMatcherRef&& other);
