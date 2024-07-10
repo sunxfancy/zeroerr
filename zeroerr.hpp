@@ -1535,7 +1535,15 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 ZEROERR_SUPPRESS_COMPARE
 
 #ifndef ZEROERR_DISABLE_COMPLEX_AND_OR
-#define AND && zeroerr::ExpressionDecomposer() <<
+/**
+ * AND and OR are used to combine expressions in a more readable way.
+ * For example:
+ *   CHECK(1 == 1 AND 2 == 2);
+ *
+ * In its implementation, the expression is decomposed to
+ *   ExpressionDecomposer() << 1 == 1 && ExpressionDecomposer() << 2 == 2
+ */
+#define AND &&zeroerr::ExpressionDecomposer() <<
 #define OR  || zeroerr::ExpressionDecomposer() <<
 #endif
 
@@ -1553,8 +1561,8 @@ struct deferred_false {
 
 #define ZEROERR_EXPRESSION_COMPARISON(op, op_name)                                                 \
     template <typename R>                                                                          \
-    ZEROERR_SFINAE_OP(Expression<R>, op)                                \
-    operator op(R&& rhs) {                                                                         \
+    ZEROERR_SFINAE_OP(Expression<R>, op)                                                           \
+    operator op(R && rhs) {                                                                        \
         std::stringstream ss;                                                                      \
         Printer           print(ss);                                                               \
         print.isCompact  = true;                                                                   \
@@ -1570,8 +1578,8 @@ struct deferred_false {
     }                                                                                              \
     template <typename R,                                                                          \
               typename std::enable_if<!std::is_rvalue_reference<R>::value, void>::type* = nullptr> \
-    ZEROERR_SFINAE_OP(Expression<const R&>, op)                                \
-    operator op(const R& rhs) {                                                                    \
+    ZEROERR_SFINAE_OP(Expression<const R&>, op)                                                    \
+    operator op(const R & rhs) {                                                                   \
         std::stringstream ss;                                                                      \
         Printer           print(ss);                                                               \
         print.isCompact  = true;                                                                   \
@@ -1633,17 +1641,15 @@ struct ExprResult {
 };
 
 namespace details {
-    template <typename T>
-    typename std::enable_if<std::is_convertible<T, bool>::value, bool>::type
-    getBool(T&& lhs) {
-        return static_cast<bool>(lhs);
-    }
+template <typename T>
+typename std::enable_if<std::is_convertible<T, bool>::value, bool>::type getBool(T&& lhs) {
+    return static_cast<bool>(lhs);
+}
 
-    template <typename T>
-    typename std::enable_if<!std::is_convertible<T, bool>::value, bool>::type
-    getBool(T&&) {
-        return true;
-    }
+template <typename T>
+typename std::enable_if<!std::is_convertible<T, bool>::value, bool>::type getBool(T&&) {
+    return true;
+}
 }  // namespace details
 
 template <typename L>
@@ -1655,7 +1661,7 @@ struct Expression {
     explicit Expression(L&& in) : lhs(static_cast<L&&>(in)) { res = details::getBool(lhs); }
     explicit Expression(L&& in, bool res, std::string&& decomp)
         : lhs(static_cast<L&&>(in)), res(res), decomp(static_cast<std::string&&>(decomp)) {}
-    
+
     operator ExprResult() {
         if (decomp.empty()) {
             Printer print;
@@ -1695,6 +1701,10 @@ struct Expression {
     ZEROERR_FORBIT_EXPRESSION(Expression, <<)
     ZEROERR_FORBIT_EXPRESSION(Expression, >>)
 };
+
+#undef ZEROERR_EXPRESSION_COMPARISON
+#undef ZEROERR_EXPRESSION_ANDOR
+#undef ZEROERR_FORBIT_EXPRESSION
 
 struct ExpressionDecomposer {
     // The right operator for capturing expressions is "<=" instead of "<<" (based on the
@@ -1745,7 +1755,6 @@ public:
     ~IMatcherRef() {
         if (p) delete p;
     }
-
 
     IMatcherRef operator&&(IMatcherRef&& other);
     IMatcherRef operator||(IMatcherRef&& other);
@@ -2027,6 +2036,15 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+
+/**
+ * @brief Domain class for generating random values of a specific type.
+ * @tparam ValueType The type of the value to generate.
+ * @tparam CorpusType The type of the corpus stored in the domain.
+ * Here is an example. If you want to generate an list of intergers, 
+ * but will store the list in a vector, then ValueType will be 
+ * std::list<int> and CorpusType will be std::vector<int>.
+ */
 
 template <typename ValueType, typename CorpusType = ValueType>
 class Domain {
@@ -3857,28 +3875,35 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 namespace zeroerr {
 
-
+/**
+ * @brief Card defines a display range in the console.
+ */
 struct Card {
-    Card(std::string title) : title(title) {}
-
+    Card() : title(), width(0), height(0) {}
+    Card(std::string title) : title(title), width(0), height(0) {}
+    Card(unsigned width, unsigned height) : title(), width(width), height(height) {}
+    Card(std::string title, unsigned width, unsigned height)
+        : title(title), width(width), height(height) {}
     std::string title;
     unsigned    width, height;
 
     void show(std::ostream& os, std::string str);
 };
 
-class Table {
+/**
+ * @brief Table is used to generate a table with configurable style.
+ */
+class Table : public Card {
 public:
-    Table() {}
-    Table(std::string title) : title(title) {}
-    Table(unsigned width, unsigned height) : width(width), height(height) {}
-    Table(std::string title, unsigned width, unsigned height)
-        : title(title), width(width), height(height) {}
+    Table() : Card() {}
+    Table(std::string title) : Card(title) {}
+    Table(unsigned width, unsigned height) : Card(width, height) {}
+    Table(std::string title, unsigned width, unsigned height) : Card(title, width, height) {}
     ~Table() {}
 
-    Table& csv(std::string path);
-    Table& json(std::string path);
-
+    /**
+     * @brief Style is used to define the border style of the table.
+     */
     struct Style {
         Style() {}
         Style(std::initializer_list<std::string> args) : m_args(args) {}
@@ -3886,16 +3911,44 @@ public:
 
         operator bool() const { return !m_args.empty(); }
     };
-    static void  registerStyle(std::string name, Style style);
+
+    static void registerStyle(std::string name, Style style);
+
+    /**
+     * @brief getStyle can load predefined style from the StyleManager.
+     * @param name is the name of the style.
+     * Available styles:
+     *  "ascii"
+     *  "ascii2"
+     *  "ascii_double_head"
+     *  "square"
+     *  "square_double_head"
+     *  "simple"
+     *  "simple_head"
+     *  "simple_heavy"
+     *  "horizontal"
+     *  "rounded"
+     *  "heavy"
+     *  "heavy_edge"
+     *  "heavy_head"
+     *  "double"
+     *  "double_edge"
+     *  "minimal"
+     *  "minimal_heavy_head"
+     *  "minimal_double_hea
+     */
     static Style getStyle(std::string name);
 
+    /**
+     * @brief Config is used to configure the table style how it is displayed.
+     */
     struct Config {
-        bool show_tb_border;
-        bool show_lr_border;
-        bool show_header_split;
-        bool show_col_split;
-        bool show_row_split;
-        bool show_footer_split;
+        bool show_tb_border;     // show top and bottom border
+        bool show_lr_border;     // show left and right border
+        bool show_header_split;  // show header split
+        bool show_col_split;     // show column split
+        bool show_row_split;     // show row split
+        bool show_footer_split;  // show footer split
         Config()
             : show_tb_border(true),
               show_lr_border(true),
@@ -3905,6 +3958,11 @@ public:
               show_footer_split(true) {}
     };
 
+    /**
+     * @brief str is used to generate the table string.
+     * @param config decides how the table is displayed.
+     * @param style decides the border style of the table.
+     */
     std::string str(Config config = Config(), Style style = Table::getStyle("square_double_head"));
 
     void set_header(std::vector<std::string> _header) { header = _header; }
@@ -3922,6 +3980,25 @@ public:
     }
 
 
+    template <typename... Args>
+    void add_row(Args&&... args) {
+        std::vector<std::string> row;
+        push_back(row, std::forward<Args>(args)...);
+        cells.push_back(row);
+    }
+
+    template <typename T, typename... Args>
+    void add_rows(T&& t, Args&&... args) {
+        add_row(std::forward<T>(t));
+        add_rows(std::forward<Args>(args)...);
+    }
+
+    template <typename T>
+    void add_rows(T&& t) {
+        add_row(std::forward<T>(t));
+    }
+
+protected:
     ZEROERR_ENABLE_IF(!ZEROERR_IS_CONTAINER)
     _push_back(rank<0>, std::vector<std::string>& row, T&& t) {
         Printer print;
@@ -3948,28 +4025,6 @@ public:
             row.push_back(print.str());
         }
     }
-
-    template <typename... Args>
-    void add_row(Args&&... args) {
-        std::vector<std::string> row;
-        push_back(row, std::forward<Args>(args)...);
-        cells.push_back(row);
-    }
-
-    template <typename T, typename... Args>
-    void add_rows(T&& t, Args&&... args) {
-        add_row(std::forward<T>(t));
-        add_rows(std::forward<Args>(args)...);
-    }
-
-    template <typename T>
-    void add_rows(T&& t) {
-        add_row(std::forward<T>(t));
-    }
-
-protected:
-    std::string title;
-    unsigned    width = 0, height = 0;  // auto-calculated
 
     std::vector<unsigned>                 col_width;
     std::vector<std::string>              header, footer;
@@ -4353,6 +4408,11 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 namespace zeroerr {
 
 namespace detail {
+
+/**
+ * @brief FunctionDecomposition is a meta function to decompose the function type.
+ *        The ValueType and numOfArgs will be the result of the decomposition.
+ */
 template <typename... Args>
 struct FunctionDecomposition {
     static constexpr size_t numOfArgs = sizeof...(Args);
@@ -4387,6 +4447,12 @@ using FunctionDecompositionT = decltype(FunctionDecompositionImpl(std::declval<T
 
 }  // namespace detail
 
+
+/**
+ * @brief FuzzTest is a template class to create a fuzz test for the target function.
+ * @tparam TargetFunction The target function to fuzz.
+ * @tparam FuncType is the decomposition result of the target function.
+ */
 template <typename TargetFunction,
           typename FuncType = detail::FunctionDecompositionT<TargetFunction>>
 struct FuzzTest;
@@ -4410,6 +4476,7 @@ public:
     virtual const char* what() const throw() { return "Fuzzing finished"; }
 };
 
+// The details are described in the declaration of the class.
 template <typename TargetFunction, typename FuncType>
 struct FuzzTest : IFuzzTest {
     using ValueType = typename FuncType::ValueType;
@@ -4422,12 +4489,20 @@ struct FuzzTest : IFuzzTest {
         FuzzTestWithDomain<TargetFunction, FuncType,
                            AggregateOf<std::tuple<typename T::ValueType...>, T...>>;
 
+    /**
+     * @tparam T The domain type to use.
+     */
     template <typename... T>
     FuzzTestWithDomainType<T...> WithDomains(
         AggregateOf<std::tuple<typename T::ValueType...>, T...> domain) {
         return FuzzTestWithDomainType<T...>(*this, domain);
     }
 
+    /**
+     * @tparam T The domain type to use.
+     * This function will decompose the domain type and use tuple to represent the list of domains.
+     * The previous function is matched in this call.
+     */
     template <typename... T>
     FuzzTestWithDomainType<T...> WithDomains(T&&... domains) {
         return WithDomains(TupleOf(std::forward<T>(domains)...));
@@ -4451,6 +4526,14 @@ struct FuzzTest : IFuzzTest {
 extern void RunFuzzTest(IFuzzTest& fuzz_test, int seed = 0, int runs = 1000, int max_len = 0,
                         int timeout = 1200, int len_control = 100);
 
+
+/**
+ * @brief FuzzTestWithDomain implements the Base class with the domain passed into.
+ * @tparam TargetFunction The target function to fuzz.
+ * @tparam FuncType is the decomposition result of the target function.
+ * @tparam Domain The domain to use.
+ * @tparam Base The base class to inherit from.
+ */
 template <typename TargetFunction, typename FuncType, typename Domain, typename Base>
 struct FuzzTestWithDomain : public Base {
     FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), m_domain(domain) {}

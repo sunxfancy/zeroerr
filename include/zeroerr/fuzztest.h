@@ -34,6 +34,11 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 namespace zeroerr {
 
 namespace detail {
+
+/**
+ * @brief FunctionDecomposition is a meta function to decompose the function type.
+ *        The ValueType and numOfArgs will be the result of the decomposition.
+ */
 template <typename... Args>
 struct FunctionDecomposition {
     static constexpr size_t numOfArgs = sizeof...(Args);
@@ -68,6 +73,12 @@ using FunctionDecompositionT = decltype(FunctionDecompositionImpl(std::declval<T
 
 }  // namespace detail
 
+
+/**
+ * @brief FuzzTest is a template class to create a fuzz test for the target function.
+ * @tparam TargetFunction The target function to fuzz.
+ * @tparam FuncType is the decomposition result of the target function.
+ */
 template <typename TargetFunction,
           typename FuncType = detail::FunctionDecompositionT<TargetFunction>>
 struct FuzzTest;
@@ -91,6 +102,7 @@ public:
     virtual const char* what() const throw() { return "Fuzzing finished"; }
 };
 
+// The details are described in the declaration of the class.
 template <typename TargetFunction, typename FuncType>
 struct FuzzTest : IFuzzTest {
     using ValueType = typename FuncType::ValueType;
@@ -103,12 +115,20 @@ struct FuzzTest : IFuzzTest {
         FuzzTestWithDomain<TargetFunction, FuncType,
                            AggregateOf<std::tuple<typename T::ValueType...>, T...>>;
 
+    /**
+     * @tparam T The domain type to use.
+     */
     template <typename... T>
     FuzzTestWithDomainType<T...> WithDomains(
         AggregateOf<std::tuple<typename T::ValueType...>, T...> domain) {
         return FuzzTestWithDomainType<T...>(*this, domain);
     }
 
+    /**
+     * @tparam T The domain type to use.
+     * This function will decompose the domain type and use tuple to represent the list of domains.
+     * The previous function is matched in this call.
+     */
     template <typename... T>
     FuzzTestWithDomainType<T...> WithDomains(T&&... domains) {
         return WithDomains(TupleOf(std::forward<T>(domains)...));
@@ -132,6 +152,14 @@ struct FuzzTest : IFuzzTest {
 extern void RunFuzzTest(IFuzzTest& fuzz_test, int seed = 0, int runs = 1000, int max_len = 0,
                         int timeout = 1200, int len_control = 100);
 
+
+/**
+ * @brief FuzzTestWithDomain implements the Base class with the domain passed into.
+ * @tparam TargetFunction The target function to fuzz.
+ * @tparam FuncType is the decomposition result of the target function.
+ * @tparam Domain The domain to use.
+ * @tparam Base The base class to inherit from.
+ */
 template <typename TargetFunction, typename FuncType, typename Domain, typename Base>
 struct FuzzTestWithDomain : public Base {
     FuzzTestWithDomain(const Base& ft, const Domain& domain) : Base(ft), m_domain(domain) {}

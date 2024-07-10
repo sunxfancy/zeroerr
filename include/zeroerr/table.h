@@ -10,28 +10,35 @@
 
 namespace zeroerr {
 
-
+/**
+ * @brief Card defines a display range in the console.
+ */
 struct Card {
-    Card(std::string title) : title(title) {}
-
+    Card() : title(), width(0), height(0) {}
+    Card(std::string title) : title(title), width(0), height(0) {}
+    Card(unsigned width, unsigned height) : title(), width(width), height(height) {}
+    Card(std::string title, unsigned width, unsigned height)
+        : title(title), width(width), height(height) {}
     std::string title;
     unsigned    width, height;
 
     void show(std::ostream& os, std::string str);
 };
 
-class Table {
+/**
+ * @brief Table is used to generate a table with configurable style.
+ */
+class Table : public Card {
 public:
-    Table() {}
-    Table(std::string title) : title(title) {}
-    Table(unsigned width, unsigned height) : width(width), height(height) {}
-    Table(std::string title, unsigned width, unsigned height)
-        : title(title), width(width), height(height) {}
+    Table() : Card() {}
+    Table(std::string title) : Card(title) {}
+    Table(unsigned width, unsigned height) : Card(width, height) {}
+    Table(std::string title, unsigned width, unsigned height) : Card(title, width, height) {}
     ~Table() {}
 
-    Table& csv(std::string path);
-    Table& json(std::string path);
-
+    /**
+     * @brief Style is used to define the border style of the table.
+     */
     struct Style {
         Style() {}
         Style(std::initializer_list<std::string> args) : m_args(args) {}
@@ -39,16 +46,44 @@ public:
 
         operator bool() const { return !m_args.empty(); }
     };
-    static void  registerStyle(std::string name, Style style);
+
+    static void registerStyle(std::string name, Style style);
+
+    /**
+     * @brief getStyle can load predefined style from the StyleManager.
+     * @param name is the name of the style.
+     * Available styles:
+     *  "ascii"
+     *  "ascii2"
+     *  "ascii_double_head"
+     *  "square"
+     *  "square_double_head"
+     *  "simple"
+     *  "simple_head"
+     *  "simple_heavy"
+     *  "horizontal"
+     *  "rounded"
+     *  "heavy"
+     *  "heavy_edge"
+     *  "heavy_head"
+     *  "double"
+     *  "double_edge"
+     *  "minimal"
+     *  "minimal_heavy_head"
+     *  "minimal_double_hea
+     */
     static Style getStyle(std::string name);
 
+    /**
+     * @brief Config is used to configure the table style how it is displayed.
+     */
     struct Config {
-        bool show_tb_border;
-        bool show_lr_border;
-        bool show_header_split;
-        bool show_col_split;
-        bool show_row_split;
-        bool show_footer_split;
+        bool show_tb_border;     // show top and bottom border
+        bool show_lr_border;     // show left and right border
+        bool show_header_split;  // show header split
+        bool show_col_split;     // show column split
+        bool show_row_split;     // show row split
+        bool show_footer_split;  // show footer split
         Config()
             : show_tb_border(true),
               show_lr_border(true),
@@ -58,6 +93,11 @@ public:
               show_footer_split(true) {}
     };
 
+    /**
+     * @brief str is used to generate the table string.
+     * @param config decides how the table is displayed.
+     * @param style decides the border style of the table.
+     */
     std::string str(Config config = Config(), Style style = Table::getStyle("square_double_head"));
 
     void set_header(std::vector<std::string> _header) { header = _header; }
@@ -75,6 +115,25 @@ public:
     }
 
 
+    template <typename... Args>
+    void add_row(Args&&... args) {
+        std::vector<std::string> row;
+        push_back(row, std::forward<Args>(args)...);
+        cells.push_back(row);
+    }
+
+    template <typename T, typename... Args>
+    void add_rows(T&& t, Args&&... args) {
+        add_row(std::forward<T>(t));
+        add_rows(std::forward<Args>(args)...);
+    }
+
+    template <typename T>
+    void add_rows(T&& t) {
+        add_row(std::forward<T>(t));
+    }
+
+protected:
     ZEROERR_ENABLE_IF(!ZEROERR_IS_CONTAINER)
     _push_back(rank<0>, std::vector<std::string>& row, T&& t) {
         Printer print;
@@ -101,28 +160,6 @@ public:
             row.push_back(print.str());
         }
     }
-
-    template <typename... Args>
-    void add_row(Args&&... args) {
-        std::vector<std::string> row;
-        push_back(row, std::forward<Args>(args)...);
-        cells.push_back(row);
-    }
-
-    template <typename T, typename... Args>
-    void add_rows(T&& t, Args&&... args) {
-        add_row(std::forward<T>(t));
-        add_rows(std::forward<Args>(args)...);
-    }
-
-    template <typename T>
-    void add_rows(T&& t) {
-        add_row(std::forward<T>(t));
-    }
-
-protected:
-    std::string title;
-    unsigned    width = 0, height = 0;  // auto-calculated
 
     std::vector<unsigned>                 col_width;
     std::vector<std::string>              header, footer;
