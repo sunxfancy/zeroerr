@@ -9,6 +9,15 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 namespace zeroerr {
 
 
+/**
+ * @brief Domain class for generating random values of a specific type.
+ * @tparam ValueType The type of the value to generate.
+ * @tparam CorpusType The type of the corpus stored in the domain.
+ * Here is an example. If you want to generate an list of intergers, 
+ * but will store the list in a vector, then ValueType will be 
+ * std::list<int> and CorpusType will be std::vector<int>.
+ */
+
 template <typename ValueType, typename CorpusType = ValueType>
 class Domain {
 public:
