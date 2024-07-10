@@ -1,0 +1,6 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="node1" href="$classzeroerr_1_1Logger.html" title=" " alt="" coords="5,56,125,83"/>
+<area shape="rect" id="node2" href="$classzeroerr_1_1DirectoryLogger.html" title=" " alt="" coords="173,5,353,32"/>
+<area shape="rect" id="node3" href="$classzeroerr_1_1FileLogger.html" title=" " alt="" coords="192,56,335,83"/>
+<area shape="rect" id="node4" href="$classzeroerr_1_1OStreamLogger.html" title=" " alt="" coords="175,107,352,133"/>
+</map>

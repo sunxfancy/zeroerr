@@ -1,0 +1,12 @@
+<map id="zeroerr::SubCase" name="zeroerr::SubCase">
+<area shape="rect" id="node1" title="SubCase is a class that holds the subcase information." alt="" coords="131,569,263,596"/>
+<area shape="rect" id="node2" href="$structzeroerr_1_1TestCase.html" title="TestCase is a class that holds the test case information. There are several fields that are used to s..." alt="" coords="231,287,366,313"/>
+<area shape="rect" id="node3" title=" " alt="" coords="305,376,457,417"/>
+<area shape="rect" id="node4" title=" " alt="" coords="249,153,335,180"/>
+<area shape="rect" id="node8" href="$structzeroerr_1_1UnitTest.html" title="UnitTest is a class that holds the test configuration. There are several options that can be set to c..." alt="" coords="75,287,205,313"/>
+<area shape="rect" id="node5" title=" " alt="" coords="223,5,361,47"/>
+<area shape="rect" id="node6" href="$classzeroerr_1_1TestContext.html" title="TestContext is a class that holds the test results and reporter context. There are 8 different matric..." alt="" coords="63,480,217,507"/>
+<area shape="rect" id="node7" href="$classzeroerr_1_1IReporter.html" title="IReporter is an interface that is used to report the test results. You can create a new reporter by i..." alt="" coords="72,383,208,410"/>
+<area shape="rect" id="node9" href="$structzeroerr_1_1Filters.html" title=" " alt="" coords="41,153,157,180"/>
+<area shape="rect" id="node10" title=" " alt="" coords="5,13,192,39"/>
+</map>

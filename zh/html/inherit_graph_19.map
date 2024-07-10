@@ -1,0 +1,10 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="node1" title=" " alt="" coords="5,217,124,243"/>
+<area shape="rect" id="node2" href="$structzeroerr_1_1detail_1_1ele__type__is__pair.html" title=" " alt="" coords="177,5,397,47"/>
+<area shape="rect" id="node3" href="$structzeroerr_1_1detail_1_1has__extension.html" title="has_extension is a type trait to check if user defined PrinterExt for a type" alt="" coords="185,71,390,112"/>
+<area shape="rect" id="node4" href="$structzeroerr_1_1detail_1_1is__array.html" title=" " alt="" coords="200,136,375,177"/>
+<area shape="rect" id="node5" href="$structzeroerr_1_1detail_1_1is__associative__container.html" title=" " alt="" coords="202,202,373,258"/>
+<area shape="rect" id="node6" href="$structzeroerr_1_1detail_1_1is__container.html" title=" " alt="" coords="186,283,389,324"/>
+<area shape="rect" id="node7" href="$structzeroerr_1_1detail_1_1is__specialization.html" title=" " alt="" coords="205,349,369,405"/>
+<area shape="rect" id="node8" href="$structzeroerr_1_1detail_1_1is__streamable.html" title=" " alt="" coords="172,429,403,471"/>
+</map>

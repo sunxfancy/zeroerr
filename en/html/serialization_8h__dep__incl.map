@@ -1,0 +1,13 @@
+<map id="include/zeroerr/internal/serialization.h" name="include/zeroerr/internal/serialization.h">
+<area shape="rect" id="node1" title=" " alt="" coords="167,5,340,47"/>
+<area shape="rect" id="node2" href="$serialization_8cpp.html" title=" " alt="" coords="83,102,235,129"/>
+<area shape="rect" id="node3" href="$domain_8h.html" title=" " alt="" coords="259,95,437,136"/>
+<area shape="rect" id="node4" href="$aggregate__of_8h.html" title=" " alt="" coords="5,184,184,225"/>
+<area shape="rect" id="node5" href="$arbitrary_8h.html" title=" " alt="" coords="132,273,311,315"/>
+<area shape="rect" id="node9" href="$container__of_8h.html" title=" " alt="" coords="259,184,437,225"/>
+<area shape="rect" id="node10" href="$element__of_8h.html" title=" " alt="" coords="385,273,564,315"/>
+<area shape="rect" id="node11" href="$in__range_8h.html" title=" " alt="" coords="588,273,767,315"/>
+<area shape="rect" id="node6" href="$fuzztest_8h.html" title=" " alt="" coords="255,363,441,389"/>
+<area shape="rect" id="node7" href="$fuzztest_8cpp.html" title=" " alt="" coords="213,437,337,464"/>
+<area shape="rect" id="node8" href="$unittest_8cpp.html" title=" " alt="" coords="361,437,484,464"/>
+</map>

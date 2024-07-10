@@ -1,0 +1,9 @@
+<map id="zeroerr::LogIterator" name="zeroerr::LogIterator">
+<area shape="rect" id="node1" title="LogIterator is a class to iterate the log messages." alt="" coords="170,471,317,497"/>
+<area shape="rect" id="node2" href="$structzeroerr_1_1DataBlock.html" title=" " alt="" coords="5,381,148,408"/>
+<area shape="rect" id="node3" href="$structzeroerr_1_1LogMessage.html" title="LogMessage is a class to store the log message." alt="" coords="335,381,493,408"/>
+<area shape="rect" id="node4" href="$structzeroerr_1_1LogInfo.html" title="LogInfo is a struct to store the meta data of the log message." alt="" coords="407,291,531,317"/>
+<area shape="rect" id="node5" title=" " alt="" coords="334,185,497,227"/>
+<area shape="rect" id="node6" title=" " alt="" coords="221,96,308,123"/>
+<area shape="rect" id="node7" title=" " alt="" coords="195,5,334,47"/>
+</map>

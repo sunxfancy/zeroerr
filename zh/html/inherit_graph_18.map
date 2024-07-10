@@ -1,0 +1,10 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="node1" title=" " alt="" coords="5,268,117,295"/>
+<area shape="rect" id="node2" href="$structzeroerr_1_1detail_1_1ele__type__is__pair_3_01T_00_01has__pair__type_3_01T_01_4_01_4.html" title=" " alt="" coords="187,5,350,61"/>
+<area shape="rect" id="node3" href="$structzeroerr_1_1detail_1_1has__extension_3_01T_00_01has__printer__ext_3_01T_01_4_01_4.html" title=" " alt="" coords="170,85,367,141"/>
+<area shape="rect" id="node4" href="$structzeroerr_1_1detail_1_1is__array_3_01T_00_01void__t_3_01decltype_07std_1_1declval_3_01T_01_4_07_08_0f0_0e_08_4_01_4.html" title=" " alt="" coords="166,165,371,221"/>
+<area shape="rect" id="node5" href="$structzeroerr_1_1detail_1_1is__associative__container_3_01T_00_01has__begin__end__find__insert_3_01T_01_4_01_4.html" title=" " alt="" coords="178,246,359,317"/>
+<area shape="rect" id="node6" href="$structzeroerr_1_1detail_1_1is__container_3_01T_00_01has__begin__end_3_01T_01_4_01_4.html" title=" " alt="" coords="175,341,362,397"/>
+<area shape="rect" id="node7" href="$structzeroerr_1_1detail_1_1is__specialization_3_01Ref_3_01Args_8_8_8_01_4_00_01Ref_01_4.html" title=" " alt="" coords="191,421,347,477"/>
+<area shape="rect" id="node8" href="$structzeroerr_1_1detail_1_1is__streamable_3_01S_00_01T_00_01has__stream__operator_3_01S_00_01T_01_4_01_4.html" title=" " alt="" coords="165,501,372,557"/>
+</map>

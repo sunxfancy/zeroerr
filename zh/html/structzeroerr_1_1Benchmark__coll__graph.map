@@ -1,0 +1,10 @@
+<map id="zeroerr::Benchmark" name="zeroerr::Benchmark">
+<area shape="rect" id="node1" title="Benchmark create a core object for configuration of a benchmark. This class is a driver to run multip..." alt="" coords="30,407,181,433"/>
+<area shape="rect" id="node2" title=" " alt="" coords="123,303,275,344"/>
+<area shape="rect" id="node3" href="$structzeroerr_1_1BenchResult.html" title="BenchResult is a result of running the benchmark." alt="" coords="135,213,292,240"/>
+<area shape="rect" id="node4" title=" " alt="" coords="34,117,121,143"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,5,144,47"/>
+<area shape="rect" id="node6" title=" " alt="" coords="145,109,349,151"/>
+<area shape="rect" id="node7" href="$structzeroerr_1_1PerfCountSet.html" title=" " alt="" coords="169,5,330,47"/>
+<area shape="rect" id="node8" href="$structzeroerr_1_1PerfCountSet.html" title=" " alt="" coords="373,109,534,151"/>
+</map>

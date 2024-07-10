@@ -1,0 +1,7 @@
+<map id="zeroerr::AssertionData" name="zeroerr::AssertionData">
+<area shape="rect" id="node1" title="AssertionData is a struct that contains all the information of an assertion. It will be thrown as an ..." alt="" coords="104,200,272,227"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,96,120,123"/>
+<area shape="rect" id="node3" title=" " alt="" coords="145,96,231,123"/>
+<area shape="rect" id="node4" title=" " alt="" coords="119,5,257,47"/>
+<area shape="rect" id="node5" href="$structzeroerr_1_1assert__info.html" title="This is a one&#45;byte assert info struct, which is used to collect the meta info of an assertion" alt="" coords="255,96,403,123"/>
+</map>
