@@ -66,8 +66,14 @@ struct TestCase;
  */
 class TestContext {
 public:
-    unsigned passed = 0, warning = 0, failed = 0, skipped = 0;
-    unsigned passed_as = 0, warning_as = 0, failed_as = 0, skipped_as = 0;
+    unsigned passed     = 0;
+    unsigned warning    = 0;
+    unsigned failed     = 0;
+    unsigned skipped    = 0;
+    unsigned passed_as  = 0;
+    unsigned warning_as = 0;
+    unsigned failed_as  = 0;
+    unsigned skipped_as = 0;
 
     IReporter& reporter;
 
@@ -239,7 +245,7 @@ public:
      * @brief Create the reporter object with the given name.
      * @param name The name of the reporter. Available reporters are: console, xml.
      * @param ut The unit test object that will be used to configure the test.
-    */
+     */
     static IReporter* create(const std::string& name, UnitTest& ut);
 
     IReporter(UnitTest& ut) : ut(ut) {}
@@ -284,7 +290,7 @@ struct regReporter {
  *   });
  *   test(a, b);
  * ```
- * 
+ *
  * This will test the targetFunc with all the combinations of a and b, e.g. (1,4), (1,5), (1,6),
  * (2,4), (2,5) ... etc.
  */

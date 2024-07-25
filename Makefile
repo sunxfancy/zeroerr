@@ -5,7 +5,7 @@ all: linux windows
 build/linux/Makefile: Makefile
 	mkdir -p build/linux
 	cmake -B build/linux -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=11 \
-		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON -DENABLE_FUZZING=ON \
+		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON -DDISABLE_CUDA_BUILD=OFF -DENABLE_FUZZING=ON \
 		-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
 
 linux: build/linux/Makefile
@@ -14,12 +14,15 @@ linux: build/linux/Makefile
 build/windows/ZeroErr.sln:
 	mkdir -p build/windows
 	cmake.exe -B build/windows -S . \
-		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -T host=x64 -A x64
+		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DDISABLE_CUDA_BUILD=OFF -T host=x64 -A x64
 
 windows: build/windows/ZeroErr.sln
 	cmake.exe --build build/windows --config Debug -j `nproc`
 
 test: linux-test windows-test fuzz-test
+
+cuda-test: windows
+	cd build/windows/test && ./Debug/cudatest.exe
 
 fuzz-test: linux
 	cd build/linux/test && ./unittest --testcase=fuzz_serialize.*
