@@ -724,6 +724,25 @@ class weak_ptr;
 namespace zeroerr {
 
 
+/**
+ * @brief rank is a helper class for Printer to define the priority of overloaded functions.
+ * @tparam N the priority of the rule. 0 is the lowest priority. The maximum priority is max_rank.
+ *
+ * You can define a rule by adding it as a function parameter with rank<N> where N is the priority.
+ * For example:
+ * template<typename T>
+ * void Foo(T v, rank<0>); // lowest priority
+ * void Foo(int v, rank<1>); // higher priority
+ *
+ * Even though in the first rule, type T can be an int, the second function will still be called due
+ * to the priority.
+ */
+template <unsigned N>
+struct rank : rank<N - 1> {};
+template <>
+struct rank<0> {};
+
+
 namespace detail {
 
 // C++11 void_t
@@ -822,6 +841,22 @@ struct is_array : std::false_type {};
 
 template <typename T>
 struct is_array<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
+
+
+template <typename T, typename = void>
+struct is_modifiable : std::false_type {};
+
+template <typename T>
+struct is_modifiable<T, void_t<decltype(
+                                // Iterable
+                                T().begin(), T().end(), T().size(),
+                                // Values are mutable
+                                // This rejects associative containers, for example
+                                // *T().begin() = std::declval<value_type_t<T>>(),
+                                // Can insert and erase elements
+                                T().insert(T().end(), std::declval<typename T::value_type>()),
+                                T().erase(T().begin()), (void)0)>> : std::true_type {};
+
 
 
 // Check if a type has the element type as std::pair
@@ -1242,23 +1277,6 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 namespace zeroerr {
 
 
-/**
- * @brief rank is a helper class for Printer to define the priority of overloaded functions.
- * @tparam N the priority of the rule. 0 is the lowest priority. The maximum priority is max_rank.
- *
- * You can define a rule by adding it as a function parameter with rank<N> where N is the priority.
- * For example:
- * template<typename T>
- * void Foo(T v, rank<0>); // lowest priority
- * void Foo(int v, rank<1>); // higher priority
- *
- * Even though in the first rule, type T can be an int, the second function will still be called due
- * to the priority.
- */
-template <unsigned N>
-struct rank : rank<N - 1> {};
-template <>
-struct rank<0> {};
 constexpr unsigned max_rank = 5;
 
 

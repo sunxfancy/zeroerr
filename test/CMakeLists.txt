@@ -43,12 +43,12 @@ endif()
 ## Test Cases
 
 set(test_files 
-    fuzz_test.cpp
-    llvm_test.cpp
-    log_test.cpp
-    print_test.cpp
-    table_test.cpp
-    unit_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/fuzz_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/log_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/print_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/table_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/unit_test.cpp
 )
 
 if (ENABLE_FUZZING)
