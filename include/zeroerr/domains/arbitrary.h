@@ -13,8 +13,11 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
-template <typename T, typename = void>
-class Arbitrary {
+template <typename T, unsigned N = 2, typename = void>
+class Arbitrary : public Arbitrary<T, N-1> {};
+
+template <typename T>
+struct Arbitrary <T, 0> {
     static_assert(detail::always_false<T>::value, "No Arbitrary specialization for this type");
 };
 
@@ -35,7 +38,7 @@ using is_unsigned_int =
     typename std::enable_if<std::is_integral<T>::value && !std::numeric_limits<T>::is_signed,
                             void>::type;
 template <typename T>
-class Arbitrary<T, is_unsigned_int<T>> : public DomainConvertable<T> {
+class Arbitrary<T, 2, is_unsigned_int<T>> : public DomainConvertable<T> {
 public:
     using ValueType  = T;
     using CorpusType = T;
@@ -53,7 +56,7 @@ using is_signed_int =
                             void>::type;
 
 template <typename T>
-class Arbitrary<T, is_signed_int<T>> : public DomainConvertable<T> {
+class Arbitrary<T, 2, is_signed_int<T>> : public DomainConvertable<T> {
 public:
     using ValueType  = T;
     using CorpusType = T;
@@ -69,7 +72,7 @@ public:
 template <typename T>
 using is_float_point = typename std::enable_if<std::is_floating_point<T>::value, void>::type;
 template <typename T>
-class Arbitrary<T, is_float_point<T>> : public DomainConvertable<T> {
+class Arbitrary<T, 2, is_float_point<T>> : public DomainConvertable<T> {
 public:
     using ValueType  = T;
     using CorpusType = T;
@@ -89,7 +92,7 @@ using is_string =
     typename std::enable_if<detail::is_specialization<T, std::basic_string>::value>::type;
 
 template <typename T>
-class Arbitrary<T, is_string<T>> : public Domain<T, std::vector<typename T::value_type>> {
+class Arbitrary<T, 2, is_string<T>> : public Domain<T, std::vector<typename T::value_type>> {
     Arbitrary<std::vector<typename T::value_type>> impl;
 
 public:
@@ -108,23 +111,11 @@ public:
     }
 };
 
+template <typename T>
+using is_modifiable = typename std::enable_if<detail::is_modifiable<T>::value>::type;
 
 template <typename T>
-using is_modifable =
-    typename std::enable_if<!detail::is_specialization<T, std::basic_string>::value,
-                            decltype(
-                                // Iterable
-                                T().begin(), T().end(), T().size(),
-                                // Values are mutable
-                                // This rejects associative containers, for example
-                                // *T().begin() = std::declval<value_type_t<T>>(),
-                                // Can insert and erase elements
-                                T().insert(T().end(), std::declval<typename T::value_type>()),
-                                T().erase(T().begin()),
-                                //
-                                (void)0)>::type;
-template <typename T>
-class Arbitrary<T, is_modifable<T>>
+class Arbitrary<T, 1, is_modifiable<T>>
     : public SequenceContainerOf<T, Arbitrary<typename T::value_type>> {
 public:
     Arbitrary()
@@ -133,18 +124,17 @@ public:
 };
 
 template <typename T, typename U>
-class Arbitrary<std::pair<T, U>>
+class Arbitrary<std::pair<T, U>, 1>
     : public AggregateOf<
           std::pair<typename std::remove_const<T>::type, typename std::remove_const<U>::type>> {};
 
 
 template <typename... T>
-class Arbitrary<std::tuple<T...>>
+class Arbitrary<std::tuple<T...>, 1>
     : public AggregateOf<std::tuple<typename std::remove_const<T>::type...>> {};
 
 template <typename T>
-class Arbitrary<const T> : public Arbitrary<T> {};
-
+class Arbitrary<const T, 2> : public Arbitrary<T> {};
 
 }  // namespace zeroerr
 
