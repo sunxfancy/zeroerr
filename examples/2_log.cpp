@@ -47,12 +47,16 @@ Expr* parseExpr(std::string input)
         return cache[input]->Clone();
     }
 }
+
 TEST_CASE("parsing test") {
     zeroerr::suspendLog();
+    std::string log;
     Expr* e1 = parseExpr("1 + 2");
-    // CHECK(LOG_GET(parseExpr, "CacheHit", input, std::string) == std::string{});
+    log = LOG_GET(parseExpr, "CacheHit", input, std::string);
+    CHECK(log == std::string{});
     Expr* e2 = parseExpr("1 + 2");
-    std::string log = LOG_GET(parseExpr, "CacheHit", input, std::string);
+    log = zeroerr::LogStream::getDefault()
+        .getLog<std::string>("parseExpr", "CacheHit", "input");
     CHECK(log == "1 + 2"); 
     zeroerr::resumeLog();
 }

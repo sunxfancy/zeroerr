@@ -4931,7 +4931,7 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
             const char* q = p + 1;
             while (*q && *q != '}') q++;
             if (*q == '}') {
-                std::string N(p + 1, (size_t)(q-p-1));
+                std::string N(p + 1, (size_t)(q - p - 1));
                 names[N] = static_cast<int>(names.size());
                 p        = q;
             }
@@ -5054,10 +5054,15 @@ void* LogStream::getRawLog(std::string func, unsigned line, std::string name) {
     return nullptr;
 }
 
+static bool startWith(const std::string& str, const std::string& prefix) {
+    return str.rfind(prefix, 0) == 0;
+}
+
 void* LogStream::getRawLog(std::string func, std::string msg, std::string name) {
     for (DataBlock* p = first; p; p = p->next)
         for (auto q = p->begin(); q < p->end(); q = moveBytes(q, q->info->size))
-            if (msg == q->info->message && func == q->info->function) return q->getRawLog(name);
+            if (startWith(q->info->message, msg) && func == q->info->function)
+                return q->getRawLog(name);
     return nullptr;
 }
 
@@ -5099,7 +5104,7 @@ LogIterator& LogIterator::operator++() {
 }
 
 bool LogIterator::check_filter() {
-    if (!message_filter.empty() && std::string(q->info->message).rfind(message_filter, 0) == 0) return false;
+    if (!message_filter.empty() && startWith(q->info->message, message_filter)) return false;
     if (!function_name_filter.empty() && q->info->function != function_name_filter) return false;
     if (line_filter != -1 && static_cast<int>(q->info->line) != line_filter) return false;
     return true;
