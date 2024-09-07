@@ -15,6 +15,14 @@
         {
             "type": "lldb",
             "request": "launch",
+            "name": "Windows 2_log",
+            "program": "${workspaceFolder}/build/windows/examples/Debug/2_log.exe",
+            "args": ["--testcase=parsing test"],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
             "name": "Windows reporter",
             "program": "${workspaceFolder}/build/windows/test/Debug/unittest.exe",
             "args": ["--no-color", "--log-to-report", "--reporters=xml"],

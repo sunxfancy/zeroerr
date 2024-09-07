@@ -207,7 +207,7 @@ LogIterator& LogIterator::operator++() {
 }
 
 bool LogIterator::check_filter() {
-    if (!message_filter.empty() && q->info->message != message_filter) return false;
+    if (!message_filter.empty() && std::string(q->info->message).rfind(message_filter, 0) == 0) return false;
     if (!function_name_filter.empty() && q->info->function != function_name_filter) return false;
     if (line_filter != -1 && static_cast<int>(q->info->line) != line_filter) return false;
     return true;

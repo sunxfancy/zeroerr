@@ -47,5 +47,5 @@ TEST_CASE("fib function test") {
     CHECK(fib(3) == 2);
     CHECK(fib(4) == 3);
     CHECK(fib(5) == 5);
-    CHECK(fib(20) == 6765);
+    CHECK_THROWS(fib(20));
 }

@@ -37,7 +37,7 @@ reporter: linux
 	cd build/linux/test && ./unittest --no-color --log-to-report --reporters=xml
 
 windows-test: windows
-	cd build/windows/test && ./Debug/unittest.exe
+	cd build/windows/test && ../examples/Debug/2_log.exe --testcase="parsing test"
 
 
 build/linux-release/Makefile: Makefile

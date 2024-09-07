@@ -121,6 +121,7 @@ TEST_CASE("verbose") {
 static void function() {
     LOG("function log {i}", 1);
     LOG("function log {sum}, {i}", 10, 1);
+    LOG("A: message {i}", 1);
 }
 
 TEST_CASE("access log in Test case") {
@@ -146,6 +147,8 @@ TEST_CASE("access log in Test case") {
     CHECK(LOG_GET(function, "function log {i}", i, int) == 1);
     CHECK(LOG_GET(function, "function log {sum}, {i}", sum, int) == 9);
     CHECK(LOG_GET(function, "function log {sum}, {i}", i, int) == 2);
+
+    CHECK(LOG_GET(function, "A", i, int) == 1);
     zeroerr::resumeLog();
 }
 
