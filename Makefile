@@ -28,7 +28,7 @@ fuzz-test: linux
 	cd build/linux/test && ./unittest --testcase=fuzz_serialize.*
 
 fuzz: linux
-	cd build/linux/test && ./unittest -f --testcase=fuzz_test.*
+	cd build/linux/test && ./unittest -f --testcase=presentation
 
 linux-test: linux
 	cd build/linux/test && ./unittest
