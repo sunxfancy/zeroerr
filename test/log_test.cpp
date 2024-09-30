@@ -187,9 +187,10 @@ TEST_CASE("multiple log stream") {
 }
 
 TEST_CASE("log to dir") {
-    zeroerr::LogStream::getDefault().setFileLogger("./logdir", LogStream::SPLIT_BY_CATEGORY,
-                                                   LogStream::SPLIT_BY_SEVERITY,
-                                                   LogStream::DAILY_FILE);
+    zeroerr::LogStream::getDefault()
+        .setFileLogger("./logdir", LogStream::SPLIT_BY_CATEGORY,
+                                   LogStream::SPLIT_BY_SEVERITY,
+                                   LogStream::DAILY_FILE);
     LOG("log to dir {i}", 1);
     WARN("warn log to dir {i}", 2);
     zeroerr::LogStream::getDefault().setStderrLogger();
