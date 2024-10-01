@@ -44,6 +44,7 @@ loadfile(${my_src_folder}/log.cpp log_cpp)
 loadfile(${my_src_folder}/table.cpp table_cpp)
 loadfile(${my_src_folder}/unittest.cpp unittest_cpp)
 loadfile(${my_src_folder}/fuzztest.cpp fuzztest_cpp)
+loadfile(${my_src_folder}/serialization.cpp serialization_cpp)
 
 
 file(WRITE  zeroerr.hpp "// ======================================================================\n")
@@ -53,5 +54,5 @@ file(APPEND zeroerr.hpp "${config}\n${color}\n${console}\n${debugbreak}\n${threa
 file(APPEND zeroerr.hpp "${domain}\n${in_range}\n${element_of}\n${container_of}\n${aggregate_of}\n${arbitrary}\n")
 file(APPEND zeroerr.hpp "${benchmark}\n${assert}\n${dbg}\n${format}\n${log}\n${table}\n${profiler}\n${unittest}\n${fuzztest}\n")
 file(APPEND zeroerr.hpp "#ifdef ZEROERR_IMPLEMENTATION\n")
-file(APPEND zeroerr.hpp "${rng_cpp}\n${color_cpp}\n${print_cpp}\n${console_cpp}\n${log_cpp}\n${table_cpp}\n${unittest_cpp}\n${fuzztest_cpp}\n${benchmark_cpp}\n")
+file(APPEND zeroerr.hpp "${rng_cpp}\n${color_cpp}\n${print_cpp}\n${console_cpp}\n${log_cpp}\n${table_cpp}\n${unittest_cpp}\n${fuzztest_cpp}\n${serialization_cpp}\n${benchmark_cpp}\n")
 file(APPEND zeroerr.hpp "#endif // ZEROERR_IMPLEMENTATION\n")
