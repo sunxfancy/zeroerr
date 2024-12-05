@@ -338,6 +338,20 @@ private:
     int index = 0;
 };
 
+
+class Decorator {
+public:
+    virtual bool onStartup() { return false; }
+    virtual bool onExecution() { return false; }
+    virtual bool onAssertion() { return false; }
+    virtual bool onTimeout() { return false; }
+};
+
+Decorator& skip(bool isSkip = true);
+Decorator& timeout(float timeout = 0.1f);  // in seconds
+Decorator& may_fail(bool isMayFail = true);
+Decorator& should_fail(bool isShouldFail = true);
+
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP

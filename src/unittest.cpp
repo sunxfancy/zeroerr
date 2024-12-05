@@ -591,8 +591,8 @@ XmlWriter::ScopedElement::~ScopedElement() {
     if (m_writer) m_writer->endElement();
 }
 
-XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text,
-                                                              bool               indent, bool new_line) {
+XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text, bool indent,
+                                                              bool new_line) {
     m_writer->writeText(text, indent, new_line);
     return *this;
 }
@@ -626,8 +626,10 @@ XmlWriter& XmlWriter::endElement() {
         m_os << "/>";
         m_tagIsOpen = false;
     } else {
-        if (m_needsIndent) m_os << m_indent;
-        else m_needsIndent = true;
+        if (m_needsIndent)
+            m_os << m_indent;
+        else
+            m_needsIndent = true;
         m_os << "</" << m_tags.back() << ">";
     }
     m_os << std::endl;
@@ -659,7 +661,7 @@ XmlWriter& XmlWriter::writeText(const std::string& text, bool indent, bool new_l
         if (tagWasOpen && indent) m_os << m_indent;
         m_os << XmlEncode(text);
         m_needsNewline = new_line;
-        m_needsIndent = new_line;
+        m_needsIndent  = new_line;
     }
     return *this;
 }
@@ -783,6 +785,49 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
     if (name == "console") return new ConsoleReporter(ut);
     if (name == "xml") return new XmlReporter(ut);
     return nullptr;
+}
+
+
+class SkipDecorator : public Decorator {};
+
+Decorator& skip(bool isSkip = true) {
+    static SkipDecorator skip_dec;
+    return skip_dec;
+}
+
+class TimeoutDecorator : public Decorator {
+    float timeout;
+
+public:
+    TimeoutDecorator(float timeout) : timeout(timeout) {}
+};
+
+Decorator& timeout(float timeout = 0.1f) {
+    static std::map<float, TimeoutDecorator> timeout_dec;
+    if (timeout_dec.find(timeout) == timeout_dec.end()) {
+        timeout_dec[timeout] = TimeoutDecorator(timeout);
+    }
+    return timeout_dec[timeout];
+}
+
+class FailureDecorator : public Decorator {
+public:
+    enum FailureType { may_fail, should_fail };
+    FailureDecorator(FailureType type) : type(type) {}
+
+private:
+    FailureType type;
+};
+
+
+Decorator& may_fail(bool isMayFail = true) {
+    static FailureDecorator may_fail_dec(FailureDecorator::may_fail);
+    return may_fail_dec;
+}
+
+Decorator& should_fail(bool isShouldFail = true) {
+    static FailureDecorator should_fail_dec(FailureDecorator::should_fail);
+    return should_fail_dec;
 }
 
 
