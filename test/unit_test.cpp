@@ -237,3 +237,8 @@ SCENARIO("vectors can be sized and resized") {
         };
     };
 }
+
+
+TEST_CASE("Test may fail", may_fail()) {
+    CHECK(0 == 1);
+}

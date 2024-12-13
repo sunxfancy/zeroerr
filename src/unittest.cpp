@@ -75,8 +75,9 @@ static inline std::string getFileName(std::string file) {
     return fileName;
 }
 
-SubCase::SubCase(std::string name, std::string file, unsigned line, TestContext* context)
-    : TestCase(name, file, line), context(context) {}
+SubCase::SubCase(std::string name, std::string file, unsigned line, TestContext* context,
+                 std::vector<Decorator*> decorators)
+    : TestCase(name, file, line, decorators), context(context) {}
 
 void SubCase::operator<<(std::function<void(TestContext*)> op) {
     func = op;
@@ -719,8 +720,8 @@ public:
         if (ut.log_to_report) suspendLog();
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                             int) override {
+    virtual void testCaseEnd(ZEROERR_UNUSED(const TestCase&), std::stringbuf& sb,
+                             const TestContext& ctx, int) override {
         current.pop_back();
         xml.scopedElement("Result")
             .writeAttribute("time", 0)
@@ -790,24 +791,28 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
 
 class SkipDecorator : public Decorator {};
 
-Decorator& skip(bool isSkip = true) {
+Decorator* skip(bool isSkip) {
     static SkipDecorator skip_dec;
-    return skip_dec;
+    if (isSkip)
+        return &skip_dec;
+    else
+        return nullptr;
 }
 
 class TimeoutDecorator : public Decorator {
     float timeout;
 
 public:
+    TimeoutDecorator() : timeout(0) {}
     TimeoutDecorator(float timeout) : timeout(timeout) {}
 };
 
-Decorator& timeout(float timeout = 0.1f) {
+Decorator* timeout(float timeout) {
     static std::map<float, TimeoutDecorator> timeout_dec;
     if (timeout_dec.find(timeout) == timeout_dec.end()) {
         timeout_dec[timeout] = TimeoutDecorator(timeout);
     }
-    return timeout_dec[timeout];
+    return &timeout_dec[timeout];
 }
 
 class FailureDecorator : public Decorator {
@@ -820,14 +825,14 @@ private:
 };
 
 
-Decorator& may_fail(bool isMayFail = true) {
+Decorator* may_fail(bool isMayFail) {
     static FailureDecorator may_fail_dec(FailureDecorator::may_fail);
-    return may_fail_dec;
+    return &may_fail_dec;
 }
 
-Decorator& should_fail(bool isShouldFail = true) {
+Decorator* should_fail(bool isShouldFail) {
     static FailureDecorator should_fail_dec(FailureDecorator::should_fail);
-    return should_fail_dec;
+    return &should_fail_dec;
 }
 
 

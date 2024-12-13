@@ -8,19 +8,20 @@
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_TEST_FUNC(function, name)                     \
+#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                \
     static void                     function(zeroerr::TestContext*); \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \
-        {name, __FILE__, __LINE__, function});                       \
+        {name, __FILE__, __LINE__, function, {__VA_ARGS__}});        \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
+#define TEST_CASE(name, ...) \
+    ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name, __VA_ARGS__)
 
-#define SUB_CASE(name)                                                \
-    zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
+#define SUB_CASE(name, ...)                                                          \
+    zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \
         << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
-#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
+#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name, ...)                   \
     class classname : public fixture {                                                       \
     public:                                                                                  \
         void funcname(zeroerr::TestContext*);                                                \
@@ -30,12 +31,12 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
         instance.funcname(_ZEROERR_TEST_CONTEXT);                                            \
     }                                                                                        \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \
-        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname)});                           \
+        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname), {__VA_ARGS__}});            \
     inline void classname::funcname(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE_FIXTURE(fixture, name)                                \
+#define TEST_CASE_FIXTURE(fixture, name, ...)                           \
     ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
-                              ZEROERR_NAMEGEN(_zeroerr_test_method), name)
+                              ZEROERR_NAMEGEN(_zeroerr_test_method), name, __VA_ARGS__)
 
 
 #define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT->save_output();
@@ -51,6 +52,7 @@ namespace zeroerr {
 
 class IReporter;
 struct TestCase;
+class Decorator;
 
 /**
  * @brief TestContext is a class that holds the test results and reporter context.
@@ -166,7 +168,7 @@ struct TestCase {
     unsigned                          line;
     std::function<void(TestContext*)> func;
     std::vector<TestCase*>            subcases;
-
+    std::vector<Decorator*>           decorators;
     /**
      * @brief Compare the test cases.
      * @param rhs The test case that will be compared.
@@ -180,8 +182,8 @@ struct TestCase {
      * @param file The file that the test case is defined.
      * @param line The line that the test case is defined.
      */
-    TestCase(std::string name, std::string file, unsigned line)
-        : name(name), file(file), line(line) {}
+    TestCase(std::string name, std::string file, unsigned line, std::vector<Decorator*> decorators)
+        : name(name), file(file), line(line), decorators(decorators) {}
 
     /**
      * @brief Construct a new Test Case object
@@ -189,10 +191,11 @@ struct TestCase {
      * @param file The file that the test case is defined.
      * @param line The line that the test case is defined.
      * @param func The function that will be run to test the test case.
+     * @param decorators The decorators that will be used to decorate the test case.
      */
     TestCase(std::string name, std::string file, unsigned line,
-             std::function<void(TestContext*)> func)
-        : name(name), file(file), line(line), func(func) {}
+             std::function<void(TestContext*)> func, std::vector<Decorator*> decorators)
+        : name(name), file(file), line(line), func(func), decorators(decorators) {}
 };
 
 
@@ -200,7 +203,8 @@ struct TestCase {
  * @brief SubCase is a class that holds the subcase information.
  */
 struct SubCase : TestCase {
-    SubCase(std::string name, std::string file, unsigned line, TestContext* context);
+    SubCase(std::string name, std::string file, unsigned line, TestContext* context,
+            std::vector<Decorator*> decorators);
     ~SubCase() = default;
     TestContext* context;
     void         operator<<(std::function<void(TestContext*)> op);
@@ -347,10 +351,10 @@ public:
     virtual bool onTimeout() { return false; }
 };
 
-Decorator& skip(bool isSkip = true);
-Decorator& timeout(float timeout = 0.1f);  // in seconds
-Decorator& may_fail(bool isMayFail = true);
-Decorator& should_fail(bool isShouldFail = true);
+Decorator* skip(bool isSkip = true);
+Decorator* timeout(float timeout = 0.1f);  // in seconds
+Decorator* may_fail(bool isMayFail = true);
+Decorator* should_fail(bool isShouldFail = true);
 
 }  // namespace zeroerr
 
