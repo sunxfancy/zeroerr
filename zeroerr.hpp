@@ -2584,13 +2584,14 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name)                    \
-    static void                     function(zeroerr::TestContext*);     \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(       \
-        {name, __FILE__, __LINE__, function}, zeroerr::TestType::bench); \
+#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name, ...)                              \
+    static void                     function(zeroerr::TestContext*);                    \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                      \
+        {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, zeroerr::TestType::bench); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define BENCHMARK(name) ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name)
+#define BENCHMARK(name, ...) \
+    ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name, __VA_ARGS__)
 
 
 namespace zeroerr {
@@ -2631,7 +2632,7 @@ struct PerformanceCounter {
     void endMeasure();
     void updateResults(uint64_t numIters);
 
-    PerfCountSet<uint64_t> const& val() const noexcept { return _val; }
+    const PerfCountSet<uint64_t>& val() const noexcept { return _val; }
     PerfCountSet<bool>            has() const noexcept { return _has; }
 
     static PerformanceCounter& inst();
@@ -2734,10 +2735,10 @@ struct Benchmark {
 namespace detail {
 
 #if defined(_MSC_VER)
-void doNotOptimizeAwaySink(void const*);
+void doNotOptimizeAwaySink(const void*);
 
 template <typename T>
-void doNotOptimizeAway(T const& val) {
+void doNotOptimizeAway(const T& val) {
     doNotOptimizeAwaySink(&val);
 }
 
@@ -2748,7 +2749,7 @@ void doNotOptimizeAway(T const& val) {
 // Google Benchmark seemed to be the most well tested anyways. see
 // https://github.com/google/benchmark/blob/master/include/benchmark/benchmark.h#L307
 template <typename T>
-void doNotOptimizeAway(T const& val) {
+void doNotOptimizeAway(const T& val) {
     // NOLINTNEXTLINE(hicpp-no-assembler)
     asm volatile("" : : "r,m"(val) : "memory");
 }
@@ -4053,19 +4054,20 @@ protected:
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_TEST_FUNC(function, name)                     \
+#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                \
     static void                     function(zeroerr::TestContext*); \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \
-        {name, __FILE__, __LINE__, function});                       \
+        {name, __FILE__, __LINE__, function, {__VA_ARGS__}});        \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
+#define TEST_CASE(name, ...) \
+    ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name, __VA_ARGS__)
 
-#define SUB_CASE(name)                                                \
-    zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
+#define SUB_CASE(name, ...)                                                          \
+    zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \
         << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
-#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
+#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name, ...)                   \
     class classname : public fixture {                                                       \
     public:                                                                                  \
         void funcname(zeroerr::TestContext*);                                                \
@@ -4075,12 +4077,12 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
         instance.funcname(_ZEROERR_TEST_CONTEXT);                                            \
     }                                                                                        \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \
-        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname)});                           \
+        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname), {__VA_ARGS__}});            \
     inline void classname::funcname(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE_FIXTURE(fixture, name)                                \
+#define TEST_CASE_FIXTURE(fixture, name, ...)                           \
     ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
-                              ZEROERR_NAMEGEN(_zeroerr_test_method), name)
+                              ZEROERR_NAMEGEN(_zeroerr_test_method), name, __VA_ARGS__)
 
 
 #define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT->save_output();
@@ -4096,6 +4098,7 @@ namespace zeroerr {
 
 class IReporter;
 struct TestCase;
+class Decorator;
 
 /**
  * @brief TestContext is a class that holds the test results and reporter context.
@@ -4211,7 +4214,7 @@ struct TestCase {
     unsigned                          line;
     std::function<void(TestContext*)> func;
     std::vector<TestCase*>            subcases;
-
+    std::vector<Decorator*>           decorators;
     /**
      * @brief Compare the test cases.
      * @param rhs The test case that will be compared.
@@ -4225,8 +4228,8 @@ struct TestCase {
      * @param file The file that the test case is defined.
      * @param line The line that the test case is defined.
      */
-    TestCase(std::string name, std::string file, unsigned line)
-        : name(name), file(file), line(line) {}
+    TestCase(std::string name, std::string file, unsigned line, std::vector<Decorator*> decorators)
+        : name(name), file(file), line(line), decorators(decorators) {}
 
     /**
      * @brief Construct a new Test Case object
@@ -4234,10 +4237,11 @@ struct TestCase {
      * @param file The file that the test case is defined.
      * @param line The line that the test case is defined.
      * @param func The function that will be run to test the test case.
+     * @param decorators The decorators that will be used to decorate the test case.
      */
     TestCase(std::string name, std::string file, unsigned line,
-             std::function<void(TestContext*)> func)
-        : name(name), file(file), line(line), func(func) {}
+             std::function<void(TestContext*)> func, std::vector<Decorator*> decorators)
+        : name(name), file(file), line(line), func(func), decorators(decorators) {}
 };
 
 
@@ -4245,7 +4249,8 @@ struct TestCase {
  * @brief SubCase is a class that holds the subcase information.
  */
 struct SubCase : TestCase {
-    SubCase(std::string name, std::string file, unsigned line, TestContext* context);
+    SubCase(std::string name, std::string file, unsigned line, TestContext* context,
+            std::vector<Decorator*> decorators);
     ~SubCase() = default;
     TestContext* context;
     void         operator<<(std::function<void(TestContext*)> op);
@@ -4383,6 +4388,20 @@ private:
     int index = 0;
 };
 
+
+class Decorator {
+public:
+    virtual bool onStartup() { return false; }
+    virtual bool onExecution() { return false; }
+    virtual bool onAssertion() { return false; }
+    virtual bool onTimeout() { return false; }
+};
+
+Decorator* skip(bool isSkip = true);
+Decorator* timeout(float timeout = 0.1f);  // in seconds
+Decorator* may_fail(bool isMayFail = true);
+Decorator* should_fail(bool isShouldFail = true);
+
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
@@ -4408,13 +4427,14 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_FUZZ_TEST_FUNC(function, name)                        \
-    static void                     function(zeroerr::TestContext*);         \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(           \
-        {name, __FILE__, __LINE__, function}, zeroerr::TestType::fuzz_test); \
+#define ZEROERR_CREATE_FUZZ_TEST_FUNC(function, name, ...)                                  \
+    static void                     function(zeroerr::TestContext*);                        \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                          \
+        {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, zeroerr::TestType::fuzz_test); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define FUZZ_TEST_CASE(name) ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
+#define FUZZ_TEST_CASE(name, ...) \
+    ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name, __VA_ARGS__)
 
 #define FUZZ_FUNC(func) zeroerr::FuzzFunction(func, _ZEROERR_TEST_CONTEXT)
 
@@ -5790,8 +5810,9 @@ static inline std::string getFileName(std::string file) {
     return fileName;
 }
 
-SubCase::SubCase(std::string name, std::string file, unsigned line, TestContext* context)
-    : TestCase(name, file, line), context(context) {}
+SubCase::SubCase(std::string name, std::string file, unsigned line, TestContext* context,
+                 std::vector<Decorator*> decorators)
+    : TestCase(name, file, line, decorators), context(context) {}
 
 void SubCase::operator<<(std::function<void(TestContext*)> op) {
     func = op;
@@ -6306,8 +6327,8 @@ XmlWriter::ScopedElement::~ScopedElement() {
     if (m_writer) m_writer->endElement();
 }
 
-XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text,
-                                                              bool               indent, bool new_line) {
+XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text, bool indent,
+                                                              bool new_line) {
     m_writer->writeText(text, indent, new_line);
     return *this;
 }
@@ -6341,8 +6362,10 @@ XmlWriter& XmlWriter::endElement() {
         m_os << "/>";
         m_tagIsOpen = false;
     } else {
-        if (m_needsIndent) m_os << m_indent;
-        else m_needsIndent = true;
+        if (m_needsIndent)
+            m_os << m_indent;
+        else
+            m_needsIndent = true;
         m_os << "</" << m_tags.back() << ">";
     }
     m_os << std::endl;
@@ -6374,7 +6397,7 @@ XmlWriter& XmlWriter::writeText(const std::string& text, bool indent, bool new_l
         if (tagWasOpen && indent) m_os << m_indent;
         m_os << XmlEncode(text);
         m_needsNewline = new_line;
-        m_needsIndent = new_line;
+        m_needsIndent  = new_line;
     }
     return *this;
 }
@@ -6432,8 +6455,8 @@ public:
         if (ut.log_to_report) suspendLog();
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                             int) override {
+    virtual void testCaseEnd(ZEROERR_UNUSED(const TestCase&), std::stringbuf& sb,
+                             const TestContext& ctx, int) override {
         current.pop_back();
         xml.scopedElement("Result")
             .writeAttribute("time", 0)
@@ -6498,6 +6521,53 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
     if (name == "console") return new ConsoleReporter(ut);
     if (name == "xml") return new XmlReporter(ut);
     return nullptr;
+}
+
+
+class SkipDecorator : public Decorator {};
+
+Decorator* skip(bool isSkip) {
+    static SkipDecorator skip_dec;
+    if (isSkip)
+        return &skip_dec;
+    else
+        return nullptr;
+}
+
+class TimeoutDecorator : public Decorator {
+    float timeout;
+
+public:
+    TimeoutDecorator() : timeout(0) {}
+    TimeoutDecorator(float timeout) : timeout(timeout) {}
+};
+
+Decorator* timeout(float timeout) {
+    static std::map<float, TimeoutDecorator> timeout_dec;
+    if (timeout_dec.find(timeout) == timeout_dec.end()) {
+        timeout_dec[timeout] = TimeoutDecorator(timeout);
+    }
+    return &timeout_dec[timeout];
+}
+
+class FailureDecorator : public Decorator {
+public:
+    enum FailureType { may_fail, should_fail };
+    FailureDecorator(FailureType type) : type(type) {}
+
+private:
+    FailureType type;
+};
+
+
+Decorator* may_fail(bool isMayFail) {
+    static FailureDecorator may_fail_dec(FailureDecorator::may_fail);
+    return &may_fail_dec;
+}
+
+Decorator* should_fail(bool isShouldFail) {
+    static FailureDecorator should_fail_dec(FailureDecorator::should_fail);
+    return &should_fail_dec;
 }
 
 
@@ -6569,6 +6639,13 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
     });
 
     current_fuzz_test = nullptr;
+#else
+    (void) fuzz_test;
+    (void) seed;
+    (void) runs;
+    (void) max_len;
+    (void) timeout;
+    (void) len_control;
 #endif
 }
 
