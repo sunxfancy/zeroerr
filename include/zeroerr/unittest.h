@@ -345,10 +345,17 @@ private:
 
 class Decorator {
 public:
-    virtual bool onStartup() { return false; }
-    virtual bool onExecution() { return false; }
+    // Called when the test registered, return true can block the test registering
+    virtual bool onStartup(const TestCase&) { return false; }
+
+    // Called when the test executing, return true can block the test execution
+    virtual bool onExecution(const TestCase&) { return false; }
+
+    // Called on each assertion, return true can skip the assertion
     virtual bool onAssertion() { return false; }
-    virtual bool onTimeout() { return false; }
+
+    // Called when the test finished, return true means the test containing errors
+    virtual bool onFinish(const TestCase&) { return false; }
 };
 
 Decorator* skip(bool isSkip = true);

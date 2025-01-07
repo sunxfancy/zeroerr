@@ -236,6 +236,20 @@ bool UnitTest::run_filter(const TestCase& tc) {
     return true;
 }
 
+static bool runOnExecutions(const TestCase& tc) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onExecution(tc)) return true;
+    }
+    return false;
+}
+
+static bool runOnFinishs(const TestCase& tc) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onFinish(tc)) return true;
+    }
+    return false;
+}
+
 int UnitTest::run() {
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
@@ -251,6 +265,7 @@ int UnitTest::run() {
 
     for (auto& tc : test_cases) {
         if (!run_filter(tc)) continue;
+        if (runOnExecutions(tc)) continue;
         reporter->testCaseStart(tc, new_buf);
         if (!list_test_cases) {
             std::streambuf* orig_buf = std::cerr.rdbuf();
@@ -269,6 +284,12 @@ int UnitTest::run() {
             std::cerr.rdbuf(orig_buf);
         }
         int type = sum.add(context);
+        if (runOnFinishs(tc)) {
+            if (type != 2) {
+                sum.failed += 1;
+                type = 2;
+            }
+        }
         reporter->testCaseEnd(tc, new_buf, context, type);
         context.reset();
         new_buf.str("");
@@ -306,7 +327,12 @@ static std::set<TestCase> getRegisteredTests(unsigned type) {
     return result;
 }
 
-regTest::regTest(const TestCase& tc, TestType type) { getTestSet(type).insert(tc); }
+regTest::regTest(const TestCase& tc, TestType type) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onStartup(tc)) return;
+    }
+    getTestSet(type).insert(tc);
+}
 
 static std::set<IReporter*>& getRegisteredReporters() {
     static std::set<IReporter*> data;
