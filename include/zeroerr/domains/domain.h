@@ -17,7 +17,6 @@ namespace zeroerr {
  * but will store the list in a vector, then ValueType will be 
  * std::list<int> and CorpusType will be std::vector<int>.
  */
-
 template <typename ValueType, typename CorpusType = ValueType>
 class Domain {
 public:
@@ -38,6 +37,13 @@ public:
     // virtual unsigned CountNumberOfFields(CorpusType v) const { return 0; }
 };
 
+
+/**
+ * @brief DomainConvertable is a base class for domains that can be converted to and from a ValueType
+ * 
+ * This class provides default implementations for the GetValue and FromValue methods.
+ * It is used to convert between the corpus types and the value types.
+ */
 template <typename ValueType, typename CorpusType = ValueType>
 class DomainConvertable : public Domain<ValueType, CorpusType> {
 public:

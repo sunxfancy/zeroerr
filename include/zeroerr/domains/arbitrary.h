@@ -13,6 +13,31 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+
+/**
+ * @brief Arbitrary is a domain that generates random values of a given type
+ * 
+ * @tparam T The type to generate values for
+ * @tparam N Template parameter for SFINAE-based specialization selection
+ * 
+ * This domain provides default random value generation for common types.
+ * It uses template specialization to handle different types appropriately.
+ * 
+ * The base template is empty and specializations are provided for:
+ * - bool
+ * - unsigned integers 
+ * - signed integers
+ * - floating point numbers
+ * - strings
+ * - containers
+ * 
+ * Example:
+ * ```cpp
+ * auto domain = Arbitrary<int>(); // Generates random integers
+ * auto domain = Arbitrary<std::string>(); // Generates random strings
+ * ```
+ */
+
 template <typename T, unsigned N = 2, typename = void>
 class Arbitrary : public Arbitrary<T, N-1> {};
 

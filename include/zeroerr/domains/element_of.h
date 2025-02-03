@@ -7,6 +7,23 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+/**
+ * @brief ElementOf is a domain that generates random values from a fixed set of elements
+ * 
+ * @tparam T The type of elements to generate
+ * 
+ * This domain allows generating random values by selecting from a predefined set of elements.
+ * The elements are provided as a vector during construction.
+ * 
+ * Example:
+ * ```cpp
+ * // Generate random values from a set of strings
+ * auto domain = ElementOf<std::string>({"red", "green", "blue"});
+ * 
+ * // Generate random values from a set of integers
+ * auto domain = ElementOf<int>({1, 2, 3, 4, 5});
+ * ```
+ */
 template <typename T>
 class ElementOf : public Domain<T, uint64_t> {
 public:

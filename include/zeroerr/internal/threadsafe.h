@@ -1,7 +1,13 @@
 #pragma once
 #include "zeroerr/internal/config.h"
 
-// Thread safety support
+/**
+ * @brief Thread safety support
+ * This header provides thread-safe support for zeroerr.
+ * 
+ * It defines macros for mutexes, locks, and atomic operations.
+ * The macros are conditionally defined based on the ZEROERR_NO_THREAD_SAFE flag.
+ */
 #ifdef ZEROERR_NO_THREAD_SAFE
 
 #define ZEROERR_MUTEX(x)

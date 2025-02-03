@@ -21,6 +21,16 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 #define ZEROERR_G_CONTEXT_SCOPE(x)
 #endif
 
+
+/**
+ * @brief Default printer for assertion messages
+ * 
+ * This macro defines the default printer for assertion messages.
+ * It prints the assertion message in different colors based on the assertion level.
+ * 
+ * The macro can be overridden by defining ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER before
+ * including this header. (Or undefine it and implement your own printer.)
+ */
 #ifndef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER
 #define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, ...)                    \
     do {                                                                          \

@@ -13,6 +13,30 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+
+/**
+ * @brief AggregateOf is a domain that combines multiple inner domains into a tuple or aggregate type
+ * 
+ * @tparam T The aggregate type to generate (e.g. struct or tuple)
+ * @tparam Inner The inner domain types that will generate each field
+ * 
+ * This domain allows generating structured data by composing multiple inner domains.
+ * Each inner domain generates one field of the aggregate type.
+ * 
+ * Example:
+ * ```cpp
+ * struct Point {
+ *   int x;
+ *   int y; 
+ * };
+ * 
+ * auto domain = AggregateOf<Point>(
+ *   InRange(0, 100),  // Domain for x
+ *   InRange(0, 100)   // Domain for y
+ * );
+ * ```
+ */
+
 template <typename T, typename... Inner>
 class AggregateOf : public Domain<T, std::tuple<typename Inner::CorpusType...>> {
 public:

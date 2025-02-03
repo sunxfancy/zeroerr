@@ -317,6 +317,23 @@
     ZEROERR_CLANG_SUPPRESS_WARNING_POP ZEROERR_GCC_SUPPRESS_WARNING_POP \
         ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
+/**
+ * Macro to suppress unused variable/parameter warnings
+ *
+ * This macro can be used to mark variables or parameters as intentionally unused
+ * while maintaining cross-compiler compatibility. It handles different compiler-specific
+ * attributes and warning suppressions:
+ *
+ * - For Clang/GCC: Uses __attribute__((unused))
+ * - For LCLINT: Uses @unused@ comment annotation
+ * - For MSVC: Suppresses warning C4100 (unreferenced formal parameter)
+ * - For other compilers: No special handling
+ *
+ * Usage example:
+ *   void foo(ZEROERR_UNUSED(int x)) {
+ *     // x is marked as intentionally unused
+ *   }
+ */
 #if ZEROERR_CLANG || ZEROERR_GCC
 #define ZEROERR_UNUSED(x) x __attribute__((unused))
 #elif defined(__LCLINT__)
