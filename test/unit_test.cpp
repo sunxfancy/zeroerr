@@ -3,7 +3,7 @@
 #include "zeroerr/dbg.h"
 #include "zeroerr/print.h"
 #include "zeroerr/unittest.h"
-
+#include <thread>
 
 using namespace zeroerr;
 
@@ -242,3 +242,16 @@ SCENARIO("vectors can be sized and resized") {
 TEST_CASE("Test may fail", may_fail()) {
     CHECK(0 == 1);
 }
+
+TEST_CASE("Test should fail", should_fail()) {
+    CHECK(0 == 1);
+}
+
+TEST_CASE("Test skip", skip()) {
+    CHECK(0 == 1);
+}
+
+TEST_CASE("Test timeout", timeout(0.01)) {
+    std::this_thread::sleep_for(std::chrono::duration<double>(0.05));
+}
+

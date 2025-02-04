@@ -2,6 +2,7 @@
 
 #include "zeroerr/internal/config.h"
 
+#include <chrono>
 #include <functional>
 #include <string>
 #include <vector>
@@ -76,6 +77,8 @@ public:
     unsigned warning_as = 0;
     unsigned failed_as  = 0;
     unsigned skipped_as = 0;
+
+    std::chrono::duration<double> duration = std::chrono::duration<double>::zero();
 
     IReporter& reporter;
 
@@ -355,7 +358,7 @@ public:
     virtual bool onAssertion() { return false; }
 
     // Called when the test finished, return true means the test containing errors
-    virtual bool onFinish(const TestCase&) { return false; }
+    virtual bool onFinish(const TestCase&, const TestContext&) { return false; }
 };
 
 Decorator* skip(bool isSkip = true);

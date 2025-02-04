@@ -236,16 +236,16 @@ bool UnitTest::run_filter(const TestCase& tc) {
     return true;
 }
 
-static bool runOnExecutions(const TestCase& tc) {
+static bool runOnExecution(const TestCase& tc) {
     for (auto& decorator : tc.decorators) {
         if (decorator->onExecution(tc)) return true;
     }
     return false;
 }
 
-static bool runOnFinishs(const TestCase& tc) {
+static bool runOnFinish(const TestCase& tc, const TestContext& ctx) {
     for (auto& decorator : tc.decorators) {
-        if (decorator->onFinish(tc)) return true;
+        if (decorator->onFinish(tc, ctx)) return true;
     }
     return false;
 }
@@ -265,12 +265,16 @@ int UnitTest::run() {
 
     for (auto& tc : test_cases) {
         if (!run_filter(tc)) continue;
-        if (runOnExecutions(tc)) continue;
+        if (runOnExecution(tc)) {
+            sum.skipped += 1;
+            continue;
+        }
         reporter->testCaseStart(tc, new_buf);
         if (!list_test_cases) {
             std::streambuf* orig_buf = std::cerr.rdbuf();
             std::cerr.rdbuf(&new_buf);
             std::cerr << std::endl;
+            auto start = std::chrono::high_resolution_clock::now();
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
@@ -281,10 +285,12 @@ int UnitTest::run() {
                     context.failed_as = 1;
                 }
             }
+            auto end         = std::chrono::high_resolution_clock::now();
+            context.duration = end - start;
             std::cerr.rdbuf(orig_buf);
         }
         int type = sum.add(context);
-        if (runOnFinishs(tc)) {
+        if (runOnFinish(tc, context)) {
             if (type != 2) {
                 sum.failed += 1;
                 type = 2;
@@ -815,14 +821,14 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
 }
 
 
-class SkipDecorator : public Decorator {};
+class SkipDecorator : public Decorator {
+    bool onExecution(const TestCase&) override { return true; }
+};
 
 Decorator* skip(bool isSkip) {
     static SkipDecorator skip_dec;
-    if (isSkip)
-        return &skip_dec;
-    else
-        return nullptr;
+    if (isSkip) return &skip_dec;
+    return nullptr;
 }
 
 class TimeoutDecorator : public Decorator {
@@ -831,6 +837,14 @@ class TimeoutDecorator : public Decorator {
 public:
     TimeoutDecorator() : timeout(0) {}
     TimeoutDecorator(float timeout) : timeout(timeout) {}
+
+    bool onFinish(const TestCase& tc, const TestContext& ctx) override {
+        if (ctx.duration > std::chrono::duration<double>(timeout)) {
+            std::cerr << FgRed <<  "Timeout: " << Reset << ctx.duration.count() << "s > " << timeout << "s" << std::endl;
+            return true;
+        }
+        return false;
+    }
 };
 
 Decorator* timeout(float timeout) {
@@ -853,12 +867,14 @@ private:
 
 Decorator* may_fail(bool isMayFail) {
     static FailureDecorator may_fail_dec(FailureDecorator::may_fail);
-    return &may_fail_dec;
+    if (isMayFail) return &may_fail_dec;
+    return nullptr;
 }
 
 Decorator* should_fail(bool isShouldFail) {
     static FailureDecorator should_fail_dec(FailureDecorator::should_fail);
-    return &should_fail_dec;
+    if (isShouldFail) return &should_fail_dec;
+    return nullptr;
 }
 
 

@@ -320,6 +320,23 @@
     ZEROERR_CLANG_SUPPRESS_WARNING_POP ZEROERR_GCC_SUPPRESS_WARNING_POP \
         ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
+/**
+ * Macro to suppress unused variable/parameter warnings
+ *
+ * This macro can be used to mark variables or parameters as intentionally unused
+ * while maintaining cross-compiler compatibility. It handles different compiler-specific
+ * attributes and warning suppressions:
+ *
+ * - For Clang/GCC: Uses __attribute__((unused))
+ * - For LCLINT: Uses @unused@ comment annotation
+ * - For MSVC: Suppresses warning C4100 (unreferenced formal parameter)
+ * - For other compilers: No special handling
+ *
+ * Usage example:
+ *   void foo(ZEROERR_UNUSED(int x)) {
+ *     // x is marked as intentionally unused
+ *   }
+ */
 #if ZEROERR_CLANG || ZEROERR_GCC
 #define ZEROERR_UNUSED(x) x __attribute__((unused))
 #elif defined(__LCLINT__)
@@ -673,7 +690,13 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() { retur
 #pragma once
 
 
-// Thread safety support
+/**
+ * @brief Thread safety support
+ * This header provides thread-safe support for zeroerr.
+ * 
+ * It defines macros for mutexes, locks, and atomic operations.
+ * The macros are conditionally defined based on the ZEROERR_NO_THREAD_SAFE flag.
+ */
 #ifdef ZEROERR_NO_THREAD_SAFE
 
 #define ZEROERR_MUTEX(x)
@@ -1010,6 +1033,32 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+/**
+ * @brief Interface for serializable objects
+ * 
+ * IRObject (Intermediate Representation Object) provides a low-level interface for serializing 
+ * data types into a common format. It uses a union to store different data types and provides
+ * type-safe access through templated getter methods.
+ *
+ * The object can store:
+ * - Integers (int64_t)
+ * - Floating point numbers (double) 
+ * - Strings (char* for long strings, char[8] for short strings)
+ * - Nested objects (IRObject*)
+ *
+ * Memory management:
+ * - The object takes ownership of allocated strings and nested objects
+ * - Copy/move operations perform deep copies/moves
+ * - The destructor frees any owned memory
+ *
+ * Usage example:
+ * @code
+ * IRObject obj;
+ * obj.type = IRObject::Int;
+ * obj.i = 42;
+ * int value = obj.GetScalar<int>(); // value = 42
+ * @endcode
+ */
 
 struct IRObject {
     IRObject() { std::memset(this, 0, sizeof(IRObject)); }
@@ -2063,7 +2112,6 @@ namespace zeroerr {
  * but will store the list in a vector, then ValueType will be 
  * std::list<int> and CorpusType will be std::vector<int>.
  */
-
 template <typename ValueType, typename CorpusType = ValueType>
 class Domain {
 public:
@@ -2084,6 +2132,13 @@ public:
     // virtual unsigned CountNumberOfFields(CorpusType v) const { return 0; }
 };
 
+
+/**
+ * @brief DomainConvertable is a base class for domains that can be converted to and from a ValueType
+ * 
+ * This class provides default implementations for the GetValue and FromValue methods.
+ * It is used to convert between the corpus types and the value types.
+ */
 template <typename ValueType, typename CorpusType = ValueType>
 class DomainConvertable : public Domain<ValueType, CorpusType> {
 public:
@@ -2105,6 +2160,23 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+/**
+ * @brief InRange is a domain that generates random values within a specified range
+ * 
+ * @tparam T The numeric type to generate values for (e.g. int, float)
+ * 
+ * This domain generates random values between a minimum and maximum value (inclusive).
+ * It supports any numeric type that can be used with arithmetic operations.
+ * 
+ * Example:
+ * ```cpp
+ * // Generate integers between 1 and 100
+ * auto domain = InRange(1, 100);
+ * 
+ * // Generate floating point numbers between 0.0 and 1.0
+ * auto domain = InRange(0.0, 1.0);
+ * ```
+ */
 template <typename T>
 class InRange : public DomainConvertable<T> {
 public:
@@ -2141,6 +2213,23 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+/**
+ * @brief ElementOf is a domain that generates random values from a fixed set of elements
+ * 
+ * @tparam T The type of elements to generate
+ * 
+ * This domain allows generating random values by selecting from a predefined set of elements.
+ * The elements are provided as a vector during construction.
+ * 
+ * Example:
+ * ```cpp
+ * // Generate random values from a set of strings
+ * auto domain = ElementOf<std::string>({"red", "green", "blue"});
+ * 
+ * // Generate random values from a set of integers
+ * auto domain = ElementOf<int>({1, 2, 3, 4, 5});
+ * ```
+ */
 template <typename T>
 class ElementOf : public Domain<T, uint64_t> {
 public:
@@ -2185,6 +2274,29 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+/**
+ * @brief ContainerOf is a domain that generates random containers filled with elements from an inner domain
+ * 
+ * @tparam T The container type to generate (e.g. vector, list, set)
+ * @tparam InnerDomain The domain type used to generate the container elements
+ * 
+ * This domain allows generating containers where each element is generated by an inner domain.
+ * It supports configuring the size constraints of the generated containers.
+ * 
+ * Example:
+ * ```cpp
+ * // Generate vectors of ints between 0-100
+ * auto domain = ContainerOf<std::vector<int>>(InRange(0, 100));
+ * 
+ * // Generate sets of strings
+ * auto domain = ContainerOf<std::set<std::string>>(Arbitrary<std::string>());
+ * 
+ * // Configure size constraints
+ * domain.WithMinSize(5);  // At least 5 elements
+ * domain.WithMaxSize(10); // At most 10 elements
+ * domain.WithSize(7);     // Exactly 7 elements
+ * ```
+ */
 struct ContainerOfBase {
     int min_size = 0, max_size = 100, size = -1;
 
@@ -2346,6 +2458,30 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+
+/**
+ * @brief AggregateOf is a domain that combines multiple inner domains into a tuple or aggregate type
+ * 
+ * @tparam T The aggregate type to generate (e.g. struct or tuple)
+ * @tparam Inner The inner domain types that will generate each field
+ * 
+ * This domain allows generating structured data by composing multiple inner domains.
+ * Each inner domain generates one field of the aggregate type.
+ * 
+ * Example:
+ * ```cpp
+ * struct Point {
+ *   int x;
+ *   int y; 
+ * };
+ * 
+ * auto domain = AggregateOf<Point>(
+ *   InRange(0, 100),  // Domain for x
+ *   InRange(0, 100)   // Domain for y
+ * );
+ * ```
+ */
+
 template <typename T, typename... Inner>
 class AggregateOf : public Domain<T, std::tuple<typename Inner::CorpusType...>> {
 public:
@@ -2441,6 +2577,31 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
+
+
+/**
+ * @brief Arbitrary is a domain that generates random values of a given type
+ * 
+ * @tparam T The type to generate values for
+ * @tparam N Template parameter for SFINAE-based specialization selection
+ * 
+ * This domain provides default random value generation for common types.
+ * It uses template specialization to handle different types appropriately.
+ * 
+ * The base template is empty and specializations are provided for:
+ * - bool
+ * - unsigned integers 
+ * - signed integers
+ * - floating point numbers
+ * - strings
+ * - containers
+ * 
+ * Example:
+ * ```cpp
+ * auto domain = Arbitrary<int>(); // Generates random integers
+ * auto domain = Arbitrary<std::string>(); // Generates random strings
+ * ```
+ */
 
 template <typename T, unsigned N = 2, typename = void>
 class Arbitrary : public Arbitrary<T, N-1> {};
@@ -2806,6 +2967,16 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 #define ZEROERR_G_CONTEXT_SCOPE(x)
 #endif
 
+
+/**
+ * @brief Default printer for assertion messages
+ * 
+ * This macro defines the default printer for assertion messages.
+ * It prints the assertion message in different colors based on the assertion level.
+ * 
+ * The macro can be overridden by defining ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER before
+ * including this header. (Or undefine it and implement your own printer.)
+ */
 #ifndef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER
 #define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, ...)                    \
     do {                                                                          \
@@ -4048,6 +4219,7 @@ protected:
 
 
 
+#include <chrono>
 #include <functional>
 #include <string>
 #include <vector>
@@ -4122,6 +4294,8 @@ public:
     unsigned warning_as = 0;
     unsigned failed_as  = 0;
     unsigned skipped_as = 0;
+
+    std::chrono::duration<double> duration = std::chrono::duration<double>::zero();
 
     IReporter& reporter;
 
@@ -4391,10 +4565,17 @@ private:
 
 class Decorator {
 public:
-    virtual bool onStartup() { return false; }
-    virtual bool onExecution() { return false; }
+    // Called when the test registered, return true can block the test registering
+    virtual bool onStartup(const TestCase&) { return false; }
+
+    // Called when the test executing, return true can block the test execution
+    virtual bool onExecution(const TestCase&) { return false; }
+
+    // Called on each assertion, return true can skip the assertion
     virtual bool onAssertion() { return false; }
-    virtual bool onTimeout() { return false; }
+
+    // Called when the test finished, return true means the test containing errors
+    virtual bool onFinish(const TestCase&, const TestContext&) { return false; }
 };
 
 Decorator* skip(bool isSkip = true);
@@ -5971,6 +6152,20 @@ bool UnitTest::run_filter(const TestCase& tc) {
     return true;
 }
 
+static bool runOnExecution(const TestCase& tc) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onExecution(tc)) return true;
+    }
+    return false;
+}
+
+static bool runOnFinish(const TestCase& tc, const TestContext& ctx) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onFinish(tc, ctx)) return true;
+    }
+    return false;
+}
+
 int UnitTest::run() {
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
@@ -5986,11 +6181,16 @@ int UnitTest::run() {
 
     for (auto& tc : test_cases) {
         if (!run_filter(tc)) continue;
+        if (runOnExecution(tc)) {
+            sum.skipped += 1;
+            continue;
+        }
         reporter->testCaseStart(tc, new_buf);
         if (!list_test_cases) {
             std::streambuf* orig_buf = std::cerr.rdbuf();
             std::cerr.rdbuf(&new_buf);
             std::cerr << std::endl;
+            auto start = std::chrono::high_resolution_clock::now();
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
@@ -6001,9 +6201,17 @@ int UnitTest::run() {
                     context.failed_as = 1;
                 }
             }
+            auto end         = std::chrono::high_resolution_clock::now();
+            context.duration = end - start;
             std::cerr.rdbuf(orig_buf);
         }
         int type = sum.add(context);
+        if (runOnFinish(tc, context)) {
+            if (type != 2) {
+                sum.failed += 1;
+                type = 2;
+            }
+        }
         reporter->testCaseEnd(tc, new_buf, context, type);
         context.reset();
         new_buf.str("");
@@ -6041,7 +6249,12 @@ static std::set<TestCase> getRegisteredTests(unsigned type) {
     return result;
 }
 
-regTest::regTest(const TestCase& tc, TestType type) { getTestSet(type).insert(tc); }
+regTest::regTest(const TestCase& tc, TestType type) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onStartup(tc)) return;
+    }
+    getTestSet(type).insert(tc);
+}
 
 static std::set<IReporter*>& getRegisteredReporters() {
     static std::set<IReporter*> data;
@@ -6524,14 +6737,14 @@ IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
 }
 
 
-class SkipDecorator : public Decorator {};
+class SkipDecorator : public Decorator {
+    bool onExecution(const TestCase&) override { return true; }
+};
 
 Decorator* skip(bool isSkip) {
     static SkipDecorator skip_dec;
-    if (isSkip)
-        return &skip_dec;
-    else
-        return nullptr;
+    if (isSkip) return &skip_dec;
+    return nullptr;
 }
 
 class TimeoutDecorator : public Decorator {
@@ -6540,6 +6753,14 @@ class TimeoutDecorator : public Decorator {
 public:
     TimeoutDecorator() : timeout(0) {}
     TimeoutDecorator(float timeout) : timeout(timeout) {}
+
+    bool onFinish(const TestCase& tc, const TestContext& ctx) override {
+        if (ctx.duration > std::chrono::duration<double>(timeout)) {
+            std::cerr << FgRed <<  "Timeout: " << Reset << ctx.duration.count() << "s > " << timeout << "s" << std::endl;
+            return true;
+        }
+        return false;
+    }
 };
 
 Decorator* timeout(float timeout) {
@@ -6562,12 +6783,14 @@ private:
 
 Decorator* may_fail(bool isMayFail) {
     static FailureDecorator may_fail_dec(FailureDecorator::may_fail);
-    return &may_fail_dec;
+    if (isMayFail) return &may_fail_dec;
+    return nullptr;
 }
 
 Decorator* should_fail(bool isShouldFail) {
     static FailureDecorator should_fail_dec(FailureDecorator::should_fail);
-    return &should_fail_dec;
+    if (isShouldFail) return &should_fail_dec;
+    return nullptr;
 }
 
 
