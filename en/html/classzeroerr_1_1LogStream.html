@@ -1,0 +1,996 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: zeroerr::LogStream Class Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classzeroerr_1_1LogStream.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
+<a href="classzeroerr_1_1LogStream-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">zeroerr::LogStream Class Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="classzeroerr_1_1LogStream.html" title="LogStream is a class to manage the log messages.">LogStream</a> is a class to manage the log messages.  
+ <a href="classzeroerr_1_1LogStream.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="log_8h_source.html">log.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a59ec01e741324868ad182bcb114af24b" id="r_a59ec01e741324868ad182bcb114af24b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a59ec01e741324868ad182bcb114af24b">FlushMode</a> { <a class="el" href="classzeroerr_1_1LogStream.html#a59ec01e741324868ad182bcb114af24ba0135ccbcc094a00dca83517fc80a95ca">FLUSH_AT_ONCE</a>
+, <a class="el" href="classzeroerr_1_1LogStream.html#a59ec01e741324868ad182bcb114af24baef3e0332e451b4c03943b9b987b1baca">FLUSH_WHEN_FULL</a>
+, <a class="el" href="classzeroerr_1_1LogStream.html#a59ec01e741324868ad182bcb114af24ba8bc83a1471305ea8e626a127c7bbcd12">FLUSH_MANUALLY</a>
+ }</td></tr>
+<tr class="separator:a59ec01e741324868ad182bcb114af24b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31b35e4071022df988d44e90eec585fb" id="r_a31b35e4071022df988d44e90eec585fb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a31b35e4071022df988d44e90eec585fb">LogMode</a> { <a class="el" href="classzeroerr_1_1LogStream.html#a31b35e4071022df988d44e90eec585fba9738fe02f81fcf68939b2b7b32fa6233">ASYNC</a>
+, <a class="el" href="classzeroerr_1_1LogStream.html#a31b35e4071022df988d44e90eec585fba6722853559daeec539be72e6896fe45c">SYNC</a>
+ }</td></tr>
+<tr class="separator:a31b35e4071022df988d44e90eec585fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa42a060e6b36cce9581fe55f9251c93a" id="r_aa42a060e6b36cce9581fe55f9251c93a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93a">DirMode</a> { <a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93aad43bf697a982696cc299238f528ae90b">SINGLE_FILE</a> = 0
+, <a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93aabd9871ea7da9876e9c7ce98ec34fbe6e">DAILY_FILE</a> = 1
+, <a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93aa65d3941e2cca337917fd41af0de558b4">SPLIT_BY_SEVERITY</a> = 1 &lt;&lt; 1
+, <a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93aaa9855ca2e607b8676012b16876d1e6eb">SPLIT_BY_CATEGORY</a> = 1 &lt;&lt; 2
+ }</td></tr>
+<tr class="separator:aa42a060e6b36cce9581fe55f9251c93a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a4ad641338d128952e3b7f67addaeff5e" id="r_a4ad641338d128952e3b7f67addaeff5e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a4ad641338d128952e3b7f67addaeff5e">LogStream</a> ()</td></tr>
+<tr class="separator:a4ad641338d128952e3b7f67addaeff5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32d107499b3e31546b61d285045f78d0" id="r_a32d107499b3e31546b61d285045f78d0"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a32d107499b3e31546b61d285045f78d0">~LogStream</a> ()</td></tr>
+<tr class="separator:a32d107499b3e31546b61d285045f78d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1f2e040cfedff11b0b918fe58dc1555" id="r_aa1f2e040cfedff11b0b918fe58dc1555"><td class="memTemplParams" colspan="2">template&lt;typename... T&gt; </td></tr>
+<tr class="memitem:aa1f2e040cfedff11b0b918fe58dc1555"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structzeroerr_1_1PushResult.html">PushResult</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#aa1f2e040cfedff11b0b918fe58dc1555">push</a> (T &amp;&amp;... args)</td></tr>
+<tr class="memdesc:aa1f2e040cfedff11b0b918fe58dc1555"><td class="mdescLeft">&#160;</td><td class="mdescRight">push a log message to the stream  <br /></td></tr>
+<tr class="separator:aa1f2e040cfedff11b0b918fe58dc1555"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c3095ebea0b6c6583040c6653055215" id="r_a0c3095ebea0b6c6583040c6653055215"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a0c3095ebea0b6c6583040c6653055215"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a0c3095ebea0b6c6583040c6653055215">getLog</a> (std::string func, unsigned line, std::string name)</td></tr>
+<tr class="memdesc:a0c3095ebea0b6c6583040c6653055215"><td class="mdescLeft">&#160;</td><td class="mdescRight">get a log message from the stream  <br /></td></tr>
+<tr class="separator:a0c3095ebea0b6c6583040c6653055215"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc64726a6e9cbbc723200df2e14ac051" id="r_afc64726a6e9cbbc723200df2e14ac051"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:afc64726a6e9cbbc723200df2e14ac051"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#afc64726a6e9cbbc723200df2e14ac051">getLog</a> (std::string func, std::string msg, std::string name)</td></tr>
+<tr class="memdesc:afc64726a6e9cbbc723200df2e14ac051"><td class="mdescLeft">&#160;</td><td class="mdescRight">get a log message from the stream  <br /></td></tr>
+<tr class="separator:afc64726a6e9cbbc723200df2e14ac051"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a003f5551063f52a00f110b6d48e37dd4" id="r_a003f5551063f52a00f110b6d48e37dd4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1LogIterator.html">LogIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a003f5551063f52a00f110b6d48e37dd4">begin</a> (std::string message=&quot;&quot;, std::string function_name=&quot;&quot;, int line=-1)</td></tr>
+<tr class="separator:a003f5551063f52a00f110b6d48e37dd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb9c673897099904d8a35cf0a5a6e53f" id="r_afb9c673897099904d8a35cf0a5a6e53f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1LogIterator.html">LogIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#afb9c673897099904d8a35cf0a5a6e53f">end</a> ()</td></tr>
+<tr class="separator:afb9c673897099904d8a35cf0a5a6e53f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8599323b8f70e20626bca1abb3ce66c5" id="r_a8599323b8f70e20626bca1abb3ce66c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1LogIterator.html">LogIterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a8599323b8f70e20626bca1abb3ce66c5">current</a> (std::string message=&quot;&quot;, std::string function_name=&quot;&quot;, int line=-1)</td></tr>
+<tr class="separator:a8599323b8f70e20626bca1abb3ce66c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ef1ac31193efc9bad6315eb6304592a" id="r_a3ef1ac31193efc9bad6315eb6304592a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a3ef1ac31193efc9bad6315eb6304592a">flush</a> ()</td></tr>
+<tr class="separator:a3ef1ac31193efc9bad6315eb6304592a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d697f960d075c50e182b815be387f2f" id="r_a2d697f960d075c50e182b815be387f2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a2d697f960d075c50e182b815be387f2f">setFileLogger</a> (std::string name, <a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93a">DirMode</a> mode1=<a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93aad43bf697a982696cc299238f528ae90b">SINGLE_FILE</a>, <a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93a">DirMode</a> mode2=<a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93aad43bf697a982696cc299238f528ae90b">SINGLE_FILE</a>, <a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93a">DirMode</a> mode3=<a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93aad43bf697a982696cc299238f528ae90b">SINGLE_FILE</a>)</td></tr>
+<tr class="separator:a2d697f960d075c50e182b815be387f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad095b671f3381fc6f7fb85b3413055ef" id="r_ad095b671f3381fc6f7fb85b3413055ef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#ad095b671f3381fc6f7fb85b3413055ef">setStdoutLogger</a> ()</td></tr>
+<tr class="separator:ad095b671f3381fc6f7fb85b3413055ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab18a89a2e3252d682e3f07c26a09e848" id="r_ab18a89a2e3252d682e3f07c26a09e848"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#ab18a89a2e3252d682e3f07c26a09e848">setStderrLogger</a> ()</td></tr>
+<tr class="separator:ab18a89a2e3252d682e3f07c26a09e848"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab65712cdd618927f9326a4abb58a6ba3" id="r_ab65712cdd618927f9326a4abb58a6ba3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#ab65712cdd618927f9326a4abb58a6ba3">setFlushAtOnce</a> ()</td></tr>
+<tr class="separator:ab65712cdd618927f9326a4abb58a6ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cd7c6dc77274842d95c417df1fb5d9b" id="r_a2cd7c6dc77274842d95c417df1fb5d9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a2cd7c6dc77274842d95c417df1fb5d9b">setFlushWhenFull</a> ()</td></tr>
+<tr class="separator:a2cd7c6dc77274842d95c417df1fb5d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a36fbcf882581b32bfe178ad282cdfb" id="r_a0a36fbcf882581b32bfe178ad282cdfb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a0a36fbcf882581b32bfe178ad282cdfb">setFlushManually</a> ()</td></tr>
+<tr class="separator:a0a36fbcf882581b32bfe178ad282cdfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ff6da6e03eea4ddc0fabe53e902d75a" id="r_a3ff6da6e03eea4ddc0fabe53e902d75a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a3ff6da6e03eea4ddc0fabe53e902d75a">setAsyncLog</a> ()</td></tr>
+<tr class="separator:a3ff6da6e03eea4ddc0fabe53e902d75a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a22ee2ead5f4930f6d06d9765d7be5a" id="r_a7a22ee2ead5f4930f6d06d9765d7be5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a7a22ee2ead5f4930f6d06d9765d7be5a">setSyncLog</a> ()</td></tr>
+<tr class="separator:a7a22ee2ead5f4930f6d06d9765d7be5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb21f52ea39554e77c47d0204ce3aadf" id="r_acb21f52ea39554e77c47d0204ce3aadf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1LogStream.html#a59ec01e741324868ad182bcb114af24b">FlushMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#acb21f52ea39554e77c47d0204ce3aadf">getFlushMode</a> () const</td></tr>
+<tr class="separator:acb21f52ea39554e77c47d0204ce3aadf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04f0551515a14e0b051a430e9fb01eb2" id="r_a04f0551515a14e0b051a430e9fb01eb2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a04f0551515a14e0b051a430e9fb01eb2">setFlushMode</a> (<a class="el" href="classzeroerr_1_1LogStream.html#a59ec01e741324868ad182bcb114af24b">FlushMode</a> mode)</td></tr>
+<tr class="separator:a04f0551515a14e0b051a430e9fb01eb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ea98341484e68693b5cfe80f565d485" id="r_a9ea98341484e68693b5cfe80f565d485"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1LogStream.html#a31b35e4071022df988d44e90eec585fb">LogMode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a9ea98341484e68693b5cfe80f565d485">getLogMode</a> () const</td></tr>
+<tr class="separator:a9ea98341484e68693b5cfe80f565d485"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2830d6977aaa76cb15b1d8794ec67bcd" id="r_a2830d6977aaa76cb15b1d8794ec67bcd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#a2830d6977aaa76cb15b1d8794ec67bcd">setLogMode</a> (<a class="el" href="classzeroerr_1_1LogStream.html#a31b35e4071022df988d44e90eec585fb">LogMode</a> mode)</td></tr>
+<tr class="separator:a2830d6977aaa76cb15b1d8794ec67bcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:aff1be6a2e831a9b321fc0bb4077a06c7" id="r_aff1be6a2e831a9b321fc0bb4077a06c7"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classzeroerr_1_1LogStream.html">LogStream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#aff1be6a2e831a9b321fc0bb4077a06c7">getDefault</a> ()</td></tr>
+<tr class="separator:aff1be6a2e831a9b321fc0bb4077a06c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:aa33eb6d7a8077663010e953644057a72" id="r_aa33eb6d7a8077663010e953644057a72"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#aa33eb6d7a8077663010e953644057a72">use_lock_free</a> = true</td></tr>
+<tr class="separator:aa33eb6d7a8077663010e953644057a72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:aedb88706a3019993b7935efc19fb9fd6" id="r_aedb88706a3019993b7935efc19fb9fd6"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1LogStream.html#aedb88706a3019993b7935efc19fb9fd6">LogIterator</a></td></tr>
+<tr class="separator:aedb88706a3019993b7935efc19fb9fd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="classzeroerr_1_1LogStream.html" title="LogStream is a class to manage the log messages.">LogStream</a> is a class to manage the log messages. </p>
+<p><a class="el" href="classzeroerr_1_1LogStream.html" title="LogStream is a class to manage the log messages.">LogStream</a> is a class to manage the log messages. It can be used to create log messages and push them to the logger. A default <a class="el" href="classzeroerr_1_1LogStream.html" title="LogStream is a class to manage the log messages.">LogStream</a> is created when the first time you call <a class="el" href="classzeroerr_1_1LogStream.html#aff1be6a2e831a9b321fc0bb4077a06c7">getDefault()</a> function (or first log happens). You can also adjust the way to flush the messages and how the log messages are written to the log file. </p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="aa42a060e6b36cce9581fe55f9251c93a" name="aa42a060e6b36cce9581fe55f9251c93a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa42a060e6b36cce9581fe55f9251c93a">&#9670;&#160;</a></span>DirMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93a">zeroerr::LogStream::DirMode</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa42a060e6b36cce9581fe55f9251c93aad43bf697a982696cc299238f528ae90b" name="aa42a060e6b36cce9581fe55f9251c93aad43bf697a982696cc299238f528ae90b"></a>SINGLE_FILE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa42a060e6b36cce9581fe55f9251c93aabd9871ea7da9876e9c7ce98ec34fbe6e" name="aa42a060e6b36cce9581fe55f9251c93aabd9871ea7da9876e9c7ce98ec34fbe6e"></a>DAILY_FILE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa42a060e6b36cce9581fe55f9251c93aa65d3941e2cca337917fd41af0de558b4" name="aa42a060e6b36cce9581fe55f9251c93aa65d3941e2cca337917fd41af0de558b4"></a>SPLIT_BY_SEVERITY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa42a060e6b36cce9581fe55f9251c93aaa9855ca2e607b8676012b16876d1e6eb" name="aa42a060e6b36cce9581fe55f9251c93aaa9855ca2e607b8676012b16876d1e6eb"></a>SPLIT_BY_CATEGORY&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a59ec01e741324868ad182bcb114af24b" name="a59ec01e741324868ad182bcb114af24b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59ec01e741324868ad182bcb114af24b">&#9670;&#160;</a></span>FlushMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classzeroerr_1_1LogStream.html#a59ec01e741324868ad182bcb114af24b">zeroerr::LogStream::FlushMode</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a59ec01e741324868ad182bcb114af24ba0135ccbcc094a00dca83517fc80a95ca" name="a59ec01e741324868ad182bcb114af24ba0135ccbcc094a00dca83517fc80a95ca"></a>FLUSH_AT_ONCE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a59ec01e741324868ad182bcb114af24baef3e0332e451b4c03943b9b987b1baca" name="a59ec01e741324868ad182bcb114af24baef3e0332e451b4c03943b9b987b1baca"></a>FLUSH_WHEN_FULL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a59ec01e741324868ad182bcb114af24ba8bc83a1471305ea8e626a127c7bbcd12" name="a59ec01e741324868ad182bcb114af24ba8bc83a1471305ea8e626a127c7bbcd12"></a>FLUSH_MANUALLY&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a31b35e4071022df988d44e90eec585fb" name="a31b35e4071022df988d44e90eec585fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31b35e4071022df988d44e90eec585fb">&#9670;&#160;</a></span>LogMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classzeroerr_1_1LogStream.html#a31b35e4071022df988d44e90eec585fb">zeroerr::LogStream::LogMode</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a31b35e4071022df988d44e90eec585fba9738fe02f81fcf68939b2b7b32fa6233" name="a31b35e4071022df988d44e90eec585fba9738fe02f81fcf68939b2b7b32fa6233"></a>ASYNC&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a31b35e4071022df988d44e90eec585fba6722853559daeec539be72e6896fe45c" name="a31b35e4071022df988d44e90eec585fba6722853559daeec539be72e6896fe45c"></a>SYNC&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a4ad641338d128952e3b7f67addaeff5e" name="a4ad641338d128952e3b7f67addaeff5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ad641338d128952e3b7f67addaeff5e">&#9670;&#160;</a></span>LogStream()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">zeroerr::LogStream::LogStream </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a32d107499b3e31546b61d285045f78d0" name="a32d107499b3e31546b61d285045f78d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32d107499b3e31546b61d285045f78d0">&#9670;&#160;</a></span>~LogStream()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">zeroerr::LogStream::~LogStream </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a003f5551063f52a00f110b6d48e37dd4" name="a003f5551063f52a00f110b6d48e37dd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a003f5551063f52a00f110b6d48e37dd4">&#9670;&#160;</a></span>begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classzeroerr_1_1LogIterator.html">LogIterator</a> zeroerr::LogStream::begin </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>message</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>function_name</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>line</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8599323b8f70e20626bca1abb3ce66c5" name="a8599323b8f70e20626bca1abb3ce66c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8599323b8f70e20626bca1abb3ce66c5">&#9670;&#160;</a></span>current()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classzeroerr_1_1LogIterator.html">LogIterator</a> zeroerr::LogStream::current </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>message</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>function_name</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>line</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afb9c673897099904d8a35cf0a5a6e53f" name="afb9c673897099904d8a35cf0a5a6e53f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb9c673897099904d8a35cf0a5a6e53f">&#9670;&#160;</a></span>end()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classzeroerr_1_1LogIterator.html">LogIterator</a> zeroerr::LogStream::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3ef1ac31193efc9bad6315eb6304592a" name="a3ef1ac31193efc9bad6315eb6304592a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ef1ac31193efc9bad6315eb6304592a">&#9670;&#160;</a></span>flush()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::flush </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aff1be6a2e831a9b321fc0bb4077a06c7" name="aff1be6a2e831a9b321fc0bb4077a06c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff1be6a2e831a9b321fc0bb4077a06c7">&#9670;&#160;</a></span>getDefault()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classzeroerr_1_1LogStream.html">LogStream</a> &amp; zeroerr::LogStream::getDefault </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acb21f52ea39554e77c47d0204ce3aadf" name="acb21f52ea39554e77c47d0204ce3aadf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb21f52ea39554e77c47d0204ce3aadf">&#9670;&#160;</a></span>getFlushMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classzeroerr_1_1LogStream.html#a59ec01e741324868ad182bcb114af24b">FlushMode</a> zeroerr::LogStream::getFlushMode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afc64726a6e9cbbc723200df2e14ac051" name="afc64726a6e9cbbc723200df2e14ac051"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc64726a6e9cbbc723200df2e14ac051">&#9670;&#160;</a></span>getLog() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T zeroerr::LogStream::getLog </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>msg</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get a log message from the stream </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The type of the log message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">func</td><td>The function name of the log message </td></tr>
+    <tr><td class="paramname">msg</td><td>The message of the log message </td></tr>
+    <tr><td class="paramname">name</td><td>The name of field you want to get</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This function is used to get a log message from the stream and extract the field with the name. The function will return the field with the type T. However, this type must be specified by the caller. </p>
+
+</div>
+</div>
+<a id="a0c3095ebea0b6c6583040c6653055215" name="a0c3095ebea0b6c6583040c6653055215"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c3095ebea0b6c6583040c6653055215">&#9670;&#160;</a></span>getLog() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T zeroerr::LogStream::getLog </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>func</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get a log message from the stream </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The type of the log message </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">func</td><td>The function name of the log message </td></tr>
+    <tr><td class="paramname">line</td><td>The line number of the log message </td></tr>
+    <tr><td class="paramname">name</td><td>The name of field you want to get</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This function is used to get a log message from the stream and extract the field with the name. The function will return the field with the type T. However, this type must be specified by the caller. </p>
+
+</div>
+</div>
+<a id="a9ea98341484e68693b5cfe80f565d485" name="a9ea98341484e68693b5cfe80f565d485"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ea98341484e68693b5cfe80f565d485">&#9670;&#160;</a></span>getLogMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classzeroerr_1_1LogStream.html#a31b35e4071022df988d44e90eec585fb">LogMode</a> zeroerr::LogStream::getLogMode </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa1f2e040cfedff11b0b918fe58dc1555" name="aa1f2e040cfedff11b0b918fe58dc1555"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1f2e040cfedff11b0b918fe58dc1555">&#9670;&#160;</a></span>push()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structzeroerr_1_1PushResult.html">PushResult</a> zeroerr::LogStream::push </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>push a log message to the stream </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The types of the arguments </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">args</td><td>The arguments </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structzeroerr_1_1PushResult.html">PushResult</a> The result of the push</dd></dl>
+<p>This function is used to push a log message to the stream. You can pass any type of arguments to this function and it will create a log message with the arguments. The log message is not written to the log file until the stream is flushed.</p>
+<p>The log message is structured as a tuple of the arguments in the inner implementation class <a class="el" href="structzeroerr_1_1LogMessageImpl.html" title="LogMessageImpl is the implementation of the LogMessage.">LogMessageImpl</a>. After the log message is created, it used type erasure to return a <a class="el" href="structzeroerr_1_1LogMessage.html" title="LogMessage is a class to store the log message.">LogMessage</a> pointer to the caller.</p>
+<p>The stored data type is determined by the to_store_type_t&lt;T&gt; template. For all the string type in raw pointer like const char* or char[], it will be converted to std::string. All reference type (including right value reference) will be converted to the original type. </p>
+
+</div>
+</div>
+<a id="a3ff6da6e03eea4ddc0fabe53e902d75a" name="a3ff6da6e03eea4ddc0fabe53e902d75a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ff6da6e03eea4ddc0fabe53e902d75a">&#9670;&#160;</a></span>setAsyncLog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::setAsyncLog </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2d697f960d075c50e182b815be387f2f" name="a2d697f960d075c50e182b815be387f2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d697f960d075c50e182b815be387f2f">&#9670;&#160;</a></span>setFileLogger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::setFileLogger </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93a">DirMode</a>&#160;</td>
+          <td class="paramname"><em>mode1</em> = <code><a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93aad43bf697a982696cc299238f528ae90b">SINGLE_FILE</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93a">DirMode</a>&#160;</td>
+          <td class="paramname"><em>mode2</em> = <code><a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93aad43bf697a982696cc299238f528ae90b">SINGLE_FILE</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93a">DirMode</a>&#160;</td>
+          <td class="paramname"><em>mode3</em> = <code><a class="el" href="classzeroerr_1_1LogStream.html#aa42a060e6b36cce9581fe55f9251c93aad43bf697a982696cc299238f528ae90b">SINGLE_FILE</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab65712cdd618927f9326a4abb58a6ba3" name="ab65712cdd618927f9326a4abb58a6ba3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab65712cdd618927f9326a4abb58a6ba3">&#9670;&#160;</a></span>setFlushAtOnce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::setFlushAtOnce </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0a36fbcf882581b32bfe178ad282cdfb" name="a0a36fbcf882581b32bfe178ad282cdfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a36fbcf882581b32bfe178ad282cdfb">&#9670;&#160;</a></span>setFlushManually()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::setFlushManually </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a04f0551515a14e0b051a430e9fb01eb2" name="a04f0551515a14e0b051a430e9fb01eb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04f0551515a14e0b051a430e9fb01eb2">&#9670;&#160;</a></span>setFlushMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::setFlushMode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classzeroerr_1_1LogStream.html#a59ec01e741324868ad182bcb114af24b">FlushMode</a>&#160;</td>
+          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2cd7c6dc77274842d95c417df1fb5d9b" name="a2cd7c6dc77274842d95c417df1fb5d9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cd7c6dc77274842d95c417df1fb5d9b">&#9670;&#160;</a></span>setFlushWhenFull()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::setFlushWhenFull </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2830d6977aaa76cb15b1d8794ec67bcd" name="a2830d6977aaa76cb15b1d8794ec67bcd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2830d6977aaa76cb15b1d8794ec67bcd">&#9670;&#160;</a></span>setLogMode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::setLogMode </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classzeroerr_1_1LogStream.html#a31b35e4071022df988d44e90eec585fb">LogMode</a>&#160;</td>
+          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab18a89a2e3252d682e3f07c26a09e848" name="ab18a89a2e3252d682e3f07c26a09e848"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab18a89a2e3252d682e3f07c26a09e848">&#9670;&#160;</a></span>setStderrLogger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::setStderrLogger </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad095b671f3381fc6f7fb85b3413055ef" name="ad095b671f3381fc6f7fb85b3413055ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad095b671f3381fc6f7fb85b3413055ef">&#9670;&#160;</a></span>setStdoutLogger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::setStdoutLogger </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7a22ee2ead5f4930f6d06d9765d7be5a" name="a7a22ee2ead5f4930f6d06d9765d7be5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a22ee2ead5f4930f6d06d9765d7be5a">&#9670;&#160;</a></span>setSyncLog()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::LogStream::setSyncLog </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Symbol Documentation</h2>
+<a id="aedb88706a3019993b7935efc19fb9fd6" name="aedb88706a3019993b7935efc19fb9fd6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedb88706a3019993b7935efc19fb9fd6">&#9670;&#160;</a></span>LogIterator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classzeroerr_1_1LogIterator.html">LogIterator</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aa33eb6d7a8077663010e953644057a72" name="aa33eb6d7a8077663010e953644057a72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa33eb6d7a8077663010e953644057a72">&#9670;&#160;</a></span>use_lock_free</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool zeroerr::LogStream::use_lock_free = true</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>include/zeroerr/<a class="el" href="log_8h_source.html">log.h</a></li>
+<li>src/<a class="el" href="log_8cpp.html">log.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespacezeroerr.html">zeroerr</a></li><li class="navelem"><a class="el" href="classzeroerr_1_1LogStream.html">LogStream</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

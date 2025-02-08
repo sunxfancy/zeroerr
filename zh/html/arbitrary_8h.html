@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/domains/arbitrary.h 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('arbitrary_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">类</a> &#124;
+<a href="#namespaces">命名空间</a> &#124;
+<a href="#typedef-members">类型定义</a>  </div>
+  <div class="headertitle"><div class="title">arbitrary.h 文件参考</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="config_8h_source.html">zeroerr/internal/config.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="typetraits_8h_source.html">zeroerr/internal/typetraits.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="aggregate__of_8h_source.html">zeroerr/domains/aggregate_of.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="container__of_8h_source.html">zeroerr/domains/container_of.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="domain_8h_source.html">zeroerr/domains/domain.h</a>&quot;</code><br />
+<code>#include &lt;limits&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+arbitrary.h 的引用(Include)关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="arbitrary_8h__incl.png" border="0" usemap="#ainclude_2zeroerr_2domains_2arbitrary_8h" alt=""/></div>
+<map name="ainclude_2zeroerr_2domains_2arbitrary_8h" id="ainclude_2zeroerr_2domains_2arbitrary_8h">
+<area shape="rect" title=" " alt="" coords="485,5,664,45"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="297,387,474,412"/>
+<area shape="poly" title=" " alt="" coords="485,35,343,49,263,60,186,75,116,94,59,118,37,131,21,146,11,161,8,178,8,254,10,271,14,285,32,305,60,320,93,336,139,357,188,372,283,389,282,394,187,377,137,362,91,341,57,325,29,309,10,288,5,273,3,254,3,178,6,159,17,142,34,127,57,113,114,89,184,70,262,55,342,43,485,29"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="617,313,818,339"/>
+<area shape="poly" title=" " alt="" coords="665,36,763,58,803,73,829,92,843,120,845,150,838,180,823,210,783,265,743,306,739,302,779,261,819,207,833,178,840,149,838,121,825,95,801,78,761,63,664,41"/>
+<area shape="rect" href="aggregate__of_8h.html" title=" " alt="" coords="585,93,815,119"/>
+<area shape="poly" title=" " alt="" coords="606,43,672,84,669,88,604,48"/>
+<area shape="rect" href="domain_8h.html" title=" " alt="" coords="311,167,505,192"/>
+<area shape="poly" title=" " alt="" coords="486,42,390,63,351,78,327,95,323,103,323,112,331,128,349,144,371,158,368,163,346,149,327,132,317,113,318,102,323,92,348,73,388,58,485,36"/>
+<area shape="rect" href="container__of_8h.html" title=" " alt="" coords="337,93,561,119"/>
+<area shape="poly" title=" " alt="" coords="546,48,481,88,478,84,543,43"/>
+<area shape="rect" title=" " alt="" coords="973,93,1032,119"/>
+<area shape="poly" title=" " alt="" coords="664,38,955,91,960,92,959,97,954,96,664,43"/>
+<area shape="poly" title=" " alt="" coords="665,341,453,386,452,381,663,336"/>
+<area shape="rect" title=" " alt="" coords="681,387,757,412"/>
+<area shape="poly" title=" " alt="" coords="720,339,721,373,716,373,715,339"/>
+<area shape="rect" title=" " alt="" coords="581,387,656,412"/>
+<area shape="poly" title=" " alt="" coords="703,341,647,381,644,376,700,337"/>
+<area shape="rect" title=" " alt="" coords="499,387,557,412"/>
+<area shape="poly" title=" " alt="" coords="688,341,571,385,570,380,686,336"/>
+<area shape="rect" title=" " alt="" coords="897,387,951,412"/>
+<area shape="poly" title=" " alt="" coords="751,336,884,382,882,387,750,341"/>
+<area shape="rect" title=" " alt="" coords="781,387,873,412"/>
+<area shape="poly" title=" " alt="" coords="736,336,799,377,796,381,733,341"/>
+<area shape="poly" title=" " alt="" coords="694,121,616,217,557,281,491,341,457,364,424,383,421,378,455,359,488,337,553,277,612,214,689,117"/>
+<area shape="poly" title=" " alt="" coords="711,117,909,374,905,377,707,120"/>
+<area shape="poly" title=" " alt="" coords="654,121,469,166,468,161,652,116"/>
+<area shape="poly" title=" " alt="" coords="446,190,481,208,498,222,510,239,514,252,510,266,492,302,467,333,415,380,411,376,463,330,487,299,506,264,509,252,506,241,494,226,478,213,444,194"/>
+<area shape="rect" href="rng_8h.html" title=" " alt="" coords="94,240,253,265"/>
+<area shape="poly" title=" " alt="" coords="371,195,225,239,224,233,370,189"/>
+<area shape="rect" href="serialization_8h.html" title=" " alt="" coords="277,240,496,265"/>
+<area shape="poly" title=" " alt="" coords="407,193,397,228,391,226,402,192"/>
+<area shape="poly" title=" " alt="" coords="162,268,147,283,135,301,129,320,134,337,156,353,192,366,284,384,283,390,191,371,154,357,130,340,123,320,130,299,143,280,158,264"/>
+<area shape="rect" title=" " alt="" coords="323,313,389,339"/>
+<area shape="poly" title=" " alt="" coords="204,263,314,306,312,311,202,268"/>
+<area shape="rect" title=" " alt="" coords="144,313,211,339"/>
+<area shape="poly" title=" " alt="" coords="177,266,179,300,173,300,171,266"/>
+<area shape="rect" title=" " alt="" coords="235,313,298,339"/>
+<area shape="poly" title=" " alt="" coords="190,263,242,303,239,307,187,267"/>
+<area shape="poly" title=" " alt="" coords="393,265,402,298,404,339,396,374,391,373,399,338,397,299,388,266"/>
+<area shape="poly" title=" " alt="" coords="440,263,651,308,650,313,439,268"/>
+<area shape="poly" title=" " alt="" coords="400,264,509,375,505,379,396,268"/>
+<area shape="poly" title=" " alt="" coords="496,250,592,253,691,263,777,281,809,295,831,312,840,326,842,343,838,374,833,373,837,343,834,328,827,315,806,299,775,286,690,268,591,259,496,256"/>
+<area shape="poly" title=" " alt="" coords="384,267,369,302,364,300,379,265"/>
+<area shape="poly" title=" " alt="" coords="354,268,225,311,223,306,352,263"/>
+<area shape="poly" title=" " alt="" coords="369,268,300,308,297,304,366,263"/>
+<area shape="poly" title=" " alt="" coords="338,117,270,130,200,154,166,170,135,190,107,214,84,241,78,254,77,267,87,295,106,320,123,337,160,359,200,375,242,386,283,392,282,397,241,391,199,380,157,364,120,341,102,324,83,298,72,268,73,253,79,239,103,210,132,185,164,165,198,149,268,125,337,112"/>
+<area shape="poly" title=" " alt="" coords="465,117,694,302,691,306,462,121"/>
+<area shape="poly" title=" " alt="" coords="445,120,424,156,419,153,440,118"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+此图展示该文件直接或间接的被哪些文件引用了:</div>
+<div class="dyncontent">
+<div class="center"><img src="arbitrary_8h__dep__incl.png" border="0" usemap="#ainclude_2zeroerr_2domains_2arbitrary_8hdep" alt=""/></div>
+<map name="ainclude_2zeroerr_2domains_2arbitrary_8hdep" id="ainclude_2zeroerr_2domains_2arbitrary_8hdep">
+<area shape="rect" title=" " alt="" coords="51,5,230,45"/>
+<area shape="rect" href="fuzztest_8h.html" title=" " alt="" coords="47,93,234,119"/>
+<area shape="poly" title=" " alt="" coords="143,59,143,93,138,93,138,59"/>
+<area shape="rect" href="fuzztest_8cpp.html" title=" " alt="" coords="5,167,129,192"/>
+<area shape="poly" title=" " alt="" coords="121,130,81,168,77,165,117,126"/>
+<area shape="rect" href="unittest_8cpp.html" title=" " alt="" coords="154,167,277,192"/>
+<area shape="poly" title=" " alt="" coords="164,126,205,165,201,168,161,130"/>
+</map>
+</div>
+</div>
+<p><a href="arbitrary_8h_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Arbitrary.html">zeroerr::Arbitrary&lt; T, N, typename &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classzeroerr_1_1Arbitrary.html" title="Arbitrary is a domain that generates random values of a given type">Arbitrary</a> is a domain that generates random values of a given type  <a href="classzeroerr_1_1Arbitrary.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1Arbitrary_3_01T_00_010_01_4.html">zeroerr::Arbitrary&lt; T, 0 &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Arbitrary_3_01bool_01_4.html">zeroerr::Arbitrary&lt; bool &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__unsigned__int_3_01T_01_4_01_4.html">zeroerr::Arbitrary&lt; T, 2, is_unsigned_int&lt; T &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__signed__int_3_01T_01_4_01_4.html">zeroerr::Arbitrary&lt; T, 2, is_signed_int&lt; T &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__float__point_3_01T_01_4_01_4.html">zeroerr::Arbitrary&lt; T, 2, is_float_point&lt; T &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__string_3_01T_01_4_01_4.html">zeroerr::Arbitrary&lt; T, 2, is_string&lt; T &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Arbitrary_3_01T_00_011_00_01is__modifiable_3_01T_01_4_01_4.html">zeroerr::Arbitrary&lt; T, 1, is_modifiable&lt; T &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Arbitrary_3_01std_1_1pair_3_01T_00_01U_01_4_00_011_01_4.html">zeroerr::Arbitrary&lt; std::pair&lt; T, U &gt;, 1 &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Arbitrary_3_01std_1_1tuple_3_01T_8_8_8_01_4_00_011_01_4.html">zeroerr::Arbitrary&lt; std::tuple&lt; T... &gt;, 1 &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Arbitrary_3_01const_01T_00_012_01_4.html">zeroerr::Arbitrary&lt; const T, 2 &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+命名空间</h2></td></tr>
+<tr class="memitem:namespacezeroerr" id="r_namespacezeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+类型定义</h2></td></tr>
+<tr class="memitem:a61f6946be3b6d74f33c16ecef699c9ad" id="r_a61f6946be3b6d74f33c16ecef699c9ad"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a61f6946be3b6d74f33c16ecef699c9ad"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a61f6946be3b6d74f33c16ecef699c9ad">zeroerr::is_unsigned_int</a> = typename std::enable_if&lt; std::is_integral&lt; T &gt;::value &amp;&amp;!std::numeric_limits&lt; T &gt;::is_signed, void &gt;::type</td></tr>
+<tr class="separator:a61f6946be3b6d74f33c16ecef699c9ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6df7ec42efc69f5f2fef85cf1a85a492" id="r_a6df7ec42efc69f5f2fef85cf1a85a492"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a6df7ec42efc69f5f2fef85cf1a85a492"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a6df7ec42efc69f5f2fef85cf1a85a492">zeroerr::is_signed_int</a> = typename std::enable_if&lt; std::is_integral&lt; T &gt;::value &amp;&amp;std::numeric_limits&lt; T &gt;::is_signed, void &gt;::type</td></tr>
+<tr class="separator:a6df7ec42efc69f5f2fef85cf1a85a492"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab82e4090d6466d9ddc72ce2443d40533" id="r_ab82e4090d6466d9ddc72ce2443d40533"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab82e4090d6466d9ddc72ce2443d40533"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ab82e4090d6466d9ddc72ce2443d40533">zeroerr::is_float_point</a> = typename std::enable_if&lt; std::is_floating_point&lt; T &gt;::value, void &gt;::type</td></tr>
+<tr class="separator:ab82e4090d6466d9ddc72ce2443d40533"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a85fda50b440bc67b8afc5ecb00bcfd" id="r_a8a85fda50b440bc67b8afc5ecb00bcfd"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a8a85fda50b440bc67b8afc5ecb00bcfd"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a8a85fda50b440bc67b8afc5ecb00bcfd">zeroerr::is_string</a> = typename std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1is__specialization.html">detail::is_specialization</a>&lt; T, std::basic_string &gt;::value &gt;::type</td></tr>
+<tr class="separator:a8a85fda50b440bc67b8afc5ecb00bcfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad125d8d4dc6585b8fbfd65e45fc5be55" id="r_ad125d8d4dc6585b8fbfd65e45fc5be55"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ad125d8d4dc6585b8fbfd65e45fc5be55"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ad125d8d4dc6585b8fbfd65e45fc5be55">zeroerr::is_modifiable</a> = typename std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1is__modifiable.html">detail::is_modifiable</a>&lt; T &gt;::value &gt;::type</td></tr>
+<tr class="separator:ad125d8d4dc6585b8fbfd65e45fc5be55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a class="el" href="dir_68074f60a1ee644a8e95f005a4f107d6.html">domains</a></li><li class="navelem"><a class="el" href="arbitrary_8h.html">arbitrary.h</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<map id="zeroerr::BenchState" name="zeroerr::BenchState">
+<area shape="rect" id="Node000001" title=" " alt="" coords="273,489,424,515"/>
+<area shape="rect" id="Node000002" href="$structzeroerr_1_1Benchmark.html" title="Benchmark create a core object for configuration of a benchmark. This class is a driver to run multip..." alt="" coords="273,401,424,427"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="351,441,351,489,346,489,346,441"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="419,115,505,141"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="467,154,468,192,466,240,457,291,439,340,425,360,408,378,372,403,369,399,404,374,421,357,434,337,452,289,460,239,463,192,462,155"/>
+<area shape="rect" id="Node000006" href="$structzeroerr_1_1BenchResult.html" title="BenchResult is a result of running the benchmark." alt="" coords="235,211,393,236"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="434,150,334,213,331,208,431,146"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="393,5,531,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="465,59,465,115,459,115,459,59"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="273,299,425,339"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="351,353,351,401,346,401,346,353"/>
+<area shape="poly" id="edge11_Node000001_Node000006" title=" " alt="" coords="295,248,277,272,263,300,253,335,248,364,251,392,263,425,276,445,292,462,328,487,325,491,289,466,271,449,258,428,245,393,242,364,247,334,258,298,272,269,291,245"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="326,248,344,298,339,299,321,250"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="5,108,209,148"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="152,153,215,184,278,208,276,213,213,189,150,157"/>
+<area shape="rect" id="Node000008" href="$structzeroerr_1_1PerfCountSet.html" title=" " alt="" coords="27,5,188,45"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="110,59,110,108,105,108,105,59"/>
+<area shape="rect" id="Node000009" href="$structzeroerr_1_1PerfCountSet.html" title=" " alt="" coords="233,108,395,148"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="317,162,317,210,311,210,311,162"/>
+<area shape="rect" id="Node000010" href="$classzeroerr_1_1Rng.html" title=" " alt="" coords="449,401,550,427"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="469,436,370,491,368,487,466,431"/>
+</map>

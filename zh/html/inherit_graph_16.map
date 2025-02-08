@@ -1,0 +1,15 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="Node000000" href="$structzeroerr_1_1ContainerOfBase.html" title="ContainerOf is a domain that generates random containers filled with elements from an inner domain" alt="" coords="9,60,196,85"/>
+<area shape="rect" id="Node000001" href="$classzeroerr_1_1SequenceContainerOf.html" title=" " alt="" coords="254,5,457,60"/>
+<area shape="poly" id="edge23_Node000000_Node000001" title=" " alt="" coords="196,55,253,46,254,51,197,60"/>
+<area shape="rect" id="Node000004" href="$classzeroerr_1_1AssociativeContainerOf.html" title=" " alt="" coords="248,85,463,125"/>
+<area shape="poly" id="edge25_Node000000_Node000004" title=" " alt="" coords="210,84,248,88,247,94,209,89"/>
+<area shape="rect" id="Node000005" href="$classzeroerr_1_1SequenceContainerOf.html" title=" " alt="" coords="254,149,457,189"/>
+<area shape="poly" id="edge26_Node000000_Node000005" title=" " alt="" coords="181,87,201,96,216,105,226,115,235,125,249,134,276,146,274,151,247,139,232,129,222,119,213,110,199,100,179,92"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1Arbitrary_3_01T_00_011_00_01is__modifiable_3_01T_01_4_01_4.html" title=" " alt="" coords="511,5,667,60"/>
+<area shape="poly" id="edge24_Node000001_Node000002" title=" " alt="" coords="470,30,511,30,511,35,470,35"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1Domain.html" title=" " alt="" coords="5,109,200,164"/>
+<area shape="poly" id="edge27_Node000003_Node000001" title=" " alt="" coords="186,101,199,96,247,70,277,58,279,63,249,75,201,100,188,106"/>
+<area shape="poly" id="edge28_Node000003_Node000004" title=" " alt="" coords="213,120,247,116,248,121,214,125"/>
+<area shape="poly" id="edge29_Node000003_Node000005" title=" " alt="" coords="214,148,254,153,253,158,213,153"/>
+</map>

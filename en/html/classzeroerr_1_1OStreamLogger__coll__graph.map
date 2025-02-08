@@ -1,0 +1,13 @@
+<map id="zeroerr::OStreamLogger" name="zeroerr::OStreamLogger">
+<area shape="rect" id="Node000001" title=" " alt="" coords="21,332,198,357"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1Logger.html" title=" " alt="" coords="5,244,125,269"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,281,106,330,101,333,75,283"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="149,244,253,269"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,281,124,333,120,330,177,277"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="129,155,274,195"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="204,208,204,244,199,244,199,208"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="116,80,287,105"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="204,119,204,155,199,155,199,119"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="148,5,255,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="204,45,204,80,199,80,199,45"/>
+</map>

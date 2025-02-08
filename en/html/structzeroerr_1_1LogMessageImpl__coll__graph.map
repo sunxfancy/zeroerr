@@ -1,0 +1,13 @@
+<map id="zeroerr::LogMessageImpl&lt; T &gt;" name="zeroerr::LogMessageImpl&lt; T &gt;">
+<area shape="rect" id="Node000001" title="LogMessageImpl is the implementation of the LogMessage." alt="" coords="5,448,229,473"/>
+<area shape="rect" id="Node000002" href="$structzeroerr_1_1LogMessage.html" title="LogMessage is a class to store the log message." alt="" coords="39,373,196,399"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,413,120,448,115,448,115,413"/>
+<area shape="rect" id="Node000003" href="$structzeroerr_1_1LogInfo.html" title="LogInfo is a struct to store the meta data of the log message." alt="" coords="55,285,179,311"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,325,120,373,115,373,115,325"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="36,183,199,223"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="120,237,120,285,115,285,115,237"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="74,95,161,120"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="120,134,120,182,115,182,115,134"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="48,5,187,45"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="120,59,120,94,115,94,115,59"/>
+</map>

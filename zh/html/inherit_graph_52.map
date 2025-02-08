@@ -1,0 +1,27 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="Node000000" href="$classzeroerr_1_1Domain.html" title="Domain class for generating random values of a specific type." alt="" coords="5,220,217,260"/>
+<area shape="rect" id="Node000001" href="$classzeroerr_1_1AggregateOf.html" title=" " alt="" coords="277,7,498,76"/>
+<area shape="poly" id="edge37_Node000000_Node000001" title=" " alt="" coords="140,208,195,156,264,102,310,74,313,79,267,106,199,160,143,212"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1AggregateOf.html" title=" " alt="" coords="292,117,483,171"/>
+<area shape="poly" id="edge39_Node000000_Node000003" title=" " alt="" coords="182,213,307,169,309,174,183,218"/>
+<area shape="rect" id="Node000005" href="$classzeroerr_1_1DomainConvertable.html" title=" " alt="" coords="265,227,509,253"/>
+<area shape="poly" id="edge41_Node000000_Node000005" title=" " alt="" coords="231,237,265,237,265,243,231,243"/>
+<area shape="rect" id="Node000010" href="$classzeroerr_1_1DomainConvertable.html" title=" " alt="" coords="284,277,491,317"/>
+<area shape="poly" id="edge46_Node000000_Node000010" title=" " alt="" coords="222,260,291,275,290,280,221,265"/>
+<area shape="rect" id="Node000012" href="$classzeroerr_1_1DomainConvertable.html" title="DomainConvertable is a base class for domains that can be converted to and from a ValueType" alt="" coords="284,341,491,381"/>
+<area shape="poly" id="edge48_Node000000_Node000012" title=" " alt="" coords="154,265,207,297,266,327,300,339,298,344,264,332,204,302,152,270"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1Arbitrary_3_01std_1_1pair_3_01T_00_01U_01_4_00_011_01_4.html" title=" " alt="" coords="558,5,735,45"/>
+<area shape="poly" id="edge38_Node000001_Node000002" title=" " alt="" coords="512,31,558,28,558,33,512,36"/>
+<area shape="rect" id="Node000004" href="$classzeroerr_1_1Arbitrary_3_01std_1_1tuple_3_01T_8_8_8_01_4_00_011_01_4.html" title=" " alt="" coords="557,69,736,109"/>
+<area shape="poly" id="edge40_Node000003_Node000004" title=" " alt="" coords="495,119,557,105,558,111,497,124"/>
+<area shape="rect" id="Node000006" href="$classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__float__point_3_01T_01_4_01_4.html" title=" " alt="" coords="569,134,725,189"/>
+<area shape="poly" id="edge42_Node000005_Node000006" title=" " alt="" coords="443,221,568,182,569,187,444,226"/>
+<area shape="rect" id="Node000007" href="$classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__signed__int_3_01T_01_4_01_4.html" title=" " alt="" coords="569,213,724,267"/>
+<area shape="poly" id="edge43_Node000005_Node000007" title=" " alt="" coords="523,237,569,237,569,243,523,243"/>
+<area shape="rect" id="Node000008" href="$classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__unsigned__int_3_01T_01_4_01_4.html" title=" " alt="" coords="573,291,720,346"/>
+<area shape="poly" id="edge44_Node000005_Node000008" title=" " alt="" coords="473,253,510,263,583,289,581,294,509,268,472,258"/>
+<area shape="rect" id="Node000009" href="$classzeroerr_1_1InRange.html" title="InRange is a domain that generates random values within a specified range" alt="" coords="563,370,730,395"/>
+<area shape="poly" id="edge45_Node000005_Node000009" title=" " alt="" coords="501,257,511,263,523,274,530,286,536,310,542,333,559,355,580,368,577,372,556,359,538,336,531,312,525,288,518,278,508,267,498,261"/>
+<area shape="rect" id="Node000011" href="$classzeroerr_1_1Arbitrary_3_01bool_01_4.html" title=" " alt="" coords="580,420,713,460"/>
+<area shape="poly" id="edge47_Node000010_Node000011" title=" " alt="" coords="503,322,511,327,529,347,536,367,543,387,559,406,581,420,578,424,556,410,539,390,531,369,524,350,508,331,500,326"/>
+</map>

@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: src/serialization.cpp 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('serialization_8cpp.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#namespaces">命名空间</a>  </div>
+  <div class="headertitle"><div class="title">serialization.cpp 文件参考</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="serialization_8h_source.html">zeroerr/internal/serialization.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="assert_8h_source.html">zeroerr/assert.h</a>&quot;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+serialization.cpp 的引用(Include)关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="serialization_8cpp__incl.png" border="0" usemap="#asrc_2serialization_8cpp" alt=""/></div>
+<map name="asrc_2serialization_8cpp" id="asrc_2serialization_8cpp">
+<area shape="rect" title=" " alt="" coords="197,5,349,31"/>
+<area shape="rect" href="serialization_8h.html" title=" " alt="" coords="193,299,412,324"/>
+<area shape="poly" title=" " alt="" coords="277,30,303,285,297,285,272,31"/>
+<area shape="rect" title=" " alt="" coords="19,445,93,471"/>
+<area shape="poly" title=" " alt="" coords="198,30,135,45,73,70,47,87,26,109,13,134,8,164,8,313,12,346,21,378,45,432,40,434,16,380,6,347,3,313,3,163,8,132,22,105,43,83,70,65,133,40,197,25"/>
+<area shape="rect" href="assert_8h.html" title=" " alt="" coords="661,79,785,104"/>
+<area shape="poly" title=" " alt="" coords="346,28,647,75,646,81,345,33"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="862,445,1039,471"/>
+<area shape="poly" title=" " alt="" coords="413,318,564,337,648,351,730,369,831,402,915,437,913,442,829,407,729,375,647,356,563,342,412,324"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="515,372,717,397"/>
+<area shape="poly" title=" " alt="" coords="354,321,553,366,551,372,352,327"/>
+<area shape="rect" title=" " alt="" coords="448,445,507,471"/>
+<area shape="poly" title=" " alt="" coords="311,323,331,358,363,395,399,420,437,439,434,444,396,425,360,399,327,361,306,326"/>
+<area shape="rect" title=" " alt="" coords="239,445,331,471"/>
+<area shape="poly" title=" " alt="" coords="277,326,246,345,233,358,222,373,219,390,226,407,239,422,256,436,252,440,236,426,222,409,214,391,218,371,229,355,243,341,274,322"/>
+<area shape="rect" title=" " alt="" coords="373,372,440,397"/>
+<area shape="poly" title=" " alt="" coords="321,322,380,362,377,366,318,326"/>
+<area shape="rect" title=" " alt="" coords="232,372,299,397"/>
+<area shape="poly" title=" " alt="" coords="299,326,280,361,275,359,294,323"/>
+<area shape="rect" title=" " alt="" coords="94,372,157,397"/>
+<area shape="poly" title=" " alt="" coords="275,326,168,369,166,364,273,322"/>
+<area shape="poly" title=" " alt="" coords="670,395,884,440,883,445,669,400"/>
+<area shape="rect" title=" " alt="" coords="578,445,654,471"/>
+<area shape="poly" title=" " alt="" coords="619,398,619,432,613,432,613,398"/>
+<area shape="poly" title=" " alt="" coords="526,400,108,453,107,447,526,395"/>
+<area shape="poly" title=" " alt="" coords="595,400,513,441,511,437,593,395"/>
+<area shape="rect" title=" " alt="" coords="729,445,783,471"/>
+<area shape="poly" title=" " alt="" coords="640,395,722,437,720,441,637,400"/>
+<area shape="poly" title=" " alt="" coords="563,400,345,447,344,441,562,395"/>
+<area shape="poly" title=" " alt="" coords="785,94,903,110,969,127,1033,149,1112,178,1127,187,1139,199,1147,215,1149,237,1149,313,1146,338,1136,361,1120,380,1101,398,1056,425,1010,443,1008,439,1053,420,1098,393,1116,377,1131,358,1141,336,1144,312,1144,237,1142,217,1135,202,1124,191,1110,183,1031,155,968,132,902,116,785,99"/>
+<area shape="poly" title=" " alt="" coords="722,105,699,172,677,214,649,252,602,293,550,326,499,352,454,370,452,365,497,347,548,321,599,288,645,249,673,211,694,170,717,104"/>
+<area shape="rect" href="format_8h.html" title=" " alt="" coords="311,225,439,251"/>
+<area shape="poly" title=" " alt="" coords="661,100,518,118,452,134,426,143,408,154,397,166,389,181,380,212,375,210,384,179,393,163,405,150,424,138,450,129,517,113,660,95"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="688,299,803,324"/>
+<area shape="poly" title=" " alt="" coords="727,104,745,284,740,285,721,105"/>
+<area shape="rect" href="debugbreak_8h.html" title=" " alt="" coords="419,152,634,177"/>
+<area shape="poly" title=" " alt="" coords="692,107,572,150,571,145,690,102"/>
+<area shape="rect" href="decomposition_8h.html" title=" " alt="" coords="760,152,995,177"/>
+<area shape="poly" title=" " alt="" coords="749,102,841,144,839,149,746,106"/>
+<area shape="rect" title=" " alt="" coords="979,299,1059,324"/>
+<area shape="poly" title=" " alt="" coords="785,94,848,101,914,112,971,128,993,138,1009,150,1027,183,1033,219,1032,255,1028,285,1022,285,1027,255,1028,220,1022,184,1005,154,991,143,970,133,913,117,847,107,785,100"/>
+<area shape="rect" title=" " alt="" coords="1185,152,1271,177"/>
+<area shape="poly" title=" " alt="" coords="785,97,957,119,1166,149,1172,150,1171,156,1165,155,956,125,784,103"/>
+<area shape="poly" title=" " alt="" coords="311,252,254,266,191,290,132,325,106,347,84,373,69,403,62,433,57,431,64,401,79,371,102,344,128,321,189,285,252,261,310,246"/>
+<area shape="poly" title=" " alt="" coords="388,249,407,270,426,297,444,332,458,369,475,431,470,433,452,370,439,334,422,300,403,274,384,253"/>
+<area shape="poly" title=" " alt="" coords="435,248,675,294,674,299,434,253"/>
+<area shape="poly" title=" " alt="" coords="763,322,925,435,921,439,760,326"/>
+<area shape="poly" title=" " alt="" coords="726,326,651,367,648,363,723,322"/>
+<area shape="rect" href="color_8h.html" title=" " alt="" coords="893,372,1008,397"/>
+<area shape="poly" title=" " alt="" coords="779,321,905,365,904,370,777,327"/>
+<area shape="poly" title=" " alt="" coords="953,398,953,432,948,432,948,398"/>
+<area shape="rect" title=" " alt="" coords="561,225,634,251"/>
+<area shape="poly" title=" " alt="" coords="540,176,578,214,574,218,536,180"/>
+<area shape="rect" title=" " alt="" coords="463,225,537,251"/>
+<area shape="poly" title=" " alt="" coords="525,179,512,214,507,212,520,177"/>
+<area shape="poly" title=" " alt="" coords="912,175,951,192,997,218,1040,253,1058,274,1073,298,1077,311,1077,327,1067,358,1042,399,1017,423,989,441,986,437,1013,419,1038,396,1062,356,1071,326,1072,312,1068,300,1054,277,1036,257,994,223,949,197,909,180"/>
+<area shape="poly" title=" " alt="" coords="867,179,821,227,766,289,762,286,817,224,864,176"/>
+<area shape="rect" href="dbg_8h.html" title=" " alt="" coords="830,225,938,251"/>
+<area shape="poly" title=" " alt="" coords="881,177,884,212,879,212,876,178"/>
+<area shape="poly" title=" " alt="" coords="897,249,968,322,999,343,1011,354,1023,371,1025,391,1017,410,1003,426,985,440,982,436,999,422,1012,407,1020,390,1017,373,1007,357,995,347,965,326,893,253"/>
+<area shape="poly" title=" " alt="" coords="879,252,772,434,768,432,875,250"/>
+<area shape="poly" title=" " alt="" coords="863,253,781,295,779,290,861,248"/>
+<area shape="poly" title=" " alt="" coords="892,250,925,323,942,359,937,361,920,325,887,252"/>
+<area shape="poly" title=" " alt="" coords="907,248,986,290,983,294,904,253"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+命名空间</h2></td></tr>
+<tr class="memitem:namespacezeroerr" id="r_namespacezeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="serialization_8cpp.html">serialization.cpp</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

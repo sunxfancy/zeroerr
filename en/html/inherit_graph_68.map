@@ -1,0 +1,9 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$classzeroerr_1_1Logger.html" title=" " alt="" coords="5,55,125,80"/>
+<area shape="rect" id="Node000001" href="$classzeroerr_1_1DirectoryLogger.html" title=" " alt="" coords="173,5,353,31"/>
+<area shape="poly" id="edge56_Node000000_Node000001" title=" " alt="" coords="129,49,211,28,212,33,131,54"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1FileLogger.html" title=" " alt="" coords="192,55,335,80"/>
+<area shape="poly" id="edge57_Node000000_Node000002" title=" " alt="" coords="139,65,192,65,192,70,139,70"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1OStreamLogger.html" title=" " alt="" coords="175,104,352,129"/>
+<area shape="poly" id="edge58_Node000000_Node000003" title=" " alt="" coords="131,81,212,101,211,107,129,86"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="include/zeroerr/internal/threadsafe.h" name="include/zeroerr/internal/threadsafe.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="154,5,327,45"/>
+<area shape="rect" id="Node000002" href="$config_8h.html" title=" " alt="" coords="5,93,183,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,48,129,89,126,84,204,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="207,93,274,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="243,46,243,79,238,79,238,46"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="298,93,362,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="264,44,308,82,305,86,261,48"/>
+</map>

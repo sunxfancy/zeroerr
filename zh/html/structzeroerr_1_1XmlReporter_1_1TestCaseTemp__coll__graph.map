@@ -1,0 +1,16 @@
+<map id="zeroerr::XmlReporter::TestCaseTemp" name="zeroerr::XmlReporter::TestCaseTemp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,313,164,353"/>
+<area shape="rect" id="Node000002" href="$structzeroerr_1_1TestCase.html" title="TestCase is a class that holds the test case information. There are several fields that are used to s..." alt="" coords="101,225,236,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,261,124,276,97,315,92,312,120,273,138,257"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="189,313,341,353"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="163,264,163,277,167,288,179,301,194,311,191,315,175,305,162,291,158,278,158,264"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="55,115,141,141"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="116,151,163,223,159,226,111,154"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="23,5,162,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="97,59,100,115,95,115,92,59"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="251,302,233,276,217,263,198,253,200,248,220,259,237,273,255,299"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="175,108,327,148"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="231,160,180,226,176,223,227,157"/>
+<area shape="rect" id="Node000007" href="$classzeroerr_1_1Decorator.html" title=" " alt="" coords="187,13,327,38"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="258,52,255,108,250,108,253,52"/>
+</map>

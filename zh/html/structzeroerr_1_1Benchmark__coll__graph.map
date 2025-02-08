@@ -1,0 +1,18 @@
+<map id="zeroerr::Benchmark" name="zeroerr::Benchmark">
+<area shape="rect" id="Node000001" title="Benchmark create a core object for configuration of a benchmark. This class is a driver to run multip..." alt="" coords="323,401,473,427"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="419,115,505,141"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="464,155,456,255,444,317,424,378,410,402,406,400,420,376,439,316,450,254,459,154"/>
+<area shape="rect" id="Node000005" href="$structzeroerr_1_1BenchResult.html" title="BenchResult is a result of running the benchmark." alt="" coords="247,211,405,236"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="433,150,396,174,342,213,339,208,392,170,430,146"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="393,5,531,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="465,59,465,115,459,115,459,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="265,299,417,339"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="362,349,393,400,389,402,357,352"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="333,249,340,298,335,299,327,250"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,108,209,148"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="155,152,222,184,288,208,287,213,220,189,152,157"/>
+<area shape="rect" id="Node000007" href="$structzeroerr_1_1PerfCountSet.html" title=" " alt="" coords="27,5,188,45"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="110,59,110,108,105,108,105,59"/>
+<area shape="rect" id="Node000008" href="$structzeroerr_1_1PerfCountSet.html" title=" " alt="" coords="233,108,395,148"/>
+<area shape="poly" id="edge8_Node000005_Node000008" title=" " alt="" coords="321,161,327,210,322,211,316,162"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="zeroerr::IMatcher&lt; T &gt;" name="zeroerr::IMatcher&lt; T &gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,176,80"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1CombinedMatcher.html" title=" " alt="" coords="224,5,457,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,49,275,28,276,33,170,55"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1NotMatcher.html" title=" " alt="" coords="245,55,436,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="190,65,245,65,245,70,190,70"/>
+<area shape="rect" id="Node000004" href="$structzeroerr_1_1StartWithMatcher.html" title=" " alt="" coords="227,104,455,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="170,80,276,101,275,107,168,85"/>
+</map>
