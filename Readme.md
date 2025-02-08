@@ -192,13 +192,26 @@ clang++ -std=c++11 -fsanitize=fuzzer-no-link -L=`clang++ -print-runtime-dir` -lc
 ```
 
 
-## Other Good Features
+## CppCon 24 Talk
 
+If you are interested in the design and internal techiques used in `zeroerr`, please checkout [the talk in CppCon 24](https://youtu.be/otSPZyXqY_M?si=LLSHh8gkfCiQk983). 
+
+[![](docs/fig/video-screenshot.png)](https://youtu.be/otSPZyXqY_M?si=LLSHh8gkfCiQk983)
+
+## Header-only libraries
+
+* dbg
+* print (without use extern functions)
+* assert
+* color (if always enabled)
+
+
+## Other Good Features
 
 Here are a list of features we provided:
 
 1. Partially include
-You can only include what you need. If you need only assertion but no unit testing, no problem.
+You can only include what you need. If you need only assertion but no unit testing, you can only include the header `zeroerr/assert.h`. 
 
 2. Optional thread safety 
 You can choose to build with/without thread safety.
@@ -235,12 +248,6 @@ We can support output structured information directly into plain text or lisp fo
 13. Automatic Tracing with logging
 While logging at the end, we can record the time consuming for this function.
 
-## Header-only libraries
-
-* dbg
-* print (without use extern functions)
-* assert
-* color (if always enabled)
 
 
 ## The logo generation

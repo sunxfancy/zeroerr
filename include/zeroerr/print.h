@@ -27,23 +27,6 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 namespace zeroerr {
 
 
-/**
- * @brief rank is a helper class for Printer to define the priority of overloaded functions.
- * @tparam N the priority of the rule. 0 is the lowest priority. The maximum priority is max_rank.
- *
- * You can define a rule by adding it as a function parameter with rank<N> where N is the priority.
- * For example:
- * template<typename T>
- * void Foo(T v, rank<0>); // lowest priority
- * void Foo(int v, rank<1>); // higher priority
- *
- * Even though in the first rule, type T can be an int, the second function will still be called due
- * to the priority.
- */
-template <unsigned N>
-struct rank : rank<N - 1> {};
-template <>
-struct rank<0> {};
 constexpr unsigned max_rank = 5;
 
 
@@ -163,7 +146,7 @@ struct Printer {
         (void)_;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS&& ZEROERR_IS_POD)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS && ZEROERR_IS_POD)
     print(const T& value, unsigned level, const char* lb, rank<1>) {
         os << tab(level) << "{";
         print_struct(value, level, isCompact ? " " : line_break,
@@ -177,7 +160,7 @@ struct Printer {
         os << tab(level) << (value ? "true" : "false") << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS&& ZEROERR_IS_STREAMABLE)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS && ZEROERR_IS_STREAMABLE)
     print(T value, unsigned level, const char* lb, rank<2>) { os << tab(level) << value << lb; }
 
 
@@ -192,7 +175,7 @@ struct Printer {
         os << tab(level) << "}" << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER&& ZEROERR_IS_ARRAY)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER && ZEROERR_IS_ARRAY)
     print(const T& value, unsigned level, const char* lb, rank<3>) {
         os << tab(level) << "[";
         bool last = false;
@@ -212,7 +195,7 @@ struct Printer {
             os << tab(level) << "<" << type(value) << " at " << value.get() << ">" << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER&& ZEROERR_IS_MAP)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER && ZEROERR_IS_MAP)
     print(const T& value, unsigned level, const char* lb, rank<4>) {
         os << tab(level) << "{" << (isCompact ? "" : line_break);
         bool last = false;

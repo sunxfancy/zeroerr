@@ -17,7 +17,9 @@ set(source_files ${source_files} PARENT_SCOPE)
 add_library(zeroerr STATIC ${source_files})
 
 target_compile_options(zeroerr PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/W4>
+    $<$<CXX_COMPILER_ID:MSVC>:/W4 /utf-8>
+    $<$<C_COMPILER_ID:MSVC>:/utf-8>
+    $<$<CXX_COMPILER_ID:Clang>:-fstandalone-debug>
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
 )
 

@@ -58,6 +58,13 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
     });
 
     current_fuzz_test = nullptr;
+#else
+    (void) fuzz_test;
+    (void) seed;
+    (void) runs;
+    (void) max_len;
+    (void) timeout;
+    (void) len_control;
 #endif
 }
 

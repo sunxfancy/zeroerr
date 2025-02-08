@@ -13,6 +13,32 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+/**
+ * @brief Interface for serializable objects
+ * 
+ * IRObject (Intermediate Representation Object) provides a low-level interface for serializing 
+ * data types into a common format. It uses a union to store different data types and provides
+ * type-safe access through templated getter methods.
+ *
+ * The object can store:
+ * - Integers (int64_t)
+ * - Floating point numbers (double) 
+ * - Strings (char* for long strings, char[8] for short strings)
+ * - Nested objects (IRObject*)
+ *
+ * Memory management:
+ * - The object takes ownership of allocated strings and nested objects
+ * - Copy/move operations perform deep copies/moves
+ * - The destructor frees any owned memory
+ *
+ * Usage example:
+ * @code
+ * IRObject obj;
+ * obj.type = IRObject::Int;
+ * obj.i = 42;
+ * int value = obj.GetScalar<int>(); // value = 42
+ * @endcode
+ */
 
 struct IRObject {
     IRObject() { std::memset(this, 0, sizeof(IRObject)); }

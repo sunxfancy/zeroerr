@@ -1,2 +1,8 @@
-add_executable(1_basic ${CMAKE_CURRENT_SOURCE_DIR}/1_basic.cpp)
-add_dependencies(1_basic assemble_single_header)
+macro(define_example name)
+    add_executable(${name} ${CMAKE_CURRENT_SOURCE_DIR}/${name}.cpp)
+    add_dependencies(${name} assemble_single_header)
+endmacro(define_example)
+
+define_example(1_basic)
+define_example(2_log)
+define_example(3_fuzzing)

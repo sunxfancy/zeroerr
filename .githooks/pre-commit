@@ -6,7 +6,9 @@ cd $SCRIPTPATH/../
 set -e
 
 CMD_TO_RUN="make && make test && make doc && cp build/linux/zeroerr.hpp ./zeroerr.hpp"
-if [ -f "/etc/wsl.conf" ]; then
+if [ "$(uname -o)" == "GNU/Linux" ]; then
+    bash -c "$CMD_TO_RUN"
+elif [ -f "/etc/wsl.conf" ]; then
     bash -c "$CMD_TO_RUN"
 else
     wsl -- bash -c "$CMD_TO_RUN"

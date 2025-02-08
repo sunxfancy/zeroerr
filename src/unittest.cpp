@@ -75,8 +75,9 @@ static inline std::string getFileName(std::string file) {
     return fileName;
 }
 
-SubCase::SubCase(std::string name, std::string file, unsigned line, TestContext* context)
-    : TestCase(name, file, line), context(context) {}
+SubCase::SubCase(std::string name, std::string file, unsigned line, TestContext* context,
+                 std::vector<Decorator*> decorators)
+    : TestCase(name, file, line, decorators), context(context) {}
 
 void SubCase::operator<<(std::function<void(TestContext*)> op) {
     func = op;
@@ -235,6 +236,20 @@ bool UnitTest::run_filter(const TestCase& tc) {
     return true;
 }
 
+static bool runOnExecution(const TestCase& tc) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onExecution(tc)) return true;
+    }
+    return false;
+}
+
+static bool runOnFinish(const TestCase& tc, const TestContext& ctx) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onFinish(tc, ctx)) return true;
+    }
+    return false;
+}
+
 int UnitTest::run() {
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
@@ -250,11 +265,16 @@ int UnitTest::run() {
 
     for (auto& tc : test_cases) {
         if (!run_filter(tc)) continue;
+        if (runOnExecution(tc)) {
+            sum.skipped += 1;
+            continue;
+        }
         reporter->testCaseStart(tc, new_buf);
         if (!list_test_cases) {
             std::streambuf* orig_buf = std::cerr.rdbuf();
             std::cerr.rdbuf(&new_buf);
             std::cerr << std::endl;
+            auto start = std::chrono::high_resolution_clock::now();
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
@@ -265,9 +285,17 @@ int UnitTest::run() {
                     context.failed_as = 1;
                 }
             }
+            auto end         = std::chrono::high_resolution_clock::now();
+            context.duration = end - start;
             std::cerr.rdbuf(orig_buf);
         }
         int type = sum.add(context);
+        if (runOnFinish(tc, context)) {
+            if (type != 2) {
+                sum.failed += 1;
+                type = 2;
+            }
+        }
         reporter->testCaseEnd(tc, new_buf, context, type);
         context.reset();
         new_buf.str("");
@@ -305,7 +333,12 @@ static std::set<TestCase> getRegisteredTests(unsigned type) {
     return result;
 }
 
-regTest::regTest(const TestCase& tc, TestType type) { getTestSet(type).insert(tc); }
+regTest::regTest(const TestCase& tc, TestType type) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onStartup(tc)) return;
+    }
+    getTestSet(type).insert(tc);
+}
 
 static std::set<IReporter*>& getRegisteredReporters() {
     static std::set<IReporter*> data;
@@ -591,8 +624,8 @@ XmlWriter::ScopedElement::~ScopedElement() {
     if (m_writer) m_writer->endElement();
 }
 
-XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text,
-                                                              bool               indent, bool new_line) {
+XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text, bool indent,
+                                                              bool new_line) {
     m_writer->writeText(text, indent, new_line);
     return *this;
 }
@@ -626,8 +659,10 @@ XmlWriter& XmlWriter::endElement() {
         m_os << "/>";
         m_tagIsOpen = false;
     } else {
-        if (m_needsIndent) m_os << m_indent;
-        else m_needsIndent = true;
+        if (m_needsIndent)
+            m_os << m_indent;
+        else
+            m_needsIndent = true;
         m_os << "</" << m_tags.back() << ">";
     }
     m_os << std::endl;
@@ -659,7 +694,7 @@ XmlWriter& XmlWriter::writeText(const std::string& text, bool indent, bool new_l
         if (tagWasOpen && indent) m_os << m_indent;
         m_os << XmlEncode(text);
         m_needsNewline = new_line;
-        m_needsIndent = new_line;
+        m_needsIndent  = new_line;
     }
     return *this;
 }
@@ -717,8 +752,8 @@ public:
         if (ut.log_to_report) suspendLog();
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                             int) override {
+    virtual void testCaseEnd(ZEROERR_UNUSED(const TestCase&), std::stringbuf& sb,
+                             const TestContext& ctx, int) override {
         current.pop_back();
         xml.scopedElement("Result")
             .writeAttribute("time", 0)
@@ -782,6 +817,63 @@ public:
 IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
     if (name == "console") return new ConsoleReporter(ut);
     if (name == "xml") return new XmlReporter(ut);
+    return nullptr;
+}
+
+
+class SkipDecorator : public Decorator {
+    bool onExecution(const TestCase&) override { return true; }
+};
+
+Decorator* skip(bool isSkip) {
+    static SkipDecorator skip_dec;
+    if (isSkip) return &skip_dec;
+    return nullptr;
+}
+
+class TimeoutDecorator : public Decorator {
+    float timeout;
+
+public:
+    TimeoutDecorator() : timeout(0) {}
+    TimeoutDecorator(float timeout) : timeout(timeout) {}
+
+    bool onFinish(const TestCase& tc, const TestContext& ctx) override {
+        if (ctx.duration > std::chrono::duration<double>(timeout)) {
+            std::cerr << FgRed <<  "Timeout: " << Reset << ctx.duration.count() << "s > " << timeout << "s" << std::endl;
+            return true;
+        }
+        return false;
+    }
+};
+
+Decorator* timeout(float timeout) {
+    static std::map<float, TimeoutDecorator> timeout_dec;
+    if (timeout_dec.find(timeout) == timeout_dec.end()) {
+        timeout_dec[timeout] = TimeoutDecorator(timeout);
+    }
+    return &timeout_dec[timeout];
+}
+
+class FailureDecorator : public Decorator {
+public:
+    enum FailureType { may_fail, should_fail };
+    FailureDecorator(FailureType type) : type(type) {}
+
+private:
+    FailureType type;
+};
+
+
+Decorator* may_fail(bool isMayFail) {
+    static FailureDecorator may_fail_dec(FailureDecorator::may_fail);
+    if (isMayFail) return &may_fail_dec;
+    return nullptr;
+}
+
+Decorator* should_fail(bool isShouldFail) {
+    static FailureDecorator should_fail_dec(FailureDecorator::should_fail);
+    if (isShouldFail) return &should_fail_dec;
     return nullptr;
 }
 

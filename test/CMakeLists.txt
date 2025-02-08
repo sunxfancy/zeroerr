@@ -32,23 +32,23 @@ if(CMAKE_CUDA_COMPILER AND NOT DISABLE_CUDA_BUILD)
     message(STATUS " CUDA ${CMAKE_CUDA_COMPILER_ID} ${CMAKE_CUDA_COMPILER_VERSION} enabled ")
 
     set(CMAKE_CUDA_STANDARD 17)
-
+    set(CMAKE_CUDA_STANDARD_REQUIRED ON)
     set(CMAKE_CUDA_ARCHITECTURES 80)
 
     set(cuda_files cuda_test.cu)
-else()
-    set(cuda_files "")
+    add_executable(cudatest ${cuda_files})
+    target_link_libraries(cudatest zeroerr)
 endif()
 
 ## Test Cases
 
 set(test_files 
-    fuzz_test.cpp
-    llvm_test.cpp
-    log_test.cpp
-    print_test.cpp
-    table_test.cpp
-    unit_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/fuzz_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/llvm_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/log_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/print_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/table_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/unit_test.cpp
 )
 
 if (ENABLE_FUZZING)
@@ -57,12 +57,14 @@ else()
     set(libfuzzer "")
 endif()
 
-add_executable(unittest ${test_files} ${cuda_files})
+add_executable(unittest ${test_files})
 target_link_libraries(unittest zeroerr ${libfuzzer} ${llvm_libs})
 target_compile_options(unittest PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/W4>
+    $<$<CXX_COMPILER_ID:MSVC>:/W4 /utf-8>
+    $<$<C_COMPILER_ID:MSVC>:/utf-8>
+    $<$<CXX_COMPILER_ID:Clang>:-fstandalone-debug>
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
-    )
+)
 
 ## Fuzzing Support
 if (ENABLE_FUZZING)

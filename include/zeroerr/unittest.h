@@ -2,25 +2,27 @@
 
 #include "zeroerr/internal/config.h"
 
+#include <chrono>
 #include <functional>
 #include <string>
 #include <vector>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_TEST_FUNC(function, name)                     \
+#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                \
     static void                     function(zeroerr::TestContext*); \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \
-        {name, __FILE__, __LINE__, function});                       \
+        {name, __FILE__, __LINE__, function, {__VA_ARGS__}});        \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
+#define TEST_CASE(name, ...) \
+    ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name, __VA_ARGS__)
 
-#define SUB_CASE(name)                                                \
-    zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
+#define SUB_CASE(name, ...)                                                          \
+    zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \
         << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
-#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
+#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name, ...)                   \
     class classname : public fixture {                                                       \
     public:                                                                                  \
         void funcname(zeroerr::TestContext*);                                                \
@@ -30,12 +32,12 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
         instance.funcname(_ZEROERR_TEST_CONTEXT);                                            \
     }                                                                                        \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \
-        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname)});                           \
+        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname), {__VA_ARGS__}});            \
     inline void classname::funcname(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE_FIXTURE(fixture, name)                                \
+#define TEST_CASE_FIXTURE(fixture, name, ...)                           \
     ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
-                              ZEROERR_NAMEGEN(_zeroerr_test_method), name)
+                              ZEROERR_NAMEGEN(_zeroerr_test_method), name, __VA_ARGS__)
 
 
 #define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT->save_output();
@@ -51,6 +53,7 @@ namespace zeroerr {
 
 class IReporter;
 struct TestCase;
+class Decorator;
 
 /**
  * @brief TestContext is a class that holds the test results and reporter context.
@@ -66,8 +69,16 @@ struct TestCase;
  */
 class TestContext {
 public:
-    unsigned passed = 0, warning = 0, failed = 0, skipped = 0;
-    unsigned passed_as = 0, warning_as = 0, failed_as = 0, skipped_as = 0;
+    unsigned passed     = 0;
+    unsigned warning    = 0;
+    unsigned failed     = 0;
+    unsigned skipped    = 0;
+    unsigned passed_as  = 0;
+    unsigned warning_as = 0;
+    unsigned failed_as  = 0;
+    unsigned skipped_as = 0;
+
+    std::chrono::duration<double> duration = std::chrono::duration<double>::zero();
 
     IReporter& reporter;
 
@@ -160,7 +171,7 @@ struct TestCase {
     unsigned                          line;
     std::function<void(TestContext*)> func;
     std::vector<TestCase*>            subcases;
-
+    std::vector<Decorator*>           decorators;
     /**
      * @brief Compare the test cases.
      * @param rhs The test case that will be compared.
@@ -174,8 +185,8 @@ struct TestCase {
      * @param file The file that the test case is defined.
      * @param line The line that the test case is defined.
      */
-    TestCase(std::string name, std::string file, unsigned line)
-        : name(name), file(file), line(line) {}
+    TestCase(std::string name, std::string file, unsigned line, std::vector<Decorator*> decorators)
+        : name(name), file(file), line(line), decorators(decorators) {}
 
     /**
      * @brief Construct a new Test Case object
@@ -183,10 +194,11 @@ struct TestCase {
      * @param file The file that the test case is defined.
      * @param line The line that the test case is defined.
      * @param func The function that will be run to test the test case.
+     * @param decorators The decorators that will be used to decorate the test case.
      */
     TestCase(std::string name, std::string file, unsigned line,
-             std::function<void(TestContext*)> func)
-        : name(name), file(file), line(line), func(func) {}
+             std::function<void(TestContext*)> func, std::vector<Decorator*> decorators)
+        : name(name), file(file), line(line), func(func), decorators(decorators) {}
 };
 
 
@@ -194,7 +206,8 @@ struct TestCase {
  * @brief SubCase is a class that holds the subcase information.
  */
 struct SubCase : TestCase {
-    SubCase(std::string name, std::string file, unsigned line, TestContext* context);
+    SubCase(std::string name, std::string file, unsigned line, TestContext* context,
+            std::vector<Decorator*> decorators);
     ~SubCase() = default;
     TestContext* context;
     void         operator<<(std::function<void(TestContext*)> op);
@@ -239,7 +252,7 @@ public:
      * @brief Create the reporter object with the given name.
      * @param name The name of the reporter. Available reporters are: console, xml.
      * @param ut The unit test object that will be used to configure the test.
-    */
+     */
     static IReporter* create(const std::string& name, UnitTest& ut);
 
     IReporter(UnitTest& ut) : ut(ut) {}
@@ -284,7 +297,7 @@ struct regReporter {
  *   });
  *   test(a, b);
  * ```
- * 
+ *
  * This will test the targetFunc with all the combinations of a and b, e.g. (1,4), (1,5), (1,6),
  * (2,4), (2,5) ... etc.
  */
@@ -331,6 +344,27 @@ public:
 private:
     int index = 0;
 };
+
+
+class Decorator {
+public:
+    // Called when the test registered, return true can block the test registering
+    virtual bool onStartup(const TestCase&) { return false; }
+
+    // Called when the test executing, return true can block the test execution
+    virtual bool onExecution(const TestCase&) { return false; }
+
+    // Called on each assertion, return true can skip the assertion
+    virtual bool onAssertion() { return false; }
+
+    // Called when the test finished, return true means the test containing errors
+    virtual bool onFinish(const TestCase&, const TestContext&) { return false; }
+};
+
+Decorator* skip(bool isSkip = true);
+Decorator* timeout(float timeout = 0.1f);  // in seconds
+Decorator* may_fail(bool isMayFail = true);
+Decorator* should_fail(bool isShouldFail = true);
 
 }  // namespace zeroerr
 

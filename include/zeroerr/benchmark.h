@@ -14,13 +14,14 @@
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name)                    \
-    static void                     function(zeroerr::TestContext*);     \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(       \
-        {name, __FILE__, __LINE__, function}, zeroerr::TestType::bench); \
+#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name, ...)                              \
+    static void                     function(zeroerr::TestContext*);                    \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                      \
+        {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, zeroerr::TestType::bench); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define BENCHMARK(name) ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name)
+#define BENCHMARK(name, ...) \
+    ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name, __VA_ARGS__)
 
 
 namespace zeroerr {
@@ -61,7 +62,7 @@ struct PerformanceCounter {
     void endMeasure();
     void updateResults(uint64_t numIters);
 
-    PerfCountSet<uint64_t> const& val() const noexcept { return _val; }
+    const PerfCountSet<uint64_t>& val() const noexcept { return _val; }
     PerfCountSet<bool>            has() const noexcept { return _has; }
 
     static PerformanceCounter& inst();
@@ -164,10 +165,10 @@ struct Benchmark {
 namespace detail {
 
 #if defined(_MSC_VER)
-void doNotOptimizeAwaySink(void const*);
+void doNotOptimizeAwaySink(const void*);
 
 template <typename T>
-void doNotOptimizeAway(T const& val) {
+void doNotOptimizeAway(const T& val) {
     doNotOptimizeAwaySink(&val);
 }
 
@@ -178,7 +179,7 @@ void doNotOptimizeAway(T const& val) {
 // Google Benchmark seemed to be the most well tested anyways. see
 // https://github.com/google/benchmark/blob/master/include/benchmark/benchmark.h#L307
 template <typename T>
-void doNotOptimizeAway(T const& val) {
+void doNotOptimizeAway(const T& val) {
     // NOLINTNEXTLINE(hicpp-no-assembler)
     asm volatile("" : : "r,m"(val) : "memory");
 }

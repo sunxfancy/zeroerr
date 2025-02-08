@@ -320,6 +320,23 @@
     ZEROERR_CLANG_SUPPRESS_WARNING_POP ZEROERR_GCC_SUPPRESS_WARNING_POP \
         ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
+/**
+ * Macro to suppress unused variable/parameter warnings
+ *
+ * This macro can be used to mark variables or parameters as intentionally unused
+ * while maintaining cross-compiler compatibility. It handles different compiler-specific
+ * attributes and warning suppressions:
+ *
+ * - For Clang/GCC: Uses __attribute__((unused))
+ * - For LCLINT: Uses @unused@ comment annotation
+ * - For MSVC: Suppresses warning C4100 (unreferenced formal parameter)
+ * - For other compilers: No special handling
+ *
+ * Usage example:
+ *   void foo(ZEROERR_UNUSED(int x)) {
+ *     // x is marked as intentionally unused
+ *   }
+ */
 #if ZEROERR_CLANG || ZEROERR_GCC
 #define ZEROERR_UNUSED(x) x __attribute__((unused))
 #elif defined(__LCLINT__)
@@ -673,7 +690,13 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() { retur
 #pragma once
 
 
-// Thread safety support
+/**
+ * @brief Thread safety support
+ * This header provides thread-safe support for zeroerr.
+ * 
+ * It defines macros for mutexes, locks, and atomic operations.
+ * The macros are conditionally defined based on the ZEROERR_NO_THREAD_SAFE flag.
+ */
 #ifdef ZEROERR_NO_THREAD_SAFE
 
 #define ZEROERR_MUTEX(x)
@@ -722,6 +745,25 @@ class weak_ptr;
 
 
 namespace zeroerr {
+
+
+/**
+ * @brief rank is a helper class for Printer to define the priority of overloaded functions.
+ * @tparam N the priority of the rule. 0 is the lowest priority. The maximum priority is max_rank.
+ *
+ * You can define a rule by adding it as a function parameter with rank<N> where N is the priority.
+ * For example:
+ * template<typename T>
+ * void Foo(T v, rank<0>); // lowest priority
+ * void Foo(int v, rank<1>); // higher priority
+ *
+ * Even though in the first rule, type T can be an int, the second function will still be called due
+ * to the priority.
+ */
+template <unsigned N>
+struct rank : rank<N - 1> {};
+template <>
+struct rank<0> {};
 
 
 namespace detail {
@@ -822,6 +864,22 @@ struct is_array : std::false_type {};
 
 template <typename T>
 struct is_array<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
+
+
+template <typename T, typename = void>
+struct is_modifiable : std::false_type {};
+
+template <typename T>
+struct is_modifiable<T, void_t<decltype(
+                                // Iterable
+                                T().begin(), T().end(), T().size(),
+                                // Values are mutable
+                                // This rejects associative containers, for example
+                                // *T().begin() = std::declval<value_type_t<T>>(),
+                                // Can insert and erase elements
+                                T().insert(T().end(), std::declval<typename T::value_type>()),
+                                T().erase(T().begin()), (void)0)>> : std::true_type {};
+
 
 
 // Check if a type has the element type as std::pair
@@ -975,6 +1033,32 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+/**
+ * @brief Interface for serializable objects
+ * 
+ * IRObject (Intermediate Representation Object) provides a low-level interface for serializing 
+ * data types into a common format. It uses a union to store different data types and provides
+ * type-safe access through templated getter methods.
+ *
+ * The object can store:
+ * - Integers (int64_t)
+ * - Floating point numbers (double) 
+ * - Strings (char* for long strings, char[8] for short strings)
+ * - Nested objects (IRObject*)
+ *
+ * Memory management:
+ * - The object takes ownership of allocated strings and nested objects
+ * - Copy/move operations perform deep copies/moves
+ * - The destructor frees any owned memory
+ *
+ * Usage example:
+ * @code
+ * IRObject obj;
+ * obj.type = IRObject::Int;
+ * obj.i = 42;
+ * int value = obj.GetScalar<int>(); // value = 42
+ * @endcode
+ */
 
 struct IRObject {
     IRObject() { std::memset(this, 0, sizeof(IRObject)); }
@@ -1242,23 +1326,6 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 namespace zeroerr {
 
 
-/**
- * @brief rank is a helper class for Printer to define the priority of overloaded functions.
- * @tparam N the priority of the rule. 0 is the lowest priority. The maximum priority is max_rank.
- *
- * You can define a rule by adding it as a function parameter with rank<N> where N is the priority.
- * For example:
- * template<typename T>
- * void Foo(T v, rank<0>); // lowest priority
- * void Foo(int v, rank<1>); // higher priority
- *
- * Even though in the first rule, type T can be an int, the second function will still be called due
- * to the priority.
- */
-template <unsigned N>
-struct rank : rank<N - 1> {};
-template <>
-struct rank<0> {};
 constexpr unsigned max_rank = 5;
 
 
@@ -1378,7 +1445,7 @@ struct Printer {
         (void)_;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS&& ZEROERR_IS_POD)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS && ZEROERR_IS_POD)
     print(const T& value, unsigned level, const char* lb, rank<1>) {
         os << tab(level) << "{";
         print_struct(value, level, isCompact ? " " : line_break,
@@ -1392,7 +1459,7 @@ struct Printer {
         os << tab(level) << (value ? "true" : "false") << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS&& ZEROERR_IS_STREAMABLE)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS && ZEROERR_IS_STREAMABLE)
     print(T value, unsigned level, const char* lb, rank<2>) { os << tab(level) << value << lb; }
 
 
@@ -1407,7 +1474,7 @@ struct Printer {
         os << tab(level) << "}" << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER&& ZEROERR_IS_ARRAY)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER && ZEROERR_IS_ARRAY)
     print(const T& value, unsigned level, const char* lb, rank<3>) {
         os << tab(level) << "[";
         bool last = false;
@@ -1427,7 +1494,7 @@ struct Printer {
             os << tab(level) << "<" << type(value) << " at " << value.get() << ">" << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER&& ZEROERR_IS_MAP)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER && ZEROERR_IS_MAP)
     print(const T& value, unsigned level, const char* lb, rank<4>) {
         os << tab(level) << "{" << (isCompact ? "" : line_break);
         bool last = false;
@@ -2045,7 +2112,6 @@ namespace zeroerr {
  * but will store the list in a vector, then ValueType will be 
  * std::list<int> and CorpusType will be std::vector<int>.
  */
-
 template <typename ValueType, typename CorpusType = ValueType>
 class Domain {
 public:
@@ -2066,6 +2132,13 @@ public:
     // virtual unsigned CountNumberOfFields(CorpusType v) const { return 0; }
 };
 
+
+/**
+ * @brief DomainConvertable is a base class for domains that can be converted to and from a ValueType
+ * 
+ * This class provides default implementations for the GetValue and FromValue methods.
+ * It is used to convert between the corpus types and the value types.
+ */
 template <typename ValueType, typename CorpusType = ValueType>
 class DomainConvertable : public Domain<ValueType, CorpusType> {
 public:
@@ -2087,6 +2160,23 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+/**
+ * @brief InRange is a domain that generates random values within a specified range
+ * 
+ * @tparam T The numeric type to generate values for (e.g. int, float)
+ * 
+ * This domain generates random values between a minimum and maximum value (inclusive).
+ * It supports any numeric type that can be used with arithmetic operations.
+ * 
+ * Example:
+ * ```cpp
+ * // Generate integers between 1 and 100
+ * auto domain = InRange(1, 100);
+ * 
+ * // Generate floating point numbers between 0.0 and 1.0
+ * auto domain = InRange(0.0, 1.0);
+ * ```
+ */
 template <typename T>
 class InRange : public DomainConvertable<T> {
 public:
@@ -2123,6 +2213,23 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+/**
+ * @brief ElementOf is a domain that generates random values from a fixed set of elements
+ * 
+ * @tparam T The type of elements to generate
+ * 
+ * This domain allows generating random values by selecting from a predefined set of elements.
+ * The elements are provided as a vector during construction.
+ * 
+ * Example:
+ * ```cpp
+ * // Generate random values from a set of strings
+ * auto domain = ElementOf<std::string>({"red", "green", "blue"});
+ * 
+ * // Generate random values from a set of integers
+ * auto domain = ElementOf<int>({1, 2, 3, 4, 5});
+ * ```
+ */
 template <typename T>
 class ElementOf : public Domain<T, uint64_t> {
 public:
@@ -2167,6 +2274,29 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+/**
+ * @brief ContainerOf is a domain that generates random containers filled with elements from an inner domain
+ * 
+ * @tparam T The container type to generate (e.g. vector, list, set)
+ * @tparam InnerDomain The domain type used to generate the container elements
+ * 
+ * This domain allows generating containers where each element is generated by an inner domain.
+ * It supports configuring the size constraints of the generated containers.
+ * 
+ * Example:
+ * ```cpp
+ * // Generate vectors of ints between 0-100
+ * auto domain = ContainerOf<std::vector<int>>(InRange(0, 100));
+ * 
+ * // Generate sets of strings
+ * auto domain = ContainerOf<std::set<std::string>>(Arbitrary<std::string>());
+ * 
+ * // Configure size constraints
+ * domain.WithMinSize(5);  // At least 5 elements
+ * domain.WithMaxSize(10); // At most 10 elements
+ * domain.WithSize(7);     // Exactly 7 elements
+ * ```
+ */
 struct ContainerOfBase {
     int min_size = 0, max_size = 100, size = -1;
 
@@ -2328,6 +2458,30 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
+
+/**
+ * @brief AggregateOf is a domain that combines multiple inner domains into a tuple or aggregate type
+ * 
+ * @tparam T The aggregate type to generate (e.g. struct or tuple)
+ * @tparam Inner The inner domain types that will generate each field
+ * 
+ * This domain allows generating structured data by composing multiple inner domains.
+ * Each inner domain generates one field of the aggregate type.
+ * 
+ * Example:
+ * ```cpp
+ * struct Point {
+ *   int x;
+ *   int y; 
+ * };
+ * 
+ * auto domain = AggregateOf<Point>(
+ *   InRange(0, 100),  // Domain for x
+ *   InRange(0, 100)   // Domain for y
+ * );
+ * ```
+ */
+
 template <typename T, typename... Inner>
 class AggregateOf : public Domain<T, std::tuple<typename Inner::CorpusType...>> {
 public:
@@ -2424,8 +2578,36 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 namespace zeroerr {
 
-template <typename T, typename = void>
-class Arbitrary {
+
+/**
+ * @brief Arbitrary is a domain that generates random values of a given type
+ * 
+ * @tparam T The type to generate values for
+ * @tparam N Template parameter for SFINAE-based specialization selection
+ * 
+ * This domain provides default random value generation for common types.
+ * It uses template specialization to handle different types appropriately.
+ * 
+ * The base template is empty and specializations are provided for:
+ * - bool
+ * - unsigned integers 
+ * - signed integers
+ * - floating point numbers
+ * - strings
+ * - containers
+ * 
+ * Example:
+ * ```cpp
+ * auto domain = Arbitrary<int>(); // Generates random integers
+ * auto domain = Arbitrary<std::string>(); // Generates random strings
+ * ```
+ */
+
+template <typename T, unsigned N = 2, typename = void>
+class Arbitrary : public Arbitrary<T, N-1> {};
+
+template <typename T>
+struct Arbitrary <T, 0> {
     static_assert(detail::always_false<T>::value, "No Arbitrary specialization for this type");
 };
 
@@ -2446,7 +2628,7 @@ using is_unsigned_int =
     typename std::enable_if<std::is_integral<T>::value && !std::numeric_limits<T>::is_signed,
                             void>::type;
 template <typename T>
-class Arbitrary<T, is_unsigned_int<T>> : public DomainConvertable<T> {
+class Arbitrary<T, 2, is_unsigned_int<T>> : public DomainConvertable<T> {
 public:
     using ValueType  = T;
     using CorpusType = T;
@@ -2464,7 +2646,7 @@ using is_signed_int =
                             void>::type;
 
 template <typename T>
-class Arbitrary<T, is_signed_int<T>> : public DomainConvertable<T> {
+class Arbitrary<T, 2, is_signed_int<T>> : public DomainConvertable<T> {
 public:
     using ValueType  = T;
     using CorpusType = T;
@@ -2480,7 +2662,7 @@ public:
 template <typename T>
 using is_float_point = typename std::enable_if<std::is_floating_point<T>::value, void>::type;
 template <typename T>
-class Arbitrary<T, is_float_point<T>> : public DomainConvertable<T> {
+class Arbitrary<T, 2, is_float_point<T>> : public DomainConvertable<T> {
 public:
     using ValueType  = T;
     using CorpusType = T;
@@ -2500,7 +2682,7 @@ using is_string =
     typename std::enable_if<detail::is_specialization<T, std::basic_string>::value>::type;
 
 template <typename T>
-class Arbitrary<T, is_string<T>> : public Domain<T, std::vector<typename T::value_type>> {
+class Arbitrary<T, 2, is_string<T>> : public Domain<T, std::vector<typename T::value_type>> {
     Arbitrary<std::vector<typename T::value_type>> impl;
 
 public:
@@ -2519,23 +2701,11 @@ public:
     }
 };
 
+template <typename T>
+using is_modifiable = typename std::enable_if<detail::is_modifiable<T>::value>::type;
 
 template <typename T>
-using is_modifable =
-    typename std::enable_if<!detail::is_specialization<T, std::basic_string>::value,
-                            decltype(
-                                // Iterable
-                                T().begin(), T().end(), T().size(),
-                                // Values are mutable
-                                // This rejects associative containers, for example
-                                // *T().begin() = std::declval<value_type_t<T>>(),
-                                // Can insert and erase elements
-                                T().insert(T().end(), std::declval<typename T::value_type>()),
-                                T().erase(T().begin()),
-                                //
-                                (void)0)>::type;
-template <typename T>
-class Arbitrary<T, is_modifable<T>>
+class Arbitrary<T, 1, is_modifiable<T>>
     : public SequenceContainerOf<T, Arbitrary<typename T::value_type>> {
 public:
     Arbitrary()
@@ -2544,18 +2714,17 @@ public:
 };
 
 template <typename T, typename U>
-class Arbitrary<std::pair<T, U>>
+class Arbitrary<std::pair<T, U>, 1>
     : public AggregateOf<
           std::pair<typename std::remove_const<T>::type, typename std::remove_const<U>::type>> {};
 
 
 template <typename... T>
-class Arbitrary<std::tuple<T...>>
+class Arbitrary<std::tuple<T...>, 1>
     : public AggregateOf<std::tuple<typename std::remove_const<T>::type...>> {};
 
 template <typename T>
-class Arbitrary<const T> : public Arbitrary<T> {};
-
+class Arbitrary<const T, 2> : public Arbitrary<T> {};
 
 }  // namespace zeroerr
 
@@ -2576,13 +2745,14 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name)                    \
-    static void                     function(zeroerr::TestContext*);     \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(       \
-        {name, __FILE__, __LINE__, function}, zeroerr::TestType::bench); \
+#define ZEROERR_CREATE_BENCHMARK_FUNC(function, name, ...)                              \
+    static void                     function(zeroerr::TestContext*);                    \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                      \
+        {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, zeroerr::TestType::bench); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define BENCHMARK(name) ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name)
+#define BENCHMARK(name, ...) \
+    ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name, __VA_ARGS__)
 
 
 namespace zeroerr {
@@ -2623,7 +2793,7 @@ struct PerformanceCounter {
     void endMeasure();
     void updateResults(uint64_t numIters);
 
-    PerfCountSet<uint64_t> const& val() const noexcept { return _val; }
+    const PerfCountSet<uint64_t>& val() const noexcept { return _val; }
     PerfCountSet<bool>            has() const noexcept { return _has; }
 
     static PerformanceCounter& inst();
@@ -2726,10 +2896,10 @@ struct Benchmark {
 namespace detail {
 
 #if defined(_MSC_VER)
-void doNotOptimizeAwaySink(void const*);
+void doNotOptimizeAwaySink(const void*);
 
 template <typename T>
-void doNotOptimizeAway(T const& val) {
+void doNotOptimizeAway(const T& val) {
     doNotOptimizeAwaySink(&val);
 }
 
@@ -2740,7 +2910,7 @@ void doNotOptimizeAway(T const& val) {
 // Google Benchmark seemed to be the most well tested anyways. see
 // https://github.com/google/benchmark/blob/master/include/benchmark/benchmark.h#L307
 template <typename T>
-void doNotOptimizeAway(T const& val) {
+void doNotOptimizeAway(const T& val) {
     // NOLINTNEXTLINE(hicpp-no-assembler)
     asm volatile("" : : "r,m"(val) : "memory");
 }
@@ -2797,6 +2967,16 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 #define ZEROERR_G_CONTEXT_SCOPE(x)
 #endif
 
+
+/**
+ * @brief Default printer for assertion messages
+ * 
+ * This macro defines the default printer for assertion messages.
+ * It prints the assertion message in different colors based on the assertion level.
+ * 
+ * The macro can be overridden by defining ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER before
+ * including this header. (Or undefine it and implement your own printer.)
+ */
 #ifndef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER
 #define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, ...)                    \
     do {                                                                          \
@@ -4039,25 +4219,27 @@ protected:
 
 
 
+#include <chrono>
 #include <functional>
 #include <string>
 #include <vector>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_TEST_FUNC(function, name)                     \
+#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                \
     static void                     function(zeroerr::TestContext*); \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \
-        {name, __FILE__, __LINE__, function});                       \
+        {name, __FILE__, __LINE__, function, {__VA_ARGS__}});        \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE(name) ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
+#define TEST_CASE(name, ...) \
+    ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name, __VA_ARGS__)
 
-#define SUB_CASE(name)                                                \
-    zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT) \
+#define SUB_CASE(name, ...)                                                          \
+    zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \
         << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
-#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name)                        \
+#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name, ...)                   \
     class classname : public fixture {                                                       \
     public:                                                                                  \
         void funcname(zeroerr::TestContext*);                                                \
@@ -4067,12 +4249,12 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
         instance.funcname(_ZEROERR_TEST_CONTEXT);                                            \
     }                                                                                        \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \
-        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname)});                           \
+        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname), {__VA_ARGS__}});            \
     inline void classname::funcname(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE_FIXTURE(fixture, name)                                \
+#define TEST_CASE_FIXTURE(fixture, name, ...)                           \
     ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
-                              ZEROERR_NAMEGEN(_zeroerr_test_method), name)
+                              ZEROERR_NAMEGEN(_zeroerr_test_method), name, __VA_ARGS__)
 
 
 #define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT->save_output();
@@ -4088,6 +4270,7 @@ namespace zeroerr {
 
 class IReporter;
 struct TestCase;
+class Decorator;
 
 /**
  * @brief TestContext is a class that holds the test results and reporter context.
@@ -4103,8 +4286,16 @@ struct TestCase;
  */
 class TestContext {
 public:
-    unsigned passed = 0, warning = 0, failed = 0, skipped = 0;
-    unsigned passed_as = 0, warning_as = 0, failed_as = 0, skipped_as = 0;
+    unsigned passed     = 0;
+    unsigned warning    = 0;
+    unsigned failed     = 0;
+    unsigned skipped    = 0;
+    unsigned passed_as  = 0;
+    unsigned warning_as = 0;
+    unsigned failed_as  = 0;
+    unsigned skipped_as = 0;
+
+    std::chrono::duration<double> duration = std::chrono::duration<double>::zero();
 
     IReporter& reporter;
 
@@ -4197,7 +4388,7 @@ struct TestCase {
     unsigned                          line;
     std::function<void(TestContext*)> func;
     std::vector<TestCase*>            subcases;
-
+    std::vector<Decorator*>           decorators;
     /**
      * @brief Compare the test cases.
      * @param rhs The test case that will be compared.
@@ -4211,8 +4402,8 @@ struct TestCase {
      * @param file The file that the test case is defined.
      * @param line The line that the test case is defined.
      */
-    TestCase(std::string name, std::string file, unsigned line)
-        : name(name), file(file), line(line) {}
+    TestCase(std::string name, std::string file, unsigned line, std::vector<Decorator*> decorators)
+        : name(name), file(file), line(line), decorators(decorators) {}
 
     /**
      * @brief Construct a new Test Case object
@@ -4220,10 +4411,11 @@ struct TestCase {
      * @param file The file that the test case is defined.
      * @param line The line that the test case is defined.
      * @param func The function that will be run to test the test case.
+     * @param decorators The decorators that will be used to decorate the test case.
      */
     TestCase(std::string name, std::string file, unsigned line,
-             std::function<void(TestContext*)> func)
-        : name(name), file(file), line(line), func(func) {}
+             std::function<void(TestContext*)> func, std::vector<Decorator*> decorators)
+        : name(name), file(file), line(line), func(func), decorators(decorators) {}
 };
 
 
@@ -4231,7 +4423,8 @@ struct TestCase {
  * @brief SubCase is a class that holds the subcase information.
  */
 struct SubCase : TestCase {
-    SubCase(std::string name, std::string file, unsigned line, TestContext* context);
+    SubCase(std::string name, std::string file, unsigned line, TestContext* context,
+            std::vector<Decorator*> decorators);
     ~SubCase() = default;
     TestContext* context;
     void         operator<<(std::function<void(TestContext*)> op);
@@ -4276,7 +4469,7 @@ public:
      * @brief Create the reporter object with the given name.
      * @param name The name of the reporter. Available reporters are: console, xml.
      * @param ut The unit test object that will be used to configure the test.
-    */
+     */
     static IReporter* create(const std::string& name, UnitTest& ut);
 
     IReporter(UnitTest& ut) : ut(ut) {}
@@ -4321,7 +4514,7 @@ struct regReporter {
  *   });
  *   test(a, b);
  * ```
- * 
+ *
  * This will test the targetFunc with all the combinations of a and b, e.g. (1,4), (1,5), (1,6),
  * (2,4), (2,5) ... etc.
  */
@@ -4369,6 +4562,27 @@ private:
     int index = 0;
 };
 
+
+class Decorator {
+public:
+    // Called when the test registered, return true can block the test registering
+    virtual bool onStartup(const TestCase&) { return false; }
+
+    // Called when the test executing, return true can block the test execution
+    virtual bool onExecution(const TestCase&) { return false; }
+
+    // Called on each assertion, return true can skip the assertion
+    virtual bool onAssertion() { return false; }
+
+    // Called when the test finished, return true means the test containing errors
+    virtual bool onFinish(const TestCase&, const TestContext&) { return false; }
+};
+
+Decorator* skip(bool isSkip = true);
+Decorator* timeout(float timeout = 0.1f);  // in seconds
+Decorator* may_fail(bool isMayFail = true);
+Decorator* should_fail(bool isShouldFail = true);
+
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
@@ -4394,13 +4608,14 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_FUZZ_TEST_FUNC(function, name)                        \
-    static void                     function(zeroerr::TestContext*);         \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(           \
-        {name, __FILE__, __LINE__, function}, zeroerr::TestType::fuzz_test); \
+#define ZEROERR_CREATE_FUZZ_TEST_FUNC(function, name, ...)                                  \
+    static void                     function(zeroerr::TestContext*);                        \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                          \
+        {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, zeroerr::TestType::fuzz_test); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define FUZZ_TEST_CASE(name) ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
+#define FUZZ_TEST_CASE(name, ...) \
+    ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name, __VA_ARGS__)
 
 #define FUZZ_FUNC(func) zeroerr::FuzzFunction(func, _ZEROERR_TEST_CONTEXT)
 
@@ -4917,7 +5132,7 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
             const char* q = p + 1;
             while (*q && *q != '}') q++;
             if (*q == '}') {
-                std::string N(p + 1, (size_t)(q-p-1));
+                std::string N(p + 1, (size_t)(q - p - 1));
                 names[N] = static_cast<int>(names.size());
                 p        = q;
             }
@@ -5040,10 +5255,15 @@ void* LogStream::getRawLog(std::string func, unsigned line, std::string name) {
     return nullptr;
 }
 
+static bool startWith(const std::string& str, const std::string& prefix) {
+    return str.rfind(prefix, 0) == 0;
+}
+
 void* LogStream::getRawLog(std::string func, std::string msg, std::string name) {
     for (DataBlock* p = first; p; p = p->next)
         for (auto q = p->begin(); q < p->end(); q = moveBytes(q, q->info->size))
-            if (msg == q->info->message && func == q->info->function) return q->getRawLog(name);
+            if (startWith(q->info->message, msg) && func == q->info->function)
+                return q->getRawLog(name);
     return nullptr;
 }
 
@@ -5085,7 +5305,7 @@ LogIterator& LogIterator::operator++() {
 }
 
 bool LogIterator::check_filter() {
-    if (!message_filter.empty() && q->info->message != message_filter) return false;
+    if (!message_filter.empty() && startWith(q->info->message, message_filter)) return false;
     if (!function_name_filter.empty() && q->info->function != function_name_filter) return false;
     if (line_filter != -1 && static_cast<int>(q->info->line) != line_filter) return false;
     return true;
@@ -5771,8 +5991,9 @@ static inline std::string getFileName(std::string file) {
     return fileName;
 }
 
-SubCase::SubCase(std::string name, std::string file, unsigned line, TestContext* context)
-    : TestCase(name, file, line), context(context) {}
+SubCase::SubCase(std::string name, std::string file, unsigned line, TestContext* context,
+                 std::vector<Decorator*> decorators)
+    : TestCase(name, file, line, decorators), context(context) {}
 
 void SubCase::operator<<(std::function<void(TestContext*)> op) {
     func = op;
@@ -5931,6 +6152,20 @@ bool UnitTest::run_filter(const TestCase& tc) {
     return true;
 }
 
+static bool runOnExecution(const TestCase& tc) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onExecution(tc)) return true;
+    }
+    return false;
+}
+
+static bool runOnFinish(const TestCase& tc, const TestContext& ctx) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onFinish(tc, ctx)) return true;
+    }
+    return false;
+}
+
 int UnitTest::run() {
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
@@ -5946,11 +6181,16 @@ int UnitTest::run() {
 
     for (auto& tc : test_cases) {
         if (!run_filter(tc)) continue;
+        if (runOnExecution(tc)) {
+            sum.skipped += 1;
+            continue;
+        }
         reporter->testCaseStart(tc, new_buf);
         if (!list_test_cases) {
             std::streambuf* orig_buf = std::cerr.rdbuf();
             std::cerr.rdbuf(&new_buf);
             std::cerr << std::endl;
+            auto start = std::chrono::high_resolution_clock::now();
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
@@ -5961,9 +6201,17 @@ int UnitTest::run() {
                     context.failed_as = 1;
                 }
             }
+            auto end         = std::chrono::high_resolution_clock::now();
+            context.duration = end - start;
             std::cerr.rdbuf(orig_buf);
         }
         int type = sum.add(context);
+        if (runOnFinish(tc, context)) {
+            if (type != 2) {
+                sum.failed += 1;
+                type = 2;
+            }
+        }
         reporter->testCaseEnd(tc, new_buf, context, type);
         context.reset();
         new_buf.str("");
@@ -6001,7 +6249,12 @@ static std::set<TestCase> getRegisteredTests(unsigned type) {
     return result;
 }
 
-regTest::regTest(const TestCase& tc, TestType type) { getTestSet(type).insert(tc); }
+regTest::regTest(const TestCase& tc, TestType type) {
+    for (auto& decorator : tc.decorators) {
+        if (decorator->onStartup(tc)) return;
+    }
+    getTestSet(type).insert(tc);
+}
 
 static std::set<IReporter*>& getRegisteredReporters() {
     static std::set<IReporter*> data;
@@ -6287,8 +6540,8 @@ XmlWriter::ScopedElement::~ScopedElement() {
     if (m_writer) m_writer->endElement();
 }
 
-XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text,
-                                                              bool               indent, bool new_line) {
+XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text, bool indent,
+                                                              bool new_line) {
     m_writer->writeText(text, indent, new_line);
     return *this;
 }
@@ -6322,8 +6575,10 @@ XmlWriter& XmlWriter::endElement() {
         m_os << "/>";
         m_tagIsOpen = false;
     } else {
-        if (m_needsIndent) m_os << m_indent;
-        else m_needsIndent = true;
+        if (m_needsIndent)
+            m_os << m_indent;
+        else
+            m_needsIndent = true;
         m_os << "</" << m_tags.back() << ">";
     }
     m_os << std::endl;
@@ -6355,7 +6610,7 @@ XmlWriter& XmlWriter::writeText(const std::string& text, bool indent, bool new_l
         if (tagWasOpen && indent) m_os << m_indent;
         m_os << XmlEncode(text);
         m_needsNewline = new_line;
-        m_needsIndent = new_line;
+        m_needsIndent  = new_line;
     }
     return *this;
 }
@@ -6413,8 +6668,8 @@ public:
         if (ut.log_to_report) suspendLog();
     }
 
-    virtual void testCaseEnd(const TestCase& tc, std::stringbuf& sb, const TestContext& ctx,
-                             int) override {
+    virtual void testCaseEnd(ZEROERR_UNUSED(const TestCase&), std::stringbuf& sb,
+                             const TestContext& ctx, int) override {
         current.pop_back();
         xml.scopedElement("Result")
             .writeAttribute("time", 0)
@@ -6478,6 +6733,63 @@ public:
 IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
     if (name == "console") return new ConsoleReporter(ut);
     if (name == "xml") return new XmlReporter(ut);
+    return nullptr;
+}
+
+
+class SkipDecorator : public Decorator {
+    bool onExecution(const TestCase&) override { return true; }
+};
+
+Decorator* skip(bool isSkip) {
+    static SkipDecorator skip_dec;
+    if (isSkip) return &skip_dec;
+    return nullptr;
+}
+
+class TimeoutDecorator : public Decorator {
+    float timeout;
+
+public:
+    TimeoutDecorator() : timeout(0) {}
+    TimeoutDecorator(float timeout) : timeout(timeout) {}
+
+    bool onFinish(const TestCase& tc, const TestContext& ctx) override {
+        if (ctx.duration > std::chrono::duration<double>(timeout)) {
+            std::cerr << FgRed <<  "Timeout: " << Reset << ctx.duration.count() << "s > " << timeout << "s" << std::endl;
+            return true;
+        }
+        return false;
+    }
+};
+
+Decorator* timeout(float timeout) {
+    static std::map<float, TimeoutDecorator> timeout_dec;
+    if (timeout_dec.find(timeout) == timeout_dec.end()) {
+        timeout_dec[timeout] = TimeoutDecorator(timeout);
+    }
+    return &timeout_dec[timeout];
+}
+
+class FailureDecorator : public Decorator {
+public:
+    enum FailureType { may_fail, should_fail };
+    FailureDecorator(FailureType type) : type(type) {}
+
+private:
+    FailureType type;
+};
+
+
+Decorator* may_fail(bool isMayFail) {
+    static FailureDecorator may_fail_dec(FailureDecorator::may_fail);
+    if (isMayFail) return &may_fail_dec;
+    return nullptr;
+}
+
+Decorator* should_fail(bool isShouldFail) {
+    static FailureDecorator should_fail_dec(FailureDecorator::should_fail);
+    if (isShouldFail) return &should_fail_dec;
     return nullptr;
 }
 
@@ -6550,10 +6862,175 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
     });
 
     current_fuzz_test = nullptr;
+#else
+    (void) fuzz_test;
+    (void) seed;
+    (void) runs;
+    (void) max_len;
+    (void) timeout;
+    (void) len_control;
 #endif
 }
 
 }  // namespace zeroerr
+
+
+
+#include <sstream>
+namespace zeroerr {
+
+IRObject* IRObject::alloc(size_t size) {
+    IRObject* list = new IRObject[size + 1];
+    list[0].i      = size;
+    return list + 1;
+}
+
+char* IRObject::alloc_str(size_t size) {
+    char* s = new char[size + 1];
+    s[size] = 0;
+    return s;
+}
+
+static std::string escape(std::string str) {
+    std::string result;
+    for (char c : str) {
+        switch (c) {
+            case ' ': result += "\\s"; break;
+            case '\n': result += "\\n"; break;
+            case '\t': result += "\\t"; break;
+            case '\r': result += "\\r"; break;
+            case '\f': result += "\\f"; break;
+            case '\v': result += "\\v"; break;
+            case '\\': result += "\\\\"; break;
+            case '"': result += "\\\""; break;
+            default: {
+                if (c < 32 || c > 126) {
+                    result += "\\x";
+                    result += "0123456789abcdef"[c >> 4];
+                    result += "0123456789abcdef"[c & 15];
+                    continue;
+                }
+                result += c;
+            }
+        }
+    }
+    return result;
+}
+
+static std::string unescape(std::string str) {
+    std::string result;
+    for (size_t i = 0; i < str.size(); ++i) {
+        if (str[i] == '\\') {
+            switch (str[++i]) {
+                case 's': result += ' '; break;
+                case 'n': result += '\n'; break;
+                case 't': result += '\t'; break;
+                case 'r': result += '\r'; break;
+                case 'f': result += '\f'; break;
+                case 'v': result += '\v'; break;
+                case '\\': result += '\\'; break;
+                case '"': result += '"'; break;
+                case 'x': {
+                    char c = 0;
+                    for (int j = 0; j < 2; ++j) {
+                        c *= 16;
+                        if (str[i + 1] >= '0' && str[i + 1] <= '9') {
+                            c += str[i + 1] - '0';
+                        } else if (str[i + 1] >= 'a' && str[i + 1] <= 'f') {
+                            c += str[i + 1] - 'a' + 10;
+                        } else if (str[i + 1] >= 'A' && str[i + 1] <= 'F') {
+                            c += str[i + 1] - 'A' + 10;
+                        }
+                    }
+                    result += c;
+                    i += 2;
+                }
+            }
+        } else {
+            result += str[i];
+        }
+    }
+    return result;
+}
+
+static void to_string(IRObject obj, std::stringstream& ss) {
+    switch (obj.type) {
+        case IRObject::Type::Int: ss << obj.i; break;
+        case IRObject::Type::Float: ss << obj.f << 'f'; break;
+        case IRObject::Type::String: ss << '"' << escape(obj.s) << '"'; break;
+        case IRObject::Type::ShortString: ss << '"' << escape(obj.ss) << '"'; break;
+        case IRObject::Type::Object:
+            ss << "{ ";
+            auto c = obj.GetChildren();
+            for (unsigned i = 0; i < c.size; ++i) {
+                to_string(*(c.children + i), ss);
+                ss << " ";
+            }
+            ss << "}";
+            break;
+    }
+}
+
+static IRObject from_string(std::stringstream& ss, std::string& token) {
+    IRObject obj;
+    if (token == "{") {
+        std::vector<IRObject> children;
+        while (ss >> token) {
+            if (token == "}") break;
+            IRObject child = from_string(ss, token);
+            if (child.type == IRObject::Type::Undefined)
+                return obj;
+            children.push_back(child);
+        }
+        IRObject* child = IRObject::alloc(children.size());
+        for (unsigned i = 0; i < children.size(); ++i) {
+            child[i] = children[i];
+        }
+        obj.SetChildren(child);
+        return obj;
+    }
+    if (token[0] == '"') {
+        CHECK(token.size() > 1 AND token.back() == '"');
+        obj.SetScalar(unescape(token.substr(1, token.size() - 2)));
+        return obj;
+    }
+    if (token.back() == 'f') {
+        obj.SetScalar(std::stod(token.substr(0, token.size() - 1)));
+        return obj;
+    }
+    if (token[0] == '-' || (token[0] >= '0' && token[0] <= '9')) {
+        obj.SetScalar(std::stoll(token));
+        return obj;
+    }
+    return obj;
+}
+
+std::string IRObject::ToString(IRObject obj) {
+    std::stringstream ss;
+    to_string(obj, ss);
+    return ss.str();
+}
+
+IRObject IRObject::FromString(std::string str) {
+    std::stringstream ss(str);
+    std::string       token;
+    ss >> token;
+    return from_string(ss, token);
+}
+
+std::vector<uint8_t> IRObject::ToBinary(IRObject obj) {
+    std::vector<uint8_t> bin;
+    return bin;
+}
+
+IRObject IRObject::FromBinary(std::vector<uint8_t> bin) {
+    IRObject obj;
+    return obj;
+}
+
+
+}  // namespace zeroerr
+
 
 
 

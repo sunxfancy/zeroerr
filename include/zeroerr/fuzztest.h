@@ -20,13 +20,14 @@
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_FUZZ_TEST_FUNC(function, name)                        \
-    static void                     function(zeroerr::TestContext*);         \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(           \
-        {name, __FILE__, __LINE__, function}, zeroerr::TestType::fuzz_test); \
+#define ZEROERR_CREATE_FUZZ_TEST_FUNC(function, name, ...)                                  \
+    static void                     function(zeroerr::TestContext*);                        \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                          \
+        {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, zeroerr::TestType::fuzz_test); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define FUZZ_TEST_CASE(name) ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name)
+#define FUZZ_TEST_CASE(name, ...) \
+    ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name, __VA_ARGS__)
 
 #define FUZZ_FUNC(func) zeroerr::FuzzFunction(func, _ZEROERR_TEST_CONTEXT)
 
