@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: Printer MultiFunctor</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('md_docs_2pages_2zh_25_8print.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">Printer MultiFunctor</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="toc"><h3>目录</h3>
+<ul><ul><li class="level2"><a href="#autotoc_md11">构造函数</a></li>
+<li class="level2"><a href="#autotoc_md12">打印任意类型</a></li>
+<li class="level2"><a href="#autotoc_md13">不同类型的优先级规则</a></li>
+</ul>
+<li class="level1"><a href="#autotoc_md14">配置参数</a><ul><li class="level2"><a href="#autotoc_md15">在流输出中打印</a></li>
+<li class="level2"><a href="#autotoc_md16">自定义规则</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="textblock"><p><code>Printer</code> 是一个用来打印任意类型数据的模板类。本身是一个有状态的MultiFunctor, 可以打印到<code>std::ostream</code> 或者 <code>std::stringstream</code>。</p>
+<h2><a class="anchor" id="autotoc_md11"></a>
+构造函数</h2>
+<p>您可以选择打印到内置的 <code>stringstream</code> 或者您传入的一个 <code>std::ostream</code>。</p>
+<div class="fragment"><div class="line"> ++</div>
+<div class="line">Printer();  <span class="comment">// print to std::stringstream</span></div>
+<div class="line">Printer(std::ostream&amp; os); <span class="comment">// print to &#39;os&#39;</span></div>
+</div><!-- fragment --><p> 如果想快速获得一个能打印到标准输出流的对象，可以调用如下方法：</p>
+<div class="fragment"><div class="line"> ++</div>
+<div class="line"><span class="keyword">extern</span> Printer&amp; getStdoutPrinter();</div>
+<div class="line"><span class="keyword">extern</span> Printer&amp; getStderrPrinter();</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md12"></a>
+打印任意类型</h2>
+<p>仿函数 <code>print(...)</code> 可以传入任意个任意不同类型的参数，他们将被依次打印。</p>
+<p>Example: </p><div class="fragment"><div class="line"> ++</div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="unittest_8cpp.html#a217dbf8b442f20279ea00b898af96f52">main</a>() {</div>
+<div class="line">    <span class="keyword">auto</span> print = <a class="code hl_function" href="namespacezeroerr.html#a843758ce79d0a877020c2eb6543a0e54">zeroerr::getStderrPrinter</a>();</div>
+<div class="line">    <span class="keywordtype">int</span>  a = 1;</div>
+<div class="line">    <span class="keywordtype">int</span>&amp; b = a;</div>
+<div class="line">    <span class="keywordtype">int</span>* c = &amp;a;</div>
+<div class="line">    print(a, b, c);</div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="ttc" id="anamespacezeroerr_html_a843758ce79d0a877020c2eb6543a0e54"><div class="ttname"><a href="namespacezeroerr.html#a843758ce79d0a877020c2eb6543a0e54">zeroerr::getStderrPrinter</a></div><div class="ttdeci">Printer &amp; getStderrPrinter()</div><div class="ttdef"><b>Definition</b> print.cpp:12</div></div>
+<div class="ttc" id="aunittest_8cpp_html_a217dbf8b442f20279ea00b898af96f52"><div class="ttname"><a href="unittest_8cpp.html#a217dbf8b442f20279ea00b898af96f52">main</a></div><div class="ttdeci">int main(int argc, const char **argv)</div><div class="ttdef"><b>Definition</b> unittest.cpp:884</div></div>
+</div><!-- fragment --><p>Output: </p><div class="fragment"><div class="line">1 1 &lt;int* at 0x7ffebc813ed4&gt;</div>
+</div><!-- fragment --><p>同时支持 STL container:</p>
+<div class="fragment"><div class="line"> ++</div>
+<div class="line"><span class="keywordtype">int</span> <a class="code hl_function" href="unittest_8cpp.html#a217dbf8b442f20279ea00b898af96f52">main</a>() {</div>
+<div class="line">    <span class="keyword">auto</span> print = <a class="code hl_function" href="namespacezeroerr.html#a843758ce79d0a877020c2eb6543a0e54">zeroerr::getStderrPrinter</a>();</div>
+<div class="line">    std::vector&lt;int&gt; vec = {1, 5, 2};</div>
+<div class="line">    <span class="keyword">auto</span> get_student = [](<span class="keywordtype">int</span> id) {</div>
+<div class="line">        <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == 0) <span class="keywordflow">return</span> std::make_tuple(3.8, <span class="charliteral">&#39;A&#39;</span>, <span class="stringliteral">&quot;Lisa Simpson&quot;</span>);</div>
+<div class="line">        <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == 1) <span class="keywordflow">return</span> std::make_tuple(2.9, <span class="charliteral">&#39;C&#39;</span>, <span class="stringliteral">&quot;Milhouse Van Houten&quot;</span>);</div>
+<div class="line">        <span class="keywordflow">if</span> (<span class="keywordtype">id</span> == 2) <span class="keywordflow">return</span> std::make_tuple(1.7, <span class="charliteral">&#39;D&#39;</span>, <span class="stringliteral">&quot;Ralph Wiggum&quot;</span>);</div>
+<div class="line">        <span class="keywordflow">throw</span> std::invalid_argument(<span class="stringliteral">&quot;id&quot;</span>);</div>
+<div class="line">    };</div>
+<div class="line">    print(a, b, c);</div>
+<div class="line">    print({get_student(0), get_student(1), get_student(2)});</div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+</div><!-- fragment --><p> Output: </p><div class="fragment"><div class="line">[1, 5, 2] </div>
+<div class="line">{</div>
+<div class="line">  (3.8, A, Lisa Simpson)</div>
+<div class="line">  (2.9, C, Milhouse Van Houten)</div>
+<div class="line">  (1.7, D, Ralph Wiggum)</div>
+<div class="line">} </div>
+</div><!-- fragment --><p>也可以方便的打印智能指针:</p>
+<div class="fragment"><div class="line"> ++</div>
+<div class="line">std::shared_ptr&lt;int&gt; p(<span class="keyword">new</span> <span class="keywordtype">int</span>(42));</div>
+<div class="line">print(p);</div>
+<div class="line"> </div>
+<div class="line">std::unique_ptr&lt;int&gt; up(<span class="keyword">new</span> <span class="keywordtype">int</span>(42));</div>
+<div class="line">print(std::move(up));</div>
+</div><!-- fragment --><p>Output: </p><div class="fragment"><div class="line">&lt;std::shared_ptr&lt;int&gt; at 0x555e1f936140&gt; </div>
+<div class="line">&lt;std::unique_ptr&lt;int, std::default_delete&lt;int&gt; &gt; at 0x555e1f931100&gt; </div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md13"></a>
+不同类型的优先级规则</h2>
+<p>该函数在打印不同类型元素时，是根据不同的类型，选取不同的优先级规则，例如，一个 string 类型，是container类型，也是Object类型，但因为std::string 有专属的规则在level4， 所以会调用专属规则进行打印。</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">level   </th><th class="markdownTableHeadNone">types    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">User Customized Rules    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone">std::string, std::complex, std::map    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone">std::share_ptr, std::unique_ptr, std::weak_ptr, std::tuple, Array    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone">container(who has begin, end methods), streamable types(with &lt;&lt; operator), bool    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">char, wchar, POD type(need PFR library)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone">Object, C pointer, integer, float   </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md14"></a>
+配置参数</h1>
+<p>这个仿函数可以被配置多种不同的运行模式:</p><ol type="1">
+<li>紧凑模式 - 所有元素不换行，单行打印，如 <code>{"a" : 1, "b" : 2}</code> <div class="fragment"><div class="line">++</div>
+<div class="line">  print.isCompact = <span class="keyword">true</span>;</div>
+</div><!-- fragment --></li>
+<li>彩色输出模式 <div class="fragment"><div class="line">++</div>
+<div class="line">  print.isColorful = <span class="keyword">true</span>;</div>
+</div><!-- fragment --></li>
+<li>引用模式，如果启用时字符串会加引号, <code>"a"</code> <div class="fragment"><div class="line">++</div>
+<div class="line">  print.isQuoted = <span class="keyword">true</span>;</div>
+</div><!-- fragment --></li>
+<li>缩进 - 默认是 <code>2</code>. <div class="fragment"><div class="line">++</div>
+<div class="line">  print.indent = 4</div>
+</div><!-- fragment --></li>
+<li>换行符，windows下您可以调整 - 默认是 <code>\n</code>. <div class="fragment"><div class="line">++</div>
+<div class="line">  print.line_break = <span class="stringliteral">&quot;\r\n&quot;</span>; <span class="comment">// for windows</span></div>
+</div><!-- fragment --></li>
+</ol>
+<h2><a class="anchor" id="autotoc_md15"></a>
+在流输出中打印</h2>
+<div class="fragment"><div class="line"> ++</div>
+<div class="line">Printer print(); <span class="comment">// print to stringstream</span></div>
+<div class="line">std::cerr &lt;&lt; print(<span class="stringliteral">&quot;hello world&quot;</span>) &lt;&lt; std::endl;</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md16"></a>
+自定义规则</h2>
+<p>打印规则是可以自定义的，并且会在最高优先级上。创建一个 <code>PrinterExt</code> function templates：</p>
+<div class="fragment"><div class="line"> ++</div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="keyword">typename</span> std::enable_if&lt; &lt;condition&gt;, <span class="keywordtype">void</span>&gt;::type</div>
+<div class="line"><a class="code hl_function" href="namespacezeroerr.html#a96f0cf094ccdf1793b38c8e6b2568a09">zeroerr::PrinterExt</a>(Printer&amp; P, &lt;type of Input&gt;, <span class="keywordtype">unsigned</span> level, <span class="keyword">const</span> <span class="keywordtype">char</span>* lb, rank&lt;N&gt;);</div>
+<div class="ttc" id="anamespacezeroerr_html_a96f0cf094ccdf1793b38c8e6b2568a09"><div class="ttname"><a href="namespacezeroerr.html#a96f0cf094ccdf1793b38c8e6b2568a09">zeroerr::PrinterExt</a></div><div class="ttdeci">void PrinterExt(Printer &amp;, T, unsigned, const char *, rank&lt; 0 &gt;)</div><div class="ttdoc">PrinterExt is an extension of Printer that allows user to write custom rules for printing.</div><div class="ttdef"><b>Definition</b> print.h:282</div></div>
+</div><!-- fragment --><p>如下是一个LLVM中指针元素的打印规则，支持 <code>llvm::Value</code>, <code>llvm::Type</code> 以及当前要打印的具体类型 <code>llvm::Function</code>:</p>
+<div class="fragment"><div class="line"> ++</div>
+<div class="line"><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacezeroerr.html">zeroerr</a>{</div>
+<div class="line"><span class="comment">// This will create a special rule for printing pointers from LLVM value</span></div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><span class="keyword">typename</span> std::enable_if&lt;</div>
+<div class="line">    std::is_base_of&lt;llvm::Value, T&gt;::value || std::is_base_of&lt;llvm::Type, T&gt;::value, <span class="keywordtype">void</span>&gt;::type</div>
+<div class="line"><a class="code hl_function" href="namespacezeroerr.html#a96f0cf094ccdf1793b38c8e6b2568a09">PrinterExt</a>(Printer&amp; P, T* s, <span class="keywordtype">unsigned</span> level, <span class="keyword">const</span> <span class="keywordtype">char</span>* lb, rank&lt;1&gt;) {</div>
+<div class="line">    <span class="keywordflow">if</span> (s == <span class="keyword">nullptr</span>) {</div>
+<div class="line">        P.os &lt;&lt; P.tab(level) &lt;&lt; <span class="stringliteral">&quot;nullptr&quot;</span> &lt;&lt; lb;</div>
+<div class="line">    } <span class="keywordflow">else</span> {</div>
+<div class="line">        llvm::raw_os_ostream os(P.os);</div>
+<div class="line">        s-&gt;print(os);</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Even though llvm::Function is a subclass of `llvm::Value`, but this rule is in rank 2. </span></div>
+<div class="line"><span class="comment">// So it will cover the basic rule. All the pointer base of `llvm::Function` will call </span></div>
+<div class="line"><span class="comment">// this function to print.</span></div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><span class="keyword">typename</span> std::enable_if&lt;std::is_base_of&lt;llvm::Function, T&gt;::value, <span class="keywordtype">void</span>&gt;::type <a class="code hl_function" href="namespacezeroerr.html#a96f0cf094ccdf1793b38c8e6b2568a09">PrinterExt</a>(</div>
+<div class="line">    Printer&amp; P, T* s, <span class="keywordtype">unsigned</span> level, <span class="keyword">const</span> <span class="keywordtype">char</span>* lb, rank&lt;2&gt;) {</div>
+<div class="line">    <span class="keywordflow">if</span> (s == <span class="keyword">nullptr</span>) {</div>
+<div class="line">        P.os &lt;&lt; P.tab(level) &lt;&lt; <span class="stringliteral">&quot;nullptr&quot;</span> &lt;&lt; lb;</div>
+<div class="line">    } <span class="keywordflow">else</span> {</div>
+<div class="line">        llvm::raw_os_ostream os(P.os);</div>
+<div class="line">        os &lt;&lt; P.tab(level) &lt;&lt; <span class="stringliteral">&quot;Function &quot;</span> &lt;&lt; <a class="code hl_variable" href="namespacezeroerr.html#a1046994cb375a28fca51f927f83cfc84">FgCyan</a> &lt;&lt; *s &lt;&lt; <a class="code hl_variable" href="namespacezeroerr.html#afd3f2c51afbcc5f5a2e970e878d2a1f8">Reset</a>;</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="line">} <span class="comment">// namespace zeroerr</span></div>
+<div class="ttc" id="anamespacezeroerr_html"><div class="ttname"><a href="namespacezeroerr.html">zeroerr</a></div><div class="ttdef"><b>Definition</b> benchmark.cpp:17</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a1046994cb375a28fca51f927f83cfc84"><div class="ttname"><a href="namespacezeroerr.html#a1046994cb375a28fca51f927f83cfc84">zeroerr::FgCyan</a></div><div class="ttdeci">const char * FgCyan</div><div class="ttdef"><b>Definition</b> color.cpp:48</div></div>
+<div class="ttc" id="anamespacezeroerr_html_afd3f2c51afbcc5f5a2e970e878d2a1f8"><div class="ttname"><a href="namespacezeroerr.html#afd3f2c51afbcc5f5a2e970e878d2a1f8">zeroerr::Reset</a></div><div class="ttdeci">const char * Reset</div><div class="ttdef"><b>Definition</b> color.cpp:34</div></div>
+</div><!-- fragment --> </div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

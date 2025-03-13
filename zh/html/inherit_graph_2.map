@@ -1,0 +1,19 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,249,124,274"/>
+<area shape="rect" id="Node000001" href="$structzeroerr_1_1detail_1_1ele__type__is__pair.html" title=" " alt="" coords="177,5,397,45"/>
+<area shape="poly" id="edge4_Node000000_Node000001" title=" " alt="" coords="70,234,82,195,103,146,132,97,170,55,189,43,192,48,174,59,136,100,107,149,87,196,75,236"/>
+<area shape="rect" id="Node000002" href="$structzeroerr_1_1detail_1_1has__extension.html" title="has_extension is a type trait to check if user defined PrinterExt for a type" alt="" coords="185,69,390,109"/>
+<area shape="poly" id="edge5_Node000000_Node000002" title=" " alt="" coords="76,235,113,177,139,146,170,119,193,107,195,112,174,124,143,149,117,180,81,238"/>
+<area shape="rect" id="Node000003" href="$structzeroerr_1_1detail_1_1is__array.html" title=" " alt="" coords="200,133,375,173"/>
+<area shape="poly" id="edge6_Node000000_Node000003" title=" " alt="" coords="89,238,126,209,171,183,200,171,202,176,173,188,129,214,92,242"/>
+<area shape="rect" id="Node000004" href="$structzeroerr_1_1detail_1_1is__associative__container.html" title=" " alt="" coords="202,198,373,253"/>
+<area shape="poly" id="edge7_Node000000_Node000004" title=" " alt="" coords="138,247,201,237,202,242,139,252"/>
+<area shape="rect" id="Node000005" href="$structzeroerr_1_1detail_1_1is__container.html" title=" " alt="" coords="186,277,389,317"/>
+<area shape="poly" id="edge8_Node000000_Node000005" title=" " alt="" coords="138,270,186,278,185,284,137,276"/>
+<area shape="rect" id="Node000006" href="$structzeroerr_1_1detail_1_1is__modifiable.html" title=" " alt="" coords="182,341,393,381"/>
+<area shape="poly" id="edge9_Node000000_Node000006" title=" " alt="" coords="95,280,131,304,173,327,204,339,202,344,171,332,128,309,92,284"/>
+<area shape="rect" id="Node000007" href="$structzeroerr_1_1detail_1_1is__specialization.html" title=" " alt="" coords="205,406,369,461"/>
+<area shape="poly" id="edge10_Node000000_Node000007" title=" " alt="" coords="82,284,119,338,145,367,174,391,207,409,204,414,170,396,141,370,115,341,78,287"/>
+<area shape="rect" id="Node000008" href="$structzeroerr_1_1detail_1_1is__streamable.html" title=" " alt="" coords="172,485,403,525"/>
+<area shape="poly" id="edge11_Node000000_Node000008" title=" " alt="" coords="75,287,87,328,107,377,135,427,153,450,174,470,194,483,191,487,170,474,149,454,131,430,102,379,82,329,69,289"/>
+</map>

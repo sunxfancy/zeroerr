@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/fuzztest.h File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('fuzztest_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">fuzztest.h File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="config_8h_source.html">zeroerr/internal/config.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="unittest_8h_source.html">zeroerr/unittest.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="aggregate__of_8h_source.html">zeroerr/domains/aggregate_of.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="arbitrary_8h_source.html">zeroerr/domains/arbitrary.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="container__of_8h_source.html">zeroerr/domains/container_of.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="element__of_8h_source.html">zeroerr/domains/element_of.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="in__range_8h_source.html">zeroerr/domains/in_range.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="rng_8h_source.html">zeroerr/internal/rng.h</a>&quot;</code><br />
+<code>#include &lt;exception&gt;</code><br />
+<code>#include &lt;functional&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;tuple&gt;</code><br />
+<code>#include &lt;type_traits&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for fuzztest.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="fuzztest_8h__incl.png" border="0" usemap="#ainclude_2zeroerr_2fuzztest_8h" alt=""/></div>
+<map name="ainclude_2zeroerr_2fuzztest_8h" id="ainclude_2zeroerr_2fuzztest_8h">
+<area shape="rect" title=" " alt="" coords="701,5,887,31"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="1173,460,1351,485"/>
+<area shape="poly" title=" " alt="" coords="888,22,1127,38,1415,67,1549,87,1659,110,1702,123,1734,137,1756,153,1763,170,1763,328,1760,343,1752,358,1721,383,1675,404,1618,422,1488,449,1365,465,1364,460,1488,444,1617,417,1673,400,1718,379,1748,354,1755,341,1758,327,1758,171,1752,156,1732,142,1700,128,1658,115,1548,92,1415,72,1126,43,887,27"/>
+<area shape="rect" href="unittest_8h.html" title=" " alt="" coords="137,313,272,339"/>
+<area shape="poly" title=" " alt="" coords="701,22,592,25,471,34,364,51,322,65,293,81,270,104,251,131,237,160,226,191,213,252,208,300,203,299,208,251,221,190,232,158,247,128,266,100,290,77,320,60,363,46,471,28,591,19,701,16"/>
+<area shape="rect" title=" " alt="" coords="44,387,131,412"/>
+<area shape="poly" title=" " alt="" coords="701,23,525,31,425,40,326,54,235,73,162,98,134,114,113,131,100,150,95,171,95,254,92,373,86,373,90,254,90,170,95,148,109,127,131,109,160,93,234,68,325,48,424,35,525,26,700,18"/>
+<area shape="rect" title=" " alt="" coords="230,460,289,485"/>
+<area shape="poly" title=" " alt="" coords="700,25,563,32,404,42,254,59,194,69,148,81,96,95,51,108,34,117,20,130,12,147,9,171,9,327,11,374,18,391,33,410,53,426,75,439,124,457,173,466,217,469,216,475,173,472,123,462,73,444,50,431,30,414,13,394,6,375,3,327,3,170,7,145,16,127,31,113,49,103,95,90,147,76,193,64,254,53,403,37,563,26,700,20"/>
+<area shape="rect" title=" " alt="" coords="399,387,461,412"/>
+<area shape="poly" title=" " alt="" coords="701,23,616,34,572,44,532,58,496,77,467,102,449,133,442,171,442,254,435,373,430,373,437,254,437,170,444,131,463,99,493,73,529,53,571,39,615,28,700,18"/>
+<area shape="rect" href="aggregate__of_8h.html" title=" " alt="" coords="982,159,1211,185"/>
+<area shape="poly" title=" " alt="" coords="843,28,907,48,975,76,1031,112,1076,148,1072,152,1028,116,973,81,905,53,842,33"/>
+<area shape="rect" href="rng_8h.html" title=" " alt="" coords="1012,313,1171,339"/>
+<area shape="poly" title=" " alt="" coords="866,28,963,47,1071,74,1122,90,1167,109,1202,129,1226,150,1242,180,1247,208,1242,236,1226,267,1199,294,1165,311,1163,306,1196,289,1221,264,1237,235,1242,208,1237,182,1221,154,1199,133,1164,113,1120,95,1069,79,961,52,865,33"/>
+<area shape="rect" title=" " alt="" coords="439,460,493,485"/>
+<area shape="poly" title=" " alt="" coords="701,29,532,49,455,63,400,81,365,98,337,115,319,137,314,152,313,171,313,327,316,349,324,370,337,388,353,405,390,433,427,453,425,458,387,437,349,409,333,392,319,372,311,351,307,328,307,171,309,151,315,135,334,111,363,94,398,76,453,58,531,43,700,24"/>
+<area shape="rect" title=" " alt="" coords="517,460,609,485"/>
+<area shape="poly" title=" " alt="" coords="701,24,644,30,582,40,519,57,459,81,422,98,391,115,379,124,371,136,365,151,363,171,363,327,366,373,374,391,389,410,408,422,436,434,504,455,503,460,434,439,405,427,386,414,369,394,361,375,358,327,358,171,360,150,366,134,376,121,388,110,419,94,457,76,517,52,581,35,643,25,700,19"/>
+<area shape="rect" href="arbitrary_8h.html" title=" " alt="" coords="763,79,961,104"/>
+<area shape="poly" title=" " alt="" coords="807,29,843,67,840,70,803,33"/>
+<area shape="rect" href="container__of_8h.html" title=" " alt="" coords="601,159,825,185"/>
+<area shape="poly" title=" " alt="" coords="787,33,754,80,724,147,719,145,749,77,782,30"/>
+<area shape="rect" href="element__of_8h.html" title=" " alt="" coords="1337,159,1555,185"/>
+<area shape="poly" title=" " alt="" coords="888,22,1123,41,1237,56,1319,76,1350,91,1379,110,1426,147,1423,152,1376,114,1348,96,1317,81,1236,61,1122,46,887,27"/>
+<area shape="rect" href="in__range_8h.html" title=" " alt="" coords="1579,152,1723,192"/>
+<area shape="poly" title=" " alt="" coords="888,21,1105,38,1233,54,1360,76,1484,109,1591,145,1589,150,1482,114,1359,81,1232,59,1104,43,887,26"/>
+<area shape="rect" title=" " alt="" coords="1799,79,1885,104"/>
+<area shape="poly" title=" " alt="" coords="888,19,1277,34,1527,51,1780,76,1786,77,1785,82,1779,81,1527,56,1277,40,887,24"/>
+<area shape="poly" title=" " alt="" coords="273,324,384,327,530,336,692,354,774,367,853,384,885,396,916,409,1042,438,1160,457,1159,462,1041,444,915,415,883,401,852,389,773,372,691,359,529,341,384,332,272,330"/>
+<area shape="rect" title=" " alt="" coords="206,387,273,412"/>
+<area shape="poly" title=" " alt="" coords="213,338,230,373,225,375,208,340"/>
+<area shape="poly" title=" " alt="" coords="187,341,120,382,117,377,185,336"/>
+<area shape="poly" title=" " alt="" coords="202,340,193,373,192,392,197,411,211,432,230,450,226,454,207,436,192,413,187,393,188,372,197,338"/>
+<area shape="poly" title=" " alt="" coords="242,336,387,382,385,387,240,341"/>
+<area shape="poly" title=" " alt="" coords="1134,182,1181,204,1205,219,1225,238,1259,279,1278,318,1284,360,1281,412,1273,447,1268,446,1275,412,1279,360,1272,319,1254,282,1221,242,1201,224,1178,209,1132,187"/>
+<area shape="rect" href="domain_8h.html" title=" " alt="" coords="1017,240,1211,265"/>
+<area shape="poly" title=" " alt="" coords="1102,184,1111,226,1106,227,1097,185"/>
+<area shape="poly" title=" " alt="" coords="1064,187,862,264,728,322,595,389,494,454,491,450,593,384,726,317,860,259,1062,182"/>
+<area shape="poly" title=" " alt="" coords="1157,263,1196,282,1215,295,1231,312,1249,345,1260,381,1266,446,1260,446,1255,382,1244,347,1227,315,1211,299,1193,286,1154,268"/>
+<area shape="poly" title=" " alt="" coords="1113,266,1102,301,1097,299,1108,265"/>
+<area shape="rect" href="serialization_8h.html" title=" " alt="" coords="763,313,982,339"/>
+<area shape="poly" title=" " alt="" coords="1076,268,926,312,924,307,1075,263"/>
+<area shape="poly" title=" " alt="" coords="1107,337,1240,449,1236,453,1104,341"/>
+<area shape="poly" title=" " alt="" coords="1012,339,994,341,476,396,475,391,994,336,1011,334"/>
+<area shape="rect" title=" " alt="" coords="966,387,1033,412"/>
+<area shape="poly" title=" " alt="" coords="1078,341,1027,380,1023,376,1075,337"/>
+<area shape="rect" title=" " alt="" coords="1057,387,1123,412"/>
+<area shape="poly" title=" " alt="" coords="1094,339,1093,373,1088,373,1089,339"/>
+<area shape="poly" title=" " alt="" coords="882,337,911,374,932,393,955,410,1005,432,1058,448,1111,458,1160,465,1159,470,1110,463,1057,453,1003,437,953,414,929,398,907,377,878,340"/>
+<area shape="poly" title=" " alt="" coords="817,341,595,389,302,463,301,457,593,384,815,336"/>
+<area shape="poly" title=" " alt="" coords="802,341,475,393,475,388,801,336"/>
+<area shape="poly" title=" " alt="" coords="894,336,968,377,965,382,892,341"/>
+<area shape="poly" title=" " alt="" coords="908,336,1044,380,1043,385,907,341"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="639,387,840,412"/>
+<area shape="poly" title=" " alt="" coords="853,341,774,382,772,378,850,336"/>
+<area shape="poly" title=" " alt="" coords="764,340,694,358,660,371,629,389,599,417,578,449,573,446,595,414,626,385,658,367,693,353,762,335"/>
+<area shape="poly" title=" " alt="" coords="824,409,1165,455,1164,461,823,415"/>
+<area shape="poly" title=" " alt="" coords="663,415,303,468,302,462,662,409"/>
+<area shape="rect" title=" " alt="" coords="939,460,1015,485"/>
+<area shape="poly" title=" " alt="" coords="778,409,926,454,925,459,777,415"/>
+<area shape="rect" title=" " alt="" coords="634,460,709,485"/>
+<area shape="poly" title=" " alt="" coords="730,414,694,452,690,448,726,410"/>
+<area shape="poly" title=" " alt="" coords="694,415,507,462,506,457,693,409"/>
+<area shape="poly" title=" " alt="" coords="712,414,606,457,604,452,710,410"/>
+<area shape="rect" title=" " alt="" coords="733,460,812,485"/>
+<area shape="poly" title=" " alt="" coords="747,411,764,447,759,449,742,413"/>
+<area shape="rect" title=" " alt="" coords="837,460,914,485"/>
+<area shape="poly" title=" " alt="" coords="762,410,842,451,840,456,760,414"/>
+<area shape="poly" title=" " alt="" coords="962,96,1036,103,1113,114,1179,129,1206,139,1225,150,1253,175,1273,200,1287,226,1295,253,1300,313,1301,387,1302,399,1301,413,1282,450,1277,448,1296,411,1297,399,1295,387,1295,313,1289,254,1282,228,1269,203,1249,179,1222,154,1203,144,1178,134,1112,119,1036,108,961,101"/>
+<area shape="poly" title=" " alt="" coords="897,101,1051,153,1049,158,895,107"/>
+<area shape="poly" title=" " alt="" coords="864,104,868,146,876,170,889,190,911,204,944,216,1026,235,1024,240,942,221,908,208,886,194,871,172,863,147,859,105"/>
+<area shape="poly" title=" " alt="" coords="763,104,659,122,617,136,591,154,576,183,576,214,587,245,607,277,632,307,660,334,713,376,710,381,657,338,628,310,602,280,582,248,571,215,571,182,587,150,614,131,657,117,762,99"/>
+<area shape="poly" title=" " alt="" coords="841,107,748,155,745,151,839,102"/>
+<area shape="rect" title=" " alt="" coords="899,159,958,185"/>
+<area shape="poly" title=" " alt="" coords="874,102,912,147,908,151,870,106"/>
+<area shape="poly" title=" " alt="" coords="748,182,1007,263,1058,273,1101,276,1141,285,1162,295,1185,311,1214,342,1235,379,1250,415,1259,446,1254,447,1245,417,1230,381,1209,346,1182,315,1160,300,1139,290,1100,281,1058,278,1005,268,747,187"/>
+<area shape="poly" title=" " alt="" coords="772,182,1043,235,1042,240,771,187"/>
+<area shape="poly" title=" " alt="" coords="717,184,739,372,734,373,711,185"/>
+<area shape="poly" title=" " alt="" coords="1449,185,1447,226,1438,286,1419,353,1404,385,1384,414,1354,440,1319,457,1317,453,1351,435,1380,410,1399,382,1414,351,1433,285,1442,226,1444,185"/>
+<area shape="poly" title=" " alt="" coords="1398,187,1176,239,1175,234,1397,182"/>
+<area shape="poly" title=" " alt="" coords="1638,194,1602,238,1548,296,1483,358,1410,414,1363,440,1316,458,1314,453,1361,435,1407,410,1479,354,1545,293,1598,235,1634,191"/>
+<area shape="poly" title=" " alt="" coords="1580,192,1568,195,1387,222,1224,242,1224,237,1386,217,1567,189,1579,187"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="fuzztest_8h__dep__incl.png" border="0" usemap="#ainclude_2zeroerr_2fuzztest_8hdep" alt=""/></div>
+<map name="ainclude_2zeroerr_2fuzztest_8hdep" id="ainclude_2zeroerr_2fuzztest_8hdep">
+<area shape="rect" title=" " alt="" coords="47,5,234,31"/>
+<area shape="rect" href="fuzztest_8cpp.html" title=" " alt="" coords="5,79,129,104"/>
+<area shape="poly" title=" " alt="" coords="121,42,81,80,77,77,117,38"/>
+<area shape="rect" href="unittest_8cpp.html" title=" " alt="" coords="154,79,277,104"/>
+<area shape="poly" title=" " alt="" coords="164,38,205,77,201,80,161,42"/>
+</map>
+</div>
+</div>
+<p><a href="fuzztest_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1FunctionDecomposition.html">zeroerr::detail::FunctionDecomposition&lt; Args &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structzeroerr_1_1detail_1_1FunctionDecomposition.html" title="FunctionDecomposition is a meta function to decompose the function type. The ValueType and numOfArgs ...">FunctionDecomposition</a> is a meta function to decompose the function type. The ValueType and numOfArgs will be the result of the decomposition.  <a href="structzeroerr_1_1detail_1_1FunctionDecomposition.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1memfun__type.html">zeroerr::detail::memfun_type&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1memfun__type_3_01Ret_07Class_1_1_5_08_07Args_8_8_8_08_01const_01_4.html">zeroerr::detail::memfun_type&lt; Ret(Class::*)(Args...) const &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1IFuzzTest.html">zeroerr::IFuzzTest</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1FuzzFinishedException.html">zeroerr::FuzzFinishedException</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1FuzzTest.html">zeroerr::FuzzTest&lt; TargetFunction, FuncType &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structzeroerr_1_1FuzzTest.html" title="FuzzTest is a template class to create a fuzz test for the target function.">FuzzTest</a> is a template class to create a fuzz test for the target function.  <a href="structzeroerr_1_1FuzzTest.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1FuzzTestWithDomain.html">zeroerr::FuzzTestWithDomain&lt; TargetFunction, FuncType, Domain, Base &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structzeroerr_1_1FuzzTestWithDomain.html" title="FuzzTestWithDomain implements the Base class with the domain passed into.">FuzzTestWithDomain</a> implements the Base class with the domain passed into.  <a href="structzeroerr_1_1FuzzTestWithDomain.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacezeroerr" id="r_namespacezeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacezeroerr_1_1detail" id="r_namespacezeroerr_1_1detail"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html">zeroerr::detail</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:ae8773e5d72f8dc75ddbab37d088dadea" id="r_ae8773e5d72f8dc75ddbab37d088dadea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fuzztest_8h.html#ae8773e5d72f8dc75ddbab37d088dadea">ZEROERR_CREATE_FUZZ_TEST_FUNC</a>(function,  name, ...)</td></tr>
+<tr class="separator:ae8773e5d72f8dc75ddbab37d088dadea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f879d955e8e0866bb811f1abc099fae" id="r_a7f879d955e8e0866bb811f1abc099fae"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fuzztest_8h.html#a7f879d955e8e0866bb811f1abc099fae">FUZZ_TEST_CASE</a>(name, ...)&#160;&#160;&#160;    <a class="el" href="fuzztest_8h.html#ae8773e5d72f8dc75ddbab37d088dadea">ZEROERR_CREATE_FUZZ_TEST_FUNC</a>(<a class="el" href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a>(_zeroerr_testcase), name, __VA_ARGS__)</td></tr>
+<tr class="separator:a7f879d955e8e0866bb811f1abc099fae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25016d0ee73771a602a07c1263076366" id="r_a25016d0ee73771a602a07c1263076366"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fuzztest_8h.html#a25016d0ee73771a602a07c1263076366">FUZZ_FUNC</a>(func)&#160;&#160;&#160;<a class="el" href="namespacezeroerr.html#ad51235e5b67acff731c5439174cceabd">zeroerr::FuzzFunction</a>(func, _ZEROERR_TEST_CONTEXT)</td></tr>
+<tr class="separator:a25016d0ee73771a602a07c1263076366"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a065ce1e8643b739afa87768d24b0a118" id="r_a065ce1e8643b739afa87768d24b0a118"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a065ce1e8643b739afa87768d24b0a118"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#a065ce1e8643b739afa87768d24b0a118">zeroerr::detail::FunctionDecompositionT</a> = decltype(<a class="el" href="namespacezeroerr_1_1detail.html#ad76ce6c5b3794ab72545bb01a10c7cd4">FunctionDecompositionImpl</a>(std::declval&lt; T &gt;()))</td></tr>
+<tr class="separator:a065ce1e8643b739afa87768d24b0a118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ad76ce6c5b3794ab72545bb01a10c7cd4" id="r_ad76ce6c5b3794ab72545bb01a10c7cd4"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:ad76ce6c5b3794ab72545bb01a10c7cd4"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structzeroerr_1_1detail_1_1FunctionDecomposition.html">FunctionDecomposition</a>&lt; typename std::decay&lt; Args &gt;::type... &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#ad76ce6c5b3794ab72545bb01a10c7cd4">zeroerr::detail::FunctionDecompositionImpl</a> (void(*)(Args...))</td></tr>
+<tr class="separator:ad76ce6c5b3794ab72545bb01a10c7cd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ff44480e55b72475ee0296a6bff86a1" id="r_a9ff44480e55b72475ee0296a6bff86a1"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a9ff44480e55b72475ee0296a6bff86a1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structzeroerr_1_1detail_1_1FunctionDecomposition.html">FunctionDecomposition</a>&lt; typename std::decay&lt; Args &gt;::type... &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#a9ff44480e55b72475ee0296a6bff86a1">zeroerr::detail::FunctionDecompositionImpl</a> (std::function&lt; void(Args...)&gt;)</td></tr>
+<tr class="separator:a9ff44480e55b72475ee0296a6bff86a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97e6e76835af94f5ac973be5edb4f03e" id="r_a97e6e76835af94f5ac973be5edb4f03e"><td class="memTemplParams" colspan="2">template&lt;typename F &gt; </td></tr>
+<tr class="memitem:a97e6e76835af94f5ac973be5edb4f03e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structzeroerr_1_1detail_1_1memfun__type.html">memfun_type</a>&lt; decltype(&amp;F::operator())&gt;::ret_type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#a97e6e76835af94f5ac973be5edb4f03e">zeroerr::detail::FunctionDecompositionImpl</a> (F)</td></tr>
+<tr class="separator:a97e6e76835af94f5ac973be5edb4f03e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06714e534ea1ef8f57e8bf06069c026b" id="r_a06714e534ea1ef8f57e8bf06069c026b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a06714e534ea1ef8f57e8bf06069c026b">zeroerr::RunFuzzTest</a> (<a class="el" href="structzeroerr_1_1IFuzzTest.html">IFuzzTest</a> &amp;<a class="el" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a7b5cb62492dda5c1fe40997a7ff8f63b">fuzz_test</a>, int seed, int runs, int max_len, int <a class="el" href="namespacezeroerr.html#a7ebf05b5d595f1b2e2a897357e83cf2b">timeout</a>, int len_control)</td></tr>
+<tr class="separator:a06714e534ea1ef8f57e8bf06069c026b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad51235e5b67acff731c5439174cceabd" id="r_ad51235e5b67acff731c5439174cceabd"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ad51235e5b67acff731c5439174cceabd"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="structzeroerr_1_1FuzzTest.html">FuzzTest</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ad51235e5b67acff731c5439174cceabd">zeroerr::FuzzFunction</a> (T func, <a class="el" href="classzeroerr_1_1TestContext.html">TestContext</a> *context)</td></tr>
+<tr class="separator:ad51235e5b67acff731c5439174cceabd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1e42a782a486b3cf66a47cc17e92c3b" id="r_ab1e42a782a486b3cf66a47cc17e92c3b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab1e42a782a486b3cf66a47cc17e92c3b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ab1e42a782a486b3cf66a47cc17e92c3b">zeroerr::ReadCorpusFromDir</a> (std::string dir)</td></tr>
+<tr class="separator:ab1e42a782a486b3cf66a47cc17e92c3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a25016d0ee73771a602a07c1263076366" name="a25016d0ee73771a602a07c1263076366"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25016d0ee73771a602a07c1263076366">&#9670;&#160;</a></span>FUZZ_FUNC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FUZZ_FUNC</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">func</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="namespacezeroerr.html#ad51235e5b67acff731c5439174cceabd">zeroerr::FuzzFunction</a>(func, _ZEROERR_TEST_CONTEXT)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7f879d955e8e0866bb811f1abc099fae" name="a7f879d955e8e0866bb811f1abc099fae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f879d955e8e0866bb811f1abc099fae">&#9670;&#160;</a></span>FUZZ_TEST_CASE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FUZZ_TEST_CASE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;    <a class="el" href="fuzztest_8h.html#ae8773e5d72f8dc75ddbab37d088dadea">ZEROERR_CREATE_FUZZ_TEST_FUNC</a>(<a class="el" href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a>(_zeroerr_testcase), name, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae8773e5d72f8dc75ddbab37d088dadea" name="ae8773e5d72f8dc75ddbab37d088dadea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8773e5d72f8dc75ddbab37d088dadea">&#9670;&#160;</a></span>ZEROERR_CREATE_FUZZ_TEST_FUNC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CREATE_FUZZ_TEST_FUNC</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">function, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">static</span> <span class="keywordtype">void</span>                     function(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a>*);                        \</div>
+<div class="line">    <span class="keyword">static</span> <a class="code hl_struct" href="structzeroerr_1_1detail_1_1regTest.html">zeroerr::detail::regTest</a> <a class="code hl_define" href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a>(_zeroerr_reg)(                          \</div>
+<div class="line">        {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, <a class="code hl_enumvalue" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a7b5cb62492dda5c1fe40997a7ff8f63b">zeroerr::TestType::fuzz_test</a>); \</div>
+<div class="line">    <span class="keyword">static</span> <span class="keywordtype">void</span> function(<a class="code hl_define" href="config_8h.html#a5a6e28def9ba92d7cdaf0243e889491a">ZEROERR_UNUSED</a>(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a>* _ZEROERR_TEST_CONTEXT))</div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html"><div class="ttname"><a href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a></div><div class="ttdoc">TestContext is a class that holds the test results and reporter context. There are 8 different matric...</div><div class="ttdef"><b>Definition</b> unittest.h:70</div></div>
+<div class="ttc" id="aconfig_8h_html_a265322b7c87fdecfc868945ba0f456f0"><div class="ttname"><a href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a></div><div class="ttdeci">#define ZEROERR_NAMEGEN(x)</div><div class="ttdef"><b>Definition</b> config.h:104</div></div>
+<div class="ttc" id="aconfig_8h_html_a5a6e28def9ba92d7cdaf0243e889491a"><div class="ttname"><a href="config_8h.html#a5a6e28def9ba92d7cdaf0243e889491a">ZEROERR_UNUSED</a></div><div class="ttdeci">#define ZEROERR_UNUSED(x)</div><div class="ttdef"><b>Definition</b> config.h:341</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a2adea737b10b78dd8a601f11daac0912a7b5cb62492dda5c1fe40997a7ff8f63b"><div class="ttname"><a href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a7b5cb62492dda5c1fe40997a7ff8f63b">zeroerr::fuzz_test</a></div><div class="ttdeci">@ fuzz_test</div><div class="ttdef"><b>Definition</b> unittest.h:267</div></div>
+<div class="ttc" id="astructzeroerr_1_1detail_1_1regTest_html"><div class="ttname"><a href="structzeroerr_1_1detail_1_1regTest.html">zeroerr::detail::regTest</a></div><div class="ttdoc">regTest is a class that is used to register the test case. It will be used as global variables and th...</div><div class="ttdef"><b>Definition</b> unittest.h:275</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a class="el" href="fuzztest_8h.html">fuzztest.h</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

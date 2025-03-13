@@ -1,0 +1,557 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/unittest.h File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('unittest_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">unittest.h File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="config_8h_source.html">zeroerr/internal/config.h</a>&quot;</code><br />
+<code>#include &lt;chrono&gt;</code><br />
+<code>#include &lt;functional&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for unittest.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="unittest_8h__incl.png" border="0" usemap="#ainclude_2zeroerr_2unittest_8h" alt=""/></div>
+<map name="ainclude_2zeroerr_2unittest_8h" id="ainclude_2zeroerr_2unittest_8h">
+<area shape="rect" title=" " alt="" coords="249,5,435,31"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="5,79,183,104"/>
+<area shape="poly" title=" " alt="" coords="303,33,148,77,147,72,301,28"/>
+<area shape="rect" title=" " alt="" coords="207,79,274,104"/>
+<area shape="poly" title=" " alt="" coords="327,33,270,73,267,68,324,28"/>
+<area shape="rect" title=" " alt="" coords="299,79,385,104"/>
+<area shape="poly" title=" " alt="" coords="345,31,345,65,339,65,339,31"/>
+<area shape="rect" title=" " alt="" coords="410,79,469,104"/>
+<area shape="poly" title=" " alt="" coords="359,29,414,68,411,72,356,33"/>
+<area shape="rect" title=" " alt="" coords="493,79,556,104"/>
+<area shape="poly" title=" " alt="" coords="372,28,483,71,481,76,370,33"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="unittest_8h__dep__incl.png" border="0" usemap="#ainclude_2zeroerr_2unittest_8hdep" alt=""/></div>
+<map name="ainclude_2zeroerr_2unittest_8hdep" id="ainclude_2zeroerr_2unittest_8hdep">
+<area shape="rect" title=" " alt="" coords="161,5,346,31"/>
+<area shape="rect" href="zeroerr_8h.html" title=" " alt="" coords="5,79,136,104"/>
+<area shape="poly" title=" " alt="" coords="212,38,102,81,100,76,210,33"/>
+<area shape="rect" href="fuzztest_8h.html" title=" " alt="" coords="160,79,347,104"/>
+<area shape="poly" title=" " alt="" coords="256,44,256,79,251,79,251,44"/>
+<area shape="rect" href="unittest_8cpp.html" title=" " alt="" coords="323,152,445,177"/>
+<area shape="poly" title=" " alt="" coords="301,34,333,52,361,77,372,96,379,116,386,151,381,152,374,117,367,98,357,80,330,56,298,38"/>
+<area shape="rect" href="fuzztest_8cpp.html" title=" " alt="" coords="174,152,298,177"/>
+<area shape="poly" title=" " alt="" coords="250,118,241,153,236,151,245,117"/>
+<area shape="poly" title=" " alt="" coords="288,108,364,149,361,154,285,113"/>
+</map>
+</div>
+</div>
+<p><a href="unittest_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classzeroerr_1_1TestContext.html" title="TestContext is a class that holds the test results and reporter context. There are 8 different matric...">TestContext</a> is a class that holds the test results and reporter context. There are 8 different matrices that are used to store the test results.  <a href="classzeroerr_1_1TestContext.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1UnitTest.html">zeroerr::UnitTest</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structzeroerr_1_1UnitTest.html" title="UnitTest is a class that holds the test configuration. There are several options that can be set to c...">UnitTest</a> is a class that holds the test configuration. There are several options that can be set to configure the test.  <a href="structzeroerr_1_1UnitTest.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1TestCase.html">zeroerr::TestCase</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structzeroerr_1_1TestCase.html" title="TestCase is a class that holds the test case information. There are several fields that are used to s...">TestCase</a> is a class that holds the test case information. There are several fields that are used to store the test case information.  <a href="structzeroerr_1_1TestCase.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1SubCase.html">zeroerr::SubCase</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structzeroerr_1_1SubCase.html" title="SubCase is a class that holds the subcase information.">SubCase</a> is a class that holds the subcase information.  <a href="structzeroerr_1_1SubCase.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1TestedObjects.html">zeroerr::TestedObjects&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1IReporter.html">zeroerr::IReporter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classzeroerr_1_1IReporter.html" title="IReporter is an interface that is used to report the test results. You can create a new reporter by i...">IReporter</a> is an interface that is used to report the test results. You can create a new reporter by inheriting this class and implementing the virtual functions. The following events will be called once it happens during testing.  <a href="classzeroerr_1_1IReporter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1regTest.html">zeroerr::detail::regTest</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structzeroerr_1_1detail_1_1regTest.html" title="regTest is a class that is used to register the test case. It will be used as global variables and th...">regTest</a> is a class that is used to register the test case. It will be used as global variables and the constructor will be called to register the test case.  <a href="structzeroerr_1_1detail_1_1regTest.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1regReporter.html">zeroerr::detail::regReporter</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structzeroerr_1_1detail_1_1regReporter.html" title="regReporter is a class that is used to register the reporter. It will be used as global variables and...">regReporter</a> is a class that is used to register the reporter. It will be used as global variables and the constructor will be called to register the reporter.  <a href="structzeroerr_1_1detail_1_1regReporter.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1CombinationalTest.html">zeroerr::CombinationalTest</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classzeroerr_1_1CombinationalTest.html" title="CombinationalTest is a class that is used to cross test a few lists of arguments. One example.">CombinationalTest</a> is a class that is used to cross test a few lists of arguments. One example.  <a href="classzeroerr_1_1CombinationalTest.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1TestArgs.html">zeroerr::TestArgs&lt; T &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classzeroerr_1_1TestArgs.html" title="TestArgs is a class that is used to store the test arguments.">TestArgs</a> is a class that is used to store the test arguments.  <a href="classzeroerr_1_1TestArgs.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1Decorator.html">zeroerr::Decorator</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacezeroerr" id="r_namespacezeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacezeroerr_1_1detail" id="r_namespacezeroerr_1_1detail"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html">zeroerr::detail</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:aebf3c87af7745c5286150fa07268c470" id="r_aebf3c87af7745c5286150fa07268c470"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unittest_8h.html#aebf3c87af7745c5286150fa07268c470">ZEROERR_CREATE_TEST_FUNC</a>(function,  name, ...)</td></tr>
+<tr class="separator:aebf3c87af7745c5286150fa07268c470"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacd39763f90aeaca22dcc182ca7eb9e5" id="r_aacd39763f90aeaca22dcc182ca7eb9e5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unittest_8h.html#aacd39763f90aeaca22dcc182ca7eb9e5">TEST_CASE</a>(name, ...)&#160;&#160;&#160;    <a class="el" href="unittest_8h.html#aebf3c87af7745c5286150fa07268c470">ZEROERR_CREATE_TEST_FUNC</a>(<a class="el" href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a>(_zeroerr_testcase), name, __VA_ARGS__)</td></tr>
+<tr class="separator:aacd39763f90aeaca22dcc182ca7eb9e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86676c0b9d1d4ca819c0e6cf36e00e64" id="r_a86676c0b9d1d4ca819c0e6cf36e00e64"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unittest_8h.html#a86676c0b9d1d4ca819c0e6cf36e00e64">SUB_CASE</a>(name, ...)</td></tr>
+<tr class="separator:a86676c0b9d1d4ca819c0e6cf36e00e64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2d9540d20f4c08e9adc154167942a9b" id="r_aa2d9540d20f4c08e9adc154167942a9b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unittest_8h.html#aa2d9540d20f4c08e9adc154167942a9b">ZEROERR_CREATE_TEST_CLASS</a>(fixture,  classname,  funcname,  name, ...)</td></tr>
+<tr class="separator:aa2d9540d20f4c08e9adc154167942a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01b3273febf34aa33e6bf729e568b871" id="r_a01b3273febf34aa33e6bf729e568b871"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unittest_8h.html#a01b3273febf34aa33e6bf729e568b871">TEST_CASE_FIXTURE</a>(fixture,  name, ...)</td></tr>
+<tr class="separator:a01b3273febf34aa33e6bf729e568b871"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab67723d90c1abf342268b6e93bb7344d" id="r_ab67723d90c1abf342268b6e93bb7344d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unittest_8h.html#ab67723d90c1abf342268b6e93bb7344d">ZEROERR_HAVE_SAME_OUTPUT</a>&#160;&#160;&#160;_ZEROERR_TEST_CONTEXT-&gt;save_output();</td></tr>
+<tr class="separator:ab67723d90c1abf342268b6e93bb7344d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf8f441c7b9d70251ccbb7ccd8b83183" id="r_acf8f441c7b9d70251ccbb7ccd8b83183"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unittest_8h.html#acf8f441c7b9d70251ccbb7ccd8b83183">SCENARIO</a>(...)&#160;&#160;&#160;<a class="el" href="unittest_8h.html#aacd39763f90aeaca22dcc182ca7eb9e5">TEST_CASE</a>(&quot;Scenario: &quot; __VA_ARGS__)</td></tr>
+<tr class="separator:acf8f441c7b9d70251ccbb7ccd8b83183"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37b7da7031ed506a0bb69823afdb3c66" id="r_a37b7da7031ed506a0bb69823afdb3c66"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unittest_8h.html#a37b7da7031ed506a0bb69823afdb3c66">GIVEN</a>(...)&#160;&#160;&#160;<a class="el" href="unittest_8h.html#a86676c0b9d1d4ca819c0e6cf36e00e64">SUB_CASE</a>(&quot;given: &quot; __VA_ARGS__)</td></tr>
+<tr class="separator:a37b7da7031ed506a0bb69823afdb3c66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af56efb00a63e744988e3d230dd149b93" id="r_af56efb00a63e744988e3d230dd149b93"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unittest_8h.html#af56efb00a63e744988e3d230dd149b93">WHEN</a>(...)&#160;&#160;&#160;<a class="el" href="unittest_8h.html#a86676c0b9d1d4ca819c0e6cf36e00e64">SUB_CASE</a>(&quot;when: &quot; __VA_ARGS__)</td></tr>
+<tr class="separator:af56efb00a63e744988e3d230dd149b93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4469ddff35746001f57e2ab2cbc4d1bb" id="r_a4469ddff35746001f57e2ab2cbc4d1bb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="unittest_8h.html#a4469ddff35746001f57e2ab2cbc4d1bb">THEN</a>(...)&#160;&#160;&#160;<a class="el" href="unittest_8h.html#a86676c0b9d1d4ca819c0e6cf36e00e64">SUB_CASE</a>(&quot;then: &quot; __VA_ARGS__)</td></tr>
+<tr class="separator:a4469ddff35746001f57e2ab2cbc4d1bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a2adea737b10b78dd8a601f11daac0912" id="r_a2adea737b10b78dd8a601f11daac0912"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912">zeroerr::TestType</a> { <a class="el" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a747cfee76c972f1c4894a4b19d13c161">zeroerr::test_case</a> = 1
+, <a class="el" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912ac9416b3e8edc1c5c4ca1013def82eefd">zeroerr::sub_case</a> = 1 &lt;&lt; 1
+, <a class="el" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a2f000e3dc3ad0a55bd508a81d476bf7f">zeroerr::bench</a> = 1 &lt;&lt; 2
+, <a class="el" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a7b5cb62492dda5c1fe40997a7ff8f63b">zeroerr::fuzz_test</a> = 1 &lt;&lt; 3
+ }</td></tr>
+<tr class="memdesc:a2adea737b10b78dd8a601f11daac0912"><td class="mdescLeft">&#160;</td><td class="mdescRight">TestType is a enum describe the type of the test case.  <a href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912">More...</a><br /></td></tr>
+<tr class="separator:a2adea737b10b78dd8a601f11daac0912"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ae93eb426f9286ba373e5b841231b4303" id="r_ae93eb426f9286ba373e5b841231b4303"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1Decorator.html">Decorator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ae93eb426f9286ba373e5b841231b4303">zeroerr::skip</a> (bool isSkip)</td></tr>
+<tr class="separator:ae93eb426f9286ba373e5b841231b4303"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ebf05b5d595f1b2e2a897357e83cf2b" id="r_a7ebf05b5d595f1b2e2a897357e83cf2b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1Decorator.html">Decorator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a7ebf05b5d595f1b2e2a897357e83cf2b">zeroerr::timeout</a> (float timeout)</td></tr>
+<tr class="separator:a7ebf05b5d595f1b2e2a897357e83cf2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab29f80eda3a9350cc1db0ec7efad53f5" id="r_ab29f80eda3a9350cc1db0ec7efad53f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1Decorator.html">Decorator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ab29f80eda3a9350cc1db0ec7efad53f5">zeroerr::may_fail</a> (bool isMayFail)</td></tr>
+<tr class="separator:ab29f80eda3a9350cc1db0ec7efad53f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04f7fc08849752f78dea0d41a6ffa3a5" id="r_a04f7fc08849752f78dea0d41a6ffa3a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1Decorator.html">Decorator</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a04f7fc08849752f78dea0d41a6ffa3a5">zeroerr::should_fail</a> (bool isShouldFail)</td></tr>
+<tr class="separator:a04f7fc08849752f78dea0d41a6ffa3a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a37b7da7031ed506a0bb69823afdb3c66" name="a37b7da7031ed506a0bb69823afdb3c66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37b7da7031ed506a0bb69823afdb3c66">&#9670;&#160;</a></span>GIVEN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GIVEN</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="unittest_8h.html#a86676c0b9d1d4ca819c0e6cf36e00e64">SUB_CASE</a>(&quot;given: &quot; __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acf8f441c7b9d70251ccbb7ccd8b83183" name="acf8f441c7b9d70251ccbb7ccd8b83183"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf8f441c7b9d70251ccbb7ccd8b83183">&#9670;&#160;</a></span>SCENARIO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SCENARIO</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="unittest_8h.html#aacd39763f90aeaca22dcc182ca7eb9e5">TEST_CASE</a>(&quot;Scenario: &quot; __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a86676c0b9d1d4ca819c0e6cf36e00e64" name="a86676c0b9d1d4ca819c0e6cf36e00e64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86676c0b9d1d4ca819c0e6cf36e00e64">&#9670;&#160;</a></span>SUB_CASE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SUB_CASE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code hl_struct" href="structzeroerr_1_1SubCase.html">zeroerr::SubCase</a>(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \</div>
+<div class="line">        &lt;&lt; [=](<a class="code hl_define" href="config_8h.html#a5a6e28def9ba92d7cdaf0243e889491a">ZEROERR_UNUSED</a>(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a> * _ZEROERR_TEST_CONTEXT)) <span class="keyword">mutable</span></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html"><div class="ttname"><a href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a></div><div class="ttdoc">TestContext is a class that holds the test results and reporter context. There are 8 different matric...</div><div class="ttdef"><b>Definition</b> unittest.h:70</div></div>
+<div class="ttc" id="aconfig_8h_html_a5a6e28def9ba92d7cdaf0243e889491a"><div class="ttname"><a href="config_8h.html#a5a6e28def9ba92d7cdaf0243e889491a">ZEROERR_UNUSED</a></div><div class="ttdeci">#define ZEROERR_UNUSED(x)</div><div class="ttdef"><b>Definition</b> config.h:341</div></div>
+<div class="ttc" id="astructzeroerr_1_1SubCase_html"><div class="ttname"><a href="structzeroerr_1_1SubCase.html">zeroerr::SubCase</a></div><div class="ttdoc">SubCase is a class that holds the subcase information.</div><div class="ttdef"><b>Definition</b> unittest.h:208</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="aacd39763f90aeaca22dcc182ca7eb9e5" name="aacd39763f90aeaca22dcc182ca7eb9e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacd39763f90aeaca22dcc182ca7eb9e5">&#9670;&#160;</a></span>TEST_CASE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TEST_CASE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;    <a class="el" href="unittest_8h.html#aebf3c87af7745c5286150fa07268c470">ZEROERR_CREATE_TEST_FUNC</a>(<a class="el" href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a>(_zeroerr_testcase), name, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a01b3273febf34aa33e6bf729e568b871" name="a01b3273febf34aa33e6bf729e568b871"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01b3273febf34aa33e6bf729e568b871">&#9670;&#160;</a></span>TEST_CASE_FIXTURE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define TEST_CASE_FIXTURE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">fixture, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code hl_define" href="unittest_8h.html#aa2d9540d20f4c08e9adc154167942a9b">ZEROERR_CREATE_TEST_CLASS</a>(fixture, <a class="code hl_define" href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a>(_zeroerr_class), \</div>
+<div class="line">                              <a class="code hl_define" href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a>(_zeroerr_test_method), name, __VA_ARGS__)</div>
+<div class="ttc" id="aconfig_8h_html_a265322b7c87fdecfc868945ba0f456f0"><div class="ttname"><a href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a></div><div class="ttdeci">#define ZEROERR_NAMEGEN(x)</div><div class="ttdef"><b>Definition</b> config.h:104</div></div>
+<div class="ttc" id="aunittest_8h_html_aa2d9540d20f4c08e9adc154167942a9b"><div class="ttname"><a href="unittest_8h.html#aa2d9540d20f4c08e9adc154167942a9b">ZEROERR_CREATE_TEST_CLASS</a></div><div class="ttdeci">#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name,...)</div><div class="ttdef"><b>Definition</b> unittest.h:25</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a4469ddff35746001f57e2ab2cbc4d1bb" name="a4469ddff35746001f57e2ab2cbc4d1bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4469ddff35746001f57e2ab2cbc4d1bb">&#9670;&#160;</a></span>THEN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define THEN</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="unittest_8h.html#a86676c0b9d1d4ca819c0e6cf36e00e64">SUB_CASE</a>(&quot;then: &quot; __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af56efb00a63e744988e3d230dd149b93" name="af56efb00a63e744988e3d230dd149b93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af56efb00a63e744988e3d230dd149b93">&#9670;&#160;</a></span>WHEN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define WHEN</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="unittest_8h.html#a86676c0b9d1d4ca819c0e6cf36e00e64">SUB_CASE</a>(&quot;when: &quot; __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa2d9540d20f4c08e9adc154167942a9b" name="aa2d9540d20f4c08e9adc154167942a9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2d9540d20f4c08e9adc154167942a9b">&#9670;&#160;</a></span>ZEROERR_CREATE_TEST_CLASS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CREATE_TEST_CLASS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">fixture, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">classname, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">funcname, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">class </span>classname : <span class="keyword">public</span> fixture {                                                       \</div>
+<div class="line">    <span class="keyword">public</span>:                                                                                  \</div>
+<div class="line">        <span class="keywordtype">void</span> funcname(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a>*);                                                \</div>
+<div class="line">    };                                                                                       \</div>
+<div class="line">    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_define" href="config_8h.html#a7661dcca8e113fba4f0e112c546e903b">ZEROERR_CAT</a>(call_, funcname)(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a> * _ZEROERR_TEST_CONTEXT) { \</div>
+<div class="line">        classname instance;                                                                  \</div>
+<div class="line">        instance.funcname(_ZEROERR_TEST_CONTEXT);                                            \</div>
+<div class="line">    }                                                                                        \</div>
+<div class="line">    <span class="keyword">static</span> <a class="code hl_struct" href="structzeroerr_1_1detail_1_1regTest.html">zeroerr::detail::regTest</a> <a class="code hl_define" href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a>(_zeroerr_reg)(                           \</div>
+<div class="line">        {name, __FILE__, __LINE__, <a class="code hl_define" href="config_8h.html#a7661dcca8e113fba4f0e112c546e903b">ZEROERR_CAT</a>(call_, funcname), {__VA_ARGS__}});            \</div>
+<div class="line">    <span class="keyword">inline</span> <span class="keywordtype">void</span> classname::funcname(<a class="code hl_define" href="config_8h.html#a5a6e28def9ba92d7cdaf0243e889491a">ZEROERR_UNUSED</a>(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a>* _ZEROERR_TEST_CONTEXT))</div>
+<div class="ttc" id="aconfig_8h_html_a7661dcca8e113fba4f0e112c546e903b"><div class="ttname"><a href="config_8h.html#a7661dcca8e113fba4f0e112c546e903b">ZEROERR_CAT</a></div><div class="ttdeci">#define ZEROERR_CAT(x, s)</div><div class="ttdef"><b>Definition</b> config.h:76</div></div>
+<div class="ttc" id="astructzeroerr_1_1detail_1_1regTest_html"><div class="ttname"><a href="structzeroerr_1_1detail_1_1regTest.html">zeroerr::detail::regTest</a></div><div class="ttdoc">regTest is a class that is used to register the test case. It will be used as global variables and th...</div><div class="ttdef"><b>Definition</b> unittest.h:275</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="aebf3c87af7745c5286150fa07268c470" name="aebf3c87af7745c5286150fa07268c470"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebf3c87af7745c5286150fa07268c470">&#9670;&#160;</a></span>ZEROERR_CREATE_TEST_FUNC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CREATE_TEST_FUNC</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">function, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">static</span> <span class="keywordtype">void</span>                     function(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a>*); \</div>
+<div class="line">    <span class="keyword">static</span> <a class="code hl_struct" href="structzeroerr_1_1detail_1_1regTest.html">zeroerr::detail::regTest</a> <a class="code hl_define" href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a>(_zeroerr_reg)(   \</div>
+<div class="line">        {name, __FILE__, __LINE__, function, {__VA_ARGS__}});        \</div>
+<div class="line">    <span class="keyword">static</span> <span class="keywordtype">void</span> function(<a class="code hl_define" href="config_8h.html#a5a6e28def9ba92d7cdaf0243e889491a">ZEROERR_UNUSED</a>(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a>* _ZEROERR_TEST_CONTEXT))</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ab67723d90c1abf342268b6e93bb7344d" name="ab67723d90c1abf342268b6e93bb7344d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab67723d90c1abf342268b6e93bb7344d">&#9670;&#160;</a></span>ZEROERR_HAVE_SAME_OUTPUT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_HAVE_SAME_OUTPUT&#160;&#160;&#160;_ZEROERR_TEST_CONTEXT-&gt;save_output();</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a class="el" href="unittest_8h.html">unittest.h</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

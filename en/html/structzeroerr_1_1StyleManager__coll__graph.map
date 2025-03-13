@@ -1,0 +1,14 @@
+<map id="zeroerr::StyleManager" name="zeroerr::StyleManager">
+<area shape="rect" id="Node000001" title=" " alt="" coords="7,461,174,487"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,359,176,399"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,413,93,461,88,461,88,413"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="47,95,134,120"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="93,134,93,358,88,358,88,134"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="107,183,293,208"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="118,127,187,180,183,185,115,131"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="21,5,160,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="93,59,93,94,88,94,88,59"/>
+<area shape="rect" id="Node000005" href="$structzeroerr_1_1Table_1_1Style.html" title="Style is used to define the border style of the table." alt="" coords="115,271,266,296"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="170,307,113,360,109,357,166,304"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="200,222,195,270,189,270,195,222"/>
+</map>

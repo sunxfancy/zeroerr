@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/domains/aggregate_of.h 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('aggregate__of_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">类</a> &#124;
+<a href="#namespaces">命名空间</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle"><div class="title">aggregate_of.h 文件参考</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="domain_8h_source.html">zeroerr/domains/domain.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="config_8h_source.html">zeroerr/internal/config.h</a>&quot;</code><br />
+<code>#include &lt;tuple&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+aggregate_of.h 的引用(Include)关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="aggregate__of_8h__incl.png" border="0" usemap="#ainclude_2zeroerr_2domains_2aggregate__of_8h" alt=""/></div>
+<map name="ainclude_2zeroerr_2domains_2aggregate__of_8h" id="ainclude_2zeroerr_2domains_2aggregate__of_8h">
+<area shape="rect" title=" " alt="" coords="85,5,263,45"/>
+<area shape="rect" href="domain_8h.html" title=" " alt="" coords="77,93,271,119"/>
+<area shape="poly" title=" " alt="" coords="177,46,177,79,171,79,171,46"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="5,313,183,339"/>
+<area shape="poly" title=" " alt="" coords="122,48,91,67,66,96,59,98,51,94,45,91,41,91,40,103,42,132,69,265,82,300,77,302,63,266,37,133,34,102,37,88,45,85,53,89,59,93,63,91,88,63,119,43"/>
+<area shape="rect" title=" " alt="" coords="755,313,809,339"/>
+<area shape="poly" title=" " alt="" coords="261,43,361,70,479,111,603,166,663,200,718,238,749,268,771,300,767,303,745,272,715,242,660,205,600,171,477,116,359,75,260,48"/>
+<area shape="poly" title=" " alt="" coords="143,121,110,140,96,153,84,168,74,201,73,237,79,271,87,300,82,301,73,272,68,237,68,200,80,165,92,149,107,135,140,117"/>
+<area shape="rect" href="rng_8h.html" title=" " alt="" coords="95,167,253,192"/>
+<area shape="poly" title=" " alt="" coords="177,119,177,153,171,153,171,119"/>
+<area shape="rect" href="serialization_8h.html" title=" " alt="" coords="287,167,506,192"/>
+<area shape="poly" title=" " alt="" coords="211,116,349,160,347,165,209,121"/>
+<area shape="poly" title=" " alt="" coords="162,194,141,215,122,241,109,271,101,300,96,299,104,269,117,239,137,211,159,190"/>
+<area shape="rect" title=" " alt="" coords="131,240,198,265"/>
+<area shape="poly" title=" " alt="" coords="175,193,171,227,165,226,170,192"/>
+<area shape="rect" title=" " alt="" coords="222,240,289,265"/>
+<area shape="poly" title=" " alt="" coords="189,190,234,229,230,233,185,194"/>
+<area shape="rect" title=" " alt="" coords="313,240,376,265"/>
+<area shape="poly" title=" " alt="" coords="202,190,305,232,303,237,200,194"/>
+<area shape="poly" title=" " alt="" coords="402,192,404,228,400,249,389,267,358,286,311,301,197,319,196,314,310,296,356,282,385,263,395,247,399,228,397,192"/>
+<area shape="poly" title=" " alt="" coords="360,195,212,240,210,235,359,189"/>
+<area shape="poly" title=" " alt="" coords="375,194,292,236,289,231,373,190"/>
+<area shape="poly" title=" " alt="" coords="390,194,363,230,359,227,386,191"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="503,240,704,265"/>
+<area shape="poly" title=" " alt="" coords="431,189,558,233,556,238,429,195"/>
+<area shape="rect" title=" " alt="" coords="266,313,325,339"/>
+<area shape="poly" title=" " alt="" coords="411,191,435,225,440,246,435,267,420,280,396,293,339,314,337,309,394,288,417,276,430,264,435,246,430,227,406,194"/>
+<area shape="rect" title=" " alt="" coords="833,313,925,339"/>
+<area shape="poly" title=" " alt="" coords="501,189,607,208,718,237,791,270,851,304,849,308,789,275,716,243,606,213,500,195"/>
+<area shape="poly" title=" " alt="" coords="522,268,190,314,189,309,521,263"/>
+<area shape="rect" title=" " alt="" coords="349,313,425,339"/>
+<area shape="poly" title=" " alt="" coords="569,268,436,311,434,306,568,263"/>
+<area shape="rect" title=" " alt="" coords="450,313,525,339"/>
+<area shape="poly" title=" " alt="" coords="586,268,519,308,517,304,583,263"/>
+<area shape="poly" title=" " alt="" coords="549,268,339,316,338,310,548,263"/>
+<area shape="poly" title=" " alt="" coords="633,263,743,306,741,311,631,268"/>
+<area shape="poly" title=" " alt="" coords="648,263,822,307,821,312,647,268"/>
+<area shape="rect" title=" " alt="" coords="549,313,628,339"/>
+<area shape="poly" title=" " alt="" coords="604,266,596,300,591,299,598,265"/>
+<area shape="rect" title=" " alt="" coords="653,313,730,339"/>
+<area shape="poly" title=" " alt="" coords="619,263,668,302,665,307,616,267"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+此图展示该文件直接或间接的被哪些文件引用了:</div>
+<div class="dyncontent">
+<div class="center"><img src="aggregate__of_8h__dep__incl.png" border="0" usemap="#ainclude_2zeroerr_2domains_2aggregate__of_8hdep" alt=""/></div>
+<map name="ainclude_2zeroerr_2domains_2aggregate__of_8hdep" id="ainclude_2zeroerr_2domains_2aggregate__of_8hdep">
+<area shape="rect" title=" " alt="" coords="68,5,247,45"/>
+<area shape="rect" href="arbitrary_8h.html" title=" " alt="" coords="5,93,184,133"/>
+<area shape="poly" title=" " alt="" coords="137,58,111,95,106,92,133,55"/>
+<area shape="rect" href="fuzztest_8h.html" title=" " alt="" coords="64,181,251,207"/>
+<area shape="poly" title=" " alt="" coords="182,56,199,93,202,113,199,134,186,161,170,183,166,179,181,158,193,133,197,113,193,94,177,58"/>
+<area shape="poly" title=" " alt="" coords="121,143,150,179,146,183,116,146"/>
+<area shape="rect" href="fuzztest_8cpp.html" title=" " alt="" coords="22,255,146,280"/>
+<area shape="poly" title=" " alt="" coords="137,218,98,256,94,253,134,214"/>
+<area shape="rect" href="unittest_8cpp.html" title=" " alt="" coords="171,255,293,280"/>
+<area shape="poly" title=" " alt="" coords="181,214,222,253,218,256,177,218"/>
+</map>
+</div>
+</div>
+<p><a href="aggregate__of_8h_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1AggregateOf.html">zeroerr::AggregateOf&lt; T, Inner &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classzeroerr_1_1AggregateOf.html" title="AggregateOf is a domain that combines multiple inner domains into a tuple or aggregate type">AggregateOf</a> is a domain that combines multiple inner domains into a tuple or aggregate type  <a href="classzeroerr_1_1AggregateOf.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1AggregateOf_1_1GetTupleDomainMapValue.html">zeroerr::AggregateOf&lt; T, Inner &gt;::GetTupleDomainMapValue</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+命名空间</h2></td></tr>
+<tr class="memitem:namespacezeroerr" id="r_namespacezeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:a26cb31d6335adc0cedce645dae35032d" id="r_a26cb31d6335adc0cedce645dae35032d"><td class="memTemplParams" colspan="2">template&lt;typename... Inner&gt; </td></tr>
+<tr class="memitem:a26cb31d6335adc0cedce645dae35032d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1AggregateOf.html">AggregateOf</a>&lt; std::tuple&lt; typename Inner::ValueType... &gt;, Inner... &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a26cb31d6335adc0cedce645dae35032d">zeroerr::TupleOf</a> (Inner &amp;&amp;... inner)</td></tr>
+<tr class="separator:a26cb31d6335adc0cedce645dae35032d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa59028a8e5e8d54c15e342fa9ffedf41" id="r_aa59028a8e5e8d54c15e342fa9ffedf41"><td class="memTemplParams" colspan="2">template&lt;typename K , typename V &gt; </td></tr>
+<tr class="memitem:aa59028a8e5e8d54c15e342fa9ffedf41"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1AggregateOf.html">AggregateOf</a>&lt; std::pair&lt; typename K::ValueType, typename V::ValueType &gt;, K, V &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#aa59028a8e5e8d54c15e342fa9ffedf41">zeroerr::PairOf</a> (K &amp;&amp;k, V &amp;&amp;v)</td></tr>
+<tr class="separator:aa59028a8e5e8d54c15e342fa9ffedf41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a class="el" href="dir_68074f60a1ee644a8e95f005a4f107d6.html">domains</a></li><li class="navelem"><a class="el" href="aggregate__of_8h.html">aggregate_of.h</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

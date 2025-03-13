@@ -1,0 +1,1424 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/internal/config.h File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('config_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">config.h File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="config_8h__dep__incl.png" border="0" usemap="#ainclude_2zeroerr_2internal_2config_8hdep" alt=""/></div>
+<map name="ainclude_2zeroerr_2internal_2config_8hdep" id="ainclude_2zeroerr_2internal_2config_8hdep">
+<area shape="rect" title=" " alt="" coords="1437,5,1610,45"/>
+<area shape="rect" href="assert_8h.html" title=" " alt="" coords="1161,453,1336,478"/>
+<area shape="poly" title=" " alt="" coords="1551,54,1591,110,1610,144,1624,181,1630,220,1621,251,1601,280,1573,311,1543,340,1509,366,1435,407,1362,437,1300,455,1298,450,1360,432,1432,403,1506,362,1539,336,1569,307,1597,277,1616,249,1624,220,1619,182,1605,146,1587,113,1547,57"/>
+<area shape="rect" href="benchmark_8h.html" title=" " alt="" coords="151,365,359,390"/>
+<area shape="poly" title=" " alt="" coords="1423,29,1157,31,826,39,667,48,528,60,424,75,388,85,366,96,335,124,311,159,292,198,278,238,263,313,258,364,253,364,258,312,273,237,287,196,306,157,331,121,363,91,386,80,423,70,528,54,666,42,826,34,1157,25,1423,24"/>
+<area shape="rect" href="color_8h.html" title=" " alt="" coords="445,101,612,126"/>
+<area shape="poly" title=" " alt="" coords="1423,33,1069,53,848,71,625,96,582,103,581,98,624,91,847,66,1069,47,1422,28"/>
+<area shape="rect" href="dbg_8h.html" title=" " alt="" coords="445,277,604,302"/>
+<area shape="poly" title=" " alt="" coords="1423,32,1162,40,842,53,566,72,476,83,448,89,436,95,423,117,421,141,428,167,441,193,478,240,513,275,509,278,474,244,437,195,423,169,416,142,418,115,432,91,447,84,475,78,565,67,842,48,1162,34,1423,26"/>
+<area shape="rect" href="decomposition_8h.html" title=" " alt="" coords="1263,357,1437,397"/>
+<area shape="poly" title=" " alt="" coords="1504,58,1466,115,1427,183,1385,280,1358,358,1353,356,1380,278,1422,180,1461,112,1499,55"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="958,365,1113,390"/>
+<area shape="poly" title=" " alt="" coords="1492,57,1448,95,1381,159,1330,210,1277,259,1202,312,1136,345,1075,367,1073,362,1134,340,1199,307,1274,255,1327,207,1377,155,1444,91,1489,53"/>
+<area shape="rect" href="table_8h.html" title=" " alt="" coords="535,365,703,390"/>
+<area shape="poly" title=" " alt="" coords="1423,32,1157,39,830,53,546,71,454,83,426,89,413,96,383,123,370,138,363,156,363,180,373,212,396,254,436,308,457,328,481,343,536,363,534,368,479,348,453,332,432,311,392,257,368,214,357,181,357,155,366,135,379,119,410,91,424,84,453,78,546,66,830,47,1157,34,1423,26"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="922,189,1087,214"/>
+<area shape="poly" title=" " alt="" coords="1434,51,1280,96,1140,147,1032,191,1030,186,1138,142,1278,91,1433,46"/>
+<area shape="rect" href="aggregate__of_8h.html" title=" " alt="" coords="2174,357,2353,397"/>
+<area shape="poly" title=" " alt="" coords="1624,29,1922,52,2071,69,2132,79,2179,91,2230,105,2273,118,2308,139,2324,157,2340,180,2350,204,2351,229,2347,254,2337,279,2311,324,2284,358,2279,355,2307,321,2333,277,2341,253,2346,229,2344,205,2335,183,2320,160,2305,144,2270,123,2229,110,2177,96,2131,85,2070,74,1921,57,1623,35"/>
+<area shape="rect" href="arbitrary_8h.html" title=" " alt="" coords="1971,445,2150,485"/>
+<area shape="poly" title=" " alt="" coords="1624,23,1733,27,1852,37,1907,46,1956,57,1996,72,2024,91,2054,133,2074,181,2085,232,2088,283,2086,333,2081,379,2068,445,2063,444,2076,378,2081,333,2083,283,2079,232,2069,182,2050,136,2020,95,1993,77,1955,62,1906,51,1851,42,1733,32,1624,29"/>
+<area shape="rect" href="fuzztest_8h.html" title=" " alt="" coords="1530,533,1717,559"/>
+<area shape="poly" title=" " alt="" coords="1568,51,1591,70,1611,92,1634,134,1644,181,1647,208,1646,231,1635,270,1619,308,1607,358,1607,397,1615,475,1624,533,1619,534,1610,475,1602,397,1602,357,1614,307,1630,268,1641,230,1642,208,1639,182,1629,135,1606,95,1587,74,1565,55"/>
+<area shape="rect" href="container__of_8h.html" title=" " alt="" coords="1819,357,1998,397"/>
+<area shape="poly" title=" " alt="" coords="1624,38,1687,58,1718,73,1746,91,1779,122,1808,157,1855,232,1887,304,1906,356,1901,358,1882,306,1850,235,1804,160,1775,125,1743,95,1715,77,1685,63,1622,43"/>
+<area shape="rect" href="domain_8h.html" title=" " alt="" coords="2102,269,2281,309"/>
+<area shape="poly" title=" " alt="" coords="1624,24,1745,28,1880,39,1944,47,2002,59,2050,73,2085,91,2101,105,2111,120,2121,150,2128,183,2143,220,2177,267,2173,271,2138,223,2123,185,2116,152,2106,123,2097,109,2082,96,2048,78,2001,64,1943,53,1880,44,1745,34,1624,30"/>
+<area shape="rect" href="element__of_8h.html" title=" " alt="" coords="1617,357,1795,397"/>
+<area shape="poly" title=" " alt="" coords="1624,35,1676,55,1699,71,1719,92,1737,125,1746,162,1749,200,1747,238,1733,308,1716,358,1711,356,1728,306,1742,238,1744,200,1741,163,1732,127,1714,95,1696,75,1674,60,1622,40"/>
+<area shape="rect" href="in__range_8h.html" title=" " alt="" coords="2377,357,2555,397"/>
+<area shape="poly" title=" " alt="" coords="1624,26,1780,31,1963,43,2134,62,2204,75,2256,91,2299,114,2336,146,2369,182,2397,221,2439,298,2462,356,2457,358,2434,301,2392,224,2365,185,2333,149,2296,119,2254,96,2202,80,2133,67,1963,48,1780,37,1624,31"/>
+<area shape="rect" href="console_8h.html" title=" " alt="" coords="637,93,810,133"/>
+<area shape="poly" title=" " alt="" coords="1423,36,1151,58,987,75,822,96,811,98,810,92,821,91,986,70,1151,53,1423,31"/>
+<area shape="rect" href="rng_8h.html" title=" " alt="" coords="1437,181,1610,221"/>
+<area shape="poly" title=" " alt="" coords="1526,59,1526,181,1521,181,1521,59"/>
+<area shape="rect" href="serialization_8h.html" title=" " alt="" coords="2153,181,2326,221"/>
+<area shape="poly" title=" " alt="" coords="1624,27,1754,33,1902,45,2039,64,2094,76,2135,91,2165,110,2191,134,2229,179,2225,183,2187,137,2162,114,2133,96,2092,81,2038,69,1902,50,1754,39,1623,32"/>
+<area shape="rect" href="threadsafe_8h.html" title=" " alt="" coords="834,93,1007,133"/>
+<area shape="poly" title=" " alt="" coords="1423,44,1008,102,1007,97,1422,38"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="1837,93,2010,133"/>
+<area shape="poly" title=" " alt="" coords="1624,45,1837,91,1836,96,1623,51"/>
+<area shape="rect" href="unittest_8h.html" title=" " alt="" coords="123,453,308,478"/>
+<area shape="poly" title=" " alt="" coords="1423,30,1150,34,806,44,640,52,495,63,384,78,346,86,322,96,280,121,248,147,222,173,201,202,185,234,170,269,142,358,137,378,142,396,152,413,166,428,196,450,193,455,162,432,148,416,137,398,132,378,137,357,165,268,180,231,197,199,218,170,244,143,277,117,319,91,345,81,384,73,494,58,639,47,806,38,1150,28,1423,25"/>
+<area shape="rect" href="zeroerr_8h.html" title=" " alt="" coords="382,533,513,559"/>
+<area shape="poly" title=" " alt="" coords="1147,479,513,541,513,536,1147,474"/>
+<area shape="rect" href="fuzztest_8cpp.html" title=" " alt="" coords="1187,607,1311,632"/>
+<area shape="poly" title=" " alt="" coords="1251,492,1251,606,1246,606,1246,492"/>
+<area shape="rect" href="serialization_8cpp.html" title=" " alt="" coords="2150,533,2302,559"/>
+<area shape="poly" title=" " alt="" coords="1350,472,2150,536,2150,541,1350,477"/>
+<area shape="rect" href="table_8cpp.html" title=" " alt="" coords="980,533,1085,559"/>
+<area shape="poly" title=" " alt="" coords="1205,485,1065,536,1063,531,1203,480"/>
+<area shape="rect" href="unittest_8cpp.html" title=" " alt="" coords="519,607,642,632"/>
+<area shape="poly" title=" " alt="" coords="1225,489,1170,527,1135,546,1099,561,1009,581,884,597,642,617,642,612,883,592,1008,576,1097,556,1133,541,1167,522,1222,484"/>
+<area shape="poly" title=" " alt="" coords="280,397,380,483,436,531,432,535,376,487,277,401"/>
+<area shape="rect" href="benchmark_8cpp.html" title=" " alt="" coords="540,453,685,478"/>
+<area shape="poly" title=" " alt="" coords="317,391,566,450,564,455,315,396"/>
+<area shape="poly" title=" " alt="" coords="508,137,458,194,434,230,416,270,403,329,402,376,411,425,426,485,444,532,439,534,421,486,406,426,397,377,397,328,411,268,429,228,454,190,504,134"/>
+<area shape="poly" title=" " alt="" coords="440,131,341,157,285,176,230,200,175,230,125,266,82,309,47,359,20,413,12,438,9,462,9,486,16,509,28,533,46,557,69,568,113,579,243,595,393,607,519,613,519,618,392,612,243,601,112,584,67,573,43,561,23,536,11,511,4,487,3,462,7,437,15,411,42,356,78,305,122,262,173,226,227,195,283,171,339,152,439,126"/>
+<area shape="poly" title=" " alt="" coords="511,138,497,159,487,182,483,201,487,221,501,251,517,275,513,278,496,254,482,222,478,201,482,181,493,156,507,135"/>
+<area shape="poly" title=" " alt="" coords="600,126,625,131,938,186,937,191,624,136,599,131"/>
+<area shape="rect" href="color_8cpp.html" title=" " alt="" coords="496,189,599,214"/>
+<area shape="poly" title=" " alt="" coords="537,139,547,188,542,189,531,140"/>
+<area shape="poly" title=" " alt="" coords="520,316,468,486,453,534,448,533,463,485,515,314"/>
+<area shape="poly" title=" " alt="" coords="618,298,1263,364,1263,370,617,303"/>
+<area shape="poly" title=" " alt="" coords="607,302,968,362,967,367,606,307"/>
+<area shape="poly" title=" " alt="" coords="549,310,608,362,604,366,546,314"/>
+<area shape="poly" title=" " alt="" coords="1319,408,1264,454,1261,450,1315,404"/>
+<area shape="poly" title=" " alt="" coords="1005,399,925,448,897,470,867,488,773,517,677,534,587,544,513,547,513,542,587,538,676,529,772,511,865,483,894,465,922,443,1002,394"/>
+<area shape="poly" title=" " alt="" coords="1057,399,1240,605,1236,608,1053,402"/>
+<area shape="poly" title=" " alt="" coords="1037,404,1035,533,1030,533,1032,404"/>
+<area shape="poly" title=" " alt="" coords="1017,402,972,444,914,488,836,529,756,564,622,609,621,604,754,559,834,524,911,483,969,440,1014,398"/>
+<area shape="rect" href="log_8cpp.html" title=" " alt="" coords="761,453,853,478"/>
+<area shape="poly" title=" " alt="" coords="993,397,839,455,837,450,991,392"/>
+<area shape="poly" title=" " alt="" coords="645,397,751,483,810,506,871,522,980,538,979,544,870,527,808,511,749,488,642,401"/>
+<area shape="poly" title=" " alt="" coords="620,404,616,452,611,452,615,404"/>
+<area shape="poly" title=" " alt="" coords="1101,213,1155,233,1181,248,1202,268,1219,290,1232,315,1247,368,1252,418,1252,453,1247,453,1246,418,1241,369,1227,317,1215,293,1199,271,1177,252,1153,238,1100,218"/>
+<area shape="poly" title=" " alt="" coords="908,215,614,246,489,262,435,271,426,291,422,321,425,398,436,477,447,532,442,533,431,478,419,398,417,320,421,289,432,267,488,256,613,241,908,210"/>
+<area shape="poly" title=" " alt="" coords="927,219,589,279,588,274,926,214"/>
+<area shape="poly" title=" " alt="" coords="1098,214,1173,234,1210,249,1246,267,1274,287,1300,311,1338,356,1334,359,1296,315,1271,291,1243,272,1208,254,1171,239,1097,219"/>
+<area shape="poly" title=" " alt="" coords="1001,228,997,266,1000,309,1013,339,1029,363,1024,366,1008,341,995,310,991,266,996,227"/>
+<area shape="poly" title=" " alt="" coords="931,220,852,241,771,272,730,295,691,321,634,367,630,363,688,317,727,290,769,267,851,235,929,214"/>
+<area shape="rect" href="format_8h.html" title=" " alt="" coords="1010,277,1189,302"/>
+<area shape="poly" title=" " alt="" coords="1029,222,1088,274,1084,278,1026,226"/>
+<area shape="rect" href="print_8cpp.html" title=" " alt="" coords="781,277,884,302"/>
+<area shape="poly" title=" " alt="" coords="970,223,857,279,855,274,968,218"/>
+<area shape="poly" title=" " alt="" coords="1120,310,1241,451,1236,454,1116,314"/>
+<area shape="poly" title=" " alt="" coords="1085,315,1046,366,1042,363,1080,311"/>
+<area shape="poly" title=" " alt="" coords="2207,405,2106,448,2104,443,2205,400"/>
+<area shape="poly" title=" " alt="" coords="2246,410,2211,452,2188,472,2163,488,2127,501,2079,512,1961,529,1832,539,1717,545,1717,539,1832,534,1960,523,2078,507,2126,496,2161,483,2185,467,2207,448,2242,407"/>
+<area shape="poly" title=" " alt="" coords="1958,488,1688,536,1687,531,1957,482"/>
+<area shape="poly" title=" " alt="" coords="1550,564,1310,609,1309,604,1549,559"/>
+<area shape="poly" title=" " alt="" coords="1516,557,643,616,642,611,1516,552"/>
+<area shape="poly" title=" " alt="" coords="1955,402,2029,443,2026,448,1952,406"/>
+<area shape="poly" title=" " alt="" coords="1866,407,1644,535,1642,531,1863,402"/>
+<area shape="poly" title=" " alt="" coords="2218,318,2249,355,2245,359,2214,322"/>
+<area shape="poly" title=" " alt="" coords="2171,322,2077,447,2073,444,2167,319"/>
+<area shape="poly" title=" " alt="" coords="2117,316,1971,360,1970,355,2115,311"/>
+<area shape="poly" title=" " alt="" coords="2088,311,1808,360,1796,362,1795,357,1807,355,2087,306"/>
+<area shape="poly" title=" " alt="" coords="2266,311,2407,355,2405,360,2264,316"/>
+<area shape="poly" title=" " alt="" coords="1693,411,1631,534,1626,532,1688,409"/>
+<area shape="poly" title=" " alt="" coords="2418,406,2321,449,2264,471,2205,488,2074,514,1941,531,1818,541,1717,546,1717,541,1818,536,1941,526,2073,509,2204,483,2262,465,2319,444,2416,401"/>
+<area shape="poly" title=" " alt="" coords="673,142,572,191,569,186,671,137"/>
+<area shape="rect" href="console_8cpp.html" title=" " alt="" coords="623,189,746,214"/>
+<area shape="poly" title=" " alt="" coords="711,147,692,189,687,187,707,145"/>
+<area shape="poly" title=" " alt="" coords="1423,208,1332,214,1224,225,1110,244,999,272,919,305,813,358,634,455,632,450,811,353,917,300,997,267,1109,239,1224,220,1331,209,1423,203"/>
+<area shape="poly" title=" " alt="" coords="1553,231,1565,249,1574,269,1577,289,1574,310,1563,358,1552,423,1553,451,1563,484,1582,511,1606,531,1603,535,1578,515,1558,487,1548,452,1547,423,1558,357,1569,309,1571,289,1569,270,1560,251,1548,234"/>
+<area shape="poly" title=" " alt="" coords="1624,213,2102,274,2101,279,1623,218"/>
+<area shape="rect" href="rng_8cpp.html" title=" " alt="" coords="1466,277,1559,302"/>
+<area shape="poly" title=" " alt="" coords="1522,236,1517,277,1511,276,1516,235"/>
+<area shape="poly" title=" " alt="" coords="2340,218,2435,243,2481,260,2523,280,2556,304,2577,332,2582,347,2583,364,2579,381,2569,399,2544,430,2514,457,2480,479,2444,497,2370,523,2303,538,2301,533,2369,518,2442,492,2478,474,2511,452,2540,426,2565,396,2574,379,2578,363,2577,348,2572,334,2552,308,2520,285,2479,265,2433,248,2339,223"/>
+<area shape="poly" title=" " alt="" coords="2224,235,2204,270,2199,268,2220,232"/>
+<area shape="poly" title=" " alt="" coords="871,142,804,183,783,205,774,215,759,224,712,243,667,256,624,264,582,268,503,267,428,263,356,261,320,265,285,272,250,284,214,302,178,327,141,359,115,389,99,420,96,435,97,450,102,467,112,484,138,507,178,528,230,548,289,564,413,591,519,608,519,613,412,596,288,569,229,553,176,533,135,512,108,487,97,469,92,451,91,435,94,418,110,386,137,355,175,322,211,297,248,279,284,267,320,260,356,256,428,257,503,262,582,262,623,259,666,251,710,238,757,219,770,210,779,201,800,179,868,138"/>
+<area shape="poly" title=" " alt="" coords="908,147,885,186,854,223,831,238,808,245,789,253,772,271,765,290,772,308,783,318,800,327,847,343,958,364,957,370,846,348,798,332,780,322,768,311,760,290,768,268,786,248,807,240,829,234,851,219,881,183,903,145"/>
+<area shape="poly" title=" " alt="" coords="891,145,809,221,759,271,752,295,751,322,755,348,762,373,782,419,801,451,797,454,777,422,757,375,749,349,746,322,747,295,754,268,805,217,887,141"/>
+<area shape="poly" title=" " alt="" coords="821,137,612,184,585,191,584,186,611,179,820,132"/>
+<area shape="poly" title=" " alt="" coords="1823,121,1717,127,1601,139,1497,157,1456,169,1426,184,1409,198,1399,212,1387,245,1376,279,1365,296,1347,312,1291,342,1229,362,1168,373,1113,379,1113,373,1168,368,1228,357,1289,337,1344,307,1361,293,1371,277,1382,244,1394,210,1405,194,1423,179,1454,164,1495,152,1600,134,1716,122,1823,115"/>
+<area shape="poly" title=" " alt="" coords="1823,127,1088,195,1087,190,1823,121"/>
+<area shape="poly" title=" " alt="" coords="1938,145,2056,444,2051,446,1933,147"/>
+<area shape="poly" title=" " alt="" coords="1924,147,1912,357,1907,357,1919,147"/>
+<area shape="poly" title=" " alt="" coords="2007,134,2171,179,2169,184,2005,140"/>
+<area shape="poly" title=" " alt="" coords="263,480,414,531,413,536,261,485"/>
+<area shape="poly" title=" " alt="" coords="244,484,301,520,371,556,451,585,526,604,524,609,449,590,369,561,298,525,241,488"/>
+<area shape="poly" title=" " alt="" coords="322,470,529,483,1530,537,1530,542,528,488,321,476"/>
+</map>
+</div>
+</div>
+<p><a href="config_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a6367d53bb4afe81928e5dc0bd791d63a" id="r_a6367d53bb4afe81928e5dc0bd791d63a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a6367d53bb4afe81928e5dc0bd791d63a">ZEROERR_VERSION_MAJOR</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a6367d53bb4afe81928e5dc0bd791d63a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa96eece0b2da5d3fd8531f32e3acc3cd" id="r_aa96eece0b2da5d3fd8531f32e3acc3cd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#aa96eece0b2da5d3fd8531f32e3acc3cd">ZEROERR_VERSION_MINOR</a>&#160;&#160;&#160;3</td></tr>
+<tr class="separator:aa96eece0b2da5d3fd8531f32e3acc3cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9504b6ed2f9b49886f6fea5d88231e6" id="r_ad9504b6ed2f9b49886f6fea5d88231e6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#ad9504b6ed2f9b49886f6fea5d88231e6">ZEROERR_VERSION_PATCH</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:ad9504b6ed2f9b49886f6fea5d88231e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2af5e97adecc47a4b02f346f0b6e4408" id="r_a2af5e97adecc47a4b02f346f0b6e4408"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a2af5e97adecc47a4b02f346f0b6e4408">ZEROERR_VERSION</a>&#160;&#160;&#160;    (<a class="el" href="config_8h.html#a6367d53bb4afe81928e5dc0bd791d63a">ZEROERR_VERSION_MAJOR</a> * 10000 + <a class="el" href="config_8h.html#aa96eece0b2da5d3fd8531f32e3acc3cd">ZEROERR_VERSION_MINOR</a> * 100 + <a class="el" href="config_8h.html#ad9504b6ed2f9b49886f6fea5d88231e6">ZEROERR_VERSION_PATCH</a>)</td></tr>
+<tr class="separator:a2af5e97adecc47a4b02f346f0b6e4408"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9631cf5110aad37d16be1a2d969ea192" id="r_a9631cf5110aad37d16be1a2d969ea192"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a9631cf5110aad37d16be1a2d969ea192">ZEROERR_STR</a>(x)&#160;&#160;&#160;#x</td></tr>
+<tr class="separator:a9631cf5110aad37d16be1a2d969ea192"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8ce879048f11a15cbf0743406b8792b" id="r_ad8ce879048f11a15cbf0743406b8792b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#ad8ce879048f11a15cbf0743406b8792b">ZEROERR_VERSION_STR_BUILDER</a>(a,  b,  c)&#160;&#160;&#160;<a class="el" href="config_8h.html#a9631cf5110aad37d16be1a2d969ea192">ZEROERR_STR</a>(a) &quot;.&quot; <a class="el" href="config_8h.html#a9631cf5110aad37d16be1a2d969ea192">ZEROERR_STR</a>(b) &quot;.&quot; <a class="el" href="config_8h.html#a9631cf5110aad37d16be1a2d969ea192">ZEROERR_STR</a>(c)</td></tr>
+<tr class="separator:ad8ce879048f11a15cbf0743406b8792b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5076ca27114706f049099540e251f7f" id="r_aa5076ca27114706f049099540e251f7f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#aa5076ca27114706f049099540e251f7f">ZEROERR_VERSION_STR</a>&#160;&#160;&#160;    <a class="el" href="config_8h.html#ad8ce879048f11a15cbf0743406b8792b">ZEROERR_VERSION_STR_BUILDER</a>(<a class="el" href="config_8h.html#a6367d53bb4afe81928e5dc0bd791d63a">ZEROERR_VERSION_MAJOR</a>, <a class="el" href="config_8h.html#aa96eece0b2da5d3fd8531f32e3acc3cd">ZEROERR_VERSION_MINOR</a>, <a class="el" href="config_8h.html#ad9504b6ed2f9b49886f6fea5d88231e6">ZEROERR_VERSION_PATCH</a>)</td></tr>
+<tr class="separator:aa5076ca27114706f049099540e251f7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1803d7388ec7749b6f1ade456ecf821" id="r_ab1803d7388ec7749b6f1ade456ecf821"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#ab1803d7388ec7749b6f1ade456ecf821">ZEROERR_CPLUSPLUS</a>&#160;&#160;&#160;__cplusplus</td></tr>
+<tr class="separator:ab1803d7388ec7749b6f1ade456ecf821"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1ffb195672c1d5bca68dcc6753a8e13" id="r_af1ffb195672c1d5bca68dcc6753a8e13"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#af1ffb195672c1d5bca68dcc6753a8e13">ZEROERR_OS_UNKNOWN</a></td></tr>
+<tr class="separator:af1ffb195672c1d5bca68dcc6753a8e13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8358933d4630dbcfc118ec79813c244" id="r_ab8358933d4630dbcfc118ec79813c244"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#ab8358933d4630dbcfc118ec79813c244">ZEROERR_CAT_IMPL</a>(s1,  s2)&#160;&#160;&#160;s1##s2</td></tr>
+<tr class="separator:ab8358933d4630dbcfc118ec79813c244"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7661dcca8e113fba4f0e112c546e903b" id="r_a7661dcca8e113fba4f0e112c546e903b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a7661dcca8e113fba4f0e112c546e903b">ZEROERR_CAT</a>(x,  s)&#160;&#160;&#160;<a class="el" href="config_8h.html#ab8358933d4630dbcfc118ec79813c244">ZEROERR_CAT_IMPL</a>(x, s)</td></tr>
+<tr class="separator:a7661dcca8e113fba4f0e112c546e903b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2df06655fd54b8bb67c95d14a8f1e82" id="r_af2df06655fd54b8bb67c95d14a8f1e82"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#af2df06655fd54b8bb67c95d14a8f1e82">ZEROERR_ARG16</a>(_0,  _1,  _2,  _3,  _4,  _5,  _6,  _7,  _8,  _9,  _10,  _11,  _12,  _13,  _14,  _15, ...)&#160;&#160;&#160;_15</td></tr>
+<tr class="separator:af2df06655fd54b8bb67c95d14a8f1e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ac6db421ed6746be3b0b32a99033941" id="r_a1ac6db421ed6746be3b0b32a99033941"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a1ac6db421ed6746be3b0b32a99033941">ZEROERR_HAS_COMMA</a>(...)&#160;&#160;&#160;    <a class="el" href="config_8h.html#af2df06655fd54b8bb67c95d14a8f1e82">ZEROERR_ARG16</a>(__VA_ARGS__, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)</td></tr>
+<tr class="separator:a1ac6db421ed6746be3b0b32a99033941"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bb1ddd0d6342ce2b05edc8f9e0a58b8" id="r_a7bb1ddd0d6342ce2b05edc8f9e0a58b8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a7bb1ddd0d6342ce2b05edc8f9e0a58b8">ZEROERR_TRIGGER_PARENTHESIS_</a>(...)&#160;&#160;&#160;,</td></tr>
+<tr class="separator:a7bb1ddd0d6342ce2b05edc8f9e0a58b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adaf6f0edcd554522d668ef8ab8d6ee63" id="r_adaf6f0edcd554522d668ef8ab8d6ee63"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#adaf6f0edcd554522d668ef8ab8d6ee63">ZEROERR_ISEMPTY</a>(...)</td></tr>
+<tr class="separator:adaf6f0edcd554522d668ef8ab8d6ee63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6462f579e310213f362142691389fa55" id="r_a6462f579e310213f362142691389fa55"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a6462f579e310213f362142691389fa55">ZEROERR_PASTE5</a>(_0,  _1,  _2,  _3,  _4)&#160;&#160;&#160;_0##_1##_2##_3##_4</td></tr>
+<tr class="separator:a6462f579e310213f362142691389fa55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae40fcf218cf9b8b5e3709758b97a1fe6" id="r_ae40fcf218cf9b8b5e3709758b97a1fe6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#ae40fcf218cf9b8b5e3709758b97a1fe6">_ZEROERR_ISEMPTY</a>(_0,  _1,  _2,  _3)&#160;&#160;&#160;    <a class="el" href="config_8h.html#a1ac6db421ed6746be3b0b32a99033941">ZEROERR_HAS_COMMA</a>(<a class="el" href="config_8h.html#a6462f579e310213f362142691389fa55">ZEROERR_PASTE5</a>(_IS_EMPTY_CASE_, _0, _1, _2, _3))</td></tr>
+<tr class="separator:ae40fcf218cf9b8b5e3709758b97a1fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac46d886204cc3b1c29b1d93efdda6190" id="r_ac46d886204cc3b1c29b1d93efdda6190"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#ac46d886204cc3b1c29b1d93efdda6190">_IS_EMPTY_CASE_0001</a>&#160;&#160;&#160;,</td></tr>
+<tr class="separator:ac46d886204cc3b1c29b1d93efdda6190"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a265322b7c87fdecfc868945ba0f456f0" id="r_a265322b7c87fdecfc868945ba0f456f0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a265322b7c87fdecfc868945ba0f456f0">ZEROERR_NAMEGEN</a>(x)&#160;&#160;&#160;<a class="el" href="config_8h.html#a7661dcca8e113fba4f0e112c546e903b">ZEROERR_CAT</a>(x, __LINE__)</td></tr>
+<tr class="separator:a265322b7c87fdecfc868945ba0f456f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38ab8a7622ce39e96f30b5204ebdd515" id="r_a38ab8a7622ce39e96f30b5204ebdd515"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a38ab8a7622ce39e96f30b5204ebdd515">ZEROERR_FUNC_SCOPE_BEGIN</a>&#160;&#160;&#160;[&amp;]</td></tr>
+<tr class="separator:a38ab8a7622ce39e96f30b5204ebdd515"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b44406d108c79cb596ab7ceafac449f" id="r_a2b44406d108c79cb596ab7ceafac449f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a2b44406d108c79cb596ab7ceafac449f">ZEROERR_FUNC_SCOPE_END</a>&#160;&#160;&#160;()</td></tr>
+<tr class="separator:a2b44406d108c79cb596ab7ceafac449f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20de5f23a67f78b7b0c7aa8df559430a" id="r_a20de5f23a67f78b7b0c7aa8df559430a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a20de5f23a67f78b7b0c7aa8df559430a">ZEROERR_FUNC_SCOPE_RET</a>(v)&#160;&#160;&#160;return v</td></tr>
+<tr class="separator:a20de5f23a67f78b7b0c7aa8df559430a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac571ec1ca1521e33fb2fb5cfb262dc08" id="r_ac571ec1ca1521e33fb2fb5cfb262dc08"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#ac571ec1ca1521e33fb2fb5cfb262dc08">ZEROERR_USE_SHORT_LOG_MACRO</a></td></tr>
+<tr class="separator:ac571ec1ca1521e33fb2fb5cfb262dc08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc7f79e4c14f27be7adb60f0f8ea3640" id="r_acc7f79e4c14f27be7adb60f0f8ea3640"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(x)&#160;&#160;&#160;x</td></tr>
+<tr class="separator:acc7f79e4c14f27be7adb60f0f8ea3640"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a985b58f9d621236e64126f4a90fef13a" id="r_a985b58f9d621236e64126f4a90fef13a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a985b58f9d621236e64126f4a90fef13a">ZEROERR_COMPILER</a>(MAJOR,  MINOR,  PATCH)&#160;&#160;&#160;((MAJOR) * 10000000 + (MINOR) * 100000 + (PATCH))</td></tr>
+<tr class="separator:a985b58f9d621236e64126f4a90fef13a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54fceb074f485e7b4d5cc31b92f27442" id="r_a54fceb074f485e7b4d5cc31b92f27442"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a54fceb074f485e7b4d5cc31b92f27442">ZEROERR_MSVC</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a54fceb074f485e7b4d5cc31b92f27442"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab0a84b521ed26e1cfcaa9fe2546b1e4" id="r_aab0a84b521ed26e1cfcaa9fe2546b1e4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#aab0a84b521ed26e1cfcaa9fe2546b1e4">ZEROERR_CLANG</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:aab0a84b521ed26e1cfcaa9fe2546b1e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51c91dcb12a9c34c2e013ae2ad84ba0e" id="r_a51c91dcb12a9c34c2e013ae2ad84ba0e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a51c91dcb12a9c34c2e013ae2ad84ba0e">ZEROERR_GCC</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a51c91dcb12a9c34c2e013ae2ad84ba0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaedbb96512514160ec4f5a4bb500df4b" id="r_aaedbb96512514160ec4f5a4bb500df4b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#aaedbb96512514160ec4f5a4bb500df4b">ZEROERR_ICC</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:aaedbb96512514160ec4f5a4bb500df4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13f2c85128e81b8449a7533810c30a40" id="r_a13f2c85128e81b8449a7533810c30a40"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a13f2c85128e81b8449a7533810c30a40">ZEROERR_CLANG_SUPPRESS_WARNING_PUSH</a></td></tr>
+<tr class="separator:a13f2c85128e81b8449a7533810c30a40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a523c11348fe8f8d78d31c3de3e424986" id="r_a523c11348fe8f8d78d31c3de3e424986"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a523c11348fe8f8d78d31c3de3e424986">ZEROERR_CLANG_SUPPRESS_WARNING</a>(w)</td></tr>
+<tr class="separator:a523c11348fe8f8d78d31c3de3e424986"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e7b177578f47c4185cda4b03c9d913a" id="r_a6e7b177578f47c4185cda4b03c9d913a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a6e7b177578f47c4185cda4b03c9d913a">ZEROERR_CLANG_SUPPRESS_WARNING_POP</a></td></tr>
+<tr class="separator:a6e7b177578f47c4185cda4b03c9d913a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa203bb7083b9a626372cec4558af9a53" id="r_aa203bb7083b9a626372cec4558af9a53"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#aa203bb7083b9a626372cec4558af9a53">ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH</a>(w)</td></tr>
+<tr class="separator:aa203bb7083b9a626372cec4558af9a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a860fcdb10f56064375f6be8f3f070427" id="r_a860fcdb10f56064375f6be8f3f070427"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a860fcdb10f56064375f6be8f3f070427">ZEROERR_GCC_SUPPRESS_WARNING_PUSH</a></td></tr>
+<tr class="separator:a860fcdb10f56064375f6be8f3f070427"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36d109ca1228348de302d15ba48203b4" id="r_a36d109ca1228348de302d15ba48203b4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a36d109ca1228348de302d15ba48203b4">ZEROERR_GCC_SUPPRESS_WARNING</a>(w)</td></tr>
+<tr class="separator:a36d109ca1228348de302d15ba48203b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa34c7d6c5241309111e6607b87c6a603" id="r_aa34c7d6c5241309111e6607b87c6a603"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#aa34c7d6c5241309111e6607b87c6a603">ZEROERR_GCC_SUPPRESS_WARNING_POP</a></td></tr>
+<tr class="separator:aa34c7d6c5241309111e6607b87c6a603"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af786983dfa9be259c3d7a3abc365c176" id="r_af786983dfa9be259c3d7a3abc365c176"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#af786983dfa9be259c3d7a3abc365c176">ZEROERR_GCC_SUPPRESS_WARNING_WITH_PUSH</a>(w)</td></tr>
+<tr class="separator:af786983dfa9be259c3d7a3abc365c176"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a203e0d278c71370e7398eb1672897882" id="r_a203e0d278c71370e7398eb1672897882"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a203e0d278c71370e7398eb1672897882">ZEROERR_MSVC_SUPPRESS_WARNING_PUSH</a></td></tr>
+<tr class="separator:a203e0d278c71370e7398eb1672897882"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e08e68d050a487f8db5c814dd14f21e" id="r_a8e08e68d050a487f8db5c814dd14f21e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a8e08e68d050a487f8db5c814dd14f21e">ZEROERR_MSVC_SUPPRESS_WARNING</a>(w)</td></tr>
+<tr class="separator:a8e08e68d050a487f8db5c814dd14f21e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6da2970dff2ffdbe8cf135797c87935" id="r_ac6da2970dff2ffdbe8cf135797c87935"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#ac6da2970dff2ffdbe8cf135797c87935">ZEROERR_MSVC_SUPPRESS_WARNING_POP</a></td></tr>
+<tr class="separator:ac6da2970dff2ffdbe8cf135797c87935"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d461132eee8fb2a6e3082b9c11fb8f0" id="r_a0d461132eee8fb2a6e3082b9c11fb8f0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a0d461132eee8fb2a6e3082b9c11fb8f0">ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH</a>(w)</td></tr>
+<tr class="separator:a0d461132eee8fb2a6e3082b9c11fb8f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ce59e10da6436524e7e23696e445681" id="r_a8ce59e10da6436524e7e23696e445681"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a8ce59e10da6436524e7e23696e445681">ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</a></td></tr>
+<tr class="separator:a8ce59e10da6436524e7e23696e445681"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20f4a75508d343fca0ce852dbe63f49d" id="r_a20f4a75508d343fca0ce852dbe63f49d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a20f4a75508d343fca0ce852dbe63f49d">ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</a></td></tr>
+<tr class="separator:a20f4a75508d343fca0ce852dbe63f49d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae75b3db9ea36ce47fba8ee96ce21ef60" id="r_ae75b3db9ea36ce47fba8ee96ce21ef60"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#ae75b3db9ea36ce47fba8ee96ce21ef60">ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN</a></td></tr>
+<tr class="separator:ae75b3db9ea36ce47fba8ee96ce21ef60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a621fafad9c0a6f3e67f82f18b2c1f7be" id="r_a621fafad9c0a6f3e67f82f18b2c1f7be"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a621fafad9c0a6f3e67f82f18b2c1f7be">ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END</a>&#160;&#160;&#160;<a class="el" href="config_8h.html#ac6da2970dff2ffdbe8cf135797c87935">ZEROERR_MSVC_SUPPRESS_WARNING_POP</a></td></tr>
+<tr class="separator:a621fafad9c0a6f3e67f82f18b2c1f7be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad842af2965462ec1b59ab0c4be8a6f5c" id="r_ad842af2965462ec1b59ab0c4be8a6f5c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a>&#160;&#160;&#160;    <a class="el" href="config_8h.html#aa203bb7083b9a626372cec4558af9a53">ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH</a>(&quot;-Wgnu-zero-variadic-macro-arguments&quot;)</td></tr>
+<tr class="separator:ad842af2965462ec1b59ab0c4be8a6f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a311b3789b8f8351421936a4462666971" id="r_a311b3789b8f8351421936a4462666971"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a>&#160;&#160;&#160;<a class="el" href="config_8h.html#a6e7b177578f47c4185cda4b03c9d913a">ZEROERR_CLANG_SUPPRESS_WARNING_POP</a></td></tr>
+<tr class="separator:a311b3789b8f8351421936a4462666971"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17cf36970a42be4db0a9774a5eabdaaa" id="r_a17cf36970a42be4db0a9774a5eabdaaa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a17cf36970a42be4db0a9774a5eabdaaa">ZEROERR_SUPPRESS_COMPARE</a></td></tr>
+<tr class="separator:a17cf36970a42be4db0a9774a5eabdaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26f514b2de5f4f9211e37b197654c52a" id="r_a26f514b2de5f4f9211e37b197654c52a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a26f514b2de5f4f9211e37b197654c52a">ZEROERR_SUPPRESS_COMPARE_POP</a></td></tr>
+<tr class="separator:a26f514b2de5f4f9211e37b197654c52a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a6e28def9ba92d7cdaf0243e889491a" id="r_a5a6e28def9ba92d7cdaf0243e889491a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="config_8h.html#a5a6e28def9ba92d7cdaf0243e889491a">ZEROERR_UNUSED</a>(x)&#160;&#160;&#160;x</td></tr>
+<tr class="separator:a5a6e28def9ba92d7cdaf0243e889491a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ac46d886204cc3b1c29b1d93efdda6190" name="ac46d886204cc3b1c29b1d93efdda6190"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac46d886204cc3b1c29b1d93efdda6190">&#9670;&#160;</a></span>_IS_EMPTY_CASE_0001</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define _IS_EMPTY_CASE_0001&#160;&#160;&#160;,</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae40fcf218cf9b8b5e3709758b97a1fe6" name="ae40fcf218cf9b8b5e3709758b97a1fe6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae40fcf218cf9b8b5e3709758b97a1fe6">&#9670;&#160;</a></span>_ZEROERR_ISEMPTY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define _ZEROERR_ISEMPTY</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_0, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_1, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_2, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_3&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;    <a class="el" href="config_8h.html#a1ac6db421ed6746be3b0b32a99033941">ZEROERR_HAS_COMMA</a>(<a class="el" href="config_8h.html#a6462f579e310213f362142691389fa55">ZEROERR_PASTE5</a>(_IS_EMPTY_CASE_, _0, _1, _2, _3))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af2df06655fd54b8bb67c95d14a8f1e82" name="af2df06655fd54b8bb67c95d14a8f1e82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2df06655fd54b8bb67c95d14a8f1e82">&#9670;&#160;</a></span>ZEROERR_ARG16</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ARG16</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_0, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_1, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_2, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_3, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_4, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_5, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_6, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_7, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_8, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_9, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_10, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_11, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_12, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_13, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_14, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_15, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;_15</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7661dcca8e113fba4f0e112c546e903b" name="a7661dcca8e113fba4f0e112c546e903b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7661dcca8e113fba4f0e112c546e903b">&#9670;&#160;</a></span>ZEROERR_CAT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CAT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">s&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ab8358933d4630dbcfc118ec79813c244">ZEROERR_CAT_IMPL</a>(x, s)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab8358933d4630dbcfc118ec79813c244" name="ab8358933d4630dbcfc118ec79813c244"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8358933d4630dbcfc118ec79813c244">&#9670;&#160;</a></span>ZEROERR_CAT_IMPL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CAT_IMPL</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">s1, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">s2&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;s1##s2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aab0a84b521ed26e1cfcaa9fe2546b1e4" name="aab0a84b521ed26e1cfcaa9fe2546b1e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab0a84b521ed26e1cfcaa9fe2546b1e4">&#9670;&#160;</a></span>ZEROERR_CLANG</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CLANG&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a523c11348fe8f8d78d31c3de3e424986" name="a523c11348fe8f8d78d31c3de3e424986"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a523c11348fe8f8d78d31c3de3e424986">&#9670;&#160;</a></span>ZEROERR_CLANG_SUPPRESS_WARNING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CLANG_SUPPRESS_WARNING</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">w</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6e7b177578f47c4185cda4b03c9d913a" name="a6e7b177578f47c4185cda4b03c9d913a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e7b177578f47c4185cda4b03c9d913a">&#9670;&#160;</a></span>ZEROERR_CLANG_SUPPRESS_WARNING_POP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CLANG_SUPPRESS_WARNING_POP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a13f2c85128e81b8449a7533810c30a40" name="a13f2c85128e81b8449a7533810c30a40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13f2c85128e81b8449a7533810c30a40">&#9670;&#160;</a></span>ZEROERR_CLANG_SUPPRESS_WARNING_PUSH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CLANG_SUPPRESS_WARNING_PUSH</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa203bb7083b9a626372cec4558af9a53" name="aa203bb7083b9a626372cec4558af9a53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa203bb7083b9a626372cec4558af9a53">&#9670;&#160;</a></span>ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">w</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a985b58f9d621236e64126f4a90fef13a" name="a985b58f9d621236e64126f4a90fef13a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a985b58f9d621236e64126f4a90fef13a">&#9670;&#160;</a></span>ZEROERR_COMPILER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_COMPILER</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">MAJOR, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">MINOR, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">PATCH&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;((MAJOR) * 10000000 + (MINOR) * 100000 + (PATCH))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab1803d7388ec7749b6f1ade456ecf821" name="ab1803d7388ec7749b6f1ade456ecf821"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1803d7388ec7749b6f1ade456ecf821">&#9670;&#160;</a></span>ZEROERR_CPLUSPLUS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CPLUSPLUS&#160;&#160;&#160;__cplusplus</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc7f79e4c14f27be7adb60f0f8ea3640" name="acc7f79e4c14f27be7adb60f0f8ea3640"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc7f79e4c14f27be7adb60f0f8ea3640">&#9670;&#160;</a></span>ZEROERR_EXPAND</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_EXPAND</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;x</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a38ab8a7622ce39e96f30b5204ebdd515" name="a38ab8a7622ce39e96f30b5204ebdd515"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38ab8a7622ce39e96f30b5204ebdd515">&#9670;&#160;</a></span>ZEROERR_FUNC_SCOPE_BEGIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_FUNC_SCOPE_BEGIN&#160;&#160;&#160;[&amp;]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2b44406d108c79cb596ab7ceafac449f" name="a2b44406d108c79cb596ab7ceafac449f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b44406d108c79cb596ab7ceafac449f">&#9670;&#160;</a></span>ZEROERR_FUNC_SCOPE_END</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_FUNC_SCOPE_END&#160;&#160;&#160;()</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a20de5f23a67f78b7b0c7aa8df559430a" name="a20de5f23a67f78b7b0c7aa8df559430a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20de5f23a67f78b7b0c7aa8df559430a">&#9670;&#160;</a></span>ZEROERR_FUNC_SCOPE_RET</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_FUNC_SCOPE_RET</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">v</td><td>)</td>
+          <td>&#160;&#160;&#160;return v</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a51c91dcb12a9c34c2e013ae2ad84ba0e" name="a51c91dcb12a9c34c2e013ae2ad84ba0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51c91dcb12a9c34c2e013ae2ad84ba0e">&#9670;&#160;</a></span>ZEROERR_GCC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_GCC&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a36d109ca1228348de302d15ba48203b4" name="a36d109ca1228348de302d15ba48203b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36d109ca1228348de302d15ba48203b4">&#9670;&#160;</a></span>ZEROERR_GCC_SUPPRESS_WARNING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_GCC_SUPPRESS_WARNING</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">w</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa34c7d6c5241309111e6607b87c6a603" name="aa34c7d6c5241309111e6607b87c6a603"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa34c7d6c5241309111e6607b87c6a603">&#9670;&#160;</a></span>ZEROERR_GCC_SUPPRESS_WARNING_POP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_GCC_SUPPRESS_WARNING_POP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a860fcdb10f56064375f6be8f3f070427" name="a860fcdb10f56064375f6be8f3f070427"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a860fcdb10f56064375f6be8f3f070427">&#9670;&#160;</a></span>ZEROERR_GCC_SUPPRESS_WARNING_PUSH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_GCC_SUPPRESS_WARNING_PUSH</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af786983dfa9be259c3d7a3abc365c176" name="af786983dfa9be259c3d7a3abc365c176"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af786983dfa9be259c3d7a3abc365c176">&#9670;&#160;</a></span>ZEROERR_GCC_SUPPRESS_WARNING_WITH_PUSH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_GCC_SUPPRESS_WARNING_WITH_PUSH</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">w</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1ac6db421ed6746be3b0b32a99033941" name="a1ac6db421ed6746be3b0b32a99033941"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ac6db421ed6746be3b0b32a99033941">&#9670;&#160;</a></span>ZEROERR_HAS_COMMA</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_HAS_COMMA</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;    <a class="el" href="config_8h.html#af2df06655fd54b8bb67c95d14a8f1e82">ZEROERR_ARG16</a>(__VA_ARGS__, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaedbb96512514160ec4f5a4bb500df4b" name="aaedbb96512514160ec4f5a4bb500df4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaedbb96512514160ec4f5a4bb500df4b">&#9670;&#160;</a></span>ZEROERR_ICC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ICC&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adaf6f0edcd554522d668ef8ab8d6ee63" name="adaf6f0edcd554522d668ef8ab8d6ee63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adaf6f0edcd554522d668ef8ab8d6ee63">&#9670;&#160;</a></span>ZEROERR_ISEMPTY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ISEMPTY</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code hl_define" href="config_8h.html#ae40fcf218cf9b8b5e3709758b97a1fe6">_ZEROERR_ISEMPTY</a>(<span class="comment">/* test if there is just one argument, eventually an empty                  \</span></div>
+<div class="line"><span class="comment">                one */</span>                                                                           \</div>
+<div class="line">                     <a class="code hl_define" href="config_8h.html#a1ac6db421ed6746be3b0b32a99033941">ZEROERR_HAS_COMMA</a>(__VA_ARGS__), <span class="comment">/* test if ZEROERR_TRIGGER_PARENTHESIS_     \</span></div>
+<div class="line"><span class="comment">                                                together with the argument adds a comma */</span>       \</div>
+<div class="line">                     <a class="code hl_define" href="config_8h.html#a1ac6db421ed6746be3b0b32a99033941">ZEROERR_HAS_COMMA</a>(<a class="code hl_define" href="config_8h.html#a7bb1ddd0d6342ce2b05edc8f9e0a58b8">ZEROERR_TRIGGER_PARENTHESIS_</a>                              \</div>
+<div class="line">                                           __VA_ARGS__), <span class="comment">/* test if the argument together with   \</span></div>
+<div class="line"><span class="comment">                                             a parenthesis adds a comma */</span>                       \</div>
+<div class="line">                     <a class="code hl_define" href="config_8h.html#a1ac6db421ed6746be3b0b32a99033941">ZEROERR_HAS_COMMA</a>(__VA_ARGS__(                                              \</div>
+<div class="line">                         <span class="comment">/*empty*/</span>)), <span class="comment">/* test if placing it between ZEROERR_TRIGGER_PARENTHESIS_ \</span></div>
+<div class="line"><span class="comment">                                         and the parenthesis adds a comma */</span>                     \</div>
+<div class="line">                     <a class="code hl_define" href="config_8h.html#a1ac6db421ed6746be3b0b32a99033941">ZEROERR_HAS_COMMA</a>(<a class="code hl_define" href="config_8h.html#a7bb1ddd0d6342ce2b05edc8f9e0a58b8">ZEROERR_TRIGGER_PARENTHESIS_</a> __VA_ARGS__(<span class="comment">/*empty*/</span>)))</div>
+<div class="ttc" id="aconfig_8h_html_a1ac6db421ed6746be3b0b32a99033941"><div class="ttname"><a href="config_8h.html#a1ac6db421ed6746be3b0b32a99033941">ZEROERR_HAS_COMMA</a></div><div class="ttdeci">#define ZEROERR_HAS_COMMA(...)</div><div class="ttdef"><b>Definition</b> config.h:81</div></div>
+<div class="ttc" id="aconfig_8h_html_a7bb1ddd0d6342ce2b05edc8f9e0a58b8"><div class="ttname"><a href="config_8h.html#a7bb1ddd0d6342ce2b05edc8f9e0a58b8">ZEROERR_TRIGGER_PARENTHESIS_</a></div><div class="ttdeci">#define ZEROERR_TRIGGER_PARENTHESIS_(...)</div><div class="ttdef"><b>Definition</b> config.h:83</div></div>
+<div class="ttc" id="aconfig_8h_html_ae40fcf218cf9b8b5e3709758b97a1fe6"><div class="ttname"><a href="config_8h.html#ae40fcf218cf9b8b5e3709758b97a1fe6">_ZEROERR_ISEMPTY</a></div><div class="ttdeci">#define _ZEROERR_ISEMPTY(_0, _1, _2, _3)</div><div class="ttdef"><b>Definition</b> config.h:95</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ae75b3db9ea36ce47fba8ee96ce21ef60" name="ae75b3db9ea36ce47fba8ee96ce21ef60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae75b3db9ea36ce47fba8ee96ce21ef60">&#9670;&#160;</a></span>ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_BEGIN</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING_PUSH                                                             \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4548) <span class="comment">/* before comma no effect; expected side - effect */</span>       \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4265) <span class="comment">/* virtual functions, but destructor is not virtual */</span>     \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4986) <span class="comment">/* exception specification does not match previous */</span>      \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4350) <span class="comment">/* &#39;member1&#39; called instead of &#39;member2&#39; */</span>                \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4668) <span class="comment">/* not defined as a preprocessor macro */</span>                  \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4365) <span class="comment">/* signed/unsigned mismatch */</span>                             \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4774) <span class="comment">/* format string not a string literal */</span>                   \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4820) <span class="comment">/* padding */</span>                                              \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4625) <span class="comment">/* copy constructor was implicitly deleted */</span>              \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4626) <span class="comment">/* assignment operator was implicitly deleted */</span>           \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(5027) <span class="comment">/* move assignment operator implicitly deleted */</span>          \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(5026) <span class="comment">/* move constructor was implicitly deleted */</span>              \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4623) <span class="comment">/* default constructor was implicitly deleted */</span>           \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(5039) <span class="comment">/* pointer to pot. throwing function passed to extern C */</span> \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(5045) <span class="comment">/* Spectre mitigation for memory load */</span>                   \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(5105) <span class="comment">/* macro producing &#39;defined&#39; has undefined behavior */</span>     \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4738) <span class="comment">/* storing float result in memory, loss of performance */</span>  \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(5262) <span class="comment">/* implicit fall-through */</span></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a621fafad9c0a6f3e67f82f18b2c1f7be" name="a621fafad9c0a6f3e67f82f18b2c1f7be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a621fafad9c0a6f3e67f82f18b2c1f7be">&#9670;&#160;</a></span>ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END&#160;&#160;&#160;<a class="el" href="config_8h.html#ac6da2970dff2ffdbe8cf135797c87935">ZEROERR_MSVC_SUPPRESS_WARNING_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a54fceb074f485e7b4d5cc31b92f27442" name="a54fceb074f485e7b4d5cc31b92f27442"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54fceb074f485e7b4d5cc31b92f27442">&#9670;&#160;</a></span>ZEROERR_MSVC</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_MSVC&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8e08e68d050a487f8db5c814dd14f21e" name="a8e08e68d050a487f8db5c814dd14f21e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e08e68d050a487f8db5c814dd14f21e">&#9670;&#160;</a></span>ZEROERR_MSVC_SUPPRESS_WARNING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_MSVC_SUPPRESS_WARNING</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">w</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac6da2970dff2ffdbe8cf135797c87935" name="ac6da2970dff2ffdbe8cf135797c87935"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6da2970dff2ffdbe8cf135797c87935">&#9670;&#160;</a></span>ZEROERR_MSVC_SUPPRESS_WARNING_POP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_MSVC_SUPPRESS_WARNING_POP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a203e0d278c71370e7398eb1672897882" name="a203e0d278c71370e7398eb1672897882"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a203e0d278c71370e7398eb1672897882">&#9670;&#160;</a></span>ZEROERR_MSVC_SUPPRESS_WARNING_PUSH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_MSVC_SUPPRESS_WARNING_PUSH</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0d461132eee8fb2a6e3082b9c11fb8f0" name="a0d461132eee8fb2a6e3082b9c11fb8f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d461132eee8fb2a6e3082b9c11fb8f0">&#9670;&#160;</a></span>ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">w</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a265322b7c87fdecfc868945ba0f456f0" name="a265322b7c87fdecfc868945ba0f456f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a265322b7c87fdecfc868945ba0f456f0">&#9670;&#160;</a></span>ZEROERR_NAMEGEN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_NAMEGEN</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#a7661dcca8e113fba4f0e112c546e903b">ZEROERR_CAT</a>(x, __LINE__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af1ffb195672c1d5bca68dcc6753a8e13" name="af1ffb195672c1d5bca68dcc6753a8e13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1ffb195672c1d5bca68dcc6753a8e13">&#9670;&#160;</a></span>ZEROERR_OS_UNKNOWN</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_OS_UNKNOWN</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6462f579e310213f362142691389fa55" name="a6462f579e310213f362142691389fa55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6462f579e310213f362142691389fa55">&#9670;&#160;</a></span>ZEROERR_PASTE5</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_PASTE5</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_0, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_1, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_2, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_3, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_4&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;_0##_1##_2##_3##_4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9631cf5110aad37d16be1a2d969ea192" name="a9631cf5110aad37d16be1a2d969ea192"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9631cf5110aad37d16be1a2d969ea192">&#9670;&#160;</a></span>ZEROERR_STR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_STR</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;#x</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a20f4a75508d343fca0ce852dbe63f49d" name="a20f4a75508d343fca0ce852dbe63f49d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20f4a75508d343fca0ce852dbe63f49d">&#9670;&#160;</a></span>ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    ZEROERR_CLANG_SUPPRESS_WARNING_POP       \</div>
+<div class="line">    ZEROERR_GCC_SUPPRESS_WARNING_POP         \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING_POP</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a8ce59e10da6436524e7e23696e445681" name="a8ce59e10da6436524e7e23696e445681"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ce59e10da6436524e7e23696e445681">&#9670;&#160;</a></span>ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a17cf36970a42be4db0a9774a5eabdaaa" name="a17cf36970a42be4db0a9774a5eabdaaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17cf36970a42be4db0a9774a5eabdaaa">&#9670;&#160;</a></span>ZEROERR_SUPPRESS_COMPARE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_SUPPRESS_COMPARE</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    ZEROERR_CLANG_SUPPRESS_WARNING_PUSH                                   \</div>
+<div class="line">    ZEROERR_CLANG_SUPPRESS_WARNING(<span class="stringliteral">&quot;-Wsign-conversion&quot;</span>)                   \</div>
+<div class="line">    ZEROERR_CLANG_SUPPRESS_WARNING(<span class="stringliteral">&quot;-Wsign-compare&quot;</span>)                      \</div>
+<div class="line">    ZEROERR_CLANG_SUPPRESS_WARNING(<span class="stringliteral">&quot;-Wgnu-zero-variadic-macro-arguments&quot;</span>) \</div>
+<div class="line">    ZEROERR_GCC_SUPPRESS_WARNING_PUSH                                     \</div>
+<div class="line">    ZEROERR_GCC_SUPPRESS_WARNING(<span class="stringliteral">&quot;-Wsign-conversion&quot;</span>)                     \</div>
+<div class="line">    ZEROERR_GCC_SUPPRESS_WARNING(<span class="stringliteral">&quot;-Wsign-compare&quot;</span>)                        \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING_PUSH                                    \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4388)                                   \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4389)                                   \</div>
+<div class="line">    ZEROERR_MSVC_SUPPRESS_WARNING(4018)</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a26f514b2de5f4f9211e37b197654c52a" name="a26f514b2de5f4f9211e37b197654c52a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26f514b2de5f4f9211e37b197654c52a">&#9670;&#160;</a></span>ZEROERR_SUPPRESS_COMPARE_POP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_SUPPRESS_COMPARE_POP</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code hl_namespace" href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html">ZEROERR_CLANG_SUPPRESS_WARNING_POP</a> ZEROERR_GCC_SUPPRESS_WARNING_POP \</div>
+<div class="line">        ZEROERR_MSVC_SUPPRESS_WARNING_POP</div>
+<div class="ttc" id="anamespaceZEROERR__CLANG__SUPPRESS__WARNING__POP_html"><div class="ttname"><a href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html">ZEROERR_CLANG_SUPPRESS_WARNING_POP</a></div><div class="ttdef"><b>Definition</b> assert.h:218</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ad842af2965462ec1b59ab0c4be8a6f5c" name="ad842af2965462ec1b59ab0c4be8a6f5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad842af2965462ec1b59ab0c4be8a6f5c">&#9670;&#160;</a></span>ZEROERR_SUPPRESS_VARIADIC_MACRO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_SUPPRESS_VARIADIC_MACRO&#160;&#160;&#160;    <a class="el" href="config_8h.html#aa203bb7083b9a626372cec4558af9a53">ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH</a>(&quot;-Wgnu-zero-variadic-macro-arguments&quot;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a311b3789b8f8351421936a4462666971" name="a311b3789b8f8351421936a4462666971"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a311b3789b8f8351421936a4462666971">&#9670;&#160;</a></span>ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_SUPPRESS_VARIADIC_MACRO_POP&#160;&#160;&#160;<a class="el" href="config_8h.html#a6e7b177578f47c4185cda4b03c9d913a">ZEROERR_CLANG_SUPPRESS_WARNING_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7bb1ddd0d6342ce2b05edc8f9e0a58b8" name="a7bb1ddd0d6342ce2b05edc8f9e0a58b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bb1ddd0d6342ce2b05edc8f9e0a58b8">&#9670;&#160;</a></span>ZEROERR_TRIGGER_PARENTHESIS_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_TRIGGER_PARENTHESIS_</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;,</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5a6e28def9ba92d7cdaf0243e889491a" name="a5a6e28def9ba92d7cdaf0243e889491a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a6e28def9ba92d7cdaf0243e889491a">&#9670;&#160;</a></span>ZEROERR_UNUSED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_UNUSED</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;x</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Macro to suppress unused variable/parameter warnings</p>
+<p>This macro can be used to mark variables or parameters as intentionally unused while maintaining cross-compiler compatibility. It handles different compiler-specific attributes and warning suppressions:</p>
+<ul>
+<li>For Clang/GCC: Uses <b>attribute</b>((unused))</li>
+<li>For LCLINT: Uses @unused@ comment annotation</li>
+<li>For MSVC: Suppresses warning C4100 (unreferenced formal parameter)</li>
+<li>For other compilers: No special handling</li>
+</ul>
+<p>Usage example: void foo(ZEROERR_UNUSED(int x)) { // x is marked as intentionally unused } </p>
+
+</div>
+</div>
+<a id="ac571ec1ca1521e33fb2fb5cfb262dc08" name="ac571ec1ca1521e33fb2fb5cfb262dc08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac571ec1ca1521e33fb2fb5cfb262dc08">&#9670;&#160;</a></span>ZEROERR_USE_SHORT_LOG_MACRO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_USE_SHORT_LOG_MACRO</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2af5e97adecc47a4b02f346f0b6e4408" name="a2af5e97adecc47a4b02f346f0b6e4408"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2af5e97adecc47a4b02f346f0b6e4408">&#9670;&#160;</a></span>ZEROERR_VERSION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_VERSION&#160;&#160;&#160;    (<a class="el" href="config_8h.html#a6367d53bb4afe81928e5dc0bd791d63a">ZEROERR_VERSION_MAJOR</a> * 10000 + <a class="el" href="config_8h.html#aa96eece0b2da5d3fd8531f32e3acc3cd">ZEROERR_VERSION_MINOR</a> * 100 + <a class="el" href="config_8h.html#ad9504b6ed2f9b49886f6fea5d88231e6">ZEROERR_VERSION_PATCH</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6367d53bb4afe81928e5dc0bd791d63a" name="a6367d53bb4afe81928e5dc0bd791d63a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6367d53bb4afe81928e5dc0bd791d63a">&#9670;&#160;</a></span>ZEROERR_VERSION_MAJOR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_VERSION_MAJOR&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa96eece0b2da5d3fd8531f32e3acc3cd" name="aa96eece0b2da5d3fd8531f32e3acc3cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa96eece0b2da5d3fd8531f32e3acc3cd">&#9670;&#160;</a></span>ZEROERR_VERSION_MINOR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_VERSION_MINOR&#160;&#160;&#160;3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad9504b6ed2f9b49886f6fea5d88231e6" name="ad9504b6ed2f9b49886f6fea5d88231e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9504b6ed2f9b49886f6fea5d88231e6">&#9670;&#160;</a></span>ZEROERR_VERSION_PATCH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_VERSION_PATCH&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa5076ca27114706f049099540e251f7f" name="aa5076ca27114706f049099540e251f7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5076ca27114706f049099540e251f7f">&#9670;&#160;</a></span>ZEROERR_VERSION_STR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_VERSION_STR&#160;&#160;&#160;    <a class="el" href="config_8h.html#ad8ce879048f11a15cbf0743406b8792b">ZEROERR_VERSION_STR_BUILDER</a>(<a class="el" href="config_8h.html#a6367d53bb4afe81928e5dc0bd791d63a">ZEROERR_VERSION_MAJOR</a>, <a class="el" href="config_8h.html#aa96eece0b2da5d3fd8531f32e3acc3cd">ZEROERR_VERSION_MINOR</a>, <a class="el" href="config_8h.html#ad9504b6ed2f9b49886f6fea5d88231e6">ZEROERR_VERSION_PATCH</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad8ce879048f11a15cbf0743406b8792b" name="ad8ce879048f11a15cbf0743406b8792b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8ce879048f11a15cbf0743406b8792b">&#9670;&#160;</a></span>ZEROERR_VERSION_STR_BUILDER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_VERSION_STR_BUILDER</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">a, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">b, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">c&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#a9631cf5110aad37d16be1a2d969ea192">ZEROERR_STR</a>(a) &quot;.&quot; <a class="el" href="config_8h.html#a9631cf5110aad37d16be1a2d969ea192">ZEROERR_STR</a>(b) &quot;.&quot; <a class="el" href="config_8h.html#a9631cf5110aad37d16be1a2d969ea192">ZEROERR_STR</a>(c)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a class="el" href="dir_fe7eac5579a524367d6d162a6d748259.html">internal</a></li><li class="navelem"><a class="el" href="config_8h.html">config.h</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

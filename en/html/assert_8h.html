@@ -1,0 +1,2039 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/assert.h File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('assert_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">assert.h File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="config_8h_source.html">zeroerr/internal/config.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="format_8h_source.html">zeroerr/format.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="debugbreak_8h_source.html">zeroerr/internal/debugbreak.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="decomposition_8h_source.html">zeroerr/internal/decomposition.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="print_8h_source.html">zeroerr/print.h</a>&quot;</code><br />
+<code>#include &lt;cstdint&gt;</code><br />
+<code>#include &lt;exception&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for assert.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="assert_8h__incl.png" border="0" usemap="#ainclude_2zeroerr_2assert_8h" alt=""/></div>
+<map name="ainclude_2zeroerr_2assert_8h" id="ainclude_2zeroerr_2assert_8h">
+<area shape="rect" title=" " alt="" coords="645,5,819,31"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="689,372,866,397"/>
+<area shape="poly" title=" " alt="" coords="645,25,571,30,496,41,431,57,407,68,392,80,388,90,392,103,404,151,419,186,443,216,479,249,521,276,557,291,596,303,644,322,740,364,738,369,642,326,594,308,555,296,518,281,476,253,439,220,415,189,399,152,387,105,383,90,387,77,404,63,429,52,495,35,571,25,644,19"/>
+<area shape="rect" href="format_8h.html" title=" " alt="" coords="115,152,243,177"/>
+<area shape="poly" title=" " alt="" coords="645,27,503,45,424,60,346,81,271,113,209,147,207,142,269,108,344,76,422,55,502,40,644,22"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="489,225,604,251"/>
+<area shape="poly" title=" " alt="" coords="723,32,682,80,665,107,653,130,641,153,621,179,576,219,573,215,617,176,636,150,648,128,660,105,678,77,719,29"/>
+<area shape="rect" href="debugbreak_8h.html" title=" " alt="" coords="402,79,617,104"/>
+<area shape="poly" title=" " alt="" coords="697,33,559,77,557,72,695,28"/>
+<area shape="rect" href="decomposition_8h.html" title=" " alt="" coords="692,79,927,104"/>
+<area shape="poly" title=" " alt="" coords="746,29,788,67,785,71,743,33"/>
+<area shape="rect" title=" " alt="" coords="911,225,991,251"/>
+<area shape="poly" title=" " alt="" coords="820,20,853,26,885,37,916,54,941,77,958,110,964,147,964,182,959,212,954,212,958,182,959,147,953,112,937,80,912,58,883,42,851,31,819,25"/>
+<area shape="rect" title=" " alt="" coords="1001,79,1068,104"/>
+<area shape="poly" title=" " alt="" coords="781,28,989,77,987,82,780,33"/>
+<area shape="rect" title=" " alt="" coords="1093,79,1179,104"/>
+<area shape="poly" title=" " alt="" coords="803,28,1080,76,1079,81,802,33"/>
+<area shape="poly" title=" " alt="" coords="238,175,476,220,475,226,237,180"/>
+<area shape="rect" title=" " alt="" coords="88,372,163,397"/>
+<area shape="poly" title=" " alt="" coords="178,178,134,359,129,358,173,177"/>
+<area shape="rect" title=" " alt="" coords="5,372,64,397"/>
+<area shape="poly" title=" " alt="" coords="173,179,52,362,48,359,169,176"/>
+<area shape="poly" title=" " alt="" coords="567,249,748,362,745,367,564,253"/>
+<area shape="rect" href="color_8h.html" title=" " alt="" coords="721,299,836,324"/>
+<area shape="poly" title=" " alt="" coords="585,248,729,292,727,297,583,253"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="218,299,419,324"/>
+<area shape="poly" title=" " alt="" coords="511,253,370,297,368,292,509,248"/>
+<area shape="poly" title=" " alt="" coords="781,324,780,359,775,358,776,324"/>
+<area shape="poly" title=" " alt="" coords="393,321,690,367,690,373,392,327"/>
+<area shape="rect" title=" " alt="" coords="289,372,365,397"/>
+<area shape="poly" title=" " alt="" coords="323,324,327,358,321,359,317,325"/>
+<area shape="poly" title=" " alt="" coords="289,327,170,370,169,365,287,322"/>
+<area shape="poly" title=" " alt="" coords="271,327,78,374,77,369,270,322"/>
+<area shape="rect" title=" " alt="" coords="607,372,662,397"/>
+<area shape="poly" title=" " alt="" coords="379,321,595,369,594,374,377,327"/>
+<area shape="rect" title=" " alt="" coords="389,372,481,397"/>
+<area shape="poly" title=" " alt="" coords="339,322,405,362,403,367,336,326"/>
+<area shape="rect" title=" " alt="" coords="505,372,583,397"/>
+<area shape="poly" title=" " alt="" coords="356,321,495,365,494,370,354,327"/>
+<area shape="rect" title=" " alt="" coords="187,372,264,397"/>
+<area shape="poly" title=" " alt="" coords="305,326,253,366,250,361,302,322"/>
+<area shape="rect" title=" " alt="" coords="435,152,509,177"/>
+<area shape="poly" title=" " alt="" coords="506,106,487,141,482,139,501,103"/>
+<area shape="rect" title=" " alt="" coords="533,152,606,177"/>
+<area shape="poly" title=" " alt="" coords="521,103,553,140,549,143,517,106"/>
+<area shape="poly" title=" " alt="" coords="849,102,908,124,968,157,992,177,1008,199,1013,225,1005,252,989,275,971,295,927,328,879,353,835,370,833,365,877,348,924,324,967,291,985,271,1000,250,1008,225,1003,202,988,180,965,161,906,129,847,107"/>
+<area shape="poly" title=" " alt="" coords="794,106,741,140,675,180,587,222,585,217,672,175,739,136,791,102"/>
+<area shape="rect" href="dbg_8h.html" title=" " alt="" coords="750,152,858,177"/>
+<area shape="poly" title=" " alt="" coords="811,105,809,139,803,138,806,104"/>
+<area shape="poly" title=" " alt="" coords="815,176,832,203,849,241,858,283,857,304,850,325,834,348,813,366,809,362,830,345,846,323,852,303,853,283,844,242,827,206,810,179"/>
+<area shape="poly" title=" " alt="" coords="763,180,602,224,601,219,762,175"/>
+<area shape="poly" title=" " alt="" coords="805,178,786,285,780,285,799,177"/>
+<area shape="poly" title=" " alt="" coords="797,179,654,362,650,359,793,176"/>
+<area shape="poly" title=" " alt="" coords="829,175,916,217,913,222,826,180"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="assert_8h__dep__incl.png" border="0" usemap="#ainclude_2zeroerr_2assert_8hdep" alt=""/></div>
+<map name="ainclude_2zeroerr_2assert_8hdep" id="ainclude_2zeroerr_2assert_8hdep">
+<area shape="rect" title=" " alt="" coords="298,5,473,31"/>
+<area shape="rect" href="zeroerr_8h.html" title=" " alt="" coords="5,79,136,104"/>
+<area shape="poly" title=" " alt="" coords="322,36,122,81,121,76,321,31"/>
+<area shape="rect" href="fuzztest_8cpp.html" title=" " alt="" coords="161,79,285,104"/>
+<area shape="poly" title=" " alt="" coords="348,39,250,81,248,76,346,34"/>
+<area shape="rect" href="serialization_8cpp.html" title=" " alt="" coords="309,79,461,104"/>
+<area shape="poly" title=" " alt="" coords="388,44,388,79,383,79,383,44"/>
+<area shape="rect" href="table_8cpp.html" title=" " alt="" coords="486,79,591,104"/>
+<area shape="poly" title=" " alt="" coords="423,34,515,76,512,81,421,39"/>
+<area shape="rect" href="unittest_8cpp.html" title=" " alt="" coords="616,79,739,104"/>
+<area shape="poly" title=" " alt="" coords="446,31,631,76,629,81,445,36"/>
+</map>
+</div>
+</div>
+<p><a href="assert_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1assert__info.html">zeroerr::assert_info</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">This is a one-byte assert info struct, which is used to collect the meta info of an assertion.  <a href="structzeroerr_1_1assert__info.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1AssertionData.html">zeroerr::AssertionData</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structzeroerr_1_1AssertionData.html" title="AssertionData is a struct that contains all the information of an assertion. It will be thrown as an ...">AssertionData</a> is a struct that contains all the information of an assertion. It will be thrown as an exception when the assertion failed.  <a href="structzeroerr_1_1AssertionData.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01true_01_4.html">zeroerr::detail::context_helper&lt; T, true &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01false_01_4.html">zeroerr::detail::context_helper&lt; T, false &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP" id="r_namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html">ZEROERR_CLANG_SUPPRESS_WARNING_POP</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacezeroerr" id="r_namespacezeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacezeroerr_1_1detail" id="r_namespacezeroerr_1_1detail"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html">zeroerr::detail</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a2ea139063c39f81539b846fd0748808e" id="r_a2ea139063c39f81539b846fd0748808e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a2ea139063c39f81539b846fd0748808e">ZEROERR_G_CONTEXT_SCOPE</a>(x)</td></tr>
+<tr class="separator:a2ea139063c39f81539b846fd0748808e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab35c6dd6374f18abbb4fb143cee2baf8" id="r_ab35c6dd6374f18abbb4fb143cee2baf8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ab35c6dd6374f18abbb4fb143cee2baf8">ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER</a>(cond,  level, ...)</td></tr>
+<tr class="memdesc:ab35c6dd6374f18abbb4fb143cee2baf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default printer for assertion messages.  <br /></td></tr>
+<tr class="separator:ab35c6dd6374f18abbb4fb143cee2baf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f50ca5b15515619b9bab2f23caecbbb" id="r_a4f50ca5b15515619b9bab2f23caecbbb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a4f50ca5b15515619b9bab2f23caecbbb">ZEROERR_PRINT_ASSERT</a>(cond,  level,  pattern, ...)</td></tr>
+<tr class="separator:a4f50ca5b15515619b9bab2f23caecbbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabe80ed658d9e8d3cd9256cc54bdbba5" id="r_aabe80ed658d9e8d3cd9256cc54bdbba5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond,  level,  expect_throw,  is_false, ...)</td></tr>
+<tr class="separator:aabe80ed658d9e8d3cd9256cc54bdbba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f634a16270a067f621be965248c4bdc" id="r_a7f634a16270a067f621be965248c4bdc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs,  op,  rhs,  level,  expect_throw,  is_false, ...)</td></tr>
+<tr class="separator:a7f634a16270a067f621be965248c4bdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e3909f9959aef04e5b9e032c2788536" id="r_a5e3909f9959aef04e5b9e032c2788536"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a5e3909f9959aef04e5b9e032c2788536">ZEROERR_CHECK</a>(cond, ...)&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__))</td></tr>
+<tr class="separator:a5e3909f9959aef04e5b9e032c2788536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a63a912cb5331d1ac8e5c2e51f46a48" id="r_a5a63a912cb5331d1ac8e5c2e51f46a48"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a5a63a912cb5331d1ac8e5c2e51f46a48">ZEROERR_CHECK_NOT</a>(cond, ...)&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, true, __VA_ARGS__))</td></tr>
+<tr class="separator:a5a63a912cb5331d1ac8e5c2e51f46a48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9ab50050c74ddebc3fb4ff3fda24dee" id="r_ab9ab50050c74ddebc3fb4ff3fda24dee"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ab9ab50050c74ddebc3fb4ff3fda24dee">ZEROERR_CHECK_THROWS</a>(cond, ...)&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, throws, false, __VA_ARGS__))</td></tr>
+<tr class="separator:ab9ab50050c74ddebc3fb4ff3fda24dee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fd494d1b6c7b8573a075b955e9d5e8e" id="r_a7fd494d1b6c7b8573a075b955e9d5e8e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a7fd494d1b6c7b8573a075b955e9d5e8e">ZEROERR_REQUIRE</a>(cond, ...)&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__))</td></tr>
+<tr class="separator:a7fd494d1b6c7b8573a075b955e9d5e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af88fbf9ba9a91b7f91f803a6a8ce9928" id="r_af88fbf9ba9a91b7f91f803a6a8ce9928"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#af88fbf9ba9a91b7f91f803a6a8ce9928">ZEROERR_REQUIRE_NOT</a>(cond, ...)&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, true, __VA_ARGS__))</td></tr>
+<tr class="separator:af88fbf9ba9a91b7f91f803a6a8ce9928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93f680d8de051323b7bea047a3e625d5" id="r_a93f680d8de051323b7bea047a3e625d5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a93f680d8de051323b7bea047a3e625d5">ZEROERR_REQUIRE_THROWS</a>(cond, ...)&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, throws, false, __VA_ARGS__))</td></tr>
+<tr class="separator:a93f680d8de051323b7bea047a3e625d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2fc1eeab31e9b63cd268600e9f5e87a" id="r_af2fc1eeab31e9b63cd268600e9f5e87a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#af2fc1eeab31e9b63cd268600e9f5e87a">ZEROERR_ASSERT</a>(cond, ...)&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__))</td></tr>
+<tr class="separator:af2fc1eeab31e9b63cd268600e9f5e87a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67675b50a78f0e33b305de59b8c110d6" id="r_a67675b50a78f0e33b305de59b8c110d6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a67675b50a78f0e33b305de59b8c110d6">ZEROERR_ASSERT_NOT</a>(cond, ...)&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, true, __VA_ARGS__))</td></tr>
+<tr class="separator:a67675b50a78f0e33b305de59b8c110d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3c85e099286e555598adf76c9530caa" id="r_ad3c85e099286e555598adf76c9530caa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ad3c85e099286e555598adf76c9530caa">ZEROERR_ASSERT_THROWS</a>(cond, ...)&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, throws, false, __VA_ARGS__))</td></tr>
+<tr class="separator:ad3c85e099286e555598adf76c9530caa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a836cca6b6ed3a1706353f6d1bca0935f" id="r_a836cca6b6ed3a1706353f6d1bca0935f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a836cca6b6ed3a1706353f6d1bca0935f">CHECK</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a5e3909f9959aef04e5b9e032c2788536">ZEROERR_CHECK</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a836cca6b6ed3a1706353f6d1bca0935f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ec9283e74ba86d87f053cdc75cc5b08" id="r_a7ec9283e74ba86d87f053cdc75cc5b08"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a7ec9283e74ba86d87f053cdc75cc5b08">CHECK_NOT</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a5a63a912cb5331d1ac8e5c2e51f46a48">ZEROERR_CHECK_NOT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a7ec9283e74ba86d87f053cdc75cc5b08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c646dfe831e596b59073014c1c8b9e5" id="r_a5c646dfe831e596b59073014c1c8b9e5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a5c646dfe831e596b59073014c1c8b9e5">CHECK_THROWS</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ab9ab50050c74ddebc3fb4ff3fda24dee">ZEROERR_CHECK_THROWS</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a5c646dfe831e596b59073014c1c8b9e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad57835ba8f1bb419a865ada6bd011a85" id="r_ad57835ba8f1bb419a865ada6bd011a85"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ad57835ba8f1bb419a865ada6bd011a85">REQUIRE</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a7fd494d1b6c7b8573a075b955e9d5e8e">ZEROERR_REQUIRE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:ad57835ba8f1bb419a865ada6bd011a85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79af081174f0dfed2726914a0e6ebf2e" id="r_a79af081174f0dfed2726914a0e6ebf2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a79af081174f0dfed2726914a0e6ebf2e">REQUIRE_NOT</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#af88fbf9ba9a91b7f91f803a6a8ce9928">ZEROERR_REQUIRE_NOT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a79af081174f0dfed2726914a0e6ebf2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3c33faa1d31a2bb0811dac74b994e3e" id="r_ae3c33faa1d31a2bb0811dac74b994e3e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ae3c33faa1d31a2bb0811dac74b994e3e">REQUIRE_THROWS</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a93f680d8de051323b7bea047a3e625d5">ZEROERR_REQUIRE_THROWS</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:ae3c33faa1d31a2bb0811dac74b994e3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a821326052e3e2bf1fb2d678e9e9a6004" id="r_a821326052e3e2bf1fb2d678e9e9a6004"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a821326052e3e2bf1fb2d678e9e9a6004">ASSERT</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#af2fc1eeab31e9b63cd268600e9f5e87a">ZEROERR_ASSERT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a821326052e3e2bf1fb2d678e9e9a6004"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3fb0f86f027e12131ef41df7119b280" id="r_ac3fb0f86f027e12131ef41df7119b280"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ac3fb0f86f027e12131ef41df7119b280">ASSERT_NOT</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a67675b50a78f0e33b305de59b8c110d6">ZEROERR_ASSERT_NOT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:ac3fb0f86f027e12131ef41df7119b280"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c87b7f27958c6b7bc8a555c6cc430e5" id="r_a4c87b7f27958c6b7bc8a555c6cc430e5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a4c87b7f27958c6b7bc8a555c6cc430e5">ASSERT_THROWS</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ad3c85e099286e555598adf76c9530caa">ZEROERR_ASSERT_THROWS</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a4c87b7f27958c6b7bc8a555c6cc430e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9fb0e99a0590e280112cf3aae5948d6" id="r_ad9fb0e99a0590e280112cf3aae5948d6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ad9fb0e99a0590e280112cf3aae5948d6">ZEROERR_CHECK_EQ</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, ==, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:ad9fb0e99a0590e280112cf3aae5948d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47a266e86bac5e3f3ce5713d975f012b" id="r_a47a266e86bac5e3f3ce5713d975f012b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a47a266e86bac5e3f3ce5713d975f012b">ZEROERR_CHECK_NE</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, !=, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:a47a266e86bac5e3f3ce5713d975f012b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9737c41b87b7ffa6d076f8cf10fbb77a" id="r_a9737c41b87b7ffa6d076f8cf10fbb77a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a9737c41b87b7ffa6d076f8cf10fbb77a">ZEROERR_CHECK_LT</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:a9737c41b87b7ffa6d076f8cf10fbb77a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac52bbbe5223626bd745bbfdc96b3a37f" id="r_ac52bbbe5223626bd745bbfdc96b3a37f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ac52bbbe5223626bd745bbfdc96b3a37f">ZEROERR_CHECK_LE</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;=, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:ac52bbbe5223626bd745bbfdc96b3a37f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed0cf391598eabf7cdd2eddd81d2b52d" id="r_aed0cf391598eabf7cdd2eddd81d2b52d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#aed0cf391598eabf7cdd2eddd81d2b52d">ZEROERR_CHECK_GT</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:aed0cf391598eabf7cdd2eddd81d2b52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ed1bf5d08bfe5c4bbf39b656e641cb4" id="r_a4ed1bf5d08bfe5c4bbf39b656e641cb4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a4ed1bf5d08bfe5c4bbf39b656e641cb4">ZEROERR_CHECK_GE</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;=, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:a4ed1bf5d08bfe5c4bbf39b656e641cb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2204d46d78c684a183f788998c524ee7" id="r_a2204d46d78c684a183f788998c524ee7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a2204d46d78c684a183f788998c524ee7">ZEROERR_REQUIRE_EQ</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, ==, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:a2204d46d78c684a183f788998c524ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec2a6da41891e643986006b173d1a41e" id="r_aec2a6da41891e643986006b173d1a41e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#aec2a6da41891e643986006b173d1a41e">ZEROERR_REQUIRE_NE</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, !=, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:aec2a6da41891e643986006b173d1a41e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a348e3043988d1b004149527a242699e5" id="r_a348e3043988d1b004149527a242699e5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a348e3043988d1b004149527a242699e5">ZEROERR_REQUIRE_LT</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:a348e3043988d1b004149527a242699e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab138d0ebd706e551b871e027579dc673" id="r_ab138d0ebd706e551b871e027579dc673"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ab138d0ebd706e551b871e027579dc673">ZEROERR_REQUIRE_LE</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;=, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:ab138d0ebd706e551b871e027579dc673"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af956e8f4095103cd0c4d40153ba37083" id="r_af956e8f4095103cd0c4d40153ba37083"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#af956e8f4095103cd0c4d40153ba37083">ZEROERR_REQUIRE_GT</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:af956e8f4095103cd0c4d40153ba37083"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad43954a75c469e07fe255a23bf7dd254" id="r_ad43954a75c469e07fe255a23bf7dd254"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ad43954a75c469e07fe255a23bf7dd254">ZEROERR_REQUIRE_GE</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;=, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:ad43954a75c469e07fe255a23bf7dd254"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a610786cfafc86e9eea1b784bcfd15914" id="r_a610786cfafc86e9eea1b784bcfd15914"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a610786cfafc86e9eea1b784bcfd15914">ZEROERR_ASSERT_EQ</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, ==, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:a610786cfafc86e9eea1b784bcfd15914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8b64a67d3b75465841a11a05aee52eb" id="r_ac8b64a67d3b75465841a11a05aee52eb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ac8b64a67d3b75465841a11a05aee52eb">ZEROERR_ASSERT_NE</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, !=, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:ac8b64a67d3b75465841a11a05aee52eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4af0c02afcc859e81eaf0405a41a06d" id="r_ab4af0c02afcc859e81eaf0405a41a06d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ab4af0c02afcc859e81eaf0405a41a06d">ZEROERR_ASSERT_LT</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:ab4af0c02afcc859e81eaf0405a41a06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed9a49111d6c4ccd7cb5918b7d0df816" id="r_aed9a49111d6c4ccd7cb5918b7d0df816"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#aed9a49111d6c4ccd7cb5918b7d0df816">ZEROERR_ASSERT_LE</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;=, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:aed9a49111d6c4ccd7cb5918b7d0df816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d576282bdf87383d2209deeff0f90ed" id="r_a5d576282bdf87383d2209deeff0f90ed"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a5d576282bdf87383d2209deeff0f90ed">ZEROERR_ASSERT_GT</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:a5d576282bdf87383d2209deeff0f90ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a970d14698b2bcbbda7f6577cab3aa2e2" id="r_a970d14698b2bcbbda7f6577cab3aa2e2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a970d14698b2bcbbda7f6577cab3aa2e2">ZEROERR_ASSERT_GE</a>(lhs,  rhs, ...)&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;=, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td></tr>
+<tr class="separator:a970d14698b2bcbbda7f6577cab3aa2e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acab009b596160e614aec1ace5aa8560b" id="r_acab009b596160e614aec1ace5aa8560b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#acab009b596160e614aec1ace5aa8560b">CHECK_EQ</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ad9fb0e99a0590e280112cf3aae5948d6">ZEROERR_CHECK_EQ</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:acab009b596160e614aec1ace5aa8560b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7402f391d8e0b60455c52e88612b920e" id="r_a7402f391d8e0b60455c52e88612b920e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a7402f391d8e0b60455c52e88612b920e">CHECK_NE</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a47a266e86bac5e3f3ce5713d975f012b">ZEROERR_CHECK_NE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a7402f391d8e0b60455c52e88612b920e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5016b178adeb924d156f914b97d50c22" id="r_a5016b178adeb924d156f914b97d50c22"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a5016b178adeb924d156f914b97d50c22">CHECK_LT</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a9737c41b87b7ffa6d076f8cf10fbb77a">ZEROERR_CHECK_LT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a5016b178adeb924d156f914b97d50c22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a123814e11f856f998a4a46abeffa033b" id="r_a123814e11f856f998a4a46abeffa033b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a123814e11f856f998a4a46abeffa033b">CHECK_LE</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ac52bbbe5223626bd745bbfdc96b3a37f">ZEROERR_CHECK_LE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a123814e11f856f998a4a46abeffa033b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5d3af75a2193b292ec73d1c5e9aa3b8" id="r_ab5d3af75a2193b292ec73d1c5e9aa3b8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ab5d3af75a2193b292ec73d1c5e9aa3b8">CHECK_GT</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aed0cf391598eabf7cdd2eddd81d2b52d">ZEROERR_CHECK_GT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:ab5d3af75a2193b292ec73d1c5e9aa3b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09d1acce35b0cf75630ee57cbbcfb8ec" id="r_a09d1acce35b0cf75630ee57cbbcfb8ec"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a09d1acce35b0cf75630ee57cbbcfb8ec">CHECK_GE</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a4ed1bf5d08bfe5c4bbf39b656e641cb4">ZEROERR_CHECK_GE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a09d1acce35b0cf75630ee57cbbcfb8ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77569c2162609127f477ca10c64af12a" id="r_a77569c2162609127f477ca10c64af12a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a77569c2162609127f477ca10c64af12a">REQUIRE_EQ</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a2204d46d78c684a183f788998c524ee7">ZEROERR_REQUIRE_EQ</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a77569c2162609127f477ca10c64af12a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa35d3126ad91dfec4b448f862279df2" id="r_afa35d3126ad91dfec4b448f862279df2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#afa35d3126ad91dfec4b448f862279df2">REQUIRE_NE</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aec2a6da41891e643986006b173d1a41e">ZEROERR_REQUIRE_NE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:afa35d3126ad91dfec4b448f862279df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c42c25001b1f2397b5824f4b1e2aa67" id="r_a6c42c25001b1f2397b5824f4b1e2aa67"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a6c42c25001b1f2397b5824f4b1e2aa67">REQUIRE_LT</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a348e3043988d1b004149527a242699e5">ZEROERR_REQUIRE_LT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a6c42c25001b1f2397b5824f4b1e2aa67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1624a83ce6c90ed75065e22e25e1f157" id="r_a1624a83ce6c90ed75065e22e25e1f157"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a1624a83ce6c90ed75065e22e25e1f157">REQUIRE_LE</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ab138d0ebd706e551b871e027579dc673">ZEROERR_REQUIRE_LE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a1624a83ce6c90ed75065e22e25e1f157"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1751d937f9894f72c330d4f69876d345" id="r_a1751d937f9894f72c330d4f69876d345"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a1751d937f9894f72c330d4f69876d345">REQUIRE_GT</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#af956e8f4095103cd0c4d40153ba37083">ZEROERR_REQUIRE_GT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a1751d937f9894f72c330d4f69876d345"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0f1acb5eb8c0a536189f54afe8185c6" id="r_aa0f1acb5eb8c0a536189f54afe8185c6"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#aa0f1acb5eb8c0a536189f54afe8185c6">REQUIRE_GE</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ad43954a75c469e07fe255a23bf7dd254">ZEROERR_REQUIRE_GE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:aa0f1acb5eb8c0a536189f54afe8185c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad230d70526177f107baf93f9bb72fb6d" id="r_ad230d70526177f107baf93f9bb72fb6d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#ad230d70526177f107baf93f9bb72fb6d">ASSERT_EQ</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a610786cfafc86e9eea1b784bcfd15914">ZEROERR_ASSERT_EQ</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:ad230d70526177f107baf93f9bb72fb6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9821560221e63103dfbc19cb2519f34e" id="r_a9821560221e63103dfbc19cb2519f34e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a9821560221e63103dfbc19cb2519f34e">ASSERT_NE</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ac8b64a67d3b75465841a11a05aee52eb">ZEROERR_ASSERT_NE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a9821560221e63103dfbc19cb2519f34e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89507d3be81fa832a5bd7bfe75ca4446" id="r_a89507d3be81fa832a5bd7bfe75ca4446"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#a89507d3be81fa832a5bd7bfe75ca4446">ASSERT_LT</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ab4af0c02afcc859e81eaf0405a41a06d">ZEROERR_ASSERT_LT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:a89507d3be81fa832a5bd7bfe75ca4446"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcdb3dc00ab6d3dc129563287bce9092" id="r_afcdb3dc00ab6d3dc129563287bce9092"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#afcdb3dc00ab6d3dc129563287bce9092">ASSERT_LE</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aed9a49111d6c4ccd7cb5918b7d0df816">ZEROERR_ASSERT_LE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:afcdb3dc00ab6d3dc129563287bce9092"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af70adf128c3a82327cc36d419b06b89e" id="r_af70adf128c3a82327cc36d419b06b89e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#af70adf128c3a82327cc36d419b06b89e">ASSERT_GT</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a5d576282bdf87383d2209deeff0f90ed">ZEROERR_ASSERT_GT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:af70adf128c3a82327cc36d419b06b89e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4a23e711a710b465613e92ec61a1ce3" id="r_aa4a23e711a710b465613e92ec61a1ce3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="assert_8h.html#aa4a23e711a710b465613e92ec61a1ce3">ASSERT_GE</a>(...)&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a970d14698b2bcbbda7f6577cab3aa2e2">ZEROERR_ASSERT_GE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td></tr>
+<tr class="separator:aa4a23e711a710b465613e92ec61a1ce3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ab580ff1deac1393ab677093aaf2f10cc" id="r_ab580ff1deac1393ab677093aaf2f10cc"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cc">zeroerr::assert_level</a> : uint8_t { <a class="el" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10ccab56dc03670114b355a6863853edebd42">zeroerr::ZEROERR_WARN_l</a>
+, <a class="el" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca942bac80ed3a851f2ec605b683d013b0">zeroerr::ZEROERR_ERROR_l</a>
+, <a class="el" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca8c4ace9fb3c925f2951a886546a2fad8">zeroerr::ZEROERR_FATAL_l</a>
+ }</td></tr>
+<tr class="separator:ab580ff1deac1393ab677093aaf2f10cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82c21014c482c753c72ba765c2b45c60" id="r_a82c21014c482c753c72ba765c2b45c60"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60">zeroerr::assert_throw</a> : uint8_t { <a class="el" href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60ab2fec3d8234306739039e0fa2786190f">zeroerr::no_throw</a>
+, <a class="el" href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60a66b08e840cf1d7ea635bc54470266584">zeroerr::throws</a>
+, <a class="el" href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60a7a5c7e4f137129f5ea4a8fde2a5ee686">zeroerr::throws_as</a>
+ }</td></tr>
+<tr class="separator:a82c21014c482c753c72ba765c2b45c60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac26cf8d0fe6c41b919cab7e8d76fa480" id="r_ac26cf8d0fe6c41b919cab7e8d76fa480"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480">zeroerr::assert_cmp</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480adf22f17124884fc51f1ac69d610096ac">zeroerr::eq</a>
+, <a class="el" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480ad4f917633649a3c47c7ab917fa990146">zeroerr::ne</a>
+, <a class="el" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480a1bfad22f0925978f310a37440bfdff43">zeroerr::gt</a>
+, <a class="el" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480a0ba64a0dea00947916dfb6a66866e1ca">zeroerr::ge</a>
+, <br />
+&#160;&#160;<a class="el" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480ad91af6958918af87d6a057c1cdf5b225">zeroerr::lt</a>
+, <a class="el" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480ad9180594744f870aeefb086982e980bb">zeroerr::le</a>
+<br />
+ }</td></tr>
+<tr class="separator:ac26cf8d0fe6c41b919cab7e8d76fa480"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:aa8cde11ab0d6d225997d2369a9fa7752" id="r_aa8cde11ab0d6d225997d2369a9fa7752"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html#aa8cde11ab0d6d225997d2369a9fa7752">ZEROERR_CLANG_SUPPRESS_WARNING_POP::_ZEROERR_TEST_CONTEXT</a> = false</td></tr>
+<tr class="separator:aa8cde11ab0d6d225997d2369a9fa7752"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a821326052e3e2bf1fb2d678e9e9a6004" name="a821326052e3e2bf1fb2d678e9e9a6004"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a821326052e3e2bf1fb2d678e9e9a6004">&#9670;&#160;</a></span>ASSERT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ASSERT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#af2fc1eeab31e9b63cd268600e9f5e87a">ZEROERR_ASSERT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad230d70526177f107baf93f9bb72fb6d" name="ad230d70526177f107baf93f9bb72fb6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad230d70526177f107baf93f9bb72fb6d">&#9670;&#160;</a></span>ASSERT_EQ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ASSERT_EQ</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a610786cfafc86e9eea1b784bcfd15914">ZEROERR_ASSERT_EQ</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa4a23e711a710b465613e92ec61a1ce3" name="aa4a23e711a710b465613e92ec61a1ce3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4a23e711a710b465613e92ec61a1ce3">&#9670;&#160;</a></span>ASSERT_GE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ASSERT_GE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a970d14698b2bcbbda7f6577cab3aa2e2">ZEROERR_ASSERT_GE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af70adf128c3a82327cc36d419b06b89e" name="af70adf128c3a82327cc36d419b06b89e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af70adf128c3a82327cc36d419b06b89e">&#9670;&#160;</a></span>ASSERT_GT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ASSERT_GT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a5d576282bdf87383d2209deeff0f90ed">ZEROERR_ASSERT_GT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afcdb3dc00ab6d3dc129563287bce9092" name="afcdb3dc00ab6d3dc129563287bce9092"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcdb3dc00ab6d3dc129563287bce9092">&#9670;&#160;</a></span>ASSERT_LE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ASSERT_LE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aed9a49111d6c4ccd7cb5918b7d0df816">ZEROERR_ASSERT_LE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a89507d3be81fa832a5bd7bfe75ca4446" name="a89507d3be81fa832a5bd7bfe75ca4446"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89507d3be81fa832a5bd7bfe75ca4446">&#9670;&#160;</a></span>ASSERT_LT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ASSERT_LT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ab4af0c02afcc859e81eaf0405a41a06d">ZEROERR_ASSERT_LT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9821560221e63103dfbc19cb2519f34e" name="a9821560221e63103dfbc19cb2519f34e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9821560221e63103dfbc19cb2519f34e">&#9670;&#160;</a></span>ASSERT_NE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ASSERT_NE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ac8b64a67d3b75465841a11a05aee52eb">ZEROERR_ASSERT_NE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac3fb0f86f027e12131ef41df7119b280" name="ac3fb0f86f027e12131ef41df7119b280"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3fb0f86f027e12131ef41df7119b280">&#9670;&#160;</a></span>ASSERT_NOT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ASSERT_NOT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a67675b50a78f0e33b305de59b8c110d6">ZEROERR_ASSERT_NOT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4c87b7f27958c6b7bc8a555c6cc430e5" name="a4c87b7f27958c6b7bc8a555c6cc430e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c87b7f27958c6b7bc8a555c6cc430e5">&#9670;&#160;</a></span>ASSERT_THROWS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ASSERT_THROWS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ad3c85e099286e555598adf76c9530caa">ZEROERR_ASSERT_THROWS</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a836cca6b6ed3a1706353f6d1bca0935f" name="a836cca6b6ed3a1706353f6d1bca0935f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a836cca6b6ed3a1706353f6d1bca0935f">&#9670;&#160;</a></span>CHECK</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a5e3909f9959aef04e5b9e032c2788536">ZEROERR_CHECK</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acab009b596160e614aec1ace5aa8560b" name="acab009b596160e614aec1ace5aa8560b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acab009b596160e614aec1ace5aa8560b">&#9670;&#160;</a></span>CHECK_EQ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_EQ</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ad9fb0e99a0590e280112cf3aae5948d6">ZEROERR_CHECK_EQ</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a09d1acce35b0cf75630ee57cbbcfb8ec" name="a09d1acce35b0cf75630ee57cbbcfb8ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09d1acce35b0cf75630ee57cbbcfb8ec">&#9670;&#160;</a></span>CHECK_GE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_GE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a4ed1bf5d08bfe5c4bbf39b656e641cb4">ZEROERR_CHECK_GE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab5d3af75a2193b292ec73d1c5e9aa3b8" name="ab5d3af75a2193b292ec73d1c5e9aa3b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5d3af75a2193b292ec73d1c5e9aa3b8">&#9670;&#160;</a></span>CHECK_GT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_GT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aed0cf391598eabf7cdd2eddd81d2b52d">ZEROERR_CHECK_GT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a123814e11f856f998a4a46abeffa033b" name="a123814e11f856f998a4a46abeffa033b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a123814e11f856f998a4a46abeffa033b">&#9670;&#160;</a></span>CHECK_LE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_LE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ac52bbbe5223626bd745bbfdc96b3a37f">ZEROERR_CHECK_LE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5016b178adeb924d156f914b97d50c22" name="a5016b178adeb924d156f914b97d50c22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5016b178adeb924d156f914b97d50c22">&#9670;&#160;</a></span>CHECK_LT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_LT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a9737c41b87b7ffa6d076f8cf10fbb77a">ZEROERR_CHECK_LT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7402f391d8e0b60455c52e88612b920e" name="a7402f391d8e0b60455c52e88612b920e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7402f391d8e0b60455c52e88612b920e">&#9670;&#160;</a></span>CHECK_NE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_NE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a47a266e86bac5e3f3ce5713d975f012b">ZEROERR_CHECK_NE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7ec9283e74ba86d87f053cdc75cc5b08" name="a7ec9283e74ba86d87f053cdc75cc5b08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ec9283e74ba86d87f053cdc75cc5b08">&#9670;&#160;</a></span>CHECK_NOT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_NOT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a5a63a912cb5331d1ac8e5c2e51f46a48">ZEROERR_CHECK_NOT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5c646dfe831e596b59073014c1c8b9e5" name="a5c646dfe831e596b59073014c1c8b9e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c646dfe831e596b59073014c1c8b9e5">&#9670;&#160;</a></span>CHECK_THROWS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_THROWS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ab9ab50050c74ddebc3fb4ff3fda24dee">ZEROERR_CHECK_THROWS</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad57835ba8f1bb419a865ada6bd011a85" name="ad57835ba8f1bb419a865ada6bd011a85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad57835ba8f1bb419a865ada6bd011a85">&#9670;&#160;</a></span>REQUIRE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REQUIRE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a7fd494d1b6c7b8573a075b955e9d5e8e">ZEROERR_REQUIRE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a77569c2162609127f477ca10c64af12a" name="a77569c2162609127f477ca10c64af12a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77569c2162609127f477ca10c64af12a">&#9670;&#160;</a></span>REQUIRE_EQ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REQUIRE_EQ</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a2204d46d78c684a183f788998c524ee7">ZEROERR_REQUIRE_EQ</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa0f1acb5eb8c0a536189f54afe8185c6" name="aa0f1acb5eb8c0a536189f54afe8185c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0f1acb5eb8c0a536189f54afe8185c6">&#9670;&#160;</a></span>REQUIRE_GE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REQUIRE_GE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ad43954a75c469e07fe255a23bf7dd254">ZEROERR_REQUIRE_GE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1751d937f9894f72c330d4f69876d345" name="a1751d937f9894f72c330d4f69876d345"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1751d937f9894f72c330d4f69876d345">&#9670;&#160;</a></span>REQUIRE_GT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REQUIRE_GT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#af956e8f4095103cd0c4d40153ba37083">ZEROERR_REQUIRE_GT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1624a83ce6c90ed75065e22e25e1f157" name="a1624a83ce6c90ed75065e22e25e1f157"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1624a83ce6c90ed75065e22e25e1f157">&#9670;&#160;</a></span>REQUIRE_LE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REQUIRE_LE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#ab138d0ebd706e551b871e027579dc673">ZEROERR_REQUIRE_LE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6c42c25001b1f2397b5824f4b1e2aa67" name="a6c42c25001b1f2397b5824f4b1e2aa67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c42c25001b1f2397b5824f4b1e2aa67">&#9670;&#160;</a></span>REQUIRE_LT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REQUIRE_LT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a348e3043988d1b004149527a242699e5">ZEROERR_REQUIRE_LT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afa35d3126ad91dfec4b448f862279df2" name="afa35d3126ad91dfec4b448f862279df2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa35d3126ad91dfec4b448f862279df2">&#9670;&#160;</a></span>REQUIRE_NE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REQUIRE_NE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aec2a6da41891e643986006b173d1a41e">ZEROERR_REQUIRE_NE</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a79af081174f0dfed2726914a0e6ebf2e" name="a79af081174f0dfed2726914a0e6ebf2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79af081174f0dfed2726914a0e6ebf2e">&#9670;&#160;</a></span>REQUIRE_NOT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REQUIRE_NOT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#af88fbf9ba9a91b7f91f803a6a8ce9928">ZEROERR_REQUIRE_NOT</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae3c33faa1d31a2bb0811dac74b994e3e" name="ae3c33faa1d31a2bb0811dac74b994e3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3c33faa1d31a2bb0811dac74b994e3e">&#9670;&#160;</a></span>REQUIRE_THROWS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REQUIRE_THROWS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="config_8h.html#ad842af2965462ec1b59ab0c4be8a6f5c">ZEROERR_SUPPRESS_VARIADIC_MACRO</a> <a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#a93f680d8de051323b7bea047a3e625d5">ZEROERR_REQUIRE_THROWS</a>(__VA_ARGS__)) <a class="el" href="config_8h.html#a311b3789b8f8351421936a4462666971">ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af2fc1eeab31e9b63cd268600e9f5e87a" name="af2fc1eeab31e9b63cd268600e9f5e87a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2fc1eeab31e9b63cd268600e9f5e87a">&#9670;&#160;</a></span>ZEROERR_ASSERT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7f634a16270a067f621be965248c4bdc" name="a7f634a16270a067f621be965248c4bdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f634a16270a067f621be965248c4bdc">&#9670;&#160;</a></span>ZEROERR_ASSERT_CMP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT_CMP</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">op, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">level, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">expect_throw, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">is_false, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code hl_define" href="config_8h.html#a38ab8a7622ce39e96f30b5204ebdd515">ZEROERR_FUNC_SCOPE_BEGIN</a> {                                                                   \</div>
+<div class="line">        <a class="code hl_struct" href="structzeroerr_1_1assert__info.html">zeroerr::assert_info</a> info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \</div>
+<div class="line">                                  zeroerr::assert_throw::expect_throw, is_false};                \</div>
+<div class="line">                                                                                                 \</div>
+<div class="line">        <a class="code hl_struct" href="structzeroerr_1_1Printer.html">zeroerr::Printer</a> print;                                                                  \</div>
+<div class="line">        print.<a class="code hl_variable" href="structzeroerr_1_1Printer.html#a732ea53671fbb30438798240c23dac7c">isQuoted</a> = <span class="keyword">false</span>;                                                                  \</div>
+<div class="line">        <a class="code hl_struct" href="structzeroerr_1_1AssertionData.html">zeroerr::AssertionData</a> assertion_data(__FILE__, __LINE__, #lhs <span class="stringliteral">&quot; &quot;</span> #op <span class="stringliteral">&quot; &quot;</span> #rhs, info);  \</div>
+<div class="line">        <span class="keywordflow">try</span> {                                                                                    \</div>
+<div class="line">            assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                      \</div>
+<div class="line">        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {                                                      \</div>
+<div class="line">            assertion_data.setException(e);                                                      \</div>
+<div class="line">        }                                                                                        \</div>
+<div class="line">        <a class="code hl_struct" href="structzeroerr_1_1detail_1_1context__helper.html">zeroerr::detail::context_helper</a>&lt;                                                         \</div>
+<div class="line">            decltype(_ZEROERR_TEST_CONTEXT),                                                     \</div>
+<div class="line">            std::is_same&lt;<span class="keyword">decltype</span>(<a class="code hl_variable" href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html#aa8cde11ab0d6d225997d2369a9fa7752">_ZEROERR_TEST_CONTEXT</a>),                                        \</div>
+<div class="line">                         <span class="keyword">const</span> <span class="keywordtype">bool</span>&gt;::value&gt;::setContext(assertion_data, _ZEROERR_TEST_CONTEXT); \</div>
+<div class="line">        ZEROERR_PRINT_ASSERT(assertion_data.passed == <span class="keyword">false</span>, level, __VA_ARGS__);                \</div>
+<div class="line">        if (<span class="keyword">false</span>) debug_break();                                                                \</div>
+<div class="line">        assertion_data();                                                                        \</div>
+<div class="line">        <a class="code hl_define" href="config_8h.html#a20de5f23a67f78b7b0c7aa8df559430a">ZEROERR_FUNC_SCOPE_RET</a>(assertion_data.passed);                                           \</div>
+<div class="line">    }                                                                                            \</div>
+<div class="line">    <a class="code hl_define" href="config_8h.html#a2b44406d108c79cb596ab7ceafac449f">ZEROERR_FUNC_SCOPE_END</a></div>
+<div class="ttc" id="aconfig_8h_html_a20de5f23a67f78b7b0c7aa8df559430a"><div class="ttname"><a href="config_8h.html#a20de5f23a67f78b7b0c7aa8df559430a">ZEROERR_FUNC_SCOPE_RET</a></div><div class="ttdeci">#define ZEROERR_FUNC_SCOPE_RET(v)</div><div class="ttdef"><b>Definition</b> config.h:118</div></div>
+<div class="ttc" id="aconfig_8h_html_a2b44406d108c79cb596ab7ceafac449f"><div class="ttname"><a href="config_8h.html#a2b44406d108c79cb596ab7ceafac449f">ZEROERR_FUNC_SCOPE_END</a></div><div class="ttdeci">#define ZEROERR_FUNC_SCOPE_END</div><div class="ttdef"><b>Definition</b> config.h:117</div></div>
+<div class="ttc" id="aconfig_8h_html_a38ab8a7622ce39e96f30b5204ebdd515"><div class="ttname"><a href="config_8h.html#a38ab8a7622ce39e96f30b5204ebdd515">ZEROERR_FUNC_SCOPE_BEGIN</a></div><div class="ttdeci">#define ZEROERR_FUNC_SCOPE_BEGIN</div><div class="ttdef"><b>Definition</b> config.h:116</div></div>
+<div class="ttc" id="anamespaceZEROERR__CLANG__SUPPRESS__WARNING__POP_html_aa8cde11ab0d6d225997d2369a9fa7752"><div class="ttname"><a href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html#aa8cde11ab0d6d225997d2369a9fa7752">ZEROERR_CLANG_SUPPRESS_WARNING_POP::_ZEROERR_TEST_CONTEXT</a></div><div class="ttdeci">constexpr bool _ZEROERR_TEST_CONTEXT</div><div class="ttdef"><b>Definition</b> assert.h:219</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html">zeroerr::AssertionData</a></div><div class="ttdoc">AssertionData is a struct that contains all the information of an assertion. It will be thrown as an ...</div><div class="ttdef"><b>Definition</b> assert.h:244</div></div>
+<div class="ttc" id="astructzeroerr_1_1Printer_html"><div class="ttname"><a href="structzeroerr_1_1Printer.html">zeroerr::Printer</a></div><div class="ttdoc">A functor class Printer for printing a value of any type.</div><div class="ttdef"><b>Definition</b> print.h:62</div></div>
+<div class="ttc" id="astructzeroerr_1_1Printer_html_a732ea53671fbb30438798240c23dac7c"><div class="ttname"><a href="structzeroerr_1_1Printer.html#a732ea53671fbb30438798240c23dac7c">zeroerr::Printer::isQuoted</a></div><div class="ttdeci">bool isQuoted</div><div class="ttdef"><b>Definition</b> print.h:105</div></div>
+<div class="ttc" id="astructzeroerr_1_1assert__info_html"><div class="ttname"><a href="structzeroerr_1_1assert__info.html">zeroerr::assert_info</a></div><div class="ttdoc">This is a one-byte assert info struct, which is used to collect the meta info of an assertion.</div><div class="ttdef"><b>Definition</b> assert.h:233</div></div>
+<div class="ttc" id="astructzeroerr_1_1detail_1_1context__helper_html"><div class="ttname"><a href="structzeroerr_1_1detail_1_1context__helper.html">zeroerr::detail::context_helper</a></div><div class="ttdef"><b>Definition</b> assert.h:295</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a610786cfafc86e9eea1b784bcfd15914" name="a610786cfafc86e9eea1b784bcfd15914"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a610786cfafc86e9eea1b784bcfd15914">&#9670;&#160;</a></span>ZEROERR_ASSERT_EQ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT_EQ</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, ==, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aabe80ed658d9e8d3cd9256cc54bdbba5" name="aabe80ed658d9e8d3cd9256cc54bdbba5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aabe80ed658d9e8d3cd9256cc54bdbba5">&#9670;&#160;</a></span>ZEROERR_ASSERT_EXP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT_EXP</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">level, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">expect_throw, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">is_false, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code hl_define" href="config_8h.html#a38ab8a7622ce39e96f30b5204ebdd515">ZEROERR_FUNC_SCOPE_BEGIN</a> {                                                                   \</div>
+<div class="line">        <a class="code hl_struct" href="structzeroerr_1_1assert__info.html">zeroerr::assert_info</a> info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \</div>
+<div class="line">                                  zeroerr::assert_throw::expect_throw, is_false};                \</div>
+<div class="line">                                                                                                 \</div>
+<div class="line">        <a class="code hl_struct" href="structzeroerr_1_1AssertionData.html">zeroerr::AssertionData</a> assertion_data(__FILE__, __LINE__, #cond, info);                  \</div>
+<div class="line">        <span class="keywordflow">try</span> {                                                                                    \</div>
+<div class="line">            assertion_data.setResult(<a class="code hl_struct" href="structzeroerr_1_1ExpressionDecomposer.html">zeroerr::ExpressionDecomposer</a>() &lt;&lt; cond);                   \</div>
+<div class="line">        } <span class="keywordflow">catch</span> (<span class="keyword">const</span> std::exception&amp; e) {                                                      \</div>
+<div class="line">            assertion_data.setException(e);                                                      \</div>
+<div class="line">        }                                                                                        \</div>
+<div class="line">        <a class="code hl_struct" href="structzeroerr_1_1detail_1_1context__helper.html">zeroerr::detail::context_helper</a>&lt;                                                         \</div>
+<div class="line">            decltype(_ZEROERR_TEST_CONTEXT),                                                     \</div>
+<div class="line">            std::is_same&lt;<span class="keyword">decltype</span>(<a class="code hl_variable" href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html#aa8cde11ab0d6d225997d2369a9fa7752">_ZEROERR_TEST_CONTEXT</a>),                                        \</div>
+<div class="line">                         <span class="keyword">const</span> <span class="keywordtype">bool</span>&gt;::value&gt;::setContext(assertion_data, _ZEROERR_TEST_CONTEXT); \</div>
+<div class="line">        ZEROERR_PRINT_ASSERT(assertion_data.passed == <span class="keyword">false</span>, level, __VA_ARGS__);                \</div>
+<div class="line">        if (<span class="keyword">false</span>) debug_break();                                                                \</div>
+<div class="line">        assertion_data();                                                                        \</div>
+<div class="line">        <a class="code hl_define" href="config_8h.html#a20de5f23a67f78b7b0c7aa8df559430a">ZEROERR_FUNC_SCOPE_RET</a>(assertion_data.passed);                                           \</div>
+<div class="line">    }                                                                                            \</div>
+<div class="line">    <a class="code hl_define" href="config_8h.html#a2b44406d108c79cb596ab7ceafac449f">ZEROERR_FUNC_SCOPE_END</a></div>
+<div class="ttc" id="astructzeroerr_1_1ExpressionDecomposer_html"><div class="ttname"><a href="structzeroerr_1_1ExpressionDecomposer.html">zeroerr::ExpressionDecomposer</a></div><div class="ttdef"><b>Definition</b> decomposition.h:183</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a970d14698b2bcbbda7f6577cab3aa2e2" name="a970d14698b2bcbbda7f6577cab3aa2e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a970d14698b2bcbbda7f6577cab3aa2e2">&#9670;&#160;</a></span>ZEROERR_ASSERT_GE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT_GE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;=, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5d576282bdf87383d2209deeff0f90ed" name="a5d576282bdf87383d2209deeff0f90ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d576282bdf87383d2209deeff0f90ed">&#9670;&#160;</a></span>ZEROERR_ASSERT_GT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT_GT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed9a49111d6c4ccd7cb5918b7d0df816" name="aed9a49111d6c4ccd7cb5918b7d0df816"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed9a49111d6c4ccd7cb5918b7d0df816">&#9670;&#160;</a></span>ZEROERR_ASSERT_LE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT_LE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;=, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab4af0c02afcc859e81eaf0405a41a06d" name="ab4af0c02afcc859e81eaf0405a41a06d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4af0c02afcc859e81eaf0405a41a06d">&#9670;&#160;</a></span>ZEROERR_ASSERT_LT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT_LT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac8b64a67d3b75465841a11a05aee52eb" name="ac8b64a67d3b75465841a11a05aee52eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8b64a67d3b75465841a11a05aee52eb">&#9670;&#160;</a></span>ZEROERR_ASSERT_NE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT_NE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, !=, rhs, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a67675b50a78f0e33b305de59b8c110d6" name="a67675b50a78f0e33b305de59b8c110d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67675b50a78f0e33b305de59b8c110d6">&#9670;&#160;</a></span>ZEROERR_ASSERT_NOT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT_NOT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, no_throw, true, __VA_ARGS__))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad3c85e099286e555598adf76c9530caa" name="ad3c85e099286e555598adf76c9530caa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3c85e099286e555598adf76c9530caa">&#9670;&#160;</a></span>ZEROERR_ASSERT_THROWS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ASSERT_THROWS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa8e38a40c6b66277e8e7a8a7bf612fe9">ZEROERR_FATAL</a>, throws, false, __VA_ARGS__))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e3909f9959aef04e5b9e032c2788536" name="a5e3909f9959aef04e5b9e032c2788536"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e3909f9959aef04e5b9e032c2788536">&#9670;&#160;</a></span>ZEROERR_CHECK</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CHECK</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad9fb0e99a0590e280112cf3aae5948d6" name="ad9fb0e99a0590e280112cf3aae5948d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9fb0e99a0590e280112cf3aae5948d6">&#9670;&#160;</a></span>ZEROERR_CHECK_EQ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CHECK_EQ</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, ==, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4ed1bf5d08bfe5c4bbf39b656e641cb4" name="a4ed1bf5d08bfe5c4bbf39b656e641cb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ed1bf5d08bfe5c4bbf39b656e641cb4">&#9670;&#160;</a></span>ZEROERR_CHECK_GE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CHECK_GE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;=, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed0cf391598eabf7cdd2eddd81d2b52d" name="aed0cf391598eabf7cdd2eddd81d2b52d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed0cf391598eabf7cdd2eddd81d2b52d">&#9670;&#160;</a></span>ZEROERR_CHECK_GT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CHECK_GT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac52bbbe5223626bd745bbfdc96b3a37f" name="ac52bbbe5223626bd745bbfdc96b3a37f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac52bbbe5223626bd745bbfdc96b3a37f">&#9670;&#160;</a></span>ZEROERR_CHECK_LE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CHECK_LE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;=, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9737c41b87b7ffa6d076f8cf10fbb77a" name="a9737c41b87b7ffa6d076f8cf10fbb77a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9737c41b87b7ffa6d076f8cf10fbb77a">&#9670;&#160;</a></span>ZEROERR_CHECK_LT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CHECK_LT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a47a266e86bac5e3f3ce5713d975f012b" name="a47a266e86bac5e3f3ce5713d975f012b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47a266e86bac5e3f3ce5713d975f012b">&#9670;&#160;</a></span>ZEROERR_CHECK_NE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CHECK_NE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, !=, rhs, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5a63a912cb5331d1ac8e5c2e51f46a48" name="a5a63a912cb5331d1ac8e5c2e51f46a48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a63a912cb5331d1ac8e5c2e51f46a48">&#9670;&#160;</a></span>ZEROERR_CHECK_NOT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CHECK_NOT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, no_throw, true, __VA_ARGS__))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab9ab50050c74ddebc3fb4ff3fda24dee" name="ab9ab50050c74ddebc3fb4ff3fda24dee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9ab50050c74ddebc3fb4ff3fda24dee">&#9670;&#160;</a></span>ZEROERR_CHECK_THROWS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_CHECK_THROWS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#a6ce5983580a1019f92f84ac135b55eee">ZEROERR_WARN</a>, throws, false, __VA_ARGS__))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2ea139063c39f81539b846fd0748808e" name="a2ea139063c39f81539b846fd0748808e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ea139063c39f81539b846fd0748808e">&#9670;&#160;</a></span>ZEROERR_G_CONTEXT_SCOPE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_G_CONTEXT_SCOPE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f50ca5b15515619b9bab2f23caecbbb" name="a4f50ca5b15515619b9bab2f23caecbbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f50ca5b15515619b9bab2f23caecbbb">&#9670;&#160;</a></span>ZEROERR_PRINT_ASSERT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_PRINT_ASSERT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">level, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">pattern, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <a class="code hl_define" href="assert_8h.html#ab35c6dd6374f18abbb4fb143cee2baf8">ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER</a>(cond, level, <span class="stringliteral">&quot; Assertion Failed:\n{msg}&quot;</span> pattern, \</div>
+<div class="line">                                         assertion_data.log(), ##__VA_ARGS__)</div>
+<div class="ttc" id="aassert_8h_html_ab35c6dd6374f18abbb4fb143cee2baf8"><div class="ttname"><a href="assert_8h.html#ab35c6dd6374f18abbb4fb143cee2baf8">ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER</a></div><div class="ttdeci">#define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level,...)</div><div class="ttdoc">Default printer for assertion messages.</div><div class="ttdef"><b>Definition</b> assert.h:35</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="ab35c6dd6374f18abbb4fb143cee2baf8" name="ab35c6dd6374f18abbb4fb143cee2baf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab35c6dd6374f18abbb4fb143cee2baf8">&#9670;&#160;</a></span>ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">level, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordflow">do</span> {                                                                          \</div>
+<div class="line">        if (cond) {                                                               \</div>
+<div class="line">            switch (zeroerr::assert_level::ZEROERR_CAT(level, _l)) {              \</div>
+<div class="line">                <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10ccab56dc03670114b355a6863853edebd42">zeroerr::assert_level::ZEROERR_WARN_l</a>:                       \</div>
+<div class="line">                    std::cerr &lt;&lt; <a class="code hl_variable" href="namespacezeroerr.html#aef18f3a2c9bf7e8bfe62aae33c5e951f">zeroerr::FgYellow</a> &lt;&lt; <span class="stringliteral">&quot;WARN&quot;</span> &lt;&lt; <a class="code hl_variable" href="namespacezeroerr.html#afd3f2c51afbcc5f5a2e970e878d2a1f8">zeroerr::Reset</a>;   \</div>
+<div class="line">                    <span class="keywordflow">break</span>;                                                        \</div>
+<div class="line">                <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca942bac80ed3a851f2ec605b683d013b0">zeroerr::assert_level::ZEROERR_ERROR_l</a>:                      \</div>
+<div class="line">                    std::cerr &lt;&lt; <a class="code hl_variable" href="namespacezeroerr.html#acdb7247c72811ad89d6eb860f5f3ad09">zeroerr::FgRed</a> &lt;&lt; <span class="stringliteral">&quot;ERROR&quot;</span> &lt;&lt; <a class="code hl_variable" href="namespacezeroerr.html#afd3f2c51afbcc5f5a2e970e878d2a1f8">zeroerr::Reset</a>;     \</div>
+<div class="line">                    <span class="keywordflow">break</span>;                                                        \</div>
+<div class="line">                <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca8c4ace9fb3c925f2951a886546a2fad8">zeroerr::assert_level::ZEROERR_FATAL_l</a>:                      \</div>
+<div class="line">                    std::cerr &lt;&lt; <a class="code hl_variable" href="namespacezeroerr.html#a3c99555f367b4370166ccdcc2802285b">zeroerr::FgMagenta</a> &lt;&lt; <span class="stringliteral">&quot;FATAL&quot;</span> &lt;&lt; <a class="code hl_variable" href="namespacezeroerr.html#afd3f2c51afbcc5f5a2e970e878d2a1f8">zeroerr::Reset</a>; \</div>
+<div class="line">                    <span class="keywordflow">break</span>;                                                        \</div>
+<div class="line">            }                                                                     \</div>
+<div class="line">            std::cerr &lt;&lt; <a class="code hl_function" href="namespacezeroerr.html#ab2a0413de126afba34da6a058156213c">zeroerr::format</a>(__VA_ARGS__) &lt;&lt; std::endl;               \</div>
+<div class="line">        }                                                                         \</div>
+<div class="line">    } <span class="keywordflow">while</span> (0)</div>
+<div class="ttc" id="anamespacezeroerr_html_a3c99555f367b4370166ccdcc2802285b"><div class="ttname"><a href="namespacezeroerr.html#a3c99555f367b4370166ccdcc2802285b">zeroerr::FgMagenta</a></div><div class="ttdeci">const char * FgMagenta</div><div class="ttdef"><b>Definition</b> color.cpp:47</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ab2a0413de126afba34da6a058156213c"><div class="ttname"><a href="namespacezeroerr.html#ab2a0413de126afba34da6a058156213c">zeroerr::format</a></div><div class="ttdeci">std::string format(const char *fmt, T... args)</div><div class="ttdoc">Format a string with arguments.</div><div class="ttdef"><b>Definition</b> format.h:25</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ab580ff1deac1393ab677093aaf2f10cca8c4ace9fb3c925f2951a886546a2fad8"><div class="ttname"><a href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca8c4ace9fb3c925f2951a886546a2fad8">zeroerr::assert_level::ZEROERR_FATAL_l</a></div><div class="ttdeci">@ ZEROERR_FATAL_l</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ab580ff1deac1393ab677093aaf2f10cca942bac80ed3a851f2ec605b683d013b0"><div class="ttname"><a href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca942bac80ed3a851f2ec605b683d013b0">zeroerr::assert_level::ZEROERR_ERROR_l</a></div><div class="ttdeci">@ ZEROERR_ERROR_l</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ab580ff1deac1393ab677093aaf2f10ccab56dc03670114b355a6863853edebd42"><div class="ttname"><a href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10ccab56dc03670114b355a6863853edebd42">zeroerr::assert_level::ZEROERR_WARN_l</a></div><div class="ttdeci">@ ZEROERR_WARN_l</div></div>
+<div class="ttc" id="anamespacezeroerr_html_acdb7247c72811ad89d6eb860f5f3ad09"><div class="ttname"><a href="namespacezeroerr.html#acdb7247c72811ad89d6eb860f5f3ad09">zeroerr::FgRed</a></div><div class="ttdeci">const char * FgRed</div><div class="ttdef"><b>Definition</b> color.cpp:43</div></div>
+<div class="ttc" id="anamespacezeroerr_html_aef18f3a2c9bf7e8bfe62aae33c5e951f"><div class="ttname"><a href="namespacezeroerr.html#aef18f3a2c9bf7e8bfe62aae33c5e951f">zeroerr::FgYellow</a></div><div class="ttdeci">const char * FgYellow</div><div class="ttdef"><b>Definition</b> color.cpp:45</div></div>
+<div class="ttc" id="anamespacezeroerr_html_afd3f2c51afbcc5f5a2e970e878d2a1f8"><div class="ttname"><a href="namespacezeroerr.html#afd3f2c51afbcc5f5a2e970e878d2a1f8">zeroerr::Reset</a></div><div class="ttdeci">const char * Reset</div><div class="ttdef"><b>Definition</b> color.cpp:34</div></div>
+</div><!-- fragment -->
+<p>Default printer for assertion messages. </p>
+<p>This macro defines the default printer for assertion messages. It prints the assertion message in different colors based on the assertion level.</p>
+<p>The macro can be overridden by defining ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER before including this header. (Or undefine it and implement your own printer.) </p>
+
+</div>
+</div>
+<a id="a7fd494d1b6c7b8573a075b955e9d5e8e" name="a7fd494d1b6c7b8573a075b955e9d5e8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fd494d1b6c7b8573a075b955e9d5e8e">&#9670;&#160;</a></span>ZEROERR_REQUIRE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_REQUIRE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2204d46d78c684a183f788998c524ee7" name="a2204d46d78c684a183f788998c524ee7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2204d46d78c684a183f788998c524ee7">&#9670;&#160;</a></span>ZEROERR_REQUIRE_EQ</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_REQUIRE_EQ</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, ==, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad43954a75c469e07fe255a23bf7dd254" name="ad43954a75c469e07fe255a23bf7dd254"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad43954a75c469e07fe255a23bf7dd254">&#9670;&#160;</a></span>ZEROERR_REQUIRE_GE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_REQUIRE_GE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;=, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af956e8f4095103cd0c4d40153ba37083" name="af956e8f4095103cd0c4d40153ba37083"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af956e8f4095103cd0c4d40153ba37083">&#9670;&#160;</a></span>ZEROERR_REQUIRE_GT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_REQUIRE_GT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &gt;, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab138d0ebd706e551b871e027579dc673" name="ab138d0ebd706e551b871e027579dc673"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab138d0ebd706e551b871e027579dc673">&#9670;&#160;</a></span>ZEROERR_REQUIRE_LE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_REQUIRE_LE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;=, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a348e3043988d1b004149527a242699e5" name="a348e3043988d1b004149527a242699e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a348e3043988d1b004149527a242699e5">&#9670;&#160;</a></span>ZEROERR_REQUIRE_LT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_REQUIRE_LT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, &lt;, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aec2a6da41891e643986006b173d1a41e" name="aec2a6da41891e643986006b173d1a41e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec2a6da41891e643986006b173d1a41e">&#9670;&#160;</a></span>ZEROERR_REQUIRE_NE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_REQUIRE_NE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">lhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">rhs, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">ZEROERR_ASSERT_CMP</a>(lhs, !=, rhs, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, false, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af88fbf9ba9a91b7f91f803a6a8ce9928" name="af88fbf9ba9a91b7f91f803a6a8ce9928"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af88fbf9ba9a91b7f91f803a6a8ce9928">&#9670;&#160;</a></span>ZEROERR_REQUIRE_NOT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_REQUIRE_NOT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, no_throw, true, __VA_ARGS__))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a93f680d8de051323b7bea047a3e625d5" name="a93f680d8de051323b7bea047a3e625d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93f680d8de051323b7bea047a3e625d5">&#9670;&#160;</a></span>ZEROERR_REQUIRE_THROWS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_REQUIRE_THROWS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">cond, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="config_8h.html#acc7f79e4c14f27be7adb60f0f8ea3640">ZEROERR_EXPAND</a>(<a class="el" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">ZEROERR_ASSERT_EXP</a>(cond, <a class="el" href="log_8h.html#aa9ed8c3df552152124347dd8914e8391">ZEROERR_ERROR</a>, throws, false, __VA_ARGS__))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a class="el" href="assert_8h.html">assert.h</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

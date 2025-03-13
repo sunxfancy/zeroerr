@@ -1,0 +1,15 @@
+<map id="zeroerr::TestContext" name="zeroerr::TestContext">
+<area shape="rect" id="Node000001" title="TestContext is a class that holds the test results and reporter context. There are 8 different matric..." alt="" coords="95,460,249,485"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1IReporter.html" title="IReporter is an interface that is used to report the test results. You can create a new reporter by i..." alt="" coords="104,372,240,397"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,411,175,459,169,459,169,411"/>
+<area shape="rect" id="Node000003" href="$structzeroerr_1_1UnitTest.html" title="UnitTest is a class that holds the test configuration. There are several options that can be set to c..." alt="" coords="107,284,237,309"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="175,323,175,371,169,371,169,323"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="35,152,122,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="84,191,92,225,110,258,125,272,142,282,139,286,122,276,106,262,87,227,79,192"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,5,144,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="78,59,81,152,76,152,73,59"/>
+<area shape="rect" id="Node000006" href="$structzeroerr_1_1Filters.html" title=" " alt="" coords="199,152,315,177"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="251,192,235,226,213,262,189,286,185,282,209,258,230,223,246,189"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="168,13,355,38"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="263,52,260,152,255,152,258,52"/>
+</map>

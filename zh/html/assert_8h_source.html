@@ -1,0 +1,534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/assert.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(0); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('assert_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">assert.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="assert_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;<a class="code" href="config_8h.html">zeroerr/internal/config.h</a>&quot;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="format_8h.html">zeroerr/format.h</a>&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &quot;<a class="code" href="debugbreak_8h.html">zeroerr/internal/debugbreak.h</a>&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="decomposition_8h.html">zeroerr/internal/decomposition.h</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="print_8h.html">zeroerr/print.h</a>&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;exception&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><a class="code hl_define" href="config_8h.html#a8ce59e10da6436524e7e23696e445681">ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</a></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">// This macro will be redefined in the log.h header, so the global context variable could be</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">// envolved only when we use log.h at the same time. If you didn&#39;t use log.h, this is still a</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">// header-only library.</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#ifndef ZEROERR_G_CONTEXT_SCOPE</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="assert_8h.html#a2ea139063c39f81539b846fd0748808e">   21</a></span><span class="preprocessor">#define ZEROERR_G_CONTEXT_SCOPE(x)</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#ifndef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER</span></div>
+<div class="foldopen" id="foldopen00035" data-start="" data-end="">
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="assert_8h.html#ab35c6dd6374f18abbb4fb143cee2baf8">   35</a></span><span class="preprocessor">#define ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, ...)                    \</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">    do {                                                                          \</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">        if (cond) {                                                               \</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">            switch (zeroerr::assert_level::ZEROERR_CAT(level, _l)) {              \</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">                case zeroerr::assert_level::ZEROERR_WARN_l:                       \</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">                    std::cerr &lt;&lt; zeroerr::FgYellow &lt;&lt; &quot;WARN&quot; &lt;&lt; zeroerr::Reset;   \</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">                    break;                                                        \</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="preprocessor">                case zeroerr::assert_level::ZEROERR_ERROR_l:                      \</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">                    std::cerr &lt;&lt; zeroerr::FgRed &lt;&lt; &quot;ERROR&quot; &lt;&lt; zeroerr::Reset;     \</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">                    break;                                                        \</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">                case zeroerr::assert_level::ZEROERR_FATAL_l:                      \</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="preprocessor">                    std::cerr &lt;&lt; zeroerr::FgMagenta &lt;&lt; &quot;FATAL&quot; &lt;&lt; zeroerr::Reset; \</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="preprocessor">                    break;                                                        \</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="preprocessor">            }                                                                     \</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="preprocessor">            std::cerr &lt;&lt; zeroerr::format(__VA_ARGS__) &lt;&lt; std::endl;               \</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">        }                                                                         \</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="preprocessor">    } while (0)</span></div>
+</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="preprocessor">#ifdef ZEROERR_OS_WINDOWS</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="preprocessor">#define ZEROERR_PRINT_ASSERT(cond, level, pattern, ...)                                    \</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="preprocessor">    ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, &quot; Assertion Failed:\n{msg}&quot; pattern, \</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="preprocessor">                                         assertion_data.log(), __VA_ARGS__)</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><a class="code hl_define" href="config_8h.html#aa203bb7083b9a626372cec4558af9a53">ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH</a>(<span class="stringliteral">&quot;-Wgnu-zero-variadic-macro-arguments&quot;</span>)</div>
+<div class="foldopen" id="foldopen00060" data-start="" data-end="">
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="assert_8h.html#a4f50ca5b15515619b9bab2f23caecbbb">   60</a></span><span class="preprocessor">#define ZEROERR_PRINT_ASSERT(cond, level, pattern, ...)                                    \</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="preprocessor">    ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, &quot; Assertion Failed:\n{msg}&quot; pattern, \</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">                                         assertion_data.log(), ##__VA_ARGS__)</span></div>
+</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><a class="code hl_namespace" href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html">ZEROERR_CLANG_SUPPRESS_WARNING_POP</a></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="foldopen" id="foldopen00066" data-start="" data-end="">
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="assert_8h.html#aabe80ed658d9e8d3cd9256cc54bdbba5">   66</a></span><span class="preprocessor">#define ZEROERR_ASSERT_EXP(cond, level, expect_throw, is_false, ...)                             \</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="preprocessor">    ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="preprocessor">        zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="preprocessor">                                  zeroerr::assert_throw::expect_throw, is_false};                \</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="preprocessor">                                                                                                 \</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="preprocessor">        zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #cond, info);                  \</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="preprocessor">        try {                                                                                    \</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="preprocessor">            assertion_data.setResult(zeroerr::ExpressionDecomposer() &lt;&lt; cond);                   \</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="preprocessor">        } catch (const std::exception&amp; e) {                                                      \</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="preprocessor">            assertion_data.setException(e);                                                      \</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="preprocessor">        }                                                                                        \</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="preprocessor">        zeroerr::detail::context_helper&lt;                                                         \</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="preprocessor">            decltype(_ZEROERR_TEST_CONTEXT),                                                     \</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="preprocessor">            std::is_same&lt;decltype(_ZEROERR_TEST_CONTEXT),                                        \</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="preprocessor">                         const bool&gt;::value&gt;::setContext(assertion_data, _ZEROERR_TEST_CONTEXT); \</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="preprocessor">        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, __VA_ARGS__);                \</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="preprocessor">        if (false) debug_break();                                                                \</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="preprocessor">        assertion_data();                                                                        \</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="preprocessor">        ZEROERR_FUNC_SCOPE_RET(assertion_data.passed);                                           \</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="preprocessor">    }                                                                                            \</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="preprocessor">    ZEROERR_FUNC_SCOPE_END</span></div>
+</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="foldopen" id="foldopen00089" data-start="" data-end="">
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="assert_8h.html#a7f634a16270a067f621be965248c4bdc">   89</a></span><span class="preprocessor">#define ZEROERR_ASSERT_CMP(lhs, op, rhs, level, expect_throw, is_false, ...)                     \</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="preprocessor">    ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="preprocessor">        zeroerr::assert_info info{zeroerr::assert_level::ZEROERR_CAT(level, _l),                 \</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="preprocessor">                                  zeroerr::assert_throw::expect_throw, is_false};                \</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="preprocessor">                                                                                                 \</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="preprocessor">        zeroerr::Printer print;                                                                  \</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="preprocessor">        print.isQuoted = false;                                                                  \</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="preprocessor">        zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #lhs &quot; &quot; #op &quot; &quot; #rhs, info);  \</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="preprocessor">        try {                                                                                    \</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="preprocessor">            assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                      \</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="preprocessor">        } catch (const std::exception&amp; e) {                                                      \</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="preprocessor">            assertion_data.setException(e);                                                      \</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="preprocessor">        }                                                                                        \</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="preprocessor">        zeroerr::detail::context_helper&lt;                                                         \</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="preprocessor">            decltype(_ZEROERR_TEST_CONTEXT),                                                     \</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="preprocessor">            std::is_same&lt;decltype(_ZEROERR_TEST_CONTEXT),                                        \</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="preprocessor">                         const bool&gt;::value&gt;::setContext(assertion_data, _ZEROERR_TEST_CONTEXT); \</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="preprocessor">        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, __VA_ARGS__);                \</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="preprocessor">        if (false) debug_break();                                                                \</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="preprocessor">        assertion_data();                                                                        \</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="preprocessor">        ZEROERR_FUNC_SCOPE_RET(assertion_data.passed);                                           \</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="preprocessor">    }                                                                                            \</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="preprocessor">    ZEROERR_FUNC_SCOPE_END</span></div>
+</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="preprocessor">#ifdef ZEROERR_NO_ASSERT</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="preprocessor">#define CHECK(...)</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="preprocessor">#define CHECK_NOT(...)</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="preprocessor">#define CHECK_THROWS(...)</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="preprocessor">#define REQUIRE(...)</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="preprocessor">#define REQUIRE_NOT(...)</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="preprocessor">#define REQUIRE_THROWS(...)</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="preprocessor">#define ASSERT(...)</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="preprocessor">#define ASSERT_NOT(...)</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="preprocessor">#define ASSERT_THROWS(...)</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="preprocessor">#define CHECK_EQ(...)</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="preprocessor">#define CHECK_NE(...)</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="preprocessor">#define CHECK_LT(...)</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="preprocessor">#define CHECK_LE(...)</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="preprocessor">#define CHECK_GT(...)</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="preprocessor">#define CHECK_GE(...)</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="preprocessor">#define REQUIRE_EQ(...)</span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="preprocessor">#define REQUIRE_NE(...)</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="preprocessor">#define REQUIRE_LT(...)</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="preprocessor">#define REQUIRE_LE(...)</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="preprocessor">#define REQUIRE_GT(...)</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="preprocessor">#define REQUIRE_GE(...)</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="preprocessor">#define ASSERT_EQ(...)</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="preprocessor">#define ASSERT_NE(...)</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="preprocessor">#define ASSERT_LT(...)</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="preprocessor">#define ASSERT_LE(...)</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="preprocessor">#define ASSERT_GT(...)</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="preprocessor">#define ASSERT_GE(...)</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="comment">// clang-format off</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><a class="code hl_define" href="config_8h.html#aa203bb7083b9a626372cec4558af9a53">ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH</a>(<span class="stringliteral">&quot;-Wgnu-zero-variadic-macro-arguments&quot;</span>)</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno"><a class="line" href="assert_8h.html#a5e3909f9959aef04e5b9e032c2788536">  151</a></span><span class="preprocessor">#define ZEROERR_CHECK(cond, ...)          ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__))</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="assert_8h.html#a5a63a912cb5331d1ac8e5c2e51f46a48">  152</a></span><span class="preprocessor">#define ZEROERR_CHECK_NOT(cond, ...)      ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__))</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno"><a class="line" href="assert_8h.html#ab9ab50050c74ddebc3fb4ff3fda24dee">  153</a></span><span class="preprocessor">#define ZEROERR_CHECK_THROWS(cond, ...)   ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, throws, false, __VA_ARGS__))</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno"><a class="line" href="assert_8h.html#a7fd494d1b6c7b8573a075b955e9d5e8e">  154</a></span><span class="preprocessor">#define ZEROERR_REQUIRE(cond, ...)        ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, no_throw, false, __VA_ARGS__))</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno"><a class="line" href="assert_8h.html#af88fbf9ba9a91b7f91f803a6a8ce9928">  155</a></span><span class="preprocessor">#define ZEROERR_REQUIRE_NOT(cond, ...)    ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, no_throw, true, __VA_ARGS__))</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="assert_8h.html#a93f680d8de051323b7bea047a3e625d5">  156</a></span><span class="preprocessor">#define ZEROERR_REQUIRE_THROWS(cond, ...) ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__))</span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno"><a class="line" href="assert_8h.html#af2fc1eeab31e9b63cd268600e9f5e87a">  157</a></span><span class="preprocessor">#define ZEROERR_ASSERT(cond, ...)         ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, no_throw, false, __VA_ARGS__))</span></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno"><a class="line" href="assert_8h.html#a67675b50a78f0e33b305de59b8c110d6">  158</a></span><span class="preprocessor">#define ZEROERR_ASSERT_NOT(cond, ...)     ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, no_throw, true, __VA_ARGS__))</span></div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="assert_8h.html#ad3c85e099286e555598adf76c9530caa">  159</a></span><span class="preprocessor">#define ZEROERR_ASSERT_THROWS(cond, ...)  ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_FATAL, throws, false, __VA_ARGS__))</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="assert_8h.html#a836cca6b6ed3a1706353f6d1bca0935f">  161</a></span><span class="preprocessor">#define CHECK(...)          ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno"><a class="line" href="assert_8h.html#a7ec9283e74ba86d87f053cdc75cc5b08">  162</a></span><span class="preprocessor">#define CHECK_NOT(...)      ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno"><a class="line" href="assert_8h.html#a5c646dfe831e596b59073014c1c8b9e5">  163</a></span><span class="preprocessor">#define CHECK_THROWS(...)   ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_THROWS(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno"><a class="line" href="assert_8h.html#ad57835ba8f1bb419a865ada6bd011a85">  164</a></span><span class="preprocessor">#define REQUIRE(...)        ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno"><a class="line" href="assert_8h.html#a79af081174f0dfed2726914a0e6ebf2e">  165</a></span><span class="preprocessor">#define REQUIRE_NOT(...)    ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno"><a class="line" href="assert_8h.html#ae3c33faa1d31a2bb0811dac74b994e3e">  166</a></span><span class="preprocessor">#define REQUIRE_THROWS(...) ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_THROWS(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="assert_8h.html#a821326052e3e2bf1fb2d678e9e9a6004">  167</a></span><span class="preprocessor">#define ASSERT(...)         ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="assert_8h.html#ac3fb0f86f027e12131ef41df7119b280">  168</a></span><span class="preprocessor">#define ASSERT_NOT(...)     ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno"><a class="line" href="assert_8h.html#a4c87b7f27958c6b7bc8a555c6cc430e5">  169</a></span><span class="preprocessor">#define ASSERT_THROWS(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_THROWS(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno"><a class="line" href="assert_8h.html#ad9fb0e99a0590e280112cf3aae5948d6">  171</a></span><span class="preprocessor">#define ZEROERR_CHECK_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno"><a class="line" href="assert_8h.html#a47a266e86bac5e3f3ce5713d975f012b">  172</a></span><span class="preprocessor">#define ZEROERR_CHECK_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno"><a class="line" href="assert_8h.html#a9737c41b87b7ffa6d076f8cf10fbb77a">  173</a></span><span class="preprocessor">#define ZEROERR_CHECK_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &lt;, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno"><a class="line" href="assert_8h.html#ac52bbbe5223626bd745bbfdc96b3a37f">  174</a></span><span class="preprocessor">#define ZEROERR_CHECK_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &lt;=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno"><a class="line" href="assert_8h.html#aed0cf391598eabf7cdd2eddd81d2b52d">  175</a></span><span class="preprocessor">#define ZEROERR_CHECK_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &gt;, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno"><a class="line" href="assert_8h.html#a4ed1bf5d08bfe5c4bbf39b656e641cb4">  176</a></span><span class="preprocessor">#define ZEROERR_CHECK_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &gt;=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="assert_8h.html#a2204d46d78c684a183f788998c524ee7">  178</a></span><span class="preprocessor">#define ZEROERR_REQUIRE_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno"><a class="line" href="assert_8h.html#aec2a6da41891e643986006b173d1a41e">  179</a></span><span class="preprocessor">#define ZEROERR_REQUIRE_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno"><a class="line" href="assert_8h.html#a348e3043988d1b004149527a242699e5">  180</a></span><span class="preprocessor">#define ZEROERR_REQUIRE_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &lt;, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno"><a class="line" href="assert_8h.html#ab138d0ebd706e551b871e027579dc673">  181</a></span><span class="preprocessor">#define ZEROERR_REQUIRE_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &lt;=, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno"><a class="line" href="assert_8h.html#af956e8f4095103cd0c4d40153ba37083">  182</a></span><span class="preprocessor">#define ZEROERR_REQUIRE_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &gt;, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno"><a class="line" href="assert_8h.html#ad43954a75c469e07fe255a23bf7dd254">  183</a></span><span class="preprocessor">#define ZEROERR_REQUIRE_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &gt;=, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno"><a class="line" href="assert_8h.html#a610786cfafc86e9eea1b784bcfd15914">  185</a></span><span class="preprocessor">#define ZEROERR_ASSERT_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno"><a class="line" href="assert_8h.html#ac8b64a67d3b75465841a11a05aee52eb">  186</a></span><span class="preprocessor">#define ZEROERR_ASSERT_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno"><a class="line" href="assert_8h.html#ab4af0c02afcc859e81eaf0405a41a06d">  187</a></span><span class="preprocessor">#define ZEROERR_ASSERT_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &lt;, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno"><a class="line" href="assert_8h.html#aed9a49111d6c4ccd7cb5918b7d0df816">  188</a></span><span class="preprocessor">#define ZEROERR_ASSERT_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &lt;=, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno"><a class="line" href="assert_8h.html#a5d576282bdf87383d2209deeff0f90ed">  189</a></span><span class="preprocessor">#define ZEROERR_ASSERT_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &gt;, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno"><a class="line" href="assert_8h.html#a970d14698b2bcbbda7f6577cab3aa2e2">  190</a></span><span class="preprocessor">#define ZEROERR_ASSERT_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, &gt;=, rhs, ZEROERR_FATAL, no_throw, false, __VA_ARGS__)</span></div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno"><a class="line" href="assert_8h.html#acab009b596160e614aec1ace5aa8560b">  192</a></span><span class="preprocessor">#define CHECK_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno"><a class="line" href="assert_8h.html#a7402f391d8e0b60455c52e88612b920e">  193</a></span><span class="preprocessor">#define CHECK_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno"><a class="line" href="assert_8h.html#a5016b178adeb924d156f914b97d50c22">  194</a></span><span class="preprocessor">#define CHECK_LT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_LT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno"><a class="line" href="assert_8h.html#a123814e11f856f998a4a46abeffa033b">  195</a></span><span class="preprocessor">#define CHECK_LE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_LE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno"><a class="line" href="assert_8h.html#ab5d3af75a2193b292ec73d1c5e9aa3b8">  196</a></span><span class="preprocessor">#define CHECK_GT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_GT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno"><a class="line" href="assert_8h.html#a09d1acce35b0cf75630ee57cbbcfb8ec">  197</a></span><span class="preprocessor">#define CHECK_GE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_CHECK_GE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno"><a class="line" href="assert_8h.html#a77569c2162609127f477ca10c64af12a">  198</a></span><span class="preprocessor">#define REQUIRE_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno"><a class="line" href="assert_8h.html#afa35d3126ad91dfec4b448f862279df2">  199</a></span><span class="preprocessor">#define REQUIRE_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno"><a class="line" href="assert_8h.html#a6c42c25001b1f2397b5824f4b1e2aa67">  200</a></span><span class="preprocessor">#define REQUIRE_LT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_LT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno"><a class="line" href="assert_8h.html#a1624a83ce6c90ed75065e22e25e1f157">  201</a></span><span class="preprocessor">#define REQUIRE_LE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_LE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno"><a class="line" href="assert_8h.html#a1751d937f9894f72c330d4f69876d345">  202</a></span><span class="preprocessor">#define REQUIRE_GT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_GT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno"><a class="line" href="assert_8h.html#aa0f1acb5eb8c0a536189f54afe8185c6">  203</a></span><span class="preprocessor">#define REQUIRE_GE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_REQUIRE_GE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno"><a class="line" href="assert_8h.html#ad230d70526177f107baf93f9bb72fb6d">  204</a></span><span class="preprocessor">#define ASSERT_EQ(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_EQ(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno"><a class="line" href="assert_8h.html#a9821560221e63103dfbc19cb2519f34e">  205</a></span><span class="preprocessor">#define ASSERT_NE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno"><a class="line" href="assert_8h.html#a89507d3be81fa832a5bd7bfe75ca4446">  206</a></span><span class="preprocessor">#define ASSERT_LT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_LT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno"><a class="line" href="assert_8h.html#afcdb3dc00ab6d3dc129563287bce9092">  207</a></span><span class="preprocessor">#define ASSERT_LE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_LE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno"><a class="line" href="assert_8h.html#af70adf128c3a82327cc36d419b06b89e">  208</a></span><span class="preprocessor">#define ASSERT_GT(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_GT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno"><a class="line" href="assert_8h.html#aa4a23e711a710b465613e92ec61a1ce3">  209</a></span><span class="preprocessor">#define ASSERT_GE(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_GE(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP</span></div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><a class="code hl_namespace" href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html">ZEROERR_CLANG_SUPPRESS_WARNING_POP</a></div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span><span class="comment">// clang-format on</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="comment">// This symbol must be in the global namespace or anonymous namespace</span></div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span><span class="comment">// used for checking the assert is inside testing or not</span></div>
+<div class="foldopen" id="foldopen00218" data-start="{" data-end="}">
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno"><a class="line" href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html">  218</a></span><span class="keyword">namespace </span>{</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno"><a class="line" href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html#aa8cde11ab0d6d225997d2369a9fa7752">  219</a></span><span class="keyword">constexpr</span> <span class="keywordtype">bool</span> <a class="code hl_variable" href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html#aa8cde11ab0d6d225997d2369a9fa7752">_ZEROERR_TEST_CONTEXT</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>}  <span class="comment">// namespace</span></div>
+</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacezeroerr.html">zeroerr</a> {</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span> </div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno"><a class="line" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cc">  225</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cc">assert_level</a> : uint8_t { <a class="code hl_enumvalue" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10ccab56dc03670114b355a6863853edebd42">ZEROERR_WARN_l</a>, <a class="code hl_enumvalue" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca942bac80ed3a851f2ec605b683d013b0">ZEROERR_ERROR_l</a>, <a class="code hl_enumvalue" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca8c4ace9fb3c925f2951a886546a2fad8">ZEROERR_FATAL_l</a> };</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno"><a class="line" href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60">  226</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60">assert_throw</a> : uint8_t { <a class="code hl_enumvalue" href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60ab2fec3d8234306739039e0fa2786190f">no_throw</a>, <span class="keywordflow">throws</span>, <a class="code hl_enumvalue" href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60a7a5c7e4f137129f5ea4a8fde2a5ee686">throws_as</a> };</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno"><a class="line" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480">  227</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480">assert_cmp</a> : uint8_t { <a class="code hl_enumvalue" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480adf22f17124884fc51f1ac69d610096ac">eq</a>, <a class="code hl_enumvalue" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480ad4f917633649a3c47c7ab917fa990146">ne</a>, <a class="code hl_enumvalue" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480a1bfad22f0925978f310a37440bfdff43">gt</a>, <a class="code hl_enumvalue" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480a0ba64a0dea00947916dfb6a66866e1ca">ge</a>, <a class="code hl_enumvalue" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480ad91af6958918af87d6a057c1cdf5b225">lt</a>, <a class="code hl_enumvalue" href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480ad9180594744f870aeefb086982e980bb">le</a> };</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
+<div class="foldopen" id="foldopen00233" data-start="{" data-end="};">
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno"><a class="line" href="structzeroerr_1_1assert__info.html">  233</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1assert__info.html">assert_info</a> {</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno"><a class="line" href="structzeroerr_1_1assert__info.html#a9a48195dd9e594e92b0d593d1b862438">  234</a></span>    <a class="code hl_enumeration" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cc">assert_level</a> <a class="code hl_variable" href="structzeroerr_1_1assert__info.html#a9a48195dd9e594e92b0d593d1b862438">level</a>      : 2;</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno"><a class="line" href="structzeroerr_1_1assert__info.html#adde2afcb1d1985097cc095b924d2b692">  235</a></span>    <a class="code hl_enumeration" href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60">assert_throw</a> <a class="code hl_variable" href="structzeroerr_1_1assert__info.html#adde2afcb1d1985097cc095b924d2b692">throw_type</a> : 2;</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno"><a class="line" href="structzeroerr_1_1assert__info.html#afbb561882a2d0594c8d5e2f53e31514c">  236</a></span>    <span class="keywordtype">bool</span>         <a class="code hl_variable" href="structzeroerr_1_1assert__info.html#afbb561882a2d0594c8d5e2f53e31514c">is_false</a>   : 1;</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>};</div>
+</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
+<div class="foldopen" id="foldopen00244" data-start="{" data-end="};">
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html">  244</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1AssertionData.html">AssertionData</a> : std::exception {</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#a6d8fb2d4663992a15ee9e7393995fb29">  245</a></span>    <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a6d8fb2d4663992a15ee9e7393995fb29">file</a>;     <span class="comment">// file name</span></div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#ada7002bc3e4ae3b5bc796f07e0392f6b">  246</a></span>    <span class="keywordtype">unsigned</span>    <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ada7002bc3e4ae3b5bc796f07e0392f6b">line</a>;     <span class="comment">// line number</span></div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#a15a8c92007cdb4393f8ccf1a780d4e7c">  247</a></span>    <a class="code hl_struct" href="structzeroerr_1_1assert__info.html">assert_info</a> <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a15a8c92007cdb4393f8ccf1a780d4e7c">info</a>;     <span class="comment">// assert info</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#ad27fafa2fb07f78759fad331bc67021f">  248</a></span>    <span class="keywordtype">bool</span>        <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ad27fafa2fb07f78759fad331bc67021f">passed</a>;   <span class="comment">// if the assertion passed</span></div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#a4839716595de28f7420a5a0304fdab33">  249</a></span>    std::string <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a4839716595de28f7420a5a0304fdab33">message</a>;  <span class="comment">// the message of the assertion</span></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#af8bc0b24a4ecd14347b0898273c5b4f4">  250</a></span>    std::string <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#af8bc0b24a4ecd14347b0898273c5b4f4">cond</a>;     <span class="comment">// the condition of the assertion</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
+<div class="foldopen" id="foldopen00252" data-start="{" data-end="}">
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#acea88844da0b044aacd122d2ae8b6660">  252</a></span>    <a class="code hl_function" href="structzeroerr_1_1AssertionData.html#acea88844da0b044aacd122d2ae8b6660">AssertionData</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a6d8fb2d4663992a15ee9e7393995fb29">file</a>, <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ada7002bc3e4ae3b5bc796f07e0392f6b">line</a>, <span class="keyword">const</span> <span class="keywordtype">char</span>* <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#af8bc0b24a4ecd14347b0898273c5b4f4">cond</a>, <a class="code hl_struct" href="structzeroerr_1_1assert__info.html">assert_info</a> <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a15a8c92007cdb4393f8ccf1a780d4e7c">info</a>)</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>        : <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a6d8fb2d4663992a15ee9e7393995fb29">file</a>(<a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a6d8fb2d4663992a15ee9e7393995fb29">file</a>), <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ada7002bc3e4ae3b5bc796f07e0392f6b">line</a>(<a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ada7002bc3e4ae3b5bc796f07e0392f6b">line</a>), <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a15a8c92007cdb4393f8ccf1a780d4e7c">info</a>(<a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a15a8c92007cdb4393f8ccf1a780d4e7c">info</a>) {</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        <span class="keyword">static</span> std::string pattern = <span class="stringliteral">&quot;zeroerr::ExpressionDecomposer() &lt;&lt; &quot;</span>;</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>        std::string        cond_str(<a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#af8bc0b24a4ecd14347b0898273c5b4f4">cond</a>);</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>        <span class="keywordtype">size_t</span>             pos = cond_str.find(pattern);</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>        <span class="keywordflow">if</span> (pos != std::string::npos) cond_str.replace(pos, pos + pattern.size(), <span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>        this-&gt;cond = cond_str;</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    }</div>
+</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
+<div class="foldopen" id="foldopen00261" data-start="{" data-end="}">
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#ab8979452e5fa16c035840ddba8a1e29d">  261</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structzeroerr_1_1AssertionData.html#ab8979452e5fa16c035840ddba8a1e29d">setResult</a>(<a class="code hl_struct" href="structzeroerr_1_1ExprResult.html">ExprResult</a>&amp;&amp; result) {</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>        <a class="code hl_struct" href="structzeroerr_1_1ExprResult.html">ExprResult</a> r(std::move(result));</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a15a8c92007cdb4393f8ccf1a780d4e7c">info</a>.<a class="code hl_variable" href="structzeroerr_1_1assert__info.html#afbb561882a2d0594c8d5e2f53e31514c">is_false</a>)</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>            <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ad27fafa2fb07f78759fad331bc67021f">passed</a> = !r.<a class="code hl_variable" href="structzeroerr_1_1ExprResult.html#aaea4616e1cadc9f25b4c1f959691c84a">res</a>;</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>        <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>            <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ad27fafa2fb07f78759fad331bc67021f">passed</a> = r.<a class="code hl_variable" href="structzeroerr_1_1ExprResult.html#aaea4616e1cadc9f25b4c1f959691c84a">res</a>;</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>        <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a4839716595de28f7420a5a0304fdab33">message</a> = r.<a class="code hl_variable" href="structzeroerr_1_1ExprResult.html#a7dcc51762d998faf27d11f5cafb24b98">decomp</a>;</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>    }</div>
+</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span> </div>
+<div class="foldopen" id="foldopen00270" data-start="{" data-end="}">
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#ad047c55b0b5cea6d85a042491ba2a283">  270</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structzeroerr_1_1AssertionData.html#ad047c55b0b5cea6d85a042491ba2a283">setException</a>(<span class="keyword">const</span> std::exception&amp; e) {</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>        <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ad27fafa2fb07f78759fad331bc67021f">passed</a>  = <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a15a8c92007cdb4393f8ccf1a780d4e7c">info</a>.<a class="code hl_variable" href="structzeroerr_1_1assert__info.html#adde2afcb1d1985097cc095b924d2b692">throw_type</a> == <a class="code hl_enumvalue" href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60a66b08e840cf1d7ea635bc54470266584">assert_throw::throws</a>;</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a4839716595de28f7420a5a0304fdab33">message</a> = e.what();</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    }</div>
+</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span> </div>
+<div class="foldopen" id="foldopen00275" data-start="{" data-end="}">
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#a2ce734f7339a8605ddd1e1a265a6bf20">  275</a></span>    std::string <a class="code hl_function" href="structzeroerr_1_1AssertionData.html#a2ce734f7339a8605ddd1e1a265a6bf20">log</a>() {</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>        std::stringstream ss;</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>        ss &lt;&lt; <span class="stringliteral">&quot;    &quot;</span> &lt;&lt; <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#af8bc0b24a4ecd14347b0898273c5b4f4">cond</a> &lt;&lt; <span class="stringliteral">&quot;  expands to  &quot;</span> &lt;&lt; <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a4839716595de28f7420a5a0304fdab33">message</a> &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>        ss &lt;&lt; <a class="code hl_variable" href="namespacezeroerr.html#a2861056e6c1184aae2ff4d142ad1de01">Dim</a> &lt;&lt; <span class="stringliteral">&quot;(&quot;</span> &lt;&lt; <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a6d8fb2d4663992a15ee9e7393995fb29">file</a> &lt;&lt; <span class="stringliteral">&quot;:&quot;</span> &lt;&lt; <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ada7002bc3e4ae3b5bc796f07e0392f6b">line</a> &lt;&lt; <span class="stringliteral">&quot;)&quot;</span> &lt;&lt; <a class="code hl_variable" href="namespacezeroerr.html#afd3f2c51afbcc5f5a2e970e878d2a1f8">Reset</a> &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>        <span class="keywordflow">return</span> ss.str();</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    }</div>
+</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    <span class="comment">// throw the exception</span></div>
+<div class="foldopen" id="foldopen00283" data-start="{" data-end="}">
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#aaec8f202dd2607f7b0660eb95ded12de">  283</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structzeroerr_1_1AssertionData.html#aaec8f202dd2607f7b0660eb95ded12de">operator()</a>() {</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ad27fafa2fb07f78759fad331bc67021f">passed</a>) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="structzeroerr_1_1AssertionData.html#ac29d049698506923ede68a2955396308">shouldThrow</a>()) <span class="keywordflow">throw</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    }</div>
+</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno"><a class="line" href="structzeroerr_1_1AssertionData.html#ac29d049698506923ede68a2955396308">  288</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="structzeroerr_1_1AssertionData.html#ac29d049698506923ede68a2955396308">shouldThrow</a>() { <span class="keywordflow">return</span> <a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a15a8c92007cdb4393f8ccf1a780d4e7c">info</a>.<a class="code hl_variable" href="structzeroerr_1_1assert__info.html#a9a48195dd9e594e92b0d593d1b862438">level</a> != <a class="code hl_enumvalue" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10ccab56dc03670114b355a6863853edebd42">assert_level::ZEROERR_WARN_l</a>; }</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>};</div>
+</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="keyword">namespace </span>detail {</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span><span class="comment">// This struct is used for handle constexpr if in C++11</span></div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="comment">// https://stackoverflow.com/questions/43587405/constexpr-if-alternative</span></div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keywordtype">bool</span>&gt;</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno"><a class="line" href="structzeroerr_1_1detail_1_1context__helper.html">  295</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1detail_1_1context__helper.html">context_helper</a>;</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="foldopen" id="foldopen00298" data-start="{" data-end="};">
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno"><a class="line" href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01true_01_4.html">  298</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1detail_1_1context__helper.html">context_helper</a>&lt;T, true&gt; {</div>
+<div class="foldopen" id="foldopen00299" data-start="{" data-end="}">
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno"><a class="line" href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01true_01_4.html#ad224970d83d48395cb10f3a81016043c">  299</a></span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01true_01_4.html#ad224970d83d48395cb10f3a81016043c">setContext</a>(<a class="code hl_struct" href="structzeroerr_1_1AssertionData.html">AssertionData</a>&amp; data, T) {</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>        <span class="keywordflow">if</span> (data.<a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ad27fafa2fb07f78759fad331bc67021f">passed</a>) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    }</div>
+</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>};</div>
+</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span> </div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="foldopen" id="foldopen00305" data-start="{" data-end="};">
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno"><a class="line" href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01false_01_4.html">  305</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1detail_1_1context__helper.html">context_helper</a>&lt;T, false&gt; {</div>
+<div class="foldopen" id="foldopen00306" data-start="{" data-end="}">
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno"><a class="line" href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01false_01_4.html#a7c0fe12fcbd4efa8b13b75f8d219f8f8">  306</a></span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01false_01_4.html#a7c0fe12fcbd4efa8b13b75f8d219f8f8">setContext</a>(<a class="code hl_struct" href="structzeroerr_1_1AssertionData.html">AssertionData</a>&amp; data, T ctx) {</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>        <span class="keywordflow">if</span> (data.<a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#ad27fafa2fb07f78759fad331bc67021f">passed</a>) {</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>            ctx-&gt;passed_as++;</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>            <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>        }</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>        <span class="keywordflow">switch</span> (data.<a class="code hl_variable" href="structzeroerr_1_1AssertionData.html#a15a8c92007cdb4393f8ccf1a780d4e7c">info</a>.<a class="code hl_variable" href="structzeroerr_1_1assert__info.html#a9a48195dd9e594e92b0d593d1b862438">level</a>) {</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca8c4ace9fb3c925f2951a886546a2fad8">assert_level::ZEROERR_FATAL_l</a>:</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca942bac80ed3a851f2ec605b683d013b0">assert_level::ZEROERR_ERROR_l</a>: ctx-&gt;failed_as++; <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>            <span class="keywordflow">case</span> <a class="code hl_enumvalue" href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10ccab56dc03670114b355a6863853edebd42">assert_level::ZEROERR_WARN_l</a>:  ctx-&gt;warning_as++; <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>        }</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    }</div>
+</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>};</div>
+</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>}  <span class="comment">// namespace detail</span></div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span> </div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>}  <span class="comment">// namespace zeroerr</span></div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span> </div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span><a class="code hl_define" href="config_8h.html#a20f4a75508d343fca0ce852dbe63f49d">ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</a></div>
+<div class="ttc" id="aconfig_8h_html"><div class="ttname"><a href="config_8h.html">config.h</a></div></div>
+<div class="ttc" id="aconfig_8h_html_a20f4a75508d343fca0ce852dbe63f49d"><div class="ttname"><a href="config_8h.html#a20f4a75508d343fca0ce852dbe63f49d">ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</a></div><div class="ttdeci">#define ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</div><div class="ttdef"><b>Definition</b> config.h:265</div></div>
+<div class="ttc" id="aconfig_8h_html_a8ce59e10da6436524e7e23696e445681"><div class="ttname"><a href="config_8h.html#a8ce59e10da6436524e7e23696e445681">ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</a></div><div class="ttdeci">#define ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</div><div class="ttdef"><b>Definition</b> config.h:218</div></div>
+<div class="ttc" id="aconfig_8h_html_aa203bb7083b9a626372cec4558af9a53"><div class="ttname"><a href="config_8h.html#aa203bb7083b9a626372cec4558af9a53">ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH</a></div><div class="ttdeci">#define ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH(w)</div><div class="ttdef"><b>Definition</b> config.h:182</div></div>
+<div class="ttc" id="adebugbreak_8h_html"><div class="ttname"><a href="debugbreak_8h.html">debugbreak.h</a></div></div>
+<div class="ttc" id="adecomposition_8h_html"><div class="ttname"><a href="decomposition_8h.html">decomposition.h</a></div></div>
+<div class="ttc" id="aformat_8h_html"><div class="ttname"><a href="format_8h.html">format.h</a></div></div>
+<div class="ttc" id="anamespaceZEROERR__CLANG__SUPPRESS__WARNING__POP_html"><div class="ttname"><a href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html">ZEROERR_CLANG_SUPPRESS_WARNING_POP</a></div><div class="ttdef"><b>Definition</b> assert.h:218</div></div>
+<div class="ttc" id="anamespaceZEROERR__CLANG__SUPPRESS__WARNING__POP_html_aa8cde11ab0d6d225997d2369a9fa7752"><div class="ttname"><a href="namespaceZEROERR__CLANG__SUPPRESS__WARNING__POP.html#aa8cde11ab0d6d225997d2369a9fa7752">ZEROERR_CLANG_SUPPRESS_WARNING_POP::_ZEROERR_TEST_CONTEXT</a></div><div class="ttdeci">constexpr bool _ZEROERR_TEST_CONTEXT</div><div class="ttdef"><b>Definition</b> assert.h:219</div></div>
+<div class="ttc" id="anamespacezeroerr_html"><div class="ttname"><a href="namespacezeroerr.html">zeroerr</a></div><div class="ttdef"><b>Definition</b> benchmark.cpp:17</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a2861056e6c1184aae2ff4d142ad1de01"><div class="ttname"><a href="namespacezeroerr.html#a2861056e6c1184aae2ff4d142ad1de01">zeroerr::Dim</a></div><div class="ttdeci">const char * Dim</div><div class="ttdef"><b>Definition</b> color.cpp:36</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a82c21014c482c753c72ba765c2b45c60"><div class="ttname"><a href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60">zeroerr::assert_throw</a></div><div class="ttdeci">assert_throw</div><div class="ttdef"><b>Definition</b> assert.h:226</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a82c21014c482c753c72ba765c2b45c60a66b08e840cf1d7ea635bc54470266584"><div class="ttname"><a href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60a66b08e840cf1d7ea635bc54470266584">zeroerr::assert_throw::throws</a></div><div class="ttdeci">@ throws</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a82c21014c482c753c72ba765c2b45c60a7a5c7e4f137129f5ea4a8fde2a5ee686"><div class="ttname"><a href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60a7a5c7e4f137129f5ea4a8fde2a5ee686">zeroerr::assert_throw::throws_as</a></div><div class="ttdeci">@ throws_as</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a82c21014c482c753c72ba765c2b45c60ab2fec3d8234306739039e0fa2786190f"><div class="ttname"><a href="namespacezeroerr.html#a82c21014c482c753c72ba765c2b45c60ab2fec3d8234306739039e0fa2786190f">zeroerr::assert_throw::no_throw</a></div><div class="ttdeci">@ no_throw</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ab580ff1deac1393ab677093aaf2f10cc"><div class="ttname"><a href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cc">zeroerr::assert_level</a></div><div class="ttdeci">assert_level</div><div class="ttdef"><b>Definition</b> assert.h:225</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ab580ff1deac1393ab677093aaf2f10cca8c4ace9fb3c925f2951a886546a2fad8"><div class="ttname"><a href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca8c4ace9fb3c925f2951a886546a2fad8">zeroerr::assert_level::ZEROERR_FATAL_l</a></div><div class="ttdeci">@ ZEROERR_FATAL_l</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ab580ff1deac1393ab677093aaf2f10cca942bac80ed3a851f2ec605b683d013b0"><div class="ttname"><a href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10cca942bac80ed3a851f2ec605b683d013b0">zeroerr::assert_level::ZEROERR_ERROR_l</a></div><div class="ttdeci">@ ZEROERR_ERROR_l</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ab580ff1deac1393ab677093aaf2f10ccab56dc03670114b355a6863853edebd42"><div class="ttname"><a href="namespacezeroerr.html#ab580ff1deac1393ab677093aaf2f10ccab56dc03670114b355a6863853edebd42">zeroerr::assert_level::ZEROERR_WARN_l</a></div><div class="ttdeci">@ ZEROERR_WARN_l</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ac26cf8d0fe6c41b919cab7e8d76fa480"><div class="ttname"><a href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480">zeroerr::assert_cmp</a></div><div class="ttdeci">assert_cmp</div><div class="ttdef"><b>Definition</b> assert.h:227</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ac26cf8d0fe6c41b919cab7e8d76fa480a0ba64a0dea00947916dfb6a66866e1ca"><div class="ttname"><a href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480a0ba64a0dea00947916dfb6a66866e1ca">zeroerr::assert_cmp::ge</a></div><div class="ttdeci">@ ge</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ac26cf8d0fe6c41b919cab7e8d76fa480a1bfad22f0925978f310a37440bfdff43"><div class="ttname"><a href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480a1bfad22f0925978f310a37440bfdff43">zeroerr::assert_cmp::gt</a></div><div class="ttdeci">@ gt</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ac26cf8d0fe6c41b919cab7e8d76fa480ad4f917633649a3c47c7ab917fa990146"><div class="ttname"><a href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480ad4f917633649a3c47c7ab917fa990146">zeroerr::assert_cmp::ne</a></div><div class="ttdeci">@ ne</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ac26cf8d0fe6c41b919cab7e8d76fa480ad9180594744f870aeefb086982e980bb"><div class="ttname"><a href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480ad9180594744f870aeefb086982e980bb">zeroerr::assert_cmp::le</a></div><div class="ttdeci">@ le</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ac26cf8d0fe6c41b919cab7e8d76fa480ad91af6958918af87d6a057c1cdf5b225"><div class="ttname"><a href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480ad91af6958918af87d6a057c1cdf5b225">zeroerr::assert_cmp::lt</a></div><div class="ttdeci">@ lt</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ac26cf8d0fe6c41b919cab7e8d76fa480adf22f17124884fc51f1ac69d610096ac"><div class="ttname"><a href="namespacezeroerr.html#ac26cf8d0fe6c41b919cab7e8d76fa480adf22f17124884fc51f1ac69d610096ac">zeroerr::assert_cmp::eq</a></div><div class="ttdeci">@ eq</div></div>
+<div class="ttc" id="anamespacezeroerr_html_afd3f2c51afbcc5f5a2e970e878d2a1f8"><div class="ttname"><a href="namespacezeroerr.html#afd3f2c51afbcc5f5a2e970e878d2a1f8">zeroerr::Reset</a></div><div class="ttdeci">const char * Reset</div><div class="ttdef"><b>Definition</b> color.cpp:34</div></div>
+<div class="ttc" id="aprint_8h_html"><div class="ttname"><a href="print_8h.html">print.h</a></div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html">zeroerr::AssertionData</a></div><div class="ttdoc">AssertionData is a struct that contains all the information of an assertion. It will be thrown as an ...</div><div class="ttdef"><b>Definition</b> assert.h:244</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_a15a8c92007cdb4393f8ccf1a780d4e7c"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#a15a8c92007cdb4393f8ccf1a780d4e7c">zeroerr::AssertionData::info</a></div><div class="ttdeci">assert_info info</div><div class="ttdef"><b>Definition</b> assert.h:247</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_a2ce734f7339a8605ddd1e1a265a6bf20"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#a2ce734f7339a8605ddd1e1a265a6bf20">zeroerr::AssertionData::log</a></div><div class="ttdeci">std::string log()</div><div class="ttdef"><b>Definition</b> assert.h:275</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_a4839716595de28f7420a5a0304fdab33"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#a4839716595de28f7420a5a0304fdab33">zeroerr::AssertionData::message</a></div><div class="ttdeci">std::string message</div><div class="ttdef"><b>Definition</b> assert.h:249</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_a6d8fb2d4663992a15ee9e7393995fb29"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#a6d8fb2d4663992a15ee9e7393995fb29">zeroerr::AssertionData::file</a></div><div class="ttdeci">const char * file</div><div class="ttdef"><b>Definition</b> assert.h:245</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_aaec8f202dd2607f7b0660eb95ded12de"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#aaec8f202dd2607f7b0660eb95ded12de">zeroerr::AssertionData::operator()</a></div><div class="ttdeci">void operator()()</div><div class="ttdef"><b>Definition</b> assert.h:283</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_ab8979452e5fa16c035840ddba8a1e29d"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#ab8979452e5fa16c035840ddba8a1e29d">zeroerr::AssertionData::setResult</a></div><div class="ttdeci">void setResult(ExprResult &amp;&amp;result)</div><div class="ttdef"><b>Definition</b> assert.h:261</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_ac29d049698506923ede68a2955396308"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#ac29d049698506923ede68a2955396308">zeroerr::AssertionData::shouldThrow</a></div><div class="ttdeci">bool shouldThrow()</div><div class="ttdef"><b>Definition</b> assert.h:288</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_acea88844da0b044aacd122d2ae8b6660"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#acea88844da0b044aacd122d2ae8b6660">zeroerr::AssertionData::AssertionData</a></div><div class="ttdeci">AssertionData(const char *file, unsigned line, const char *cond, assert_info info)</div><div class="ttdef"><b>Definition</b> assert.h:252</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_ad047c55b0b5cea6d85a042491ba2a283"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#ad047c55b0b5cea6d85a042491ba2a283">zeroerr::AssertionData::setException</a></div><div class="ttdeci">void setException(const std::exception &amp;e)</div><div class="ttdef"><b>Definition</b> assert.h:270</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_ad27fafa2fb07f78759fad331bc67021f"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#ad27fafa2fb07f78759fad331bc67021f">zeroerr::AssertionData::passed</a></div><div class="ttdeci">bool passed</div><div class="ttdef"><b>Definition</b> assert.h:248</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_ada7002bc3e4ae3b5bc796f07e0392f6b"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#ada7002bc3e4ae3b5bc796f07e0392f6b">zeroerr::AssertionData::line</a></div><div class="ttdeci">unsigned line</div><div class="ttdef"><b>Definition</b> assert.h:246</div></div>
+<div class="ttc" id="astructzeroerr_1_1AssertionData_html_af8bc0b24a4ecd14347b0898273c5b4f4"><div class="ttname"><a href="structzeroerr_1_1AssertionData.html#af8bc0b24a4ecd14347b0898273c5b4f4">zeroerr::AssertionData::cond</a></div><div class="ttdeci">std::string cond</div><div class="ttdef"><b>Definition</b> assert.h:250</div></div>
+<div class="ttc" id="astructzeroerr_1_1ExprResult_html"><div class="ttname"><a href="structzeroerr_1_1ExprResult.html">zeroerr::ExprResult</a></div><div class="ttdef"><b>Definition</b> decomposition.h:87</div></div>
+<div class="ttc" id="astructzeroerr_1_1ExprResult_html_a7dcc51762d998faf27d11f5cafb24b98"><div class="ttname"><a href="structzeroerr_1_1ExprResult.html#a7dcc51762d998faf27d11f5cafb24b98">zeroerr::ExprResult::decomp</a></div><div class="ttdeci">std::string decomp</div><div class="ttdef"><b>Definition</b> decomposition.h:89</div></div>
+<div class="ttc" id="astructzeroerr_1_1ExprResult_html_aaea4616e1cadc9f25b4c1f959691c84a"><div class="ttname"><a href="structzeroerr_1_1ExprResult.html#aaea4616e1cadc9f25b4c1f959691c84a">zeroerr::ExprResult::res</a></div><div class="ttdeci">bool res</div><div class="ttdef"><b>Definition</b> decomposition.h:88</div></div>
+<div class="ttc" id="astructzeroerr_1_1assert__info_html"><div class="ttname"><a href="structzeroerr_1_1assert__info.html">zeroerr::assert_info</a></div><div class="ttdoc">This is a one-byte assert info struct, which is used to collect the meta info of an assertion</div><div class="ttdef"><b>Definition</b> assert.h:233</div></div>
+<div class="ttc" id="astructzeroerr_1_1assert__info_html_a9a48195dd9e594e92b0d593d1b862438"><div class="ttname"><a href="structzeroerr_1_1assert__info.html#a9a48195dd9e594e92b0d593d1b862438">zeroerr::assert_info::level</a></div><div class="ttdeci">assert_level level</div><div class="ttdef"><b>Definition</b> assert.h:234</div></div>
+<div class="ttc" id="astructzeroerr_1_1assert__info_html_adde2afcb1d1985097cc095b924d2b692"><div class="ttname"><a href="structzeroerr_1_1assert__info.html#adde2afcb1d1985097cc095b924d2b692">zeroerr::assert_info::throw_type</a></div><div class="ttdeci">assert_throw throw_type</div><div class="ttdef"><b>Definition</b> assert.h:235</div></div>
+<div class="ttc" id="astructzeroerr_1_1assert__info_html_afbb561882a2d0594c8d5e2f53e31514c"><div class="ttname"><a href="structzeroerr_1_1assert__info.html#afbb561882a2d0594c8d5e2f53e31514c">zeroerr::assert_info::is_false</a></div><div class="ttdeci">bool is_false</div><div class="ttdef"><b>Definition</b> assert.h:236</div></div>
+<div class="ttc" id="astructzeroerr_1_1detail_1_1context__helper_3_01T_00_01false_01_4_html_a7c0fe12fcbd4efa8b13b75f8d219f8f8"><div class="ttname"><a href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01false_01_4.html#a7c0fe12fcbd4efa8b13b75f8d219f8f8">zeroerr::detail::context_helper&lt; T, false &gt;::setContext</a></div><div class="ttdeci">static void setContext(AssertionData &amp;data, T ctx)</div><div class="ttdef"><b>Definition</b> assert.h:306</div></div>
+<div class="ttc" id="astructzeroerr_1_1detail_1_1context__helper_3_01T_00_01true_01_4_html_ad224970d83d48395cb10f3a81016043c"><div class="ttname"><a href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01true_01_4.html#ad224970d83d48395cb10f3a81016043c">zeroerr::detail::context_helper&lt; T, true &gt;::setContext</a></div><div class="ttdeci">static void setContext(AssertionData &amp;data, T)</div><div class="ttdef"><b>Definition</b> assert.h:299</div></div>
+<div class="ttc" id="astructzeroerr_1_1detail_1_1context__helper_html"><div class="ttname"><a href="structzeroerr_1_1detail_1_1context__helper.html">zeroerr::detail::context_helper</a></div><div class="ttdef"><b>Definition</b> assert.h:295</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a class="el" href="assert_8h.html">assert.h</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

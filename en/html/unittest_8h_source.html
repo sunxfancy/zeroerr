@@ -1,0 +1,516 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/unittest.h Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(0); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('unittest_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">unittest.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="unittest_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;<a class="code" href="config_8h.html">zeroerr/internal/config.h</a>&quot;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;chrono&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><a class="code hl_define" href="config_8h.html#a8ce59e10da6436524e7e23696e445681">ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</a></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="foldopen" id="foldopen00012" data-start="" data-end="">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="unittest_8h.html#aebf3c87af7745c5286150fa07268c470">   12</a></span><span class="preprocessor">#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                \</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">    static void                     function(zeroerr::TestContext*); \</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">        {name, __FILE__, __LINE__, function, {__VA_ARGS__}});        \</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">    static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))</span></div>
+</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="foldopen" id="foldopen00018" data-start="" data-end="">
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="unittest_8h.html#aacd39763f90aeaca22dcc182ca7eb9e5">   18</a></span><span class="preprocessor">#define TEST_CASE(name, ...) \</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">    ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name, __VA_ARGS__)</span></div>
+</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="foldopen" id="foldopen00021" data-start="" data-end="">
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="unittest_8h.html#a86676c0b9d1d4ca819c0e6cf36e00e64">   21</a></span><span class="preprocessor">#define SUB_CASE(name, ...)                                                          \</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">    zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">        &lt;&lt; [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable</span></div>
+</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="foldopen" id="foldopen00025" data-start="" data-end="">
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="unittest_8h.html#aa2d9540d20f4c08e9adc154167942a9b">   25</a></span><span class="preprocessor">#define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name, ...)                   \</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">    class classname : public fixture {                                                       \</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">    public:                                                                                  \</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">        void funcname(zeroerr::TestContext*);                                                \</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">    };                                                                                       \</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">    static void ZEROERR_CAT(call_, funcname)(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT) { \</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">        classname instance;                                                                  \</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">        instance.funcname(_ZEROERR_TEST_CONTEXT);                                            \</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">    }                                                                                        \</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname), {__VA_ARGS__}});            \</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">    inline void classname::funcname(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))</span></div>
+</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="foldopen" id="foldopen00038" data-start="" data-end="">
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="unittest_8h.html#a01b3273febf34aa33e6bf729e568b871">   38</a></span><span class="preprocessor">#define TEST_CASE_FIXTURE(fixture, name, ...)                           \</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">    ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">                              ZEROERR_NAMEGEN(_zeroerr_test_method), name, __VA_ARGS__)</span></div>
+</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="unittest_8h.html#ab67723d90c1abf342268b6e93bb7344d">   43</a></span><span class="preprocessor">#define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT-&gt;save_output();</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">#ifndef ZEROERR_DISABLE_BDD</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="unittest_8h.html#acf8f441c7b9d70251ccbb7ccd8b83183">   46</a></span><span class="preprocessor">#define SCENARIO(...) TEST_CASE(&quot;Scenario: &quot; __VA_ARGS__)</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="unittest_8h.html#a37b7da7031ed506a0bb69823afdb3c66">   47</a></span><span class="preprocessor">#define GIVEN(...)    SUB_CASE(&quot;given: &quot; __VA_ARGS__)</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="unittest_8h.html#af56efb00a63e744988e3d230dd149b93">   48</a></span><span class="preprocessor">#define WHEN(...)     SUB_CASE(&quot;when: &quot; __VA_ARGS__)</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="unittest_8h.html#a4469ddff35746001f57e2ab2cbc4d1bb">   49</a></span><span class="preprocessor">#define THEN(...)     SUB_CASE(&quot;then: &quot; __VA_ARGS__)</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacezeroerr.html">zeroerr</a> {</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="keyword">class </span>IReporter;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keyword">struct </span>TestCase;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">class </span>Decorator;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="foldopen" id="foldopen00070" data-start="{" data-end="};">
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html">   70</a></span><span class="keyword">class </span><a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a> {</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#a67f42662712a6d9f737f562f82738311">   72</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#a67f42662712a6d9f737f562f82738311">passed</a>     = 0;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#aed7740983fdbfa5fbd878c3824d6e7d0">   73</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#aed7740983fdbfa5fbd878c3824d6e7d0">warning</a>    = 0;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#a5aa226bda45e5c765ab76aa3c06a8860">   74</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#a5aa226bda45e5c765ab76aa3c06a8860">failed</a>     = 0;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#a44bafe3d8caa170f2d85aaac31ae9d11">   75</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#a44bafe3d8caa170f2d85aaac31ae9d11">skipped</a>    = 0;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#ab9b467e6dd1885a4570c45344cba8695">   76</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#ab9b467e6dd1885a4570c45344cba8695">passed_as</a>  = 0;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#afb26cc055274975f24f64bab65c1abb5">   77</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#afb26cc055274975f24f64bab65c1abb5">warning_as</a> = 0;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#ac98bb47676f2648631f7cc751d2acfc4">   78</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#ac98bb47676f2648631f7cc751d2acfc4">failed_as</a>  = 0;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#ab4f23ae0b49d06856affd653f260a675">   79</a></span>    <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#ab4f23ae0b49d06856affd653f260a675">skipped_as</a> = 0;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#ab0e24ee0a8c0721de2605a5097448bb6">   81</a></span>    std::chrono::duration&lt;double&gt; <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#ab0e24ee0a8c0721de2605a5097448bb6">duration</a> = std::chrono::duration&lt;double&gt;::zero();</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#ad3c7d87c91277b5ee0a72b2f57950824">   83</a></span>    <a class="code hl_class" href="classzeroerr_1_1IReporter.html">IReporter</a>&amp; <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#ad3c7d87c91277b5ee0a72b2f57950824">reporter</a>;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="classzeroerr_1_1TestContext.html#aff2e1733881bcc5c0ac1ff9182e4476e">add</a>(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a>&amp; local);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1TestContext.html#a297042c71c78fffb5ea516ede0e76e5e">reset</a>();</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1TestContext.html#a9921cfbf6e31fe1402b9849a63a9d0c2">save_output</a>();</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#afcb52612e11a3af98d8cf8a325bfafe4">  106</a></span>    <a class="code hl_function" href="classzeroerr_1_1TestContext.html#afcb52612e11a3af98d8cf8a325bfafe4">TestContext</a>(<a class="code hl_class" href="classzeroerr_1_1IReporter.html">IReporter</a>&amp; <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#ad3c7d87c91277b5ee0a72b2f57950824">reporter</a>) : <a class="code hl_variable" href="classzeroerr_1_1TestContext.html#ad3c7d87c91277b5ee0a72b2f57950824">reporter</a>(<a class="code hl_variable" href="classzeroerr_1_1TestContext.html#ad3c7d87c91277b5ee0a72b2f57950824">reporter</a>) {}</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestContext.html#a60a2d0a5000902f17799a6cd00859348">  107</a></span>    <a class="code hl_function" href="classzeroerr_1_1TestContext.html#a60a2d0a5000902f17799a6cd00859348">~TestContext</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>};</div>
+</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
+<div class="foldopen" id="foldopen00124" data-start="{" data-end="};">
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html">  124</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1UnitTest.html">UnitTest</a> {</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <a class="code hl_struct" href="structzeroerr_1_1UnitTest.html">UnitTest</a>&amp; <a class="code hl_function" href="structzeroerr_1_1UnitTest.html#adc47f6c00707754f28ec136dc82c16b4">parseArgs</a>(<span class="keywordtype">int</span> argc, <span class="keyword">const</span> <span class="keywordtype">char</span>** argv);</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="structzeroerr_1_1UnitTest.html#af405abcaa81c58ba2d51b16c86fefb9f">run</a>();</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="structzeroerr_1_1UnitTest.html#a9792f825879a652983e2760bb9228bf3">run_filter</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a>&amp; tc);</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html#af45b7d7d6fea730cbc15505f12e7c4f7">  147</a></span>    <span class="keywordtype">bool</span>            <a class="code hl_variable" href="structzeroerr_1_1UnitTest.html#af45b7d7d6fea730cbc15505f12e7c4f7">silent</a>          = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html#a4704fd5579d480cec3c1f851f4b8806d">  148</a></span>    <span class="keywordtype">bool</span>            <a class="code hl_variable" href="structzeroerr_1_1UnitTest.html#a4704fd5579d480cec3c1f851f4b8806d">run_bench</a>       = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html#a3d4b1a576b719e0e2fc91fdedb3a5c88">  149</a></span>    <span class="keywordtype">bool</span>            <a class="code hl_variable" href="structzeroerr_1_1UnitTest.html#a3d4b1a576b719e0e2fc91fdedb3a5c88">run_fuzz</a>        = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html#a2034cc79e78e6bdbf57062c9ee61deb2">  150</a></span>    <span class="keywordtype">bool</span>            <a class="code hl_variable" href="structzeroerr_1_1UnitTest.html#a2034cc79e78e6bdbf57062c9ee61deb2">list_test_cases</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html#ac23e9ec91f19b3faee35f64243ef56f6">  151</a></span>    <span class="keywordtype">bool</span>            <a class="code hl_variable" href="structzeroerr_1_1UnitTest.html#ac23e9ec91f19b3faee35f64243ef56f6">no_color</a>        = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html#a886e4a07a0dbe5aa8a8cb1beeafbb246">  152</a></span>    <span class="keywordtype">bool</span>            <a class="code hl_variable" href="structzeroerr_1_1UnitTest.html#a886e4a07a0dbe5aa8a8cb1beeafbb246">log_to_report</a>   = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html#aa5024999afa5a9158229d63096246aeb">  153</a></span>    std::string     <a class="code hl_variable" href="structzeroerr_1_1UnitTest.html#aa5024999afa5a9158229d63096246aeb">correct_output_path</a>;</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html#add84897da7ac576dedf5dd45b2f4348c">  154</a></span>    std::string     <a class="code hl_variable" href="structzeroerr_1_1UnitTest.html#add84897da7ac576dedf5dd45b2f4348c">reporter_name</a> = <span class="stringliteral">&quot;console&quot;</span>;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html#a19b3070a161ff0151b42a535350f20cf">  155</a></span>    std::string     <a class="code hl_variable" href="structzeroerr_1_1UnitTest.html#a19b3070a161ff0151b42a535350f20cf">binary</a>;</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="structzeroerr_1_1UnitTest.html#aca270e3ff091af16d0733526d519a178">  156</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1Filters.html">Filters</a>* <a class="code hl_variable" href="structzeroerr_1_1UnitTest.html#aca270e3ff091af16d0733526d519a178">filters</a>;</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>};</div>
+</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
+<div class="foldopen" id="foldopen00168" data-start="{" data-end="};">
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestCase.html">  168</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a> {</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestCase.html#afad2e5b69703f5254521bdbdfba61004">  169</a></span>    std::string                       <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#afad2e5b69703f5254521bdbdfba61004">name</a>;</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestCase.html#a6c2ee7e324c9f83c8b32caa783d0273c">  170</a></span>    std::string                       <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a6c2ee7e324c9f83c8b32caa783d0273c">file</a>;</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestCase.html#a98376a08c6ee6609b67e1694ae9969d5">  171</a></span>    <span class="keywordtype">unsigned</span>                          <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a98376a08c6ee6609b67e1694ae9969d5">line</a>;</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestCase.html#a06a8b32f470891c8ab8e6894c29d43dc">  172</a></span>    std::function&lt;void(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a>*)&gt; <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a06a8b32f470891c8ab8e6894c29d43dc">func</a>;</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestCase.html#a9b0d7e5439e80296ded8fe796043104d">  173</a></span>    std::vector&lt;TestCase*&gt;            <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a9b0d7e5439e80296ded8fe796043104d">subcases</a>;</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestCase.html#a5653f973b5d217326634e6255eedc4e2">  174</a></span>    std::vector&lt;Decorator*&gt;           <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a5653f973b5d217326634e6255eedc4e2">decorators</a>;</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="structzeroerr_1_1TestCase.html#a01b79d3c423e4257a6639b54a36b3927">operator&lt;</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a>&amp; rhs) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
+<div class="foldopen" id="foldopen00188" data-start="{" data-end="}">
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestCase.html#aeb1ded7fd0adfbea98a331d80a5c7084">  188</a></span>    <a class="code hl_function" href="structzeroerr_1_1TestCase.html#aeb1ded7fd0adfbea98a331d80a5c7084">TestCase</a>(std::string <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#afad2e5b69703f5254521bdbdfba61004">name</a>, std::string <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a6c2ee7e324c9f83c8b32caa783d0273c">file</a>, <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a98376a08c6ee6609b67e1694ae9969d5">line</a>, std::vector&lt;Decorator*&gt; <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a5653f973b5d217326634e6255eedc4e2">decorators</a>)</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        : <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#afad2e5b69703f5254521bdbdfba61004">name</a>(<a class="code hl_variable" href="structzeroerr_1_1TestCase.html#afad2e5b69703f5254521bdbdfba61004">name</a>), <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a6c2ee7e324c9f83c8b32caa783d0273c">file</a>(<a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a6c2ee7e324c9f83c8b32caa783d0273c">file</a>), <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a98376a08c6ee6609b67e1694ae9969d5">line</a>(<a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a98376a08c6ee6609b67e1694ae9969d5">line</a>), <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a5653f973b5d217326634e6255eedc4e2">decorators</a>(<a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a5653f973b5d217326634e6255eedc4e2">decorators</a>) {}</div>
+</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
+<div class="foldopen" id="foldopen00199" data-start="{" data-end="}">
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestCase.html#a5df73af438ef82c072b8055ee1f80aea">  199</a></span>    <a class="code hl_function" href="structzeroerr_1_1TestCase.html#a5df73af438ef82c072b8055ee1f80aea">TestCase</a>(std::string <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#afad2e5b69703f5254521bdbdfba61004">name</a>, std::string <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a6c2ee7e324c9f83c8b32caa783d0273c">file</a>, <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a98376a08c6ee6609b67e1694ae9969d5">line</a>,</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>             std::function&lt;<span class="keywordtype">void</span>(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a>*)&gt; <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a06a8b32f470891c8ab8e6894c29d43dc">func</a>, std::vector&lt;Decorator*&gt; <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a5653f973b5d217326634e6255eedc4e2">decorators</a>)</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        : <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#afad2e5b69703f5254521bdbdfba61004">name</a>(<a class="code hl_variable" href="structzeroerr_1_1TestCase.html#afad2e5b69703f5254521bdbdfba61004">name</a>), <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a6c2ee7e324c9f83c8b32caa783d0273c">file</a>(<a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a6c2ee7e324c9f83c8b32caa783d0273c">file</a>), <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a98376a08c6ee6609b67e1694ae9969d5">line</a>(<a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a98376a08c6ee6609b67e1694ae9969d5">line</a>), <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a06a8b32f470891c8ab8e6894c29d43dc">func</a>(<a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a06a8b32f470891c8ab8e6894c29d43dc">func</a>), <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a5653f973b5d217326634e6255eedc4e2">decorators</a>(<a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a5653f973b5d217326634e6255eedc4e2">decorators</a>) {}</div>
+</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>};</div>
+</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span> </div>
+<div class="foldopen" id="foldopen00208" data-start="{" data-end="};">
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno"><a class="line" href="structzeroerr_1_1SubCase.html">  208</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1SubCase.html">SubCase</a> : <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a> {</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    <a class="code hl_struct" href="structzeroerr_1_1SubCase.html">SubCase</a>(std::string <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#afad2e5b69703f5254521bdbdfba61004">name</a>, std::string <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a6c2ee7e324c9f83c8b32caa783d0273c">file</a>, <span class="keywordtype">unsigned</span> <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a98376a08c6ee6609b67e1694ae9969d5">line</a>, <a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a>* <a class="code hl_variable" href="structzeroerr_1_1SubCase.html#a1094ea77abbc713d083fc237a2f034d2">context</a>,</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>            std::vector&lt;Decorator*&gt; <a class="code hl_variable" href="structzeroerr_1_1TestCase.html#a5653f973b5d217326634e6255eedc4e2">decorators</a>);</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno"><a class="line" href="structzeroerr_1_1SubCase.html#a60c5f26039a5952dfa2860505e80c1be">  211</a></span>    <a class="code hl_function" href="structzeroerr_1_1SubCase.html#a60c5f26039a5952dfa2860505e80c1be">~SubCase</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno"><a class="line" href="structzeroerr_1_1SubCase.html#a1094ea77abbc713d083fc237a2f034d2">  212</a></span>    <a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a>* <a class="code hl_variable" href="structzeroerr_1_1SubCase.html#a1094ea77abbc713d083fc237a2f034d2">context</a>;</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    <span class="keywordtype">void</span>         <a class="code hl_function" href="structzeroerr_1_1SubCase.html#a4a6b1a3ace5eac6537677a931f9414de">operator&lt;&lt;</a>(std::function&lt;<span class="keywordtype">void</span>(<a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a>*)&gt; op);</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>};</div>
+</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span> </div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="foldopen" id="foldopen00218" data-start="{" data-end="};">
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestedObjects.html">  218</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1TestedObjects.html">TestedObjects</a> {</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestedObjects.html#abc7af4b21a6afe886422373ac8970b0f">  219</a></span>    <span class="keywordtype">void</span>           <a class="code hl_function" href="structzeroerr_1_1TestedObjects.html#abc7af4b21a6afe886422373ac8970b0f">add</a>(T&amp;&amp; obj) { <a class="code hl_variable" href="structzeroerr_1_1TestedObjects.html#a5eb82616ce016e0781ef3fc03a915f39">objects</a>.push_back(std::forward&lt;T&gt;(obj)); }</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno"><a class="line" href="structzeroerr_1_1TestedObjects.html#a5eb82616ce016e0781ef3fc03a915f39">  220</a></span>    std::vector&lt;T&gt; <a class="code hl_variable" href="structzeroerr_1_1TestedObjects.html#a5eb82616ce016e0781ef3fc03a915f39">objects</a>;</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>};</div>
+</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
+<div class="foldopen" id="foldopen00235" data-start="{" data-end="};">
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html">  235</a></span><span class="keyword">class </span><a class="code hl_class" href="classzeroerr_1_1IReporter.html">IReporter</a> {</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html#a3286c817db165d55b22191717197cb28">  237</a></span>    <span class="keyword">virtual</span> <a class="code hl_function" href="classzeroerr_1_1IReporter.html#a3286c817db165d55b22191717197cb28">~IReporter</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html#a8792d1cb430543b3cc2b39d5ed19ce49">  239</a></span>    <span class="keyword">virtual</span> std::string <a class="code hl_function" href="classzeroerr_1_1IReporter.html#a8792d1cb430543b3cc2b39d5ed19ce49">getName</a>() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    <span class="comment">// There are a list of events</span></div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html#a36d2c079f5506824da2020c5eeb92af5">  242</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1IReporter.html#a36d2c079f5506824da2020c5eeb92af5">testStart</a>()                                           = 0;</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html#a3d810cfe76a19d74479802d51957078b">  243</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1IReporter.html#a3d810cfe76a19d74479802d51957078b">testCaseStart</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a>&amp; tc, std::stringbuf&amp; sb) = 0;</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html#ae82c65c0fd8a38bd8cb89181bd3812f4">  244</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1IReporter.html#ae82c65c0fd8a38bd8cb89181bd3812f4">testCaseEnd</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a>&amp; tc, std::stringbuf&amp; sb, <span class="keyword">const</span> <a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a>&amp; ctx,</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>                             <span class="keywordtype">int</span> type)                                 = 0;</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html#a292a702139d500153b5db8e009b298d3">  246</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1IReporter.html#a292a702139d500153b5db8e009b298d3">subCaseStart</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a>&amp; tc, std::stringbuf&amp; sb)  = 0;</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html#a5e085a06899e975e3fb2c2e1669d3b34">  247</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1IReporter.html#a5e085a06899e975e3fb2c2e1669d3b34">subCaseEnd</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a>&amp; tc, std::stringbuf&amp; sb, <span class="keyword">const</span> <a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a>&amp; ctx,</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>                            <span class="keywordtype">int</span> type)                                  = 0;</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html#a84fc992650de17540a8876a8d9a7d637">  249</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1IReporter.html#a84fc992650de17540a8876a8d9a7d637">testEnd</a>(<span class="keyword">const</span> <a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a>&amp; tc)                        = 0;</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    <span class="keyword">static</span> <a class="code hl_class" href="classzeroerr_1_1IReporter.html">IReporter</a>* <a class="code hl_function" href="classzeroerr_1_1IReporter.html#a2f720cfc0ed15b5e303e95fbdf65a204">create</a>(<span class="keyword">const</span> std::string&amp; name, <a class="code hl_struct" href="structzeroerr_1_1UnitTest.html">UnitTest</a>&amp; <a class="code hl_variable" href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">ut</a>);</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span> </div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html#a9ca1a32ceba930c6d5ed4a7a9181c314">  258</a></span>    <a class="code hl_function" href="classzeroerr_1_1IReporter.html#a9ca1a32ceba930c6d5ed4a7a9181c314">IReporter</a>(<a class="code hl_struct" href="structzeroerr_1_1UnitTest.html">UnitTest</a>&amp; <a class="code hl_variable" href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">ut</a>) : <a class="code hl_variable" href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">ut</a>(<a class="code hl_variable" href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">ut</a>) {}</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno"><a class="line" href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">  261</a></span>    <a class="code hl_struct" href="structzeroerr_1_1UnitTest.html">UnitTest</a>&amp; <a class="code hl_variable" href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">ut</a>;</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>};</div>
+</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span> </div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno"><a class="line" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a2f000e3dc3ad0a55bd508a81d476bf7f">  267</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912">TestType</a> { <a class="code hl_enumvalue" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a747cfee76c972f1c4894a4b19d13c161">test_case</a> = 1, <a class="code hl_enumvalue" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912ac9416b3e8edc1c5c4ca1013def82eefd">sub_case</a> = 1 &lt;&lt; 1, <a class="code hl_enumvalue" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a2f000e3dc3ad0a55bd508a81d476bf7f">bench</a> = 1 &lt;&lt; 2, <a class="code hl_enumvalue" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a7b5cb62492dda5c1fe40997a7ff8f63b">fuzz_test</a> = 1 &lt;&lt; 3 };</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span><span class="keyword">namespace </span>detail {</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
+<div class="foldopen" id="foldopen00275" data-start="{" data-end="};">
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno"><a class="line" href="structzeroerr_1_1detail_1_1regTest.html">  275</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1detail_1_1regTest.html">regTest</a> {</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    <span class="keyword">explicit</span> <a class="code hl_struct" href="structzeroerr_1_1detail_1_1regTest.html">regTest</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a>&amp; tc, <a class="code hl_enumeration" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912">TestType</a> type = <a class="code hl_enumvalue" href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a747cfee76c972f1c4894a4b19d13c161">test_case</a>);</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>};</div>
+</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span> </div>
+<div class="foldopen" id="foldopen00283" data-start="{" data-end="};">
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno"><a class="line" href="structzeroerr_1_1detail_1_1regReporter.html">  283</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1detail_1_1regReporter.html">regReporter</a> {</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    <span class="keyword">explicit</span> <a class="code hl_struct" href="structzeroerr_1_1detail_1_1regReporter.html">regReporter</a>(<a class="code hl_class" href="classzeroerr_1_1IReporter.html">IReporter</a>*);</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>};</div>
+</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>}  <span class="comment">// namespace detail</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span> </div>
+<div class="foldopen" id="foldopen00304" data-start="{" data-end="};">
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno"><a class="line" href="classzeroerr_1_1CombinationalTest.html">  304</a></span><span class="keyword">class </span><a class="code hl_class" href="classzeroerr_1_1CombinationalTest.html">CombinationalTest</a> {</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno"><a class="line" href="classzeroerr_1_1CombinationalTest.html#ac95ea027bdf4f8eb3e8fb959ff767c44">  306</a></span>    <a class="code hl_function" href="classzeroerr_1_1CombinationalTest.html#ac95ea027bdf4f8eb3e8fb959ff767c44">CombinationalTest</a>(std::function&lt;<span class="keywordtype">void</span>()&gt; <a class="code hl_variable" href="classzeroerr_1_1CombinationalTest.html#a24f8a3a342053874bc3bbcf2404b35c7">func</a>) : <a class="code hl_variable" href="classzeroerr_1_1CombinationalTest.html#a24f8a3a342053874bc3bbcf2404b35c7">func</a>(<a class="code hl_variable" href="classzeroerr_1_1CombinationalTest.html#a24f8a3a342053874bc3bbcf2404b35c7">func</a>) {}</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno"><a class="line" href="classzeroerr_1_1CombinationalTest.html#a24f8a3a342053874bc3bbcf2404b35c7">  307</a></span>    std::function&lt;void()&gt; <a class="code hl_variable" href="classzeroerr_1_1CombinationalTest.html#a24f8a3a342053874bc3bbcf2404b35c7">func</a>;</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="foldopen" id="foldopen00310" data-start="{" data-end="}">
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno"><a class="line" href="classzeroerr_1_1CombinationalTest.html#a42fecd9130b39805c6127a75d2ae618d">  310</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1CombinationalTest.html#a42fecd9130b39805c6127a75d2ae618d">operator()</a>(T&amp; arg) {</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>        arg.reset();</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; arg.size(); ++i, ++arg) {</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>            <a class="code hl_variable" href="classzeroerr_1_1CombinationalTest.html#a24f8a3a342053874bc3bbcf2404b35c7">func</a>();</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        }</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    }</div>
+</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
+<div class="foldopen" id="foldopen00318" data-start="{" data-end="}">
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno"><a class="line" href="classzeroerr_1_1CombinationalTest.html#a3406172593dd107b18a0f308a5b0a7c3">  318</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1CombinationalTest.html#a3406172593dd107b18a0f308a5b0a7c3">operator()</a>(T&amp; arg, Args&amp;... args) {</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>        arg.reset();</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; arg.size(); ++i, ++arg) {</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>            <a class="code hl_function" href="classzeroerr_1_1CombinationalTest.html#a42fecd9130b39805c6127a75d2ae618d">operator()</a>(args...);</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>        }</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>    }</div>
+</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>};</div>
+</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span> </div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> </div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="foldopen" id="foldopen00331" data-start="{" data-end="};">
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestArgs.html">  331</a></span><span class="keyword">class </span><a class="code hl_class" href="classzeroerr_1_1TestArgs.html">TestArgs</a> {</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestArgs.html#a9fb1e15e5604dd819dc15413b5daca98">  333</a></span>    <a class="code hl_function" href="classzeroerr_1_1TestArgs.html#a9fb1e15e5604dd819dc15413b5daca98">TestArgs</a>(std::initializer_list&lt;T&gt; <a class="code hl_variable" href="classzeroerr_1_1TestArgs.html#a88a26ca65c5d07b59bcf8d4def6e9e3b">args</a>) : <a class="code hl_variable" href="classzeroerr_1_1TestArgs.html#a88a26ca65c5d07b59bcf8d4def6e9e3b">args</a>(<a class="code hl_variable" href="classzeroerr_1_1TestArgs.html#a88a26ca65c5d07b59bcf8d4def6e9e3b">args</a>) {}</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestArgs.html#a88a26ca65c5d07b59bcf8d4def6e9e3b">  334</a></span>    std::vector&lt;T&gt; <a class="code hl_variable" href="classzeroerr_1_1TestArgs.html#a88a26ca65c5d07b59bcf8d4def6e9e3b">args</a>;</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span> </div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestArgs.html#a30e99f474f37bafb2e7e68ce212903dd">  336</a></span>    <span class="keyword">operator</span> T()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classzeroerr_1_1TestArgs.html#a88a26ca65c5d07b59bcf8d4def6e9e3b">args</a>[index]; }</div>
+<div class="foldopen" id="foldopen00337" data-start="{" data-end="}">
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestArgs.html#a09c4ebc1f11ad62080a1c207350c851d">  337</a></span>    <a class="code hl_class" href="classzeroerr_1_1TestArgs.html">TestArgs</a>&amp; <a class="code hl_function" href="classzeroerr_1_1TestArgs.html#a09c4ebc1f11ad62080a1c207350c851d">operator++</a>() {</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>        index++;</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    }</div>
+</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestArgs.html#a2590bd865f145e68a87fde8f223a194e">  341</a></span>    <span class="keywordtype">size_t</span> <a class="code hl_function" href="classzeroerr_1_1TestArgs.html#a2590bd865f145e68a87fde8f223a194e">size</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="classzeroerr_1_1TestArgs.html#a88a26ca65c5d07b59bcf8d4def6e9e3b">args</a>.size(); }</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno"><a class="line" href="classzeroerr_1_1TestArgs.html#af4d996b9fa925ffc21911aa138f5c57b">  342</a></span>    <span class="keywordtype">void</span>   <a class="code hl_function" href="classzeroerr_1_1TestArgs.html#af4d996b9fa925ffc21911aa138f5c57b">reset</a>() { index = 0; }</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    <span class="keywordtype">int</span> index = 0;</div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>};</div>
+</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span> </div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span> </div>
+<div class="foldopen" id="foldopen00349" data-start="{" data-end="};">
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno"><a class="line" href="classzeroerr_1_1Decorator.html">  349</a></span><span class="keyword">class </span><a class="code hl_class" href="classzeroerr_1_1Decorator.html">Decorator</a> {</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>    <span class="comment">// Called when the test registered, return true can block the test registering</span></div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno"><a class="line" href="classzeroerr_1_1Decorator.html#a4be0e0aade873d32be351c28171cadb3">  352</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="classzeroerr_1_1Decorator.html#a4be0e0aade873d32be351c28171cadb3">onStartup</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a>&amp;) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span> </div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    <span class="comment">// Called when the test executing, return true can block the test execution</span></div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno"><a class="line" href="classzeroerr_1_1Decorator.html#aaad618a73e1d8f2591a81b16b11e0405">  355</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="classzeroerr_1_1Decorator.html#aaad618a73e1d8f2591a81b16b11e0405">onExecution</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a>&amp;) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    <span class="comment">// Called on each assertion, return true can skip the assertion</span></div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno"><a class="line" href="classzeroerr_1_1Decorator.html#a2e6ff4dce477237436dbe3a90d8a4c81">  358</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="classzeroerr_1_1Decorator.html#a2e6ff4dce477237436dbe3a90d8a4c81">onAssertion</a>() { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span> </div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="comment">// Called when the test finished, return true means the test containing errors</span></div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno"><a class="line" href="classzeroerr_1_1Decorator.html#ad9ba7881b984a03f15f01d4fed324c40">  361</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="classzeroerr_1_1Decorator.html#ad9ba7881b984a03f15f01d4fed324c40">onFinish</a>(<span class="keyword">const</span> <a class="code hl_struct" href="structzeroerr_1_1TestCase.html">TestCase</a>&amp;, <span class="keyword">const</span> <a class="code hl_class" href="classzeroerr_1_1TestContext.html">TestContext</a>&amp;) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>};</div>
+</div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span> </div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>Decorator* <a class="code hl_function" href="namespacezeroerr.html#ae93eb426f9286ba373e5b841231b4303">skip</a>(<span class="keywordtype">bool</span> isSkip = <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>Decorator* <a class="code hl_function" href="namespacezeroerr.html#a7ebf05b5d595f1b2e2a897357e83cf2b">timeout</a>(<span class="keywordtype">float</span> <a class="code hl_function" href="namespacezeroerr.html#a7ebf05b5d595f1b2e2a897357e83cf2b">timeout</a> = 0.1f);  <span class="comment">// in seconds</span></div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>Decorator* <a class="code hl_function" href="namespacezeroerr.html#ab29f80eda3a9350cc1db0ec7efad53f5">may_fail</a>(<span class="keywordtype">bool</span> isMayFail = <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>Decorator* <a class="code hl_function" href="namespacezeroerr.html#a04f7fc08849752f78dea0d41a6ffa3a5">should_fail</a>(<span class="keywordtype">bool</span> isShouldFail = <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span> </div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>}  <span class="comment">// namespace zeroerr</span></div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span> </div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span><a class="code hl_define" href="config_8h.html#a20f4a75508d343fca0ce852dbe63f49d">ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</a></div>
+<div class="ttc" id="aclasszeroerr_1_1CombinationalTest_html"><div class="ttname"><a href="classzeroerr_1_1CombinationalTest.html">zeroerr::CombinationalTest</a></div><div class="ttdoc">CombinationalTest is a class that is used to cross test a few lists of arguments. One example.</div><div class="ttdef"><b>Definition</b> unittest.h:304</div></div>
+<div class="ttc" id="aclasszeroerr_1_1CombinationalTest_html_a24f8a3a342053874bc3bbcf2404b35c7"><div class="ttname"><a href="classzeroerr_1_1CombinationalTest.html#a24f8a3a342053874bc3bbcf2404b35c7">zeroerr::CombinationalTest::func</a></div><div class="ttdeci">std::function&lt; void()&gt; func</div><div class="ttdef"><b>Definition</b> unittest.h:307</div></div>
+<div class="ttc" id="aclasszeroerr_1_1CombinationalTest_html_a3406172593dd107b18a0f308a5b0a7c3"><div class="ttname"><a href="classzeroerr_1_1CombinationalTest.html#a3406172593dd107b18a0f308a5b0a7c3">zeroerr::CombinationalTest::operator()</a></div><div class="ttdeci">void operator()(T &amp;arg, Args &amp;... args)</div><div class="ttdef"><b>Definition</b> unittest.h:318</div></div>
+<div class="ttc" id="aclasszeroerr_1_1CombinationalTest_html_a42fecd9130b39805c6127a75d2ae618d"><div class="ttname"><a href="classzeroerr_1_1CombinationalTest.html#a42fecd9130b39805c6127a75d2ae618d">zeroerr::CombinationalTest::operator()</a></div><div class="ttdeci">void operator()(T &amp;arg)</div><div class="ttdef"><b>Definition</b> unittest.h:310</div></div>
+<div class="ttc" id="aclasszeroerr_1_1CombinationalTest_html_ac95ea027bdf4f8eb3e8fb959ff767c44"><div class="ttname"><a href="classzeroerr_1_1CombinationalTest.html#ac95ea027bdf4f8eb3e8fb959ff767c44">zeroerr::CombinationalTest::CombinationalTest</a></div><div class="ttdeci">CombinationalTest(std::function&lt; void()&gt; func)</div><div class="ttdef"><b>Definition</b> unittest.h:306</div></div>
+<div class="ttc" id="aclasszeroerr_1_1Decorator_html"><div class="ttname"><a href="classzeroerr_1_1Decorator.html">zeroerr::Decorator</a></div><div class="ttdef"><b>Definition</b> unittest.h:349</div></div>
+<div class="ttc" id="aclasszeroerr_1_1Decorator_html_a2e6ff4dce477237436dbe3a90d8a4c81"><div class="ttname"><a href="classzeroerr_1_1Decorator.html#a2e6ff4dce477237436dbe3a90d8a4c81">zeroerr::Decorator::onAssertion</a></div><div class="ttdeci">virtual bool onAssertion()</div><div class="ttdef"><b>Definition</b> unittest.h:358</div></div>
+<div class="ttc" id="aclasszeroerr_1_1Decorator_html_a4be0e0aade873d32be351c28171cadb3"><div class="ttname"><a href="classzeroerr_1_1Decorator.html#a4be0e0aade873d32be351c28171cadb3">zeroerr::Decorator::onStartup</a></div><div class="ttdeci">virtual bool onStartup(const TestCase &amp;)</div><div class="ttdef"><b>Definition</b> unittest.h:352</div></div>
+<div class="ttc" id="aclasszeroerr_1_1Decorator_html_aaad618a73e1d8f2591a81b16b11e0405"><div class="ttname"><a href="classzeroerr_1_1Decorator.html#aaad618a73e1d8f2591a81b16b11e0405">zeroerr::Decorator::onExecution</a></div><div class="ttdeci">virtual bool onExecution(const TestCase &amp;)</div><div class="ttdef"><b>Definition</b> unittest.h:355</div></div>
+<div class="ttc" id="aclasszeroerr_1_1Decorator_html_ad9ba7881b984a03f15f01d4fed324c40"><div class="ttname"><a href="classzeroerr_1_1Decorator.html#ad9ba7881b984a03f15f01d4fed324c40">zeroerr::Decorator::onFinish</a></div><div class="ttdeci">virtual bool onFinish(const TestCase &amp;, const TestContext &amp;)</div><div class="ttdef"><b>Definition</b> unittest.h:361</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html"><div class="ttname"><a href="classzeroerr_1_1IReporter.html">zeroerr::IReporter</a></div><div class="ttdoc">IReporter is an interface that is used to report the test results. You can create a new reporter by i...</div><div class="ttdef"><b>Definition</b> unittest.h:235</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_a292a702139d500153b5db8e009b298d3"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#a292a702139d500153b5db8e009b298d3">zeroerr::IReporter::subCaseStart</a></div><div class="ttdeci">virtual void subCaseStart(const TestCase &amp;tc, std::stringbuf &amp;sb)=0</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_a2f720cfc0ed15b5e303e95fbdf65a204"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#a2f720cfc0ed15b5e303e95fbdf65a204">zeroerr::IReporter::create</a></div><div class="ttdeci">static IReporter * create(const std::string &amp;name, UnitTest &amp;ut)</div><div class="ttdoc">Create the reporter object with the given name.</div><div class="ttdef"><b>Definition</b> unittest.cpp:817</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_a3286c817db165d55b22191717197cb28"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#a3286c817db165d55b22191717197cb28">zeroerr::IReporter::~IReporter</a></div><div class="ttdeci">virtual ~IReporter()=default</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_a36d2c079f5506824da2020c5eeb92af5"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#a36d2c079f5506824da2020c5eeb92af5">zeroerr::IReporter::testStart</a></div><div class="ttdeci">virtual void testStart()=0</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_a3d810cfe76a19d74479802d51957078b"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#a3d810cfe76a19d74479802d51957078b">zeroerr::IReporter::testCaseStart</a></div><div class="ttdeci">virtual void testCaseStart(const TestCase &amp;tc, std::stringbuf &amp;sb)=0</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_a5e085a06899e975e3fb2c2e1669d3b34"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#a5e085a06899e975e3fb2c2e1669d3b34">zeroerr::IReporter::subCaseEnd</a></div><div class="ttdeci">virtual void subCaseEnd(const TestCase &amp;tc, std::stringbuf &amp;sb, const TestContext &amp;ctx, int type)=0</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_a84fc992650de17540a8876a8d9a7d637"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#a84fc992650de17540a8876a8d9a7d637">zeroerr::IReporter::testEnd</a></div><div class="ttdeci">virtual void testEnd(const TestContext &amp;tc)=0</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_a8792d1cb430543b3cc2b39d5ed19ce49"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#a8792d1cb430543b3cc2b39d5ed19ce49">zeroerr::IReporter::getName</a></div><div class="ttdeci">virtual std::string getName() const =0</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_a966cb4c9c3cd32e3d18884c79a54ccba"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">zeroerr::IReporter::ut</a></div><div class="ttdeci">UnitTest &amp; ut</div><div class="ttdef"><b>Definition</b> unittest.h:261</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_a9ca1a32ceba930c6d5ed4a7a9181c314"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#a9ca1a32ceba930c6d5ed4a7a9181c314">zeroerr::IReporter::IReporter</a></div><div class="ttdeci">IReporter(UnitTest &amp;ut)</div><div class="ttdef"><b>Definition</b> unittest.h:258</div></div>
+<div class="ttc" id="aclasszeroerr_1_1IReporter_html_ae82c65c0fd8a38bd8cb89181bd3812f4"><div class="ttname"><a href="classzeroerr_1_1IReporter.html#ae82c65c0fd8a38bd8cb89181bd3812f4">zeroerr::IReporter::testCaseEnd</a></div><div class="ttdeci">virtual void testCaseEnd(const TestCase &amp;tc, std::stringbuf &amp;sb, const TestContext &amp;ctx, int type)=0</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestArgs_html"><div class="ttname"><a href="classzeroerr_1_1TestArgs.html">zeroerr::TestArgs</a></div><div class="ttdoc">TestArgs is a class that is used to store the test arguments.</div><div class="ttdef"><b>Definition</b> unittest.h:331</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestArgs_html_a09c4ebc1f11ad62080a1c207350c851d"><div class="ttname"><a href="classzeroerr_1_1TestArgs.html#a09c4ebc1f11ad62080a1c207350c851d">zeroerr::TestArgs::operator++</a></div><div class="ttdeci">TestArgs &amp; operator++()</div><div class="ttdef"><b>Definition</b> unittest.h:337</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestArgs_html_a2590bd865f145e68a87fde8f223a194e"><div class="ttname"><a href="classzeroerr_1_1TestArgs.html#a2590bd865f145e68a87fde8f223a194e">zeroerr::TestArgs::size</a></div><div class="ttdeci">size_t size() const</div><div class="ttdef"><b>Definition</b> unittest.h:341</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestArgs_html_a88a26ca65c5d07b59bcf8d4def6e9e3b"><div class="ttname"><a href="classzeroerr_1_1TestArgs.html#a88a26ca65c5d07b59bcf8d4def6e9e3b">zeroerr::TestArgs::args</a></div><div class="ttdeci">std::vector&lt; T &gt; args</div><div class="ttdef"><b>Definition</b> unittest.h:334</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestArgs_html_a9fb1e15e5604dd819dc15413b5daca98"><div class="ttname"><a href="classzeroerr_1_1TestArgs.html#a9fb1e15e5604dd819dc15413b5daca98">zeroerr::TestArgs::TestArgs</a></div><div class="ttdeci">TestArgs(std::initializer_list&lt; T &gt; args)</div><div class="ttdef"><b>Definition</b> unittest.h:333</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestArgs_html_af4d996b9fa925ffc21911aa138f5c57b"><div class="ttname"><a href="classzeroerr_1_1TestArgs.html#af4d996b9fa925ffc21911aa138f5c57b">zeroerr::TestArgs::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdef"><b>Definition</b> unittest.h:342</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html"><div class="ttname"><a href="classzeroerr_1_1TestContext.html">zeroerr::TestContext</a></div><div class="ttdoc">TestContext is a class that holds the test results and reporter context. There are 8 different matric...</div><div class="ttdef"><b>Definition</b> unittest.h:70</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_a297042c71c78fffb5ea516ede0e76e5e"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#a297042c71c78fffb5ea516ede0e76e5e">zeroerr::TestContext::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdoc">Reset the matrices to 0.</div><div class="ttdef"><b>Definition</b> unittest.cpp:65</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_a44bafe3d8caa170f2d85aaac31ae9d11"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#a44bafe3d8caa170f2d85aaac31ae9d11">zeroerr::TestContext::skipped</a></div><div class="ttdeci">unsigned skipped</div><div class="ttdef"><b>Definition</b> unittest.h:75</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_a5aa226bda45e5c765ab76aa3c06a8860"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#a5aa226bda45e5c765ab76aa3c06a8860">zeroerr::TestContext::failed</a></div><div class="ttdeci">unsigned failed</div><div class="ttdef"><b>Definition</b> unittest.h:74</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_a60a2d0a5000902f17799a6cd00859348"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#a60a2d0a5000902f17799a6cd00859348">zeroerr::TestContext::~TestContext</a></div><div class="ttdeci">~TestContext()=default</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_a67f42662712a6d9f737f562f82738311"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#a67f42662712a6d9f737f562f82738311">zeroerr::TestContext::passed</a></div><div class="ttdeci">unsigned passed</div><div class="ttdef"><b>Definition</b> unittest.h:72</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_a9921cfbf6e31fe1402b9849a63a9d0c2"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#a9921cfbf6e31fe1402b9849a63a9d0c2">zeroerr::TestContext::save_output</a></div><div class="ttdeci">void save_output()</div><div class="ttdoc">Save the output of the test to the correct_output_path as a golden file.</div><div class="ttdef"><b>Definition</b> unittest.cpp:45</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_ab0e24ee0a8c0721de2605a5097448bb6"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#ab0e24ee0a8c0721de2605a5097448bb6">zeroerr::TestContext::duration</a></div><div class="ttdeci">std::chrono::duration&lt; double &gt; duration</div><div class="ttdef"><b>Definition</b> unittest.h:81</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_ab4f23ae0b49d06856affd653f260a675"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#ab4f23ae0b49d06856affd653f260a675">zeroerr::TestContext::skipped_as</a></div><div class="ttdeci">unsigned skipped_as</div><div class="ttdef"><b>Definition</b> unittest.h:79</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_ab9b467e6dd1885a4570c45344cba8695"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#ab9b467e6dd1885a4570c45344cba8695">zeroerr::TestContext::passed_as</a></div><div class="ttdeci">unsigned passed_as</div><div class="ttdef"><b>Definition</b> unittest.h:76</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_ac98bb47676f2648631f7cc751d2acfc4"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#ac98bb47676f2648631f7cc751d2acfc4">zeroerr::TestContext::failed_as</a></div><div class="ttdeci">unsigned failed_as</div><div class="ttdef"><b>Definition</b> unittest.h:78</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_ad3c7d87c91277b5ee0a72b2f57950824"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#ad3c7d87c91277b5ee0a72b2f57950824">zeroerr::TestContext::reporter</a></div><div class="ttdeci">IReporter &amp; reporter</div><div class="ttdef"><b>Definition</b> unittest.h:83</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_aed7740983fdbfa5fbd878c3824d6e7d0"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#aed7740983fdbfa5fbd878c3824d6e7d0">zeroerr::TestContext::warning</a></div><div class="ttdeci">unsigned warning</div><div class="ttdef"><b>Definition</b> unittest.h:73</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_afb26cc055274975f24f64bab65c1abb5"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#afb26cc055274975f24f64bab65c1abb5">zeroerr::TestContext::warning_as</a></div><div class="ttdeci">unsigned warning_as</div><div class="ttdef"><b>Definition</b> unittest.h:77</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_afcb52612e11a3af98d8cf8a325bfafe4"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#afcb52612e11a3af98d8cf8a325bfafe4">zeroerr::TestContext::TestContext</a></div><div class="ttdeci">TestContext(IReporter &amp;reporter)</div><div class="ttdoc">Construct a new Test Context object.</div><div class="ttdef"><b>Definition</b> unittest.h:106</div></div>
+<div class="ttc" id="aclasszeroerr_1_1TestContext_html_aff2e1733881bcc5c0ac1ff9182e4476e"><div class="ttname"><a href="classzeroerr_1_1TestContext.html#aff2e1733881bcc5c0ac1ff9182e4476e">zeroerr::TestContext::add</a></div><div class="ttdeci">int add(TestContext &amp;local)</div><div class="ttdoc">Add the subtest results to the matrices.</div><div class="ttdef"><b>Definition</b> unittest.cpp:24</div></div>
+<div class="ttc" id="aconfig_8h_html"><div class="ttname"><a href="config_8h.html">config.h</a></div></div>
+<div class="ttc" id="aconfig_8h_html_a20f4a75508d343fca0ce852dbe63f49d"><div class="ttname"><a href="config_8h.html#a20f4a75508d343fca0ce852dbe63f49d">ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</a></div><div class="ttdeci">#define ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</div><div class="ttdef"><b>Definition</b> config.h:265</div></div>
+<div class="ttc" id="aconfig_8h_html_a8ce59e10da6436524e7e23696e445681"><div class="ttname"><a href="config_8h.html#a8ce59e10da6436524e7e23696e445681">ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</a></div><div class="ttdeci">#define ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</div><div class="ttdef"><b>Definition</b> config.h:218</div></div>
+<div class="ttc" id="anamespacezeroerr_html"><div class="ttname"><a href="namespacezeroerr.html">zeroerr</a></div><div class="ttdef"><b>Definition</b> benchmark.cpp:17</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a04f7fc08849752f78dea0d41a6ffa3a5"><div class="ttname"><a href="namespacezeroerr.html#a04f7fc08849752f78dea0d41a6ffa3a5">zeroerr::should_fail</a></div><div class="ttdeci">Decorator * should_fail(bool isShouldFail)</div><div class="ttdef"><b>Definition</b> unittest.cpp:874</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a2adea737b10b78dd8a601f11daac0912"><div class="ttname"><a href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912">zeroerr::TestType</a></div><div class="ttdeci">TestType</div><div class="ttdoc">TestType is a enum describe the type of the test case.</div><div class="ttdef"><b>Definition</b> unittest.h:267</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a2adea737b10b78dd8a601f11daac0912a2f000e3dc3ad0a55bd508a81d476bf7f"><div class="ttname"><a href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a2f000e3dc3ad0a55bd508a81d476bf7f">zeroerr::bench</a></div><div class="ttdeci">@ bench</div><div class="ttdef"><b>Definition</b> unittest.h:267</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a2adea737b10b78dd8a601f11daac0912a747cfee76c972f1c4894a4b19d13c161"><div class="ttname"><a href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a747cfee76c972f1c4894a4b19d13c161">zeroerr::test_case</a></div><div class="ttdeci">@ test_case</div><div class="ttdef"><b>Definition</b> unittest.h:267</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a2adea737b10b78dd8a601f11daac0912a7b5cb62492dda5c1fe40997a7ff8f63b"><div class="ttname"><a href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a7b5cb62492dda5c1fe40997a7ff8f63b">zeroerr::fuzz_test</a></div><div class="ttdeci">@ fuzz_test</div><div class="ttdef"><b>Definition</b> unittest.h:267</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a2adea737b10b78dd8a601f11daac0912ac9416b3e8edc1c5c4ca1013def82eefd"><div class="ttname"><a href="namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912ac9416b3e8edc1c5c4ca1013def82eefd">zeroerr::sub_case</a></div><div class="ttdeci">@ sub_case</div><div class="ttdef"><b>Definition</b> unittest.h:267</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a7ebf05b5d595f1b2e2a897357e83cf2b"><div class="ttname"><a href="namespacezeroerr.html#a7ebf05b5d595f1b2e2a897357e83cf2b">zeroerr::timeout</a></div><div class="ttdeci">Decorator * timeout(float timeout)</div><div class="ttdef"><b>Definition</b> unittest.cpp:850</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ab29f80eda3a9350cc1db0ec7efad53f5"><div class="ttname"><a href="namespacezeroerr.html#ab29f80eda3a9350cc1db0ec7efad53f5">zeroerr::may_fail</a></div><div class="ttdeci">Decorator * may_fail(bool isMayFail)</div><div class="ttdef"><b>Definition</b> unittest.cpp:868</div></div>
+<div class="ttc" id="anamespacezeroerr_html_ae93eb426f9286ba373e5b841231b4303"><div class="ttname"><a href="namespacezeroerr.html#ae93eb426f9286ba373e5b841231b4303">zeroerr::skip</a></div><div class="ttdeci">Decorator * skip(bool isSkip)</div><div class="ttdef"><b>Definition</b> unittest.cpp:828</div></div>
+<div class="ttc" id="astructzeroerr_1_1Filters_html"><div class="ttname"><a href="structzeroerr_1_1Filters.html">zeroerr::Filters</a></div><div class="ttdef"><b>Definition</b> unittest.cpp:105</div></div>
+<div class="ttc" id="astructzeroerr_1_1SubCase_html"><div class="ttname"><a href="structzeroerr_1_1SubCase.html">zeroerr::SubCase</a></div><div class="ttdoc">SubCase is a class that holds the subcase information.</div><div class="ttdef"><b>Definition</b> unittest.h:208</div></div>
+<div class="ttc" id="astructzeroerr_1_1SubCase_html_a1094ea77abbc713d083fc237a2f034d2"><div class="ttname"><a href="structzeroerr_1_1SubCase.html#a1094ea77abbc713d083fc237a2f034d2">zeroerr::SubCase::context</a></div><div class="ttdeci">TestContext * context</div><div class="ttdef"><b>Definition</b> unittest.h:212</div></div>
+<div class="ttc" id="astructzeroerr_1_1SubCase_html_a4a6b1a3ace5eac6537677a931f9414de"><div class="ttname"><a href="structzeroerr_1_1SubCase.html#a4a6b1a3ace5eac6537677a931f9414de">zeroerr::SubCase::operator&lt;&lt;</a></div><div class="ttdeci">void operator&lt;&lt;(std::function&lt; void(TestContext *)&gt; op)</div><div class="ttdef"><b>Definition</b> unittest.cpp:82</div></div>
+<div class="ttc" id="astructzeroerr_1_1SubCase_html_a60c5f26039a5952dfa2860505e80c1be"><div class="ttname"><a href="structzeroerr_1_1SubCase.html#a60c5f26039a5952dfa2860505e80c1be">zeroerr::SubCase::~SubCase</a></div><div class="ttdeci">~SubCase()=default</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestCase_html"><div class="ttname"><a href="structzeroerr_1_1TestCase.html">zeroerr::TestCase</a></div><div class="ttdoc">TestCase is a class that holds the test case information. There are several fields that are used to s...</div><div class="ttdef"><b>Definition</b> unittest.h:168</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestCase_html_a01b79d3c423e4257a6639b54a36b3927"><div class="ttname"><a href="structzeroerr_1_1TestCase.html#a01b79d3c423e4257a6639b54a36b3927">zeroerr::TestCase::operator&lt;</a></div><div class="ttdeci">bool operator&lt;(const TestCase &amp;rhs) const</div><div class="ttdoc">Compare the test cases.</div><div class="ttdef"><b>Definition</b> unittest.cpp:309</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestCase_html_a06a8b32f470891c8ab8e6894c29d43dc"><div class="ttname"><a href="structzeroerr_1_1TestCase.html#a06a8b32f470891c8ab8e6894c29d43dc">zeroerr::TestCase::func</a></div><div class="ttdeci">std::function&lt; void(TestContext *)&gt; func</div><div class="ttdef"><b>Definition</b> unittest.h:172</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestCase_html_a5653f973b5d217326634e6255eedc4e2"><div class="ttname"><a href="structzeroerr_1_1TestCase.html#a5653f973b5d217326634e6255eedc4e2">zeroerr::TestCase::decorators</a></div><div class="ttdeci">std::vector&lt; Decorator * &gt; decorators</div><div class="ttdef"><b>Definition</b> unittest.h:174</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestCase_html_a5df73af438ef82c072b8055ee1f80aea"><div class="ttname"><a href="structzeroerr_1_1TestCase.html#a5df73af438ef82c072b8055ee1f80aea">zeroerr::TestCase::TestCase</a></div><div class="ttdeci">TestCase(std::string name, std::string file, unsigned line, std::function&lt; void(TestContext *)&gt; func, std::vector&lt; Decorator * &gt; decorators)</div><div class="ttdoc">Construct a new Test Case object.</div><div class="ttdef"><b>Definition</b> unittest.h:199</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestCase_html_a6c2ee7e324c9f83c8b32caa783d0273c"><div class="ttname"><a href="structzeroerr_1_1TestCase.html#a6c2ee7e324c9f83c8b32caa783d0273c">zeroerr::TestCase::file</a></div><div class="ttdeci">std::string file</div><div class="ttdef"><b>Definition</b> unittest.h:170</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestCase_html_a98376a08c6ee6609b67e1694ae9969d5"><div class="ttname"><a href="structzeroerr_1_1TestCase.html#a98376a08c6ee6609b67e1694ae9969d5">zeroerr::TestCase::line</a></div><div class="ttdeci">unsigned line</div><div class="ttdef"><b>Definition</b> unittest.h:171</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestCase_html_a9b0d7e5439e80296ded8fe796043104d"><div class="ttname"><a href="structzeroerr_1_1TestCase.html#a9b0d7e5439e80296ded8fe796043104d">zeroerr::TestCase::subcases</a></div><div class="ttdeci">std::vector&lt; TestCase * &gt; subcases</div><div class="ttdef"><b>Definition</b> unittest.h:173</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestCase_html_aeb1ded7fd0adfbea98a331d80a5c7084"><div class="ttname"><a href="structzeroerr_1_1TestCase.html#aeb1ded7fd0adfbea98a331d80a5c7084">zeroerr::TestCase::TestCase</a></div><div class="ttdeci">TestCase(std::string name, std::string file, unsigned line, std::vector&lt; Decorator * &gt; decorators)</div><div class="ttdoc">Construct a new Test Case object.</div><div class="ttdef"><b>Definition</b> unittest.h:188</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestCase_html_afad2e5b69703f5254521bdbdfba61004"><div class="ttname"><a href="structzeroerr_1_1TestCase.html#afad2e5b69703f5254521bdbdfba61004">zeroerr::TestCase::name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition</b> unittest.h:169</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestedObjects_html"><div class="ttname"><a href="structzeroerr_1_1TestedObjects.html">zeroerr::TestedObjects</a></div><div class="ttdef"><b>Definition</b> unittest.h:218</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestedObjects_html_a5eb82616ce016e0781ef3fc03a915f39"><div class="ttname"><a href="structzeroerr_1_1TestedObjects.html#a5eb82616ce016e0781ef3fc03a915f39">zeroerr::TestedObjects::objects</a></div><div class="ttdeci">std::vector&lt; T &gt; objects</div><div class="ttdef"><b>Definition</b> unittest.h:220</div></div>
+<div class="ttc" id="astructzeroerr_1_1TestedObjects_html_abc7af4b21a6afe886422373ac8970b0f"><div class="ttname"><a href="structzeroerr_1_1TestedObjects.html#abc7af4b21a6afe886422373ac8970b0f">zeroerr::TestedObjects::add</a></div><div class="ttdeci">void add(T &amp;&amp;obj)</div><div class="ttdef"><b>Definition</b> unittest.h:219</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html">zeroerr::UnitTest</a></div><div class="ttdoc">UnitTest is a class that holds the test configuration. There are several options that can be set to c...</div><div class="ttdef"><b>Definition</b> unittest.h:124</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_a19b3070a161ff0151b42a535350f20cf"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#a19b3070a161ff0151b42a535350f20cf">zeroerr::UnitTest::binary</a></div><div class="ttdeci">std::string binary</div><div class="ttdef"><b>Definition</b> unittest.h:155</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_a2034cc79e78e6bdbf57062c9ee61deb2"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#a2034cc79e78e6bdbf57062c9ee61deb2">zeroerr::UnitTest::list_test_cases</a></div><div class="ttdeci">bool list_test_cases</div><div class="ttdef"><b>Definition</b> unittest.h:150</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_a3d4b1a576b719e0e2fc91fdedb3a5c88"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#a3d4b1a576b719e0e2fc91fdedb3a5c88">zeroerr::UnitTest::run_fuzz</a></div><div class="ttdeci">bool run_fuzz</div><div class="ttdef"><b>Definition</b> unittest.h:149</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_a4704fd5579d480cec3c1f851f4b8806d"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#a4704fd5579d480cec3c1f851f4b8806d">zeroerr::UnitTest::run_bench</a></div><div class="ttdeci">bool run_bench</div><div class="ttdef"><b>Definition</b> unittest.h:148</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_a886e4a07a0dbe5aa8a8cb1beeafbb246"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#a886e4a07a0dbe5aa8a8cb1beeafbb246">zeroerr::UnitTest::log_to_report</a></div><div class="ttdeci">bool log_to_report</div><div class="ttdef"><b>Definition</b> unittest.h:152</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_a9792f825879a652983e2760bb9228bf3"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#a9792f825879a652983e2760bb9228bf3">zeroerr::UnitTest::run_filter</a></div><div class="ttdeci">bool run_filter(const TestCase &amp;tc)</div><div class="ttdoc">Run the test with the given filter.</div><div class="ttdef"><b>Definition</b> unittest.cpp:226</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_aa5024999afa5a9158229d63096246aeb"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#aa5024999afa5a9158229d63096246aeb">zeroerr::UnitTest::correct_output_path</a></div><div class="ttdeci">std::string correct_output_path</div><div class="ttdef"><b>Definition</b> unittest.h:153</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_ac23e9ec91f19b3faee35f64243ef56f6"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#ac23e9ec91f19b3faee35f64243ef56f6">zeroerr::UnitTest::no_color</a></div><div class="ttdeci">bool no_color</div><div class="ttdef"><b>Definition</b> unittest.h:151</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_aca270e3ff091af16d0733526d519a178"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#aca270e3ff091af16d0733526d519a178">zeroerr::UnitTest::filters</a></div><div class="ttdeci">struct Filters * filters</div><div class="ttdef"><b>Definition</b> unittest.h:156</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_adc47f6c00707754f28ec136dc82c16b4"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#adc47f6c00707754f28ec136dc82c16b4">zeroerr::UnitTest::parseArgs</a></div><div class="ttdeci">UnitTest &amp; parseArgs(int argc, const char **argv)</div><div class="ttdoc">Parse the arguments to configure the test.</div><div class="ttdef"><b>Definition</b> unittest.cpp:110</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_add84897da7ac576dedf5dd45b2f4348c"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#add84897da7ac576dedf5dd45b2f4348c">zeroerr::UnitTest::reporter_name</a></div><div class="ttdeci">std::string reporter_name</div><div class="ttdef"><b>Definition</b> unittest.h:154</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_af405abcaa81c58ba2d51b16c86fefb9f"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#af405abcaa81c58ba2d51b16c86fefb9f">zeroerr::UnitTest::run</a></div><div class="ttdeci">int run()</div><div class="ttdoc">Run the test.</div><div class="ttdef"><b>Definition</b> unittest.cpp:253</div></div>
+<div class="ttc" id="astructzeroerr_1_1UnitTest_html_af45b7d7d6fea730cbc15505f12e7c4f7"><div class="ttname"><a href="structzeroerr_1_1UnitTest.html#af45b7d7d6fea730cbc15505f12e7c4f7">zeroerr::UnitTest::silent</a></div><div class="ttdeci">bool silent</div><div class="ttdef"><b>Definition</b> unittest.h:147</div></div>
+<div class="ttc" id="astructzeroerr_1_1detail_1_1regReporter_html"><div class="ttname"><a href="structzeroerr_1_1detail_1_1regReporter.html">zeroerr::detail::regReporter</a></div><div class="ttdoc">regReporter is a class that is used to register the reporter. It will be used as global variables and...</div><div class="ttdef"><b>Definition</b> unittest.h:283</div></div>
+<div class="ttc" id="astructzeroerr_1_1detail_1_1regTest_html"><div class="ttname"><a href="structzeroerr_1_1detail_1_1regTest.html">zeroerr::detail::regTest</a></div><div class="ttdoc">regTest is a class that is used to register the test case. It will be used as global variables and th...</div><div class="ttdef"><b>Definition</b> unittest.h:275</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a class="el" href="unittest_8h.html">unittest.h</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

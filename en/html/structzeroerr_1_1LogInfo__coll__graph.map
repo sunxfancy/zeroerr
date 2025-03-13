@@ -1,0 +1,9 @@
+<map id="zeroerr::LogInfo" name="zeroerr::LogInfo">
+<area shape="rect" id="Node000001" title="LogInfo is a struct to store the meta data of the log message." alt="" coords="25,285,149,311"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,183,168,223"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,237,89,285,84,285,84,237"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="43,95,130,120"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="89,134,89,182,84,182,84,134"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="17,5,156,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="89,59,89,94,84,94,84,59"/>
+</map>

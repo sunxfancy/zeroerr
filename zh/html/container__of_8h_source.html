@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/domains/container_of.h 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(0); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('container__of_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">container_of.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="container__of_8h.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &quot;<a class="code" href="config_8h.html">zeroerr/internal/config.h</a>&quot;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;<a class="code" href="domain_8h.html">zeroerr/domains/domain.h</a>&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="typetraits_8h.html">zeroerr/internal/typetraits.h</a>&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><a class="code hl_define" href="config_8h.html#a8ce59e10da6436524e7e23696e445681">ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</a></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacezeroerr.html">zeroerr</a> {</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="foldopen" id="foldopen00034" data-start="{" data-end="};">
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="structzeroerr_1_1ContainerOfBase.html">   34</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structzeroerr_1_1ContainerOfBase.html">ContainerOfBase</a> {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="structzeroerr_1_1ContainerOfBase.html#ac864a25e83e719b3ac5bcc9a6d7372eb">   35</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#a024ab54fd868a313fcc24be881abbcda">min_size</a> = 0, <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ac864a25e83e719b3ac5bcc9a6d7372eb">max_size</a> = 100, <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ae0f228ee873d442bb0b4ca097b831623">size</a> = -1;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="structzeroerr_1_1ContainerOfBase.html#a6df1286c70df7cdfa6ce6324ccb9ef12">   37</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structzeroerr_1_1ContainerOfBase.html#a6df1286c70df7cdfa6ce6324ccb9ef12">WithMaxSize</a>(<span class="keywordtype">unsigned</span> _max_size) { this-&gt;<a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ac864a25e83e719b3ac5bcc9a6d7372eb">max_size</a> = _max_size; }</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="structzeroerr_1_1ContainerOfBase.html#ae53172f628846b3ecbf49dbad473b530">   38</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structzeroerr_1_1ContainerOfBase.html#ae53172f628846b3ecbf49dbad473b530">WithMinSize</a>(<span class="keywordtype">unsigned</span> _min_size) { this-&gt;min_size = _min_size; }</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="structzeroerr_1_1ContainerOfBase.html#a21c8e11afca4b8a0e042546a7d6a9eec">   39</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="structzeroerr_1_1ContainerOfBase.html#a21c8e11afca4b8a0e042546a7d6a9eec">WithSize</a>(<span class="keywordtype">unsigned</span> _size) { this-&gt;<a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ae0f228ee873d442bb0b4ca097b831623">size</a> = _size; }</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>};</div>
+</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> InnerDomain&gt;</div>
+<div class="foldopen" id="foldopen00044" data-start="{" data-end="};">
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="classzeroerr_1_1AssociativeContainerOf.html">   44</a></span><span class="keyword">class </span><a class="code hl_class" href="classzeroerr_1_1AssociativeContainerOf.html">AssociativeContainerOf</a> : <span class="keyword">public</span> <a class="code hl_class" href="classzeroerr_1_1Domain.html">Domain</a>&lt;T, std::vector&lt;typename InnerDomain::CorpusType&gt;&gt;,</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                               <span class="keyword">public</span> <a class="code hl_struct" href="structzeroerr_1_1ContainerOfBase.html">ContainerOfBase</a> {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    InnerDomain inner_domain;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="classzeroerr_1_1AssociativeContainerOf.html#a5dfb2179c58b679363229d446d413a73">   49</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a5dfb2179c58b679363229d446d413a73">ValueType</a>  = T;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classzeroerr_1_1AssociativeContainerOf.html#a32c23432390c63efbe8b9e1039177e16">   50</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a32c23432390c63efbe8b9e1039177e16">CorpusType</a> = std::vector&lt;typename InnerDomain::CorpusType&gt;;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="classzeroerr_1_1AssociativeContainerOf.html#a465e2b8c6281517c01224272d93a07c0">   52</a></span>    <a class="code hl_function" href="classzeroerr_1_1AssociativeContainerOf.html#a465e2b8c6281517c01224272d93a07c0">AssociativeContainerOf</a>(InnerDomain&amp;&amp; inner_domain) : inner_domain(std::move(inner_domain)) {}</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="foldopen" id="foldopen00054" data-start="{" data-end="}">
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classzeroerr_1_1AssociativeContainerOf.html#ad84661a44366c31cde2e4adb7a684c2c">   54</a></span>    <span class="keyword">virtual</span> <a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a5dfb2179c58b679363229d446d413a73">ValueType</a> <a class="code hl_function" href="classzeroerr_1_1AssociativeContainerOf.html#ad84661a44366c31cde2e4adb7a684c2c">GetValue</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a32c23432390c63efbe8b9e1039177e16">CorpusType</a>&amp; v)<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a5dfb2179c58b679363229d446d413a73">ValueType</a> result;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; elem : v) {</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>            result.insert(inner_domain.GetValue(elem));</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        }</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    }</div>
+</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="foldopen" id="foldopen00062" data-start="{" data-end="}">
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classzeroerr_1_1AssociativeContainerOf.html#ac873e6095ebd59f143ab84a22702e16f">   62</a></span>    <span class="keyword">virtual</span> <a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a32c23432390c63efbe8b9e1039177e16">CorpusType</a> <a class="code hl_function" href="classzeroerr_1_1AssociativeContainerOf.html#ac873e6095ebd59f143ab84a22702e16f">FromValue</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a5dfb2179c58b679363229d446d413a73">ValueType</a>&amp; v)<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a32c23432390c63efbe8b9e1039177e16">CorpusType</a> result;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; elem : v) {</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>            result.push_back(inner_domain.FromValue(elem));</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        }</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    }</div>
+</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="foldopen" id="foldopen00070" data-start="{" data-end="}">
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="classzeroerr_1_1AssociativeContainerOf.html#a837375006ccb5b91f20a77b141f74c7b">   70</a></span>    <a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a32c23432390c63efbe8b9e1039177e16">CorpusType</a> <a class="code hl_function" href="classzeroerr_1_1AssociativeContainerOf.html#a837375006ccb5b91f20a77b141f74c7b">GetRandomCorpus</a>(<a class="code hl_class" href="classzeroerr_1_1Rng.html">Rng</a>&amp; rng)<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keywordtype">unsigned</span>   E = rng.<a class="code hl_function" href="classzeroerr_1_1Rng.html#a52e17764d07f972411cb772298cda8c9">bounded</a>(<a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ac864a25e83e719b3ac5bcc9a6d7372eb">max_size</a> - <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#a024ab54fd868a313fcc24be881abbcda">min_size</a> + 1) + <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#a024ab54fd868a313fcc24be881abbcda">min_size</a>;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        <a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a32c23432390c63efbe8b9e1039177e16">CorpusType</a> result;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; E; i++) {</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            result.push_back(inner_domain.GetRandomCorpus(rng));</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        }</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    }</div>
+</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="foldopen" id="foldopen00079" data-start="{" data-end="}">
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="classzeroerr_1_1AssociativeContainerOf.html#a568174a8f18a3160a36c3bb0b1fa5594">   79</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1AssociativeContainerOf.html#a568174a8f18a3160a36c3bb0b1fa5594">Mutate</a>(<a class="code hl_class" href="classzeroerr_1_1Rng.html">Rng</a>&amp; rng, <a class="code hl_typedef" href="classzeroerr_1_1AssociativeContainerOf.html#a32c23432390c63efbe8b9e1039177e16">CorpusType</a>&amp; v, <span class="keywordtype">bool</span> only_shrink)<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordtype">int</span> action = rng.<a class="code hl_function" href="classzeroerr_1_1Rng.html#a52e17764d07f972411cb772298cda8c9">bounded</a>(5);</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ae0f228ee873d442bb0b4ca097b831623">size</a> == -1 &amp;&amp; action == 0) {</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            <span class="keywordflow">if</span> (<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(v.size()) &gt; <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#a024ab54fd868a313fcc24be881abbcda">min_size</a>)</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>                v.erase(v.begin() + rng.<a class="code hl_function" href="classzeroerr_1_1Rng.html#a52e17764d07f972411cb772298cda8c9">bounded</a>(<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(v.size())));</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ae0f228ee873d442bb0b4ca097b831623">size</a> == -1 &amp;&amp; action == 1) {</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            <span class="keywordflow">if</span> (<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(v.size()) &lt; <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ac864a25e83e719b3ac5bcc9a6d7372eb">max_size</a>)</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                v.push_back(inner_domain.GetRandomCorpus(rng));</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>            inner_domain.Mutate(rng, v[rng.<a class="code hl_function" href="classzeroerr_1_1Rng.html#a52e17764d07f972411cb772298cda8c9">bounded</a>(<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(v.size()))], only_shrink);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        }</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    }</div>
+</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>};</div>
+</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> InnerDomain&gt;</div>
+<div class="foldopen" id="foldopen00096" data-start="{" data-end="};">
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="classzeroerr_1_1SequenceContainerOf.html">   96</a></span><span class="keyword">class </span><a class="code hl_class" href="classzeroerr_1_1SequenceContainerOf.html">SequenceContainerOf</a> : <span class="keyword">public</span> <a class="code hl_class" href="classzeroerr_1_1Domain.html">Domain</a>&lt;T, std::vector&lt;typename InnerDomain::CorpusType&gt;&gt;,</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>                            <span class="keyword">public</span> <a class="code hl_struct" href="structzeroerr_1_1ContainerOfBase.html">ContainerOfBase</a> {</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    InnerDomain inner_domain;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="classzeroerr_1_1SequenceContainerOf.html#ac58e8b32e2c1c25c7e4e02c77654975b">  101</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#ac58e8b32e2c1c25c7e4e02c77654975b">ValueType</a>  = T;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="classzeroerr_1_1SequenceContainerOf.html#acdbff7ba78c81ce7e86bf92d3466fd64">  102</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#acdbff7ba78c81ce7e86bf92d3466fd64">CorpusType</a> = std::vector&lt;typename InnerDomain::CorpusType&gt;;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="classzeroerr_1_1SequenceContainerOf.html#a008de5ffb6e3eba1cc828898ed83db73">  104</a></span>    <a class="code hl_function" href="classzeroerr_1_1SequenceContainerOf.html#a008de5ffb6e3eba1cc828898ed83db73">SequenceContainerOf</a>(InnerDomain&amp;&amp; inner_domain) : inner_domain(std::move(inner_domain)) {}</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="foldopen" id="foldopen00106" data-start="{" data-end="}">
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno"><a class="line" href="classzeroerr_1_1SequenceContainerOf.html#a2b411a05560ba25865c20d66fac67ef8">  106</a></span>    <span class="keyword">virtual</span> <a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#ac58e8b32e2c1c25c7e4e02c77654975b">ValueType</a> <a class="code hl_function" href="classzeroerr_1_1SequenceContainerOf.html#a2b411a05560ba25865c20d66fac67ef8">GetValue</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#acdbff7ba78c81ce7e86bf92d3466fd64">CorpusType</a>&amp; v)<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        <span class="keywordflow">return</span> <a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#ac58e8b32e2c1c25c7e4e02c77654975b">ValueType</a>(v.begin(), v.end());</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    }</div>
+</div>
+<div class="foldopen" id="foldopen00109" data-start="{" data-end="}">
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="classzeroerr_1_1SequenceContainerOf.html#abadd336ac7fc7c79d92adc4ce4beb414">  109</a></span>    <span class="keyword">virtual</span> <a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#acdbff7ba78c81ce7e86bf92d3466fd64">CorpusType</a> <a class="code hl_function" href="classzeroerr_1_1SequenceContainerOf.html#abadd336ac7fc7c79d92adc4ce4beb414">FromValue</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#ac58e8b32e2c1c25c7e4e02c77654975b">ValueType</a>&amp; v)<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        <span class="keywordflow">return</span> <a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#acdbff7ba78c81ce7e86bf92d3466fd64">CorpusType</a>(v.begin(), v.end());</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    }</div>
+</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="foldopen" id="foldopen00113" data-start="{" data-end="}">
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="classzeroerr_1_1SequenceContainerOf.html#a6e84e314d9bbdee3527481e1c6cc3f76">  113</a></span>    <a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#acdbff7ba78c81ce7e86bf92d3466fd64">CorpusType</a> <a class="code hl_function" href="classzeroerr_1_1SequenceContainerOf.html#a6e84e314d9bbdee3527481e1c6cc3f76">GetRandomCorpus</a>(<a class="code hl_class" href="classzeroerr_1_1Rng.html">Rng</a>&amp; rng)<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        <span class="keywordtype">unsigned</span>   E = rng.<a class="code hl_function" href="classzeroerr_1_1Rng.html#a52e17764d07f972411cb772298cda8c9">bounded</a>(<a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ac864a25e83e719b3ac5bcc9a6d7372eb">max_size</a> - <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#a024ab54fd868a313fcc24be881abbcda">min_size</a> + 1) + <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#a024ab54fd868a313fcc24be881abbcda">min_size</a>;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        <a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#acdbff7ba78c81ce7e86bf92d3466fd64">CorpusType</a> result;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; E; i++) {</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            result.push_back(inner_domain.GetRandomCorpus(rng));</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        }</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>        <span class="keywordflow">return</span> result;</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    }</div>
+</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="foldopen" id="foldopen00122" data-start="{" data-end="}">
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno"><a class="line" href="classzeroerr_1_1SequenceContainerOf.html#a4c2298f21b4e146800253dba861b7597">  122</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classzeroerr_1_1SequenceContainerOf.html#a4c2298f21b4e146800253dba861b7597">Mutate</a>(<a class="code hl_class" href="classzeroerr_1_1Rng.html">Rng</a>&amp; rng, <a class="code hl_typedef" href="classzeroerr_1_1SequenceContainerOf.html#acdbff7ba78c81ce7e86bf92d3466fd64">CorpusType</a>&amp; v, <span class="keywordtype">bool</span> only_shrink)<span class="keyword"> const override </span>{</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordtype">int</span> action = rng.<a class="code hl_function" href="classzeroerr_1_1Rng.html#a52e17764d07f972411cb772298cda8c9">bounded</a>(5);</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ae0f228ee873d442bb0b4ca097b831623">size</a> == -1 &amp;&amp; action == 0) {</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            <span class="keywordflow">if</span> (<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(v.size()) &gt; <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#a024ab54fd868a313fcc24be881abbcda">min_size</a>) v.erase(v.begin() + rng.<a class="code hl_function" href="classzeroerr_1_1Rng.html#a52e17764d07f972411cb772298cda8c9">bounded</a>(<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(v.size())));</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ae0f228ee873d442bb0b4ca097b831623">size</a> == -1 &amp;&amp; action == 1) {</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>            <span class="keywordflow">if</span> (<span class="keyword">static_cast&lt;</span><span class="keywordtype">int</span><span class="keyword">&gt;</span>(v.size()) &lt; <a class="code hl_variable" href="structzeroerr_1_1ContainerOfBase.html#ac864a25e83e719b3ac5bcc9a6d7372eb">max_size</a>)</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>                v.push_back(inner_domain.GetRandomCorpus(rng));</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>            inner_domain.Mutate(rng, v[rng.<a class="code hl_function" href="classzeroerr_1_1Rng.html#a52e17764d07f972411cb772298cda8c9">bounded</a>(<span class="keyword">static_cast&lt;</span>uint32_t<span class="keyword">&gt;</span>(v.size()))], only_shrink);</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        }</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    }</div>
+</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>};</div>
+</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment">// ContainerOf&lt;T&gt;(inner) combinator creates a domain for a container T (eg, a</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="comment">// std::vector, std::set, etc) where elements are created from `inner`.</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="comment">//</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="comment">// Example usage:</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">//</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment">//   ContainerOf&lt;std::vector&lt;int&gt;&gt;(InRange(1, 2021))</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment">//</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment">// The domain also supports customizing the minimum and maximum size via the</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">// `WithSize`, `WithMinSize` and `WithMaxSize` functions. Eg:</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="comment">//</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="comment">//   ContainerOf&lt;std::vector&lt;int&gt;&gt;(Arbitrary&lt;int&gt;()).WithMaxSize(5)</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="comment">//</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Inner&gt;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><span class="keyword">typename</span> std::enable_if&lt;detail::is_associative_container&lt;T&gt;::value,</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>                        AssociativeContainerOf&lt;T, Inner&gt;&gt;::type</div>
+<div class="foldopen" id="foldopen00152" data-start="{" data-end="}">
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="namespacezeroerr.html#a84e68cf62e5be70fa20bb016d30c001d">  152</a></span><a class="code hl_function" href="namespacezeroerr.html#a84e68cf62e5be70fa20bb016d30c001d">ContainerOf</a>(Inner&amp;&amp; inner) {</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="keywordflow">return</span> <a class="code hl_class" href="classzeroerr_1_1AssociativeContainerOf.html">AssociativeContainerOf&lt;T, Inner&gt;</a>(std::move(inner));</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>}</div>
+</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> Inner&gt;</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="keyword">typename</span> std::enable_if&lt;!detail::is_associative_container&lt;T&gt;::value &amp;&amp;</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>                            detail::is_container&lt;T&gt;::value,</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>                        SequenceContainerOf&lt;T, Inner&gt;&gt;::type</div>
+<div class="foldopen" id="foldopen00160" data-start="{" data-end="}">
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno"><a class="line" href="namespacezeroerr.html#a74735e63264395e5853c50d580a8880e">  160</a></span><a class="code hl_function" href="namespacezeroerr.html#a84e68cf62e5be70fa20bb016d30c001d">ContainerOf</a>(Inner&amp;&amp; inner) {</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="keywordflow">return</span> <a class="code hl_class" href="classzeroerr_1_1SequenceContainerOf.html">SequenceContainerOf&lt;T, Inner&gt;</a>(std::move(inner));</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>}</div>
+</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span> </div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="comment">// We can also support with a template template parameter, so that we can use</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="comment">// the name of the container instead of the complete type. In such case,</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="comment">// the ValueType of the inner domain should be passed into the container</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="comment">//</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="comment">//   ContainerOf&lt;std::vector&gt;(Positive&lt;int&gt;()).WithSize(3);</span></div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="comment">//</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="keyword">template</span> &lt;<span class="keyword">template</span> &lt;<span class="keyword">typename</span>, <span class="keyword">typename</span>...&gt; <span class="keyword">class </span>T, <span class="keyword">typename</span>... Inner,</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>          <span class="keyword">typename</span> C = T&lt;<span class="keyword">typename</span> Inner::ValueType...&gt;&gt;</div>
+<div class="foldopen" id="foldopen00172" data-start="{" data-end="}">
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno"><a class="line" href="namespacezeroerr.html#a12d9c5cedd42f903d6849b6c93122b67">  172</a></span><span class="keyword">auto</span> <a class="code hl_function" href="namespacezeroerr.html#a84e68cf62e5be70fa20bb016d30c001d">ContainerOf</a>(Inner... inner) -&gt; <span class="keyword">decltype</span>(ContainerOf&lt;C&gt;(std::move(inner)...)) {</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="keywordflow">return</span> ContainerOf&lt;C&gt;(std::move(inner)...);</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>}</div>
+</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>}  <span class="comment">// namespace zeroerr</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><a class="code hl_define" href="config_8h.html#a20f4a75508d343fca0ce852dbe63f49d">ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</a></div>
+<div class="ttc" id="aclasszeroerr_1_1AssociativeContainerOf_html"><div class="ttname"><a href="classzeroerr_1_1AssociativeContainerOf.html">zeroerr::AssociativeContainerOf</a></div><div class="ttdef"><b>Definition</b> container_of.h:45</div></div>
+<div class="ttc" id="aclasszeroerr_1_1AssociativeContainerOf_html_a32c23432390c63efbe8b9e1039177e16"><div class="ttname"><a href="classzeroerr_1_1AssociativeContainerOf.html#a32c23432390c63efbe8b9e1039177e16">zeroerr::AssociativeContainerOf::CorpusType</a></div><div class="ttdeci">std::vector&lt; typename InnerDomain::CorpusType &gt; CorpusType</div><div class="ttdef"><b>Definition</b> container_of.h:50</div></div>
+<div class="ttc" id="aclasszeroerr_1_1AssociativeContainerOf_html_a465e2b8c6281517c01224272d93a07c0"><div class="ttname"><a href="classzeroerr_1_1AssociativeContainerOf.html#a465e2b8c6281517c01224272d93a07c0">zeroerr::AssociativeContainerOf::AssociativeContainerOf</a></div><div class="ttdeci">AssociativeContainerOf(InnerDomain &amp;&amp;inner_domain)</div><div class="ttdef"><b>Definition</b> container_of.h:52</div></div>
+<div class="ttc" id="aclasszeroerr_1_1AssociativeContainerOf_html_a568174a8f18a3160a36c3bb0b1fa5594"><div class="ttname"><a href="classzeroerr_1_1AssociativeContainerOf.html#a568174a8f18a3160a36c3bb0b1fa5594">zeroerr::AssociativeContainerOf::Mutate</a></div><div class="ttdeci">void Mutate(Rng &amp;rng, CorpusType &amp;v, bool only_shrink) const override</div><div class="ttdef"><b>Definition</b> container_of.h:79</div></div>
+<div class="ttc" id="aclasszeroerr_1_1AssociativeContainerOf_html_a5dfb2179c58b679363229d446d413a73"><div class="ttname"><a href="classzeroerr_1_1AssociativeContainerOf.html#a5dfb2179c58b679363229d446d413a73">zeroerr::AssociativeContainerOf::ValueType</a></div><div class="ttdeci">T ValueType</div><div class="ttdef"><b>Definition</b> container_of.h:49</div></div>
+<div class="ttc" id="aclasszeroerr_1_1AssociativeContainerOf_html_a837375006ccb5b91f20a77b141f74c7b"><div class="ttname"><a href="classzeroerr_1_1AssociativeContainerOf.html#a837375006ccb5b91f20a77b141f74c7b">zeroerr::AssociativeContainerOf::GetRandomCorpus</a></div><div class="ttdeci">CorpusType GetRandomCorpus(Rng &amp;rng) const override</div><div class="ttdef"><b>Definition</b> container_of.h:70</div></div>
+<div class="ttc" id="aclasszeroerr_1_1AssociativeContainerOf_html_ac873e6095ebd59f143ab84a22702e16f"><div class="ttname"><a href="classzeroerr_1_1AssociativeContainerOf.html#ac873e6095ebd59f143ab84a22702e16f">zeroerr::AssociativeContainerOf::FromValue</a></div><div class="ttdeci">virtual CorpusType FromValue(const ValueType &amp;v) const override</div><div class="ttdef"><b>Definition</b> container_of.h:62</div></div>
+<div class="ttc" id="aclasszeroerr_1_1AssociativeContainerOf_html_ad84661a44366c31cde2e4adb7a684c2c"><div class="ttname"><a href="classzeroerr_1_1AssociativeContainerOf.html#ad84661a44366c31cde2e4adb7a684c2c">zeroerr::AssociativeContainerOf::GetValue</a></div><div class="ttdeci">virtual ValueType GetValue(const CorpusType &amp;v) const override</div><div class="ttdef"><b>Definition</b> container_of.h:54</div></div>
+<div class="ttc" id="aclasszeroerr_1_1Domain_html"><div class="ttname"><a href="classzeroerr_1_1Domain.html">zeroerr::Domain</a></div><div class="ttdoc">Domain class for generating random values of a specific type.</div><div class="ttdef"><b>Definition</b> domain.h:21</div></div>
+<div class="ttc" id="aclasszeroerr_1_1Rng_html"><div class="ttname"><a href="classzeroerr_1_1Rng.html">zeroerr::Rng</a></div><div class="ttdef"><b>Definition</b> rng.h:30</div></div>
+<div class="ttc" id="aclasszeroerr_1_1Rng_html_a52e17764d07f972411cb772298cda8c9"><div class="ttname"><a href="classzeroerr_1_1Rng.html#a52e17764d07f972411cb772298cda8c9">zeroerr::Rng::bounded</a></div><div class="ttdeci">uint32_t bounded(uint32_t range) noexcept</div><div class="ttdef"><b>Definition</b> rng.h:126</div></div>
+<div class="ttc" id="aclasszeroerr_1_1SequenceContainerOf_html"><div class="ttname"><a href="classzeroerr_1_1SequenceContainerOf.html">zeroerr::SequenceContainerOf</a></div><div class="ttdef"><b>Definition</b> container_of.h:97</div></div>
+<div class="ttc" id="aclasszeroerr_1_1SequenceContainerOf_html_a008de5ffb6e3eba1cc828898ed83db73"><div class="ttname"><a href="classzeroerr_1_1SequenceContainerOf.html#a008de5ffb6e3eba1cc828898ed83db73">zeroerr::SequenceContainerOf::SequenceContainerOf</a></div><div class="ttdeci">SequenceContainerOf(InnerDomain &amp;&amp;inner_domain)</div><div class="ttdef"><b>Definition</b> container_of.h:104</div></div>
+<div class="ttc" id="aclasszeroerr_1_1SequenceContainerOf_html_a2b411a05560ba25865c20d66fac67ef8"><div class="ttname"><a href="classzeroerr_1_1SequenceContainerOf.html#a2b411a05560ba25865c20d66fac67ef8">zeroerr::SequenceContainerOf::GetValue</a></div><div class="ttdeci">virtual ValueType GetValue(const CorpusType &amp;v) const override</div><div class="ttdef"><b>Definition</b> container_of.h:106</div></div>
+<div class="ttc" id="aclasszeroerr_1_1SequenceContainerOf_html_a4c2298f21b4e146800253dba861b7597"><div class="ttname"><a href="classzeroerr_1_1SequenceContainerOf.html#a4c2298f21b4e146800253dba861b7597">zeroerr::SequenceContainerOf::Mutate</a></div><div class="ttdeci">void Mutate(Rng &amp;rng, CorpusType &amp;v, bool only_shrink) const override</div><div class="ttdef"><b>Definition</b> container_of.h:122</div></div>
+<div class="ttc" id="aclasszeroerr_1_1SequenceContainerOf_html_a6e84e314d9bbdee3527481e1c6cc3f76"><div class="ttname"><a href="classzeroerr_1_1SequenceContainerOf.html#a6e84e314d9bbdee3527481e1c6cc3f76">zeroerr::SequenceContainerOf::GetRandomCorpus</a></div><div class="ttdeci">CorpusType GetRandomCorpus(Rng &amp;rng) const override</div><div class="ttdef"><b>Definition</b> container_of.h:113</div></div>
+<div class="ttc" id="aclasszeroerr_1_1SequenceContainerOf_html_abadd336ac7fc7c79d92adc4ce4beb414"><div class="ttname"><a href="classzeroerr_1_1SequenceContainerOf.html#abadd336ac7fc7c79d92adc4ce4beb414">zeroerr::SequenceContainerOf::FromValue</a></div><div class="ttdeci">virtual CorpusType FromValue(const ValueType &amp;v) const override</div><div class="ttdef"><b>Definition</b> container_of.h:109</div></div>
+<div class="ttc" id="aclasszeroerr_1_1SequenceContainerOf_html_ac58e8b32e2c1c25c7e4e02c77654975b"><div class="ttname"><a href="classzeroerr_1_1SequenceContainerOf.html#ac58e8b32e2c1c25c7e4e02c77654975b">zeroerr::SequenceContainerOf::ValueType</a></div><div class="ttdeci">T ValueType</div><div class="ttdef"><b>Definition</b> container_of.h:101</div></div>
+<div class="ttc" id="aclasszeroerr_1_1SequenceContainerOf_html_acdbff7ba78c81ce7e86bf92d3466fd64"><div class="ttname"><a href="classzeroerr_1_1SequenceContainerOf.html#acdbff7ba78c81ce7e86bf92d3466fd64">zeroerr::SequenceContainerOf::CorpusType</a></div><div class="ttdeci">std::vector&lt; typename InnerDomain::CorpusType &gt; CorpusType</div><div class="ttdef"><b>Definition</b> container_of.h:102</div></div>
+<div class="ttc" id="aconfig_8h_html"><div class="ttname"><a href="config_8h.html">config.h</a></div></div>
+<div class="ttc" id="aconfig_8h_html_a20f4a75508d343fca0ce852dbe63f49d"><div class="ttname"><a href="config_8h.html#a20f4a75508d343fca0ce852dbe63f49d">ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</a></div><div class="ttdeci">#define ZEROERR_SUPPRESS_COMMON_WARNINGS_POP</div><div class="ttdef"><b>Definition</b> config.h:265</div></div>
+<div class="ttc" id="aconfig_8h_html_a8ce59e10da6436524e7e23696e445681"><div class="ttname"><a href="config_8h.html#a8ce59e10da6436524e7e23696e445681">ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</a></div><div class="ttdeci">#define ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH</div><div class="ttdef"><b>Definition</b> config.h:218</div></div>
+<div class="ttc" id="adomain_8h_html"><div class="ttname"><a href="domain_8h.html">domain.h</a></div></div>
+<div class="ttc" id="anamespacezeroerr_html"><div class="ttname"><a href="namespacezeroerr.html">zeroerr</a></div><div class="ttdef"><b>Definition</b> benchmark.cpp:17</div></div>
+<div class="ttc" id="anamespacezeroerr_html_a84e68cf62e5be70fa20bb016d30c001d"><div class="ttname"><a href="namespacezeroerr.html#a84e68cf62e5be70fa20bb016d30c001d">zeroerr::ContainerOf</a></div><div class="ttdeci">std::enable_if&lt; detail::is_associative_container&lt; T &gt;::value, AssociativeContainerOf&lt; T, Inner &gt; &gt;::type ContainerOf(Inner &amp;&amp;inner)</div><div class="ttdef"><b>Definition</b> container_of.h:152</div></div>
+<div class="ttc" id="astructzeroerr_1_1ContainerOfBase_html"><div class="ttname"><a href="structzeroerr_1_1ContainerOfBase.html">zeroerr::ContainerOfBase</a></div><div class="ttdoc">ContainerOf is a domain that generates random containers filled with elements from an inner domain</div><div class="ttdef"><b>Definition</b> container_of.h:34</div></div>
+<div class="ttc" id="astructzeroerr_1_1ContainerOfBase_html_a024ab54fd868a313fcc24be881abbcda"><div class="ttname"><a href="structzeroerr_1_1ContainerOfBase.html#a024ab54fd868a313fcc24be881abbcda">zeroerr::ContainerOfBase::min_size</a></div><div class="ttdeci">int min_size</div><div class="ttdef"><b>Definition</b> container_of.h:35</div></div>
+<div class="ttc" id="astructzeroerr_1_1ContainerOfBase_html_a21c8e11afca4b8a0e042546a7d6a9eec"><div class="ttname"><a href="structzeroerr_1_1ContainerOfBase.html#a21c8e11afca4b8a0e042546a7d6a9eec">zeroerr::ContainerOfBase::WithSize</a></div><div class="ttdeci">void WithSize(unsigned _size)</div><div class="ttdef"><b>Definition</b> container_of.h:39</div></div>
+<div class="ttc" id="astructzeroerr_1_1ContainerOfBase_html_a6df1286c70df7cdfa6ce6324ccb9ef12"><div class="ttname"><a href="structzeroerr_1_1ContainerOfBase.html#a6df1286c70df7cdfa6ce6324ccb9ef12">zeroerr::ContainerOfBase::WithMaxSize</a></div><div class="ttdeci">void WithMaxSize(unsigned _max_size)</div><div class="ttdef"><b>Definition</b> container_of.h:37</div></div>
+<div class="ttc" id="astructzeroerr_1_1ContainerOfBase_html_ac864a25e83e719b3ac5bcc9a6d7372eb"><div class="ttname"><a href="structzeroerr_1_1ContainerOfBase.html#ac864a25e83e719b3ac5bcc9a6d7372eb">zeroerr::ContainerOfBase::max_size</a></div><div class="ttdeci">int max_size</div><div class="ttdef"><b>Definition</b> container_of.h:35</div></div>
+<div class="ttc" id="astructzeroerr_1_1ContainerOfBase_html_ae0f228ee873d442bb0b4ca097b831623"><div class="ttname"><a href="structzeroerr_1_1ContainerOfBase.html#ae0f228ee873d442bb0b4ca097b831623">zeroerr::ContainerOfBase::size</a></div><div class="ttdeci">int size</div><div class="ttdef"><b>Definition</b> container_of.h:35</div></div>
+<div class="ttc" id="astructzeroerr_1_1ContainerOfBase_html_ae53172f628846b3ecbf49dbad473b530"><div class="ttname"><a href="structzeroerr_1_1ContainerOfBase.html#ae53172f628846b3ecbf49dbad473b530">zeroerr::ContainerOfBase::WithMinSize</a></div><div class="ttdeci">void WithMinSize(unsigned _min_size)</div><div class="ttdef"><b>Definition</b> container_of.h:38</div></div>
+<div class="ttc" id="atypetraits_8h_html"><div class="ttname"><a href="typetraits_8h.html">typetraits.h</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a class="el" href="dir_68074f60a1ee644a8e95f005a4f107d6.html">domains</a></li><li class="navelem"><a class="el" href="container__of_8h.html">container_of.h</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

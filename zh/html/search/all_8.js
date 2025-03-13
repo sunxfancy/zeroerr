@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['bar_0',['bar',['../table_8cpp.html#a7d5b153eb806e86d4bf91a3cd15fc043',1,'table.cpp']]],
+  ['begin_1',['begin',['../structzeroerr_1_1DataBlock.html#aae408364b84fadc623576a965f47995c',1,'zeroerr::DataBlock::begin()'],['../classzeroerr_1_1LogStream.html#a003f5551063f52a00f110b6d48e37dd4',1,'zeroerr::LogStream::begin()']]],
+  ['beginmeasure_2',['beginMeasure',['../structzeroerr_1_1PerformanceCounter.html#a7cb66fd11f8bac3e4011868f32767012',1,'zeroerr::PerformanceCounter']]],
+  ['bench_3',['bench',['../structzeroerr_1_1BenchState.html#a4202a9b46a8a997c0b256e90fedf4701',1,'zeroerr::BenchState::bench'],['../namespacezeroerr.html#a2adea737b10b78dd8a601f11daac0912a2f000e3dc3ad0a55bd508a81d476bf7f',1,'zeroerr::bench']]],
+  ['benchmark_4',['benchmark',['../structzeroerr_1_1Benchmark.html#ac8b2ba203d32d972dc08623d5085c901',1,'zeroerr::Benchmark::Benchmark()'],['../benchmark_8h.html#a580c48d324f038b23fea44795c57a926',1,'BENCHMARK:&#160;benchmark.h'],['../structzeroerr_1_1Benchmark.html',1,'zeroerr::Benchmark']]],
+  ['benchmark_2ecpp_5',['benchmark.cpp',['../benchmark_8cpp.html',1,'']]],
+  ['benchmark_2eh_6',['benchmark.h',['../benchmark_8h.html',1,'']]],
+  ['benchresult_7',['BenchResult',['../structzeroerr_1_1BenchResult.html',1,'zeroerr']]],
+  ['benchstate_8',['benchstate',['../structzeroerr_1_1BenchState.html',1,'zeroerr::BenchState'],['../structzeroerr_1_1BenchState.html#a6c1ade9aeca719c07ac448ae49a54a90',1,'zeroerr::BenchState::BenchState()']]],
+  ['bgblack_9',['BgBlack',['../namespacezeroerr.html#a8f3e7680e8e0e3688db300a3814c3603',1,'zeroerr']]],
+  ['bgblue_10',['BgBlue',['../namespacezeroerr.html#aed84baa56cef954b3e17b6083b64d8f5',1,'zeroerr']]],
+  ['bgcyan_11',['BgCyan',['../namespacezeroerr.html#ab6e4ded0e280bbbfacfd2710b8afeba5',1,'zeroerr']]],
+  ['bggreen_12',['BgGreen',['../namespacezeroerr.html#a4e053f97972675e820bd20cbbe6cb121',1,'zeroerr']]],
+  ['bgmagenta_13',['BgMagenta',['../namespacezeroerr.html#a2216bba4ca66bbc42d02e26ce201697f',1,'zeroerr']]],
+  ['bgred_14',['BgRed',['../namespacezeroerr.html#a3296553c54a9911bf3eb967817324c05',1,'zeroerr']]],
+  ['bgwhite_15',['BgWhite',['../namespacezeroerr.html#a8735cfcce0fc7f832c333dfe2e0c63c1',1,'zeroerr']]],
+  ['bgyellow_16',['BgYellow',['../namespacezeroerr.html#a3a13bac63cc93f4f277e1ef577e0ee90',1,'zeroerr']]],
+  ['binary_17',['binary',['../structzeroerr_1_1UnitTest.html#a19b3070a161ff0151b42a535350f20cf',1,'zeroerr::UnitTest']]],
+  ['blink_18',['Blink',['../namespacezeroerr.html#a7a667a829e306f7d67427da369ac5ab4',1,'zeroerr']]],
+  ['bounded_19',['bounded',['../classzeroerr_1_1Rng.html#a52e17764d07f972411cb772298cda8c9',1,'zeroerr::Rng']]],
+  ['branch_5finstructions_20',['branch_instructions',['../structzeroerr_1_1BenchResult.html#a13bf55b35c6e02c9dce54a401a53b9fcab2d58b1fbfae7746cc111e35685292d1',1,'zeroerr::BenchResult']]],
+  ['branch_5fmisses_21',['branch_misses',['../structzeroerr_1_1BenchResult.html#a13bf55b35c6e02c9dce54a401a53b9fca257abee9c26e16c9c1748ede57951c4e',1,'zeroerr::BenchResult']]],
+  ['branchinstructions_22',['branchInstructions',['../structzeroerr_1_1PerfCountSet.html#a80f18069e614b9d46dab78e017da093c',1,'zeroerr::PerfCountSet']]],
+  ['branchmisses_23',['branchMisses',['../structzeroerr_1_1PerfCountSet.html#ad90354871c0e641393536ea42a2cff4e',1,'zeroerr::PerfCountSet']]],
+  ['bright_24',['Bright',['../namespacezeroerr.html#a139d7e398d1a93f53b3f8441c73faf56',1,'zeroerr']]]
+];

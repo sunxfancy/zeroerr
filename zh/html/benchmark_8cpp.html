@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: src/benchmark.cpp 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('benchmark_8cpp.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">类</a> &#124;
+<a href="#namespaces">命名空间</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle"><div class="title">benchmark.cpp 文件参考</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="benchmark_8h_source.html">zeroerr/benchmark.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="rng_8h_source.html">zeroerr/internal/rng.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="table_8h_source.html">zeroerr/table.h</a>&quot;</code><br />
+<code>#include &lt;cstring&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;map&gt;</code><br />
+<code>#include &lt;random&gt;</code><br />
+<code>#include &lt;stdexcept&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+benchmark.cpp 的引用(Include)关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="benchmark_8cpp__incl.png" border="0" usemap="#asrc_2benchmark_8cpp" alt=""/></div>
+<map name="asrc_2benchmark_8cpp" id="asrc_2benchmark_8cpp">
+<area shape="rect" title=" " alt="" coords="614,5,759,31"/>
+<area shape="rect" href="benchmark_8h.html" title=" " alt="" coords="71,79,228,104"/>
+<area shape="poly" title=" " alt="" coords="614,32,242,80,242,75,613,26"/>
+<area shape="rect" href="rng_8h.html" title=" " alt="" coords="275,79,434,104"/>
+<area shape="poly" title=" " alt="" coords="634,33,422,78,421,73,633,28"/>
+<area shape="rect" title=" " alt="" coords="392,152,459,177"/>
+<area shape="poly" title=" " alt="" coords="663,33,569,81,456,147,454,142,567,76,661,28"/>
+<area shape="rect" href="table_8h.html" title=" " alt="" coords="580,79,697,104"/>
+<area shape="poly" title=" " alt="" coords="681,33,656,69,652,66,676,30"/>
+<area shape="rect" title=" " alt="" coords="921,225,1001,251"/>
+<area shape="poly" title=" " alt="" coords="703,29,938,214,934,219,699,33"/>
+<area shape="rect" title=" " alt="" coords="891,79,941,104"/>
+<area shape="poly" title=" " alt="" coords="724,28,878,76,877,81,723,33"/>
+<area shape="rect" title=" " alt="" coords="965,79,1037,104"/>
+<area shape="poly" title=" " alt="" coords="739,28,953,76,951,81,738,33"/>
+<area shape="rect" title=" " alt="" coords="1062,79,1149,104"/>
+<area shape="poly" title=" " alt="" coords="760,28,1049,76,1048,81,759,33"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="270,372,447,397"/>
+<area shape="poly" title=" " alt="" coords="84,106,43,124,26,137,12,153,8,164,12,177,27,225,45,261,69,291,108,322,143,342,180,356,257,374,256,379,179,362,140,346,105,326,66,295,40,263,22,227,7,178,3,164,7,151,22,133,41,119,82,102"/>
+<area shape="rect" title=" " alt="" coords="21,152,88,177"/>
+<area shape="poly" title=" " alt="" coords="136,106,83,146,79,141,132,102"/>
+<area shape="rect" title=" " alt="" coords="163,152,229,177"/>
+<area shape="poly" title=" " alt="" coords="159,103,183,139,179,142,155,106"/>
+<area shape="rect" title=" " alt="" coords="472,372,531,397"/>
+<area shape="poly" title=" " alt="" coords="149,104,144,138,146,158,153,176,173,199,204,225,290,278,385,327,464,364,461,369,382,332,287,283,201,229,169,203,148,179,141,159,139,138,144,104"/>
+<area shape="rect" title=" " alt="" coords="254,152,317,177"/>
+<area shape="poly" title=" " alt="" coords="172,102,252,143,250,148,170,106"/>
+<area shape="poly" title=" " alt="" coords="357,104,361,358,356,358,352,104"/>
+<area shape="poly" title=" " alt="" coords="330,106,235,149,233,144,328,102"/>
+<area shape="poly" title=" " alt="" coords="345,106,308,144,304,140,341,102"/>
+<area shape="poly" title=" " alt="" coords="368,102,406,140,402,144,364,106"/>
+<area shape="poly" title=" " alt="" coords="621,106,589,127,555,154,500,209,450,267,377,362,372,359,445,264,496,205,551,150,586,123,618,102"/>
+<area shape="poly" title=" " alt="" coords="622,106,597,127,574,153,547,207,527,264,507,359,502,358,522,263,542,205,570,151,594,123,619,102"/>
+<area shape="poly" title=" " alt="" coords="582,107,330,157,329,152,581,101"/>
+<area shape="rect" href="dbg_8h.html" title=" " alt="" coords="585,152,693,177"/>
+<area shape="poly" title=" " alt="" coords="641,104,641,138,636,138,636,104"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="653,225,768,251"/>
+<area shape="poly" title=" " alt="" coords="660,102,686,122,708,151,716,182,717,211,711,211,711,182,703,153,682,126,657,106"/>
+<area shape="rect" title=" " alt="" coords="1054,372,1130,397"/>
+<area shape="poly" title=" " alt="" coords="698,97,768,110,852,134,938,171,978,195,1015,223,1043,255,1064,292,1088,358,1083,360,1059,294,1038,258,1011,227,975,199,935,176,850,139,767,116,697,102"/>
+<area shape="poly" title=" " alt="" coords="626,180,440,326,387,366,384,361,437,322,623,176"/>
+<area shape="rect" href="color_8h.html" title=" " alt="" coords="559,299,673,324"/>
+<area shape="poly" title=" " alt="" coords="639,178,622,285,617,285,634,177"/>
+<area shape="poly" title=" " alt="" coords="652,176,691,214,687,218,649,180"/>
+<area shape="rect" title=" " alt="" coords="975,372,1030,397"/>
+<area shape="poly" title=" " alt="" coords="693,173,755,188,826,213,899,248,933,271,965,297,986,326,999,358,994,360,981,329,961,300,930,275,897,253,824,218,753,193,692,178"/>
+<area shape="poly" title=" " alt="" coords="691,175,908,222,907,227,690,180"/>
+<area shape="poly" title=" " alt="" coords="575,327,414,371,413,366,574,321"/>
+<area shape="poly" title=" " alt="" coords="713,252,708,288,700,309,687,326,657,338,601,351,462,373,461,368,600,345,655,333,684,322,696,306,703,287,708,251"/>
+<area shape="poly" title=" " alt="" coords="697,253,644,292,641,288,694,249"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="749,299,950,324"/>
+<area shape="poly" title=" " alt="" coords="734,248,816,290,813,295,732,253"/>
+<area shape="poly" title=" " alt="" coords="771,327,451,373,450,367,770,321"/>
+<area shape="poly" title=" " alt="" coords="783,327,675,347,545,374,544,369,674,342,782,321"/>
+<area shape="poly" title=" " alt="" coords="889,321,1042,366,1040,371,887,327"/>
+<area shape="rect" title=" " alt="" coords="555,372,629,397"/>
+<area shape="poly" title=" " alt="" coords="809,327,643,372,642,367,807,321"/>
+<area shape="poly" title=" " alt="" coords="875,322,966,364,964,369,873,326"/>
+<area shape="rect" title=" " alt="" coords="654,372,746,397"/>
+<area shape="poly" title=" " alt="" coords="826,326,738,368,736,364,824,322"/>
+<area shape="rect" title=" " alt="" coords="770,372,849,397"/>
+<area shape="poly" title=" " alt="" coords="845,326,825,361,820,359,840,323"/>
+<area shape="rect" title=" " alt="" coords="873,372,951,397"/>
+<area shape="poly" title=" " alt="" coords="862,323,895,360,891,363,858,326"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1BenchState.html">zeroerr::BenchState</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+命名空间</h2></td></tr>
+<tr class="memitem:namespacezeroerr" id="r_namespacezeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:namespacezeroerr_1_1detail" id="r_namespacezeroerr_1_1detail"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html">zeroerr::detail</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:a75b644e7b5f627bb6464e7ad2da05ada" id="r_a75b644e7b5f627bb6464e7ad2da05ada"><td class="memItemLeft" align="right" valign="top">Clock::duration&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a75b644e7b5f627bb6464e7ad2da05ada">zeroerr::calcClockResolution</a> (size_t numEvaluations) noexcept</td></tr>
+<tr class="separator:a75b644e7b5f627bb6464e7ad2da05ada"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a483168edeff89cddc421a75d39901b6f" id="r_a483168edeff89cddc421a75d39901b6f"><td class="memItemLeft" align="right" valign="top">Clock::duration&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a483168edeff89cddc421a75d39901b6f">zeroerr::clockResolution</a> () noexcept</td></tr>
+<tr class="separator:a483168edeff89cddc421a75d39901b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac3d7cc155edb44fcdd933539657b3d1" id="r_aac3d7cc155edb44fcdd933539657b3d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structzeroerr_1_1BenchState.html">BenchState</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#aac3d7cc155edb44fcdd933539657b3d1">zeroerr::createBenchState</a> (<a class="el" href="structzeroerr_1_1Benchmark.html">Benchmark</a> &amp;benchmark)</td></tr>
+<tr class="separator:aac3d7cc155edb44fcdd933539657b3d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42831edaf7772129d6f89e30d441b6a8" id="r_a42831edaf7772129d6f89e30d441b6a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a42831edaf7772129d6f89e30d441b6a8">zeroerr::destroyBenchState</a> (<a class="el" href="structzeroerr_1_1BenchState.html">BenchState</a> *state)</td></tr>
+<tr class="separator:a42831edaf7772129d6f89e30d441b6a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec7c64dd8c0a4598b79b69286c517ead" id="r_aec7c64dd8c0a4598b79b69286c517ead"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#aec7c64dd8c0a4598b79b69286c517ead">zeroerr::getNumIter</a> (<a class="el" href="structzeroerr_1_1BenchState.html">BenchState</a> *state)</td></tr>
+<tr class="separator:aec7c64dd8c0a4598b79b69286c517ead"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9962dfb820a7f898bc2ba6a8e007fe5" id="r_ab9962dfb820a7f898bc2ba6a8e007fe5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ab9962dfb820a7f898bc2ba6a8e007fe5">zeroerr::runIteration</a> (<a class="el" href="structzeroerr_1_1BenchState.html">BenchState</a> *state)</td></tr>
+<tr class="separator:ab9962dfb820a7f898bc2ba6a8e007fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6e900de3458d9f0dfb64b8f540a69c9" id="r_aa6e900de3458d9f0dfb64b8f540a69c9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#aa6e900de3458d9f0dfb64b8f540a69c9">zeroerr::moveResult</a> (<a class="el" href="structzeroerr_1_1BenchState.html">BenchState</a> *state, std::string name)</td></tr>
+<tr class="separator:aa6e900de3458d9f0dfb64b8f540a69c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="benchmark_8cpp.html">benchmark.cpp</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

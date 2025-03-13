@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/dbg.h 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('dbg_8h.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">类</a> &#124;
+<a href="#namespaces">命名空间</a> &#124;
+<a href="#define-members">宏定义</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle"><div class="title">dbg.h 文件参考</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="config_8h_source.html">zeroerr/internal/config.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="color_8h_source.html">zeroerr/color.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="print_8h_source.html">zeroerr/print.h</a>&quot;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;tuple&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+dbg.h 的引用(Include)关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="dbg_8h__incl.png" border="0" usemap="#ainclude_2zeroerr_2dbg_8h" alt=""/></div>
+<map name="ainclude_2zeroerr_2dbg_8h" id="ainclude_2zeroerr_2dbg_8h">
+<area shape="rect" title=" " alt="" coords="213,5,372,31"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="5,225,183,251"/>
+<area shape="poly" title=" " alt="" coords="273,33,203,80,164,114,131,154,115,183,104,213,99,211,110,181,126,150,161,110,200,76,270,29"/>
+<area shape="rect" href="color_8h.html" title=" " alt="" coords="141,152,255,177"/>
+<area shape="poly" title=" " alt="" coords="276,33,250,53,226,80,212,109,204,139,199,138,207,108,221,77,246,49,273,29"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="235,79,350,104"/>
+<area shape="poly" title=" " alt="" coords="295,31,295,65,290,65,290,31"/>
+<area shape="rect" title=" " alt="" coords="811,225,865,251"/>
+<area shape="poly" title=" " alt="" coords="322,28,799,218,797,223,320,33"/>
+<area shape="rect" title=" " alt="" coords="609,79,689,104"/>
+<area shape="poly" title=" " alt="" coords="350,28,595,77,594,82,349,33"/>
+<area shape="poly" title=" " alt="" coords="183,180,124,219,121,215,180,175"/>
+<area shape="poly" title=" " alt="" coords="295,105,289,141,282,161,269,179,232,207,190,224,188,219,230,202,265,175,277,159,284,139,290,104"/>
+<area shape="poly" title=" " alt="" coords="279,106,226,146,223,141,276,102"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="332,152,533,177"/>
+<area shape="poly" title=" " alt="" coords="316,102,399,143,397,148,314,106"/>
+<area shape="poly" title=" " alt="" coords="379,180,162,225,161,220,378,175"/>
+<area shape="rect" title=" " alt="" coords="207,225,283,251"/>
+<area shape="poly" title=" " alt="" coords="403,180,289,223,287,218,402,175"/>
+<area shape="rect" title=" " alt="" coords="307,225,382,251"/>
+<area shape="poly" title=" " alt="" coords="420,179,371,219,368,214,417,175"/>
+<area shape="rect" title=" " alt="" coords="406,225,465,251"/>
+<area shape="poly" title=" " alt="" coords="436,178,437,212,432,212,430,178"/>
+<area shape="poly" title=" " alt="" coords="521,175,648,194,798,223,797,228,647,199,520,180"/>
+<area shape="rect" title=" " alt="" coords="489,225,581,251"/>
+<area shape="poly" title=" " alt="" coords="451,175,509,215,506,219,448,180"/>
+<area shape="rect" title=" " alt="" coords="605,225,684,251"/>
+<area shape="poly" title=" " alt="" coords="468,175,598,218,597,223,466,180"/>
+<area shape="rect" title=" " alt="" coords="709,225,786,251"/>
+<area shape="poly" title=" " alt="" coords="484,175,696,222,695,228,483,180"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+此图展示该文件直接或间接的被哪些文件引用了:</div>
+<div class="dyncontent">
+<div class="center"><img src="dbg_8h__dep__incl.png" border="0" usemap="#ainclude_2zeroerr_2dbg_8hdep" alt=""/></div>
+<map name="ainclude_2zeroerr_2dbg_8hdep" id="ainclude_2zeroerr_2dbg_8hdep">
+<area shape="rect" title=" " alt="" coords="327,5,486,31"/>
+<area shape="rect" href="zeroerr_8h.html" title=" " alt="" coords="5,240,136,265"/>
+<area shape="poly" title=" " alt="" coords="324,36,268,54,215,81,168,120,129,166,98,209,79,241,75,238,94,206,124,163,164,116,212,76,266,49,322,31"/>
+<area shape="rect" href="decomposition_8h.html" title=" " alt="" coords="225,79,399,119"/>
+<area shape="poly" title=" " alt="" coords="384,41,337,81,333,76,381,37"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="408,167,563,192"/>
+<area shape="poly" title=" " alt="" coords="421,42,482,165,477,167,416,44"/>
+<area shape="rect" href="table_8h.html" title=" " alt="" coords="576,86,744,111"/>
+<area shape="poly" title=" " alt="" coords="457,32,624,83,622,89,456,37"/>
+<area shape="rect" href="assert_8h.html" title=" " alt="" coords="209,167,383,192"/>
+<area shape="poly" title=" " alt="" coords="308,133,301,167,296,166,303,132"/>
+<area shape="poly" title=" " alt="" coords="248,199,108,242,106,237,246,194"/>
+<area shape="rect" href="fuzztest_8cpp.html" title=" " alt="" coords="337,240,461,265"/>
+<area shape="poly" title=" " alt="" coords="325,198,383,238,380,242,322,202"/>
+<area shape="rect" href="serialization_8cpp.html" title=" " alt="" coords="160,240,312,265"/>
+<area shape="poly" title=" " alt="" coords="279,204,248,242,244,238,275,201"/>
+<area shape="rect" href="table_8cpp.html" title=" " alt="" coords="633,240,738,265"/>
+<area shape="poly" title=" " alt="" coords="372,192,633,239,632,244,371,197"/>
+<area shape="rect" href="unittest_8cpp.html" title=" " alt="" coords="485,240,608,265"/>
+<area shape="poly" title=" " alt="" coords="350,193,507,237,505,242,349,198"/>
+<area shape="poly" title=" " alt="" coords="406,197,137,243,136,238,405,192"/>
+<area shape="poly" title=" " alt="" coords="463,203,415,242,411,238,459,198"/>
+<area shape="poly" title=" " alt="" coords="531,194,654,237,652,242,530,199"/>
+<area shape="poly" title=" " alt="" coords="506,201,539,238,535,242,502,204"/>
+<area shape="rect" href="log_8cpp.html" title=" " alt="" coords="762,240,854,265"/>
+<area shape="poly" title=" " alt="" coords="551,192,762,239,761,244,550,198"/>
+<area shape="poly" title=" " alt="" coords="698,116,726,137,748,166,750,188,740,209,723,228,705,242,702,238,720,224,736,206,745,187,743,168,722,141,695,120"/>
+<area shape="rect" href="benchmark_8cpp.html" title=" " alt="" coords="587,167,733,192"/>
+<area shape="poly" title=" " alt="" coords="663,125,663,166,657,166,657,125"/>
+</map>
+</div>
+</div>
+<p><a href="dbg_8h_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1last.html">zeroerr::last&lt; T1, T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1last_3_01T1_01_4.html">zeroerr::last&lt; T1 &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+命名空间</h2></td></tr>
+<tr class="memitem:namespacezeroerr" id="r_namespacezeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+宏定义</h2></td></tr>
+<tr class="memitem:aadf47595f4fdb31176441bb4415eecac" id="r_aadf47595f4fdb31176441bb4415eecac"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dbg_8h.html#aadf47595f4fdb31176441bb4415eecac">dbg</a>(...)&#160;&#160;&#160;<a class="el" href="namespacezeroerr.html#a1162755c9874e1b90f6d6dd4980c00fa">zeroerr::DebugExpr</a>(__FILE__, __LINE__, __func__, #__VA_ARGS__, __VA_ARGS__)</td></tr>
+<tr class="separator:aadf47595f4fdb31176441bb4415eecac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:ae306972e2f8354d2e8248f8705a8283b" id="r_ae306972e2f8354d2e8248f8705a8283b"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:ae306972e2f8354d2e8248f8705a8283b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ae306972e2f8354d2e8248f8705a8283b">zeroerr::get_last</a> (Args &amp;&amp;... args) -&gt; typename <a class="el" href="structzeroerr_1_1last.html">last</a>&lt; Args... &gt;::type</td></tr>
+<tr class="memdesc:ae306972e2f8354d2e8248f8705a8283b"><td class="mdescLeft">&#160;</td><td class="mdescRight">get_last is a function to get the last argument of a variadic template. It is used by DebugExpr.  <br /></td></tr>
+<tr class="separator:ae306972e2f8354d2e8248f8705a8283b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1162755c9874e1b90f6d6dd4980c00fa" id="r_a1162755c9874e1b90f6d6dd4980c00fa"><td class="memTemplParams" colspan="2">template&lt;typename... T&gt; </td></tr>
+<tr class="memitem:a1162755c9874e1b90f6d6dd4980c00fa"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a1162755c9874e1b90f6d6dd4980c00fa">zeroerr::DebugExpr</a> (const char *file, unsigned line, const char *func, const char *exprs, T... t) -&gt; typename <a class="el" href="structzeroerr_1_1last.html">last</a>&lt; T... &gt;::type</td></tr>
+<tr class="memdesc:a1162755c9874e1b90f6d6dd4980c00fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">DebugExpr is a function to print any type of variable with its type name. It is used by dbg macro.  <br /></td></tr>
+<tr class="separator:a1162755c9874e1b90f6d6dd4980c00fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">宏定义说明</h2>
+<a id="aadf47595f4fdb31176441bb4415eecac" name="aadf47595f4fdb31176441bb4415eecac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadf47595f4fdb31176441bb4415eecac">&#9670;&#160;</a></span>dbg</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define dbg</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;<a class="el" href="namespacezeroerr.html#a1162755c9874e1b90f6d6dd4980c00fa">zeroerr::DebugExpr</a>(__FILE__, __LINE__, __func__, #__VA_ARGS__, __VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a class="el" href="dbg_8h.html">dbg.h</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>
