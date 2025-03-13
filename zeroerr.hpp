@@ -727,11 +727,11 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() { retur
 #include <string>
 #include <tuple>  // this should be removed
 #include <type_traits>
-#include <iosfwd>
+#include <complex>
+#include <memory>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-// those predefines can help to avoid include too many headers
 
 namespace zeroerr {
 
@@ -1291,7 +1291,6 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 
 
-#include <complex>
 
 #ifdef __GNUG__
 #include <cxxabi.h>

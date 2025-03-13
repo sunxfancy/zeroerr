@@ -6,7 +6,8 @@
 #include <string>
 #include <tuple>  // this should be removed
 #include <type_traits>
-#include <iosfwd>
+#include <complex>
+#include <memory>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 

@@ -18,6 +18,10 @@ TEST_CASE("log_test") {
     WARN("Test Warning {print}", "print data");
 
     ERR_IF(1 == 1, "1 == 1");
+
+    for (int i = 0; i < 10; ++i) {
+        LOG_EVERY_(3, "log every 3 times {i}", i);
+    }
 }
 
 

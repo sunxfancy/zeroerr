@@ -3,7 +3,6 @@
 
 #include "zeroerr/color.h"
 #include "zeroerr/internal/typetraits.h"
-#include <complex>
 
 #ifdef __GNUG__
 #include <cxxabi.h>
