@@ -11,13 +11,22 @@ build/linux/Makefile: Makefile
 linux: build/linux/Makefile
 	cmake --build build/linux -j `nproc`
 
-build/windows/ZeroErr.sln:
+build/windows/ZeroErr.sln: Makefile
 	mkdir -p build/windows
 	cmake.exe -B build/windows -S . \
 		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DDISABLE_CUDA_BUILD=OFF -T host=x64 -A x64
 
 windows: build/windows/ZeroErr.sln
 	cmake.exe --build build/windows --config Debug -j `nproc`
+
+build/macosx/Makefile: Makefile
+	mkdir -p build/macosx
+	cmake -B build/macosx -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=11 \
+		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON -DDISABLE_CUDA_BUILD=OFF -DENABLE_FUZZING=OFF \
+		-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
+
+macosx: build/macosx/Makefile
+	cmake --build build/macosx -j 4
 
 test: linux-test windows-test fuzz-test
 
@@ -39,6 +48,8 @@ reporter: linux
 windows-test: windows
 	cd build/windows/test && ../examples/Debug/2_log.exe --testcase="parsing test"
 
+macosx-test: macosx
+	cd build/macosx/test && ./unittest
 
 build/linux-release/Makefile: Makefile
 	mkdir -p build/linux-release

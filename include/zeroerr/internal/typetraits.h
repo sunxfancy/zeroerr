@@ -6,24 +6,9 @@
 #include <string>
 #include <tuple>  // this should be removed
 #include <type_traits>
+#include <iosfwd>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
-
-// those predefines can help to avoid include too many headers
-namespace std {
-template <typename T>
-class complex;
-
-template <class T, class Deleter>
-class unique_ptr;
-
-template <class T>
-class shared_ptr;
-
-template <class T>
-class weak_ptr;
-
-}  // namespace std
 
 
 namespace zeroerr {

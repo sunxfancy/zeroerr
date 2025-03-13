@@ -12,14 +12,11 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <iosfwd>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 extern const char* ZEROERR_LOG_CATEGORY;
-
-namespace std {
-class mutex;
-}
 
 namespace zeroerr {
 

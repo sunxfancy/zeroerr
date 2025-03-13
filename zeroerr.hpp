@@ -643,6 +643,9 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() {
     return false;
 }
 #elif defined(__APPLE__)
+#include <sys/sysctl.h>
+#include <unistd.h>
+#include <iostream>
 // The following function is taken directly from the following technical note:
 // https://developer.apple.com/library/archive/qa/qa1361/_index.html
 // Returns true if the current process is being debugged (either
@@ -724,25 +727,11 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() { retur
 #include <string>
 #include <tuple>  // this should be removed
 #include <type_traits>
+#include <iosfwd>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 // those predefines can help to avoid include too many headers
-namespace std {
-template <typename T>
-class complex;
-
-template <class T, class Deleter>
-class unique_ptr;
-
-template <class T>
-class shared_ptr;
-
-template <class T>
-class weak_ptr;
-
-}  // namespace std
-
 
 namespace zeroerr {
 
@@ -1302,7 +1291,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 
 
-
+#include <complex>
 
 #ifdef __GNUG__
 #include <cxxabi.h>
@@ -3402,14 +3391,11 @@ std::string format(const char* fmt, T... args) {
 #include <map>
 #include <string>
 #include <vector>
+#include <iosfwd>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 extern const char* ZEROERR_LOG_CATEGORY;
-
-namespace std {
-class mutex;
-}
 
 namespace zeroerr {
 

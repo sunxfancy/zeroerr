@@ -175,6 +175,9 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() {
     return false;
 }
 #elif defined(__APPLE__)
+#include <sys/sysctl.h>
+#include <unistd.h>
+#include <iostream>
 // The following function is taken directly from the following technical note:
 // https://developer.apple.com/library/archive/qa/qa1361/_index.html
 // Returns true if the current process is being debugged (either
