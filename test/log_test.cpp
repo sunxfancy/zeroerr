@@ -20,7 +20,19 @@ TEST_CASE("log_test") {
     ERR_IF(1 == 1, "1 == 1");
 
     for (int i = 0; i < 10; ++i) {
-        LOG_EVERY_(3, "log every 3 times {i}", i);
+        LOG_EVERY_(3, "log every 3 times: {i}", i);
+    }
+
+    for (int i = 0; i < 10; ++i) {
+        LOG_FIRST(i % 2 == 0, "log first even number: {i}", i);
+    }
+
+    for (int i = 0; i < 10; ++i) {
+        LOG_FIRST(i % 2 == 1, "log first odd number: {i}", i);
+    }
+
+    for (int i = 0; i < 10; ++i) {
+        LOG_IF_EVERY_(3, i % 2 == 1, "log every 3 times odd number: {i}", i);
     }
 }
 

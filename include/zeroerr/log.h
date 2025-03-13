@@ -9,10 +9,10 @@
 #include "zeroerr/print.h"
 
 #include <chrono>
+#include <iosfwd>
 #include <map>
 #include <string>
 #include <vector>
-#include <iosfwd>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -80,7 +80,7 @@ namespace zeroerr {
 
 #define ZEROERR_LOG_EVERY_(n, ACTION, ...) \
     do {                                   \
-        unsigned counter = 0;              \
+        static unsigned counter = 0;       \
         if (counter == 0) {                \
             counter = n;                   \
             ACTION(__VA_ARGS__);           \
@@ -98,12 +98,14 @@ namespace zeroerr {
 
 #define ZEROERR_LOG_IF_EVERY_(n, cond, ACTION, ...) \
     do {                                            \
-        unsigned counter = 0;                       \
-        if (counter == 0 && (cond)) {               \
-            counter = n;                            \
-            ACTION(__VA_ARGS__);                    \
+        if (cond) {                                 \
+            static unsigned counter = 0;            \
+            if (counter == 0) {                     \
+                counter = n;                        \
+                ACTION(__VA_ARGS__);                \
+            }                                       \
+            --counter;                              \
         }                                           \
-        --counter;                                  \
     } while (0)
 
 #define INFO_IF_EVERY_(n, cond, ...)  ZEROERR_LOG_IF_EVERY_(n, cond, ZEROERR_INFO, __VA_ARGS__)
@@ -114,7 +116,7 @@ namespace zeroerr {
 
 #define ZEROERR_LOG_FIRST(cond, ACTION, ...) \
     do {                                     \
-        bool first = true;                   \
+        static bool first = true;            \
         if (first && (cond)) {               \
             first = false;                   \
             ACTION(__VA_ARGS__);             \
@@ -129,8 +131,9 @@ namespace zeroerr {
 
 #define ZEROERR_LOG_FIRST_(n, cond, ACTION, ...) \
     do {                                         \
-        unsigned counter = n;                    \
-        if (n-- && (cond)) {                     \
+        static unsigned counter = n;             \
+        if (counter && (cond)) {                 \
+            counter--;                           \
             ACTION(__VA_ARGS__);                 \
         }                                        \
     } while (0)
@@ -227,24 +230,24 @@ enum LogSeverity {
 
 /**
  * @brief LogInfo is a struct to store the meta data of the log message.
- * @details LogInfo is a struct to store the meta data of the log message. 
+ * @details LogInfo is a struct to store the meta data of the log message.
  * It contains filename, function, message, category, line number, size, and severity.
  * Those data is initialized when the first log message is created using a static
  * local variable in the function where the log message is put.
- * 
+ *
  * For example:
  *   void foo() {
  *     log("Hello, {name}!", "John");
  *   }
- * 
- * The inner implementation could be considered as (not exactly 
+ *
+ * The inner implementation could be considered as (not exactly
  * since message is allocated from a pool):
  *   void foo() {
- *      static LogInfo log_info{ 
- *          __FILE__, __func__, "Hello, {name}!", 
- *          ZEROERR_LOG_CATEGORY, 
- *          __LINE__, 
- *          sizeof("Hello, world!"), 
+ *      static LogInfo log_info{
+ *          __FILE__, __func__, "Hello, {name}!",
+ *          ZEROERR_LOG_CATEGORY,
+ *          __LINE__,
+ *          sizeof("Hello, world!"),
  *          LogSeverity::INFO_l);
  *      LogMessage* logdata = new LogMessageImpl<std::string>("John");
  *      logdata->info = &log_info;
@@ -498,11 +501,11 @@ public:
      * The log message is structured as a tuple of the arguments in the inner
      * implementation class LogMessageImpl. After the log message is created, it
      * used type erasure to return a LogMessage pointer to the caller.
-     * 
+     *
      * The stored data type is determined by the to_store_type_t<T> template.
      * For all the string type in raw pointer like const char* or char[],
      * it will be converted to std::string.
-     * All reference type (including right value reference) will be converted 
+     * All reference type (including right value reference) will be converted
      * to the original type.
      */
     template <typename... T>
