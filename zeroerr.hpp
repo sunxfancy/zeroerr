@@ -4005,11 +4005,21 @@ PushResult log(LogStream& stream, T&&... args) {
  */
 class IContextScope {
 public:
+    /**
+     * @brief Output context information to a stream
+     * @param os The output stream to write context to
+     */
     virtual void str(std::ostream& os) const = 0;
 };
 
 extern thread_local std::vector<IContextScope*> _ZEROERR_G_CONTEXT_SCOPE_VECTOR;
 
+/**
+ * @brief Template implementation of context scope
+ * @details Stores a callable that outputs context information when needed
+ * during assertion failure
+ * @tparam F Type of the callable function
+ */
 template <typename F>
 class ContextScope : public IContextScope {
 public:
@@ -4022,6 +4032,12 @@ protected:
     F f_;
 };
 
+/**
+ * @brief Helper function to create a context scope
+ * @tparam F Type of the callable function
+ * @param f Function that will output context information
+ * @return ContextScope instance that manages the context information
+ */
 template <typename F>
 ContextScope<F> MakeContextScope(const F& f) {
     return ContextScope<F>(f);
