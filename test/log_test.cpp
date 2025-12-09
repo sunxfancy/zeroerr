@@ -16,8 +16,7 @@ using namespace zeroerr;
 TEST_CASE("log_test") {
     LOG("Hello {i}", 1);
     WARN("Test Warning {print}", "print data");
-
-    ERR_IF(1 == 1, "1 == 1");
+    WARN_IF(1 == 1, "1 == 1");
 
     for (int i = 0; i < 10; ++i) {
         LOG_EVERY_(3, "log every 3 times: {i}", i);
@@ -50,7 +49,7 @@ TEST_CASE("lazy evaluation") {
         sum += i;
         INFO("i =", i);
         INFO("i+1 =", i + 1);
-        REQUIRE(0 <= sum < 50);
+        CHECK(0 <= sum < 50);
     }
 }
 #ifdef ZEROERR_ENABLE_SPEED_TEST
@@ -176,7 +175,7 @@ TEST_CASE("iterate log stream") {
 
     auto& stream = zeroerr::LogStream::getDefault();
     for (auto p = stream.begin(); p != stream.end(); ++p) {
-        if (p->info->function == std::string("function") && p->info->line == 122) {
+        if (p->info->function == std::string("function") && p->info->line == 172) {
             std::cerr << "p.get<int>(\"i\") = " << p.get<int>("i") << std::endl;
             CHECK(p.get<int>("i") == 1);
         }

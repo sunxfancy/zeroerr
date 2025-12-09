@@ -98,9 +98,11 @@ static void to_string(IRObject obj, std::stringstream& ss) {
 
 static IRObject from_string(std::stringstream& ss, std::string& token) {
     IRObject obj;
+    if (token.empty()) return obj;
     if (token == "{") {
         std::vector<IRObject> children;
         while (ss >> token) {
+            if (token.empty()) return obj;
             if (token == "}") break;
             IRObject child = from_string(ss, token);
             if (child.type == IRObject::Type::Undefined)

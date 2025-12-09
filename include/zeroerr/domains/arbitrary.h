@@ -70,7 +70,7 @@ public:
 
     CorpusType GetRandomCorpus(Rng& rng) const override { return static_cast<T>(rng.bounded(100)); }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+    void Mutate(Rng& rng, CorpusType& v, bool) const override {
         v = static_cast<T>(rng.bounded(100));
     }
 };
@@ -88,7 +88,7 @@ public:
 
     CorpusType GetRandomCorpus(Rng& rng) const override { return static_cast<T>(rng.bounded(100)); }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+    void Mutate(Rng& rng, CorpusType& v, bool) const override {
         v = static_cast<T>(rng.bounded(100));
         v -= 50;
     }
@@ -106,7 +106,7 @@ public:
         return static_cast<T>(rng.bounded(1000));
     }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+    void Mutate(Rng& rng, CorpusType& v, bool) const override {
         v = static_cast<T>(rng.bounded(1000));
     }
 };

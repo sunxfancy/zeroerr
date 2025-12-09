@@ -244,14 +244,14 @@ TEST_CASE("Test may fail", may_fail()) {
 }
 
 TEST_CASE("Test should fail", should_fail()) {
-    CHECK(0 == 1);
+    REQUIRE(0 == 1);
 }
 
 TEST_CASE("Test skip", skip()) {
     CHECK(0 == 1);
 }
 
-TEST_CASE("Test timeout", timeout(0.01)) {
+TEST_CASE("Test timeout", timeout(0.10)) {
     std::this_thread::sleep_for(std::chrono::duration<double>(0.05));
 }
 

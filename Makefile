@@ -6,7 +6,9 @@ build/linux/Makefile: Makefile
 	mkdir -p build/linux
 	cmake -B build/linux -S . -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=11 \
 		-DBUILD_EXAMPLES=ON -DBUILD_TEST=ON -DUSE_MOLD=ON -DDISABLE_CUDA_BUILD=OFF -DENABLE_FUZZING=ON \
-		-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang
+		-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang \
+		-DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+		-DCMAKE_CXX_FLAGS=-L/home/utils/llvm-20.1.8/lib/clang/20/lib/linux
 
 linux: build/linux/Makefile
 	cmake --build build/linux -j `nproc`

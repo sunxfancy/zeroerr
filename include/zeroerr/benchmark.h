@@ -20,8 +20,10 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
         {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, zeroerr::TestType::bench); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define BENCHMARK(name, ...) \
-    ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name, __VA_ARGS__)
+#define BENCHMARK(...) \
+    ZEROERR_SUPPRESS_VARIADIC_MACRO \
+    ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), __VA_ARGS__) \
+    ZEROERR_SUPPRESS_VARIADIC_MACRO_POP \
 
 
 namespace zeroerr {

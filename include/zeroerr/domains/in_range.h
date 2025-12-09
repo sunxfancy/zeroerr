@@ -41,7 +41,7 @@ public:
         return v;
     }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+    void Mutate(Rng& rng, CorpusType& v, bool) const override {
         CorpusType offsize = max - min + 1;
         v                  = rng.bounded(offsize);
         v                  = min + v;

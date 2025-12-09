@@ -41,7 +41,7 @@ namespace zeroerr {
  */
 
 struct IRObject {
-    IRObject() { std::memset(this, 0, sizeof(IRObject)); }
+    IRObject() { memset(this, 0, sizeof(IRObject)); }
     ~IRObject() {}
     IRObject(const IRObject& other) { *this = other; }
     IRObject(IRObject&& other) { *this = std::move(other); }
@@ -55,7 +55,7 @@ struct IRObject {
         return *this;
     }
 
-    enum Type { Undefined, Int, Float, String, ShortString, Object };
+    enum Type { Undefined = 0, Int, Float, String, ShortString, Object };
 
     union {
         int64_t   i;
@@ -65,7 +65,7 @@ struct IRObject {
         IRObject* o;  // first must be the number of elements
     };
     char     others[7];
-    unsigned type;
+    unsigned char type;
 
     template <typename T>
     typename std::enable_if<std::is_integral<T>::value, T>::type GetScalar() {
@@ -128,7 +128,10 @@ struct IRObject {
         int64_t   size;
         IRObject* children;
     };
-    Childrens GetChildren() { return {o->i, o + 1}; }
+    Childrens GetChildren() { 
+        if (type != Type::Object) return {0, nullptr};
+        return {o->i, o + 1};
+    }
 
     void SetChildren(IRObject* children) {
         o    = children - 1;
