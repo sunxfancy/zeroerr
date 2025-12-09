@@ -49,6 +49,7 @@ set(test_files
     ${CMAKE_CURRENT_SOURCE_DIR}/print_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/table_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/unit_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/serialization_test.cpp
 )
 
 if (ENABLE_FUZZING)
@@ -72,6 +73,11 @@ if (ENABLE_FUZZING)
         OUTPUT_VARIABLE LIB_FUZZER_PATH
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
+    if (NOT LIB_FUZZER_PATH)
+        message(FATAL_ERROR "libfuzzer not found")
+    else()
+        message(STATUS "libfuzzer path: ${LIB_FUZZER_PATH}")
+    endif()
 
     set_target_properties(unittest PROPERTIES COMPILE_DEFINITIONS ZEROERR_ENABLE_FUZZING)
     target_compile_options(unittest PRIVATE -fsanitize=fuzzer-no-link)

@@ -178,8 +178,8 @@ LogIterator::LogIterator(LogStream& stream, std::string message, std::string fun
                          int line)
     : p(stream.first),
       q(stream.first->begin()),
-      message_filter(message),
       function_name_filter(function_name),
+      message_filter(message),
       line_filter(line) {
     while (!check_filter() && p) next();
 }

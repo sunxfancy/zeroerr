@@ -243,11 +243,14 @@ static bool runOnExecution(const TestCase& tc) {
     return false;
 }
 
-static bool runOnFinish(const TestCase& tc, const TestContext& ctx) {
+static bool runOnFinish(const TestCase& tc, TestContext& ctx) {
+    bool contain_changes = false;
     for (auto& decorator : tc.decorators) {
-        if (decorator->onFinish(tc, ctx)) return true;
+        if (decorator->onFinish(tc, ctx)) {
+            contain_changes = true;
+        }
     }
-    return false;
+    return contain_changes;
 }
 
 int UnitTest::run() {
@@ -291,11 +294,10 @@ int UnitTest::run() {
         }
         int type = sum.add(context);
         if (runOnFinish(tc, context)) {
-            if (type != 2) {
-                sum.failed += 1;
-                type = 2;
-            }
-        }
+            if (context.passed > 0) type = 0;
+            if (context.warning > 0) type = 1;
+            if (context.failed > 0) type = 2;
+        } 
         reporter->testCaseEnd(tc, new_buf, context, type);
         context.reset();
         new_buf.str("");
@@ -375,12 +377,13 @@ public:
 
     virtual void testCaseStart(const TestCase& tc, std::stringbuf&) override {
         std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
-                  << Reset << FgCyan << tc.name << Reset << std::endl;
+                  << Reset << FgCyan << tc.name << Reset;
     }
 
     virtual void testCaseEnd(const TestCase&, std::stringbuf& sb, const TestContext&,
                              int type) override {
-        if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
+        if (!(ut.silent && type == 0)) std::cerr << "  " << (type == 0 ? "✅" : type == 1 ? "⚠️" : "❌")
+        << std::endl << insertIndentation(sb.str()) << std::endl;
     }
 
     virtual void subCaseStart(const TestCase& tc, std::stringbuf&) override {
@@ -838,7 +841,7 @@ public:
     TimeoutDecorator() : timeout(0) {}
     TimeoutDecorator(float timeout) : timeout(timeout) {}
 
-    bool onFinish(const TestCase& tc, const TestContext& ctx) override {
+    bool onFinish(const TestCase&, TestContext& ctx) override {
         if (ctx.duration > std::chrono::duration<double>(timeout)) {
             std::cerr << FgRed <<  "Timeout: " << Reset << ctx.duration.count() << "s > " << timeout << "s" << std::endl;
             return true;
@@ -859,6 +862,21 @@ class FailureDecorator : public Decorator {
 public:
     enum FailureType { may_fail, should_fail };
     FailureDecorator(FailureType type) : type(type) {}
+
+    bool onFinish(const TestCase& tc, TestContext& ctx) override {
+        if (type == FailureType::may_fail) {
+            ctx.failed += ctx.passed;
+            ctx.passed = 0;
+            return true;
+        }
+        if (type == FailureType::should_fail) {
+            int failed = ctx.failed;
+            ctx.failed = ctx.passed;
+            ctx.passed = failed;
+            return true;
+        }
+        return false;
+    }
 
 private:
     FailureType type;

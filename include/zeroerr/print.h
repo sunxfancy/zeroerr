@@ -114,6 +114,13 @@ struct Printer {
         return demangle(typeid(t).name());
     }
 
+#if defined(ZEROERR_ENABLE_MAGIC_ENUM) && (ZEROERR_CXX_STANDARD >= 17)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
+    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
+#else
+    ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
+    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
+#endif
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_INT || ZEROERR_IS_FLOAT)
     print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
@@ -123,7 +130,7 @@ struct Printer {
         if (value == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
-            os << tab(level) << "<" << type(value) << " at " << value << ">" << lb;
+            os << tab(level) << "<" << type(value) << " at " << static_cast<const void*>(value) << ">" << lb;
     }
 
 

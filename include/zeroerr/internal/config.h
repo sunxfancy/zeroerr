@@ -83,6 +83,7 @@
 #define ZEROERR_TRIGGER_PARENTHESIS_(...) ,
 
 #define ZEROERR_ISEMPTY(...)                                                                     \
+    ZEROERR_SUPPRESS_VARIADIC_MACRO                                                              \
     _ZEROERR_ISEMPTY(/* test if there is just one argument, eventually an empty                  \
                 one */                                                                           \
                      ZEROERR_HAS_COMMA(__VA_ARGS__), /* test if ZEROERR_TRIGGER_PARENTHESIS_     \
@@ -93,7 +94,8 @@
                      ZEROERR_HAS_COMMA(__VA_ARGS__(                                              \
                          /*empty*/)), /* test if placing it between ZEROERR_TRIGGER_PARENTHESIS_ \
                                          and the parenthesis adds a comma */                     \
-                     ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__(/*empty*/)))
+                     ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__(/*empty*/)))     \
+    ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 
 #define ZEROERR_PASTE5(_0, _1, _2, _3, _4) _0##_1##_2##_3##_4
 #define _ZEROERR_ISEMPTY(_0, _1, _2, _3) \
@@ -227,6 +229,7 @@
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wmissing-prototypes")                                         \
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wc++98-compat")                                               \
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wc++98-compat-pedantic")                                      \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wvariadic-macro-arguments-omitted")                           \
                                                                                                    \
     ZEROERR_GCC_SUPPRESS_WARNING_PUSH                                                              \
     ZEROERR_GCC_SUPPRESS_WARNING("-Wunknown-pragmas")                                              \
@@ -295,8 +298,9 @@
 
 #define ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
-#define ZEROERR_SUPPRESS_VARIADIC_MACRO \
-    ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
+#define ZEROERR_SUPPRESS_VARIADIC_MACRO                                             \
+    ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments") \
+    ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wvariadic-macro-arguments-omitted")
 
 #define ZEROERR_SUPPRESS_VARIADIC_MACRO_POP ZEROERR_CLANG_SUPPRESS_WARNING_POP
 

@@ -262,9 +262,10 @@ void visit2_at(std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t i
     typename std::enable_if<x, void>::type
 #define ZEROERR_IS_INT        std::is_integral<T>::value
 #define ZEROERR_IS_FLOAT      std::is_floating_point<T>::value
+#define ZEROERR_IS_ENUM       std::is_enum<T>::value
 #define ZEROERR_IS_CONTAINER  detail::is_container<T>::value
 #define ZEROERR_IS_STRING     detail::is_string<T>::value
-#define ZEROERR_IS_POINTER    std::is_pointer<T>::value
+#define ZEROERR_IS_POINTER    (std::is_pointer<T>::value || std::is_same<T, std::nullptr_t>::value)
 #define ZEROERR_IS_CHAR       std::is_same<T, char>::value
 #define ZEROERR_IS_WCHAR      std::is_same<T, wchar_t>::value
 #define ZEROERR_IS_CLASS      std::is_class<T>::value
