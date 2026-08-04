@@ -16,6 +16,13 @@ set(source_files ${source_files} PARENT_SCOPE)
 # Add the library
 add_library(zeroerr STATIC ${source_files})
 
+target_include_directories(zeroerr PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/../include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../extension
+    ${CMAKE_CURRENT_SOURCE_DIR}/../third_party
+    ${CMAKE_CURRENT_BINARY_DIR}/..
+)
+
 target_compile_options(zeroerr PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4 /utf-8>
     $<$<C_COMPILER_ID:MSVC>:/utf-8>
@@ -24,5 +31,5 @@ target_compile_options(zeroerr PRIVATE
 )
 
 if (ENABLE_FUZZING)
-    set_target_properties(zeroerr PROPERTIES COMPILE_DEFINITIONS ZEROERR_ENABLE_FUZZING)
+    target_compile_definitions(zeroerr PUBLIC ZEROERR_ENABLE_FUZZING)
 endif()

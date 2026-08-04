@@ -292,19 +292,16 @@ int UnitTest::run() {
             context.duration = end - start;
             std::cerr.rdbuf(orig_buf);
         }
+        // Decorators may rewrite pass/fail before results are accumulated.
+        runOnFinish(tc, context);
         int type = sum.add(context);
-        if (runOnFinish(tc, context)) {
-            if (context.passed > 0) type = 0;
-            if (context.warning > 0) type = 1;
-            if (context.failed > 0) type = 2;
-        } 
         reporter->testCaseEnd(tc, new_buf, context, type);
         context.reset();
         new_buf.str("");
     }
     reporter->testEnd(sum);
     delete reporter;
-    return 0;
+    return (sum.failed > 0 || sum.failed_as > 0) ? 1 : 0;
 }
 
 // sorted by file names and line numbers
@@ -865,14 +862,25 @@ public:
 
     bool onFinish(const TestCase& tc, TestContext& ctx) override {
         if (type == FailureType::may_fail) {
-            ctx.failed += ctx.passed;
-            ctx.passed = 0;
+            // Treat failures as warnings so the suite can continue cleanly.
+            ctx.warning_as += ctx.failed_as;
+            ctx.failed_as = 0;
+            ctx.warning += ctx.failed;
+            ctx.failed = 0;
             return true;
         }
         if (type == FailureType::should_fail) {
-            int failed = ctx.failed;
-            ctx.failed = ctx.passed;
-            ctx.passed = failed;
+            if (ctx.failed_as > 0 || ctx.failed > 0) {
+                ctx.passed_as += ctx.failed_as;
+                ctx.failed_as = 0;
+                ctx.passed += ctx.failed;
+                ctx.failed = 0;
+            } else {
+                ctx.failed_as = ctx.passed_as > 0 ? ctx.passed_as : 1;
+                ctx.passed_as = 0;
+                ctx.failed = 1;
+                ctx.passed = 0;
+            }
             return true;
         }
         return false;
@@ -899,7 +907,8 @@ Decorator* should_fail(bool isShouldFail) {
 }  // namespace zeroerr
 
 
+#ifndef ZEROERR_NO_MAIN
 int main(int argc, const char** argv) {
-    zeroerr::UnitTest().parseArgs(argc, argv).run();
-    std::_Exit(0);
+    return zeroerr::UnitTest().parseArgs(argc, argv).run();
 }
+#endif

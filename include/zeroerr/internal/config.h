@@ -20,6 +20,10 @@
 // If you wish to use the whole library without thread safety, uncomment the following line
 // #define ZEROERR_NO_THREAD_SAFE
 
+// When embedding zeroerr as a library into another binary that provides its own main,
+// define ZEROERR_NO_MAIN (e.g. target_compile_definitions(zeroerr PUBLIC ZEROERR_NO_MAIN)).
+// #define ZEROERR_NO_MAIN
+
 // If you wish to disable auto initialization of the system
 // #define ZEROERR_DISABLE_AUTO_INIT
 
