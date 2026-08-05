@@ -3006,17 +3006,14 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
     } while (0)
 #endif
 
-#ifdef ZEROERR_OS_WINDOWS
-#define ZEROERR_PRINT_ASSERT(cond, level, pattern, ...)                                    \
-    ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, " Assertion Failed:\n{msg}" pattern, \
-                                         assertion_data.log(), __VA_ARGS__)
-#else
+// pattern is optional: call sites pass "" __VA_ARGS__ so empty message args still
+// provide a pattern token. ##__VA_ARGS__ drops the trailing comma when there are no
+// extra format arguments (required for clang/clangd; MSVC accepts the extension too).
 ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 #define ZEROERR_PRINT_ASSERT(cond, level, pattern, ...)                                    \
     ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, " Assertion Failed:\n{msg}" pattern, \
                                          assertion_data.log(), ##__VA_ARGS__)
 ZEROERR_CLANG_SUPPRESS_WARNING_POP
-#endif
 
 #define ZEROERR_ASSERT_EXP(cond, level, expect_throw, is_false, ...)                             \
     ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \
@@ -3033,7 +3030,7 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
                          const bool>::value>::setContext(assertion_data, _ZEROERR_TEST_CONTEXT); \
-        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, __VA_ARGS__);                \
+        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, "" __VA_ARGS__);             \
         if (false) debug_break();                                                                \
         assertion_data();                                                                        \
         ZEROERR_FUNC_SCOPE_RET(assertion_data.passed);                                           \
@@ -3058,7 +3055,7 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
                          const bool>::value>::setContext(assertion_data, _ZEROERR_TEST_CONTEXT); \
-        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, __VA_ARGS__);                \
+        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, "" __VA_ARGS__);             \
         if (false) debug_break();                                                                \
         assertion_data();                                                                        \
         ZEROERR_FUNC_SCOPE_RET(assertion_data.passed);                                           \
