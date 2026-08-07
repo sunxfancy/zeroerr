@@ -9,19 +9,18 @@
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                              \
-    static void                     function(zeroerr::TestContext*);               \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                 \
-        zeroerr::TestCase(name, __FILE__, __LINE__, function, {__VA_ARGS__}));     \
+#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                          \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                      \
+    static void                     function(zeroerr::TestContext*);           \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(             \
+        zeroerr::TestCase(name, __FILE__, __LINE__, function, {__VA_ARGS__})); \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP;                                      \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE(...)                                                              \
-    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                           \
-    ZEROERR_EXPAND(ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase),     \
-                                            __VA_ARGS__))                           \
-    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+#define TEST_CASE(...) \
+    ZEROERR_EXPAND(ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), __VA_ARGS__))
 
-#define ZEROERR_CREATE_SUB_CASE(name, ...)                                                  \
+#define ZEROERR_CREATE_SUB_CASE(name, ...)                                           \
     zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \
         << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
