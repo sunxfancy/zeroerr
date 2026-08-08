@@ -126,12 +126,31 @@ struct is_string
 };
 
 
-// Check if a type can use arr[0] like an array
+// Completeness check that SFINAE-fails for incomplete T (needed on GCC:
+// subscripting a pointer-to-incomplete inside decltype is a hard error).
+template <typename T, typename = void>
+struct is_complete_type : std::false_type {};
+template <typename T>
+struct is_complete_type<T, decltype(void(sizeof(T)))> : std::true_type {};
+
+// Check if a type can use arr[0] like an array.
+// Pointers are handled separately: only complete pointees are array-like.
 template <typename T, typename = void>
 struct is_array : std::false_type {};
 
 template <typename T>
-struct is_array<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
+struct is_array<T*, typename std::enable_if<is_complete_type<T>::value>::type> : std::true_type {};
+
+template <typename T>
+struct is_array<T* const, typename std::enable_if<is_complete_type<T>::value>::type> : std::true_type {
+};
+
+template <typename T>
+struct is_array<
+    T, void_t<typename std::enable_if<!std::is_pointer<
+                   typename std::remove_cv<typename std::remove_reference<T>::type>::type>::value>::
+                  type,
+              decltype(std::declval<T>()[0])>> : std::true_type {};
 
 
 template <typename T, typename = void>
