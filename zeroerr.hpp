@@ -23,6 +23,10 @@
 // If you wish to use the whole library without thread safety, uncomment the following line
 // #define ZEROERR_NO_THREAD_SAFE
 
+// When embedding zeroerr as a library into another binary that provides its own main,
+// define ZEROERR_NO_MAIN (e.g. target_compile_definitions(zeroerr PUBLIC ZEROERR_NO_MAIN)).
+// #define ZEROERR_NO_MAIN
+
 // If you wish to disable auto initialization of the system
 // #define ZEROERR_DISABLE_AUTO_INIT
 
@@ -86,6 +90,7 @@
 #define ZEROERR_TRIGGER_PARENTHESIS_(...) ,
 
 #define ZEROERR_ISEMPTY(...)                                                                     \
+    ZEROERR_SUPPRESS_VARIADIC_MACRO                                                              \
     _ZEROERR_ISEMPTY(/* test if there is just one argument, eventually an empty                  \
                 one */                                                                           \
                      ZEROERR_HAS_COMMA(__VA_ARGS__), /* test if ZEROERR_TRIGGER_PARENTHESIS_     \
@@ -96,7 +101,8 @@
                      ZEROERR_HAS_COMMA(__VA_ARGS__(                                              \
                          /*empty*/)), /* test if placing it between ZEROERR_TRIGGER_PARENTHESIS_ \
                                          and the parenthesis adds a comma */                     \
-                     ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__(/*empty*/)))
+                     ZEROERR_HAS_COMMA(ZEROERR_TRIGGER_PARENTHESIS_ __VA_ARGS__(/*empty*/)))     \
+    ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 
 #define ZEROERR_PASTE5(_0, _1, _2, _3, _4) _0##_1##_2##_3##_4
 #define _ZEROERR_ISEMPTY(_0, _1, _2, _3) \
@@ -230,6 +236,7 @@
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wmissing-prototypes")                                         \
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wc++98-compat")                                               \
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wc++98-compat-pedantic")                                      \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wvariadic-macro-arguments-omitted")                           \
                                                                                                    \
     ZEROERR_GCC_SUPPRESS_WARNING_PUSH                                                              \
     ZEROERR_GCC_SUPPRESS_WARNING("-Wunknown-pragmas")                                              \
@@ -298,8 +305,9 @@
 
 #define ZEROERR_MAKE_STD_HEADERS_CLEAN_FROM_WARNINGS_ON_WALL_END ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
-#define ZEROERR_SUPPRESS_VARIADIC_MACRO \
-    ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
+#define ZEROERR_SUPPRESS_VARIADIC_MACRO                                             \
+    ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments") \
+    ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wvariadic-macro-arguments-omitted")
 
 #define ZEROERR_SUPPRESS_VARIADIC_MACRO_POP ZEROERR_CLANG_SUPPRESS_WARNING_POP
 
@@ -847,12 +855,33 @@ struct is_string
 };
 
 
-// Check if a type can use arr[0] like an array
+// Completeness check that SFINAE-fails for incomplete T.
 template <typename T, typename = void>
-struct is_array : std::false_type {};
+struct is_complete_type : std::false_type {};
+template <typename T>
+struct is_complete_type<T, decltype(void(sizeof(T)))> : std::true_type {};
+
+// Non-pointer [0] detection. Must not be instantiated for pointer-to-incomplete:
+// GCC treats that subscript as a hard error inside void_t, not SFINAE.
+template <typename T, typename = void>
+struct is_indexable_non_pointer : std::false_type {};
+template <typename T>
+struct is_indexable_non_pointer<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
+
+// Dispatch on is_pointer first so pointer-to-incomplete never reaches [0].
+template <typename T,
+          bool = std::is_pointer<
+              typename std::remove_cv<typename std::remove_reference<T>::type>::type>::value>
+struct is_array_dispatch : is_indexable_non_pointer<T> {};
 
 template <typename T>
-struct is_array<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
+struct is_array_dispatch<T, true>
+    : is_complete_type<typename std::remove_pointer<
+          typename std::remove_cv<typename std::remove_reference<T>::type>::type>::type> {};
+
+// Check if a type can use arr[0] like an array.
+template <typename T>
+struct is_array : is_array_dispatch<T> {};
 
 
 template <typename T, typename = void>
@@ -983,9 +1012,10 @@ void visit2_at(std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t i
     typename std::enable_if<x, void>::type
 #define ZEROERR_IS_INT        std::is_integral<T>::value
 #define ZEROERR_IS_FLOAT      std::is_floating_point<T>::value
+#define ZEROERR_IS_ENUM       std::is_enum<T>::value
 #define ZEROERR_IS_CONTAINER  detail::is_container<T>::value
 #define ZEROERR_IS_STRING     detail::is_string<T>::value
-#define ZEROERR_IS_POINTER    std::is_pointer<T>::value
+#define ZEROERR_IS_POINTER    (std::is_pointer<T>::value || std::is_same<T, std::nullptr_t>::value)
 #define ZEROERR_IS_CHAR       std::is_same<T, char>::value
 #define ZEROERR_IS_WCHAR      std::is_same<T, wchar_t>::value
 #define ZEROERR_IS_CLASS      std::is_class<T>::value
@@ -1050,7 +1080,7 @@ namespace zeroerr {
  */
 
 struct IRObject {
-    IRObject() { std::memset(this, 0, sizeof(IRObject)); }
+    IRObject() { memset(this, 0, sizeof(IRObject)); }
     ~IRObject() {}
     IRObject(const IRObject& other) { *this = other; }
     IRObject(IRObject&& other) { *this = std::move(other); }
@@ -1064,7 +1094,7 @@ struct IRObject {
         return *this;
     }
 
-    enum Type { Undefined, Int, Float, String, ShortString, Object };
+    enum Type { Undefined = 0, Int, Float, String, ShortString, Object };
 
     union {
         int64_t   i;
@@ -1074,7 +1104,7 @@ struct IRObject {
         IRObject* o;  // first must be the number of elements
     };
     char     others[7];
-    unsigned type;
+    unsigned char type;
 
     template <typename T>
     typename std::enable_if<std::is_integral<T>::value, T>::type GetScalar() {
@@ -1137,7 +1167,10 @@ struct IRObject {
         int64_t   size;
         IRObject* children;
     };
-    Childrens GetChildren() { return {o->i, o + 1}; }
+    Childrens GetChildren() { 
+        if (type != Type::Object) return {0, nullptr};
+        return {o->i, o + 1};
+    }
 
     void SetChildren(IRObject* children) {
         o    = children - 1;
@@ -1402,6 +1435,13 @@ struct Printer {
         return demangle(typeid(t).name());
     }
 
+#if defined(ZEROERR_ENABLE_MAGIC_ENUM) && (ZEROERR_CXX_STANDARD >= 17)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
+    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
+#else
+    ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
+    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
+#endif
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_INT || ZEROERR_IS_FLOAT)
     print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
@@ -1411,7 +1451,7 @@ struct Printer {
         if (value == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
-            os << tab(level) << "<" << type(value) << " at " << value << ">" << lb;
+            os << tab(level) << "<" << type(value) << " at " << static_cast<const void*>(value) << ">" << lb;
     }
 
 
@@ -2182,7 +2222,7 @@ public:
         return v;
     }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+    void Mutate(Rng& rng, CorpusType& v, bool) const override {
         CorpusType offsize = max - min + 1;
         v                  = rng.bounded(offsize);
         v                  = min + v;
@@ -2623,7 +2663,7 @@ public:
 
     CorpusType GetRandomCorpus(Rng& rng) const override { return static_cast<T>(rng.bounded(100)); }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+    void Mutate(Rng& rng, CorpusType& v, bool) const override {
         v = static_cast<T>(rng.bounded(100));
     }
 };
@@ -2641,7 +2681,7 @@ public:
 
     CorpusType GetRandomCorpus(Rng& rng) const override { return static_cast<T>(rng.bounded(100)); }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+    void Mutate(Rng& rng, CorpusType& v, bool) const override {
         v = static_cast<T>(rng.bounded(100));
         v -= 50;
     }
@@ -2659,7 +2699,7 @@ public:
         return static_cast<T>(rng.bounded(1000));
     }
 
-    void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
+    void Mutate(Rng& rng, CorpusType& v, bool) const override {
         v = static_cast<T>(rng.bounded(1000));
     }
 };
@@ -2739,8 +2779,10 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
         {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, zeroerr::TestType::bench); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define BENCHMARK(name, ...) \
-    ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), name, __VA_ARGS__)
+#define BENCHMARK(...) \
+    ZEROERR_SUPPRESS_VARIADIC_MACRO \
+    ZEROERR_CREATE_BENCHMARK_FUNC(ZEROERR_NAMEGEN(_zeroerr_benchmark), __VA_ARGS__) \
+    ZEROERR_SUPPRESS_VARIADIC_MACRO_POP \
 
 
 namespace zeroerr {
@@ -2985,17 +3027,14 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
     } while (0)
 #endif
 
-#ifdef ZEROERR_OS_WINDOWS
-#define ZEROERR_PRINT_ASSERT(cond, level, pattern, ...)                                    \
-    ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, " Assertion Failed:\n{msg}" pattern, \
-                                         assertion_data.log(), __VA_ARGS__)
-#else
+// pattern is optional: call sites pass "" __VA_ARGS__ so empty message args still
+// provide a pattern token. ##__VA_ARGS__ drops the trailing comma when there are no
+// extra format arguments (required for clang/clangd; MSVC accepts the extension too).
 ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 #define ZEROERR_PRINT_ASSERT(cond, level, pattern, ...)                                    \
     ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER(cond, level, " Assertion Failed:\n{msg}" pattern, \
                                          assertion_data.log(), ##__VA_ARGS__)
 ZEROERR_CLANG_SUPPRESS_WARNING_POP
-#endif
 
 #define ZEROERR_ASSERT_EXP(cond, level, expect_throw, is_false, ...)                             \
     ZEROERR_FUNC_SCOPE_BEGIN {                                                                   \
@@ -3012,7 +3051,7 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
                          const bool>::value>::setContext(assertion_data, _ZEROERR_TEST_CONTEXT); \
-        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, __VA_ARGS__);                \
+        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, "" __VA_ARGS__);             \
         if (false) debug_break();                                                                \
         assertion_data();                                                                        \
         ZEROERR_FUNC_SCOPE_RET(assertion_data.passed);                                           \
@@ -3037,7 +3076,7 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
             decltype(_ZEROERR_TEST_CONTEXT),                                                     \
             std::is_same<decltype(_ZEROERR_TEST_CONTEXT),                                        \
                          const bool>::value>::setContext(assertion_data, _ZEROERR_TEST_CONTEXT); \
-        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, __VA_ARGS__);                \
+        ZEROERR_PRINT_ASSERT(assertion_data.passed == false, level, "" __VA_ARGS__);             \
         if (false) debug_break();                                                                \
         assertion_data();                                                                        \
         ZEROERR_FUNC_SCOPE_RET(assertion_data.passed);                                           \
@@ -4005,11 +4044,21 @@ PushResult log(LogStream& stream, T&&... args) {
  */
 class IContextScope {
 public:
+    /**
+     * @brief Output context information to a stream
+     * @param os The output stream to write context to
+     */
     virtual void str(std::ostream& os) const = 0;
 };
 
 extern thread_local std::vector<IContextScope*> _ZEROERR_G_CONTEXT_SCOPE_VECTOR;
 
+/**
+ * @brief Template implementation of context scope
+ * @details Stores a callable that outputs context information when needed
+ * during assertion failure
+ * @tparam F Type of the callable function
+ */
 template <typename F>
 class ContextScope : public IContextScope {
 public:
@@ -4022,6 +4071,12 @@ protected:
     F f_;
 };
 
+/**
+ * @brief Helper function to create a context scope
+ * @tparam F Type of the callable function
+ * @param f Function that will output context information
+ * @return ContextScope instance that manages the context information
+ */
 template <typename F>
 ContextScope<F> MakeContextScope(const F& f) {
     return ContextScope<F>(f);
@@ -4214,18 +4269,26 @@ protected:
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                \
-    static void                     function(zeroerr::TestContext*); \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(   \
-        {name, __FILE__, __LINE__, function, {__VA_ARGS__}});        \
+#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                              \
+    static void                     function(zeroerr::TestContext*);               \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                 \
+        zeroerr::TestCase(name, __FILE__, __LINE__, function, {__VA_ARGS__}));     \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE(name, ...) \
-    ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name, __VA_ARGS__)
+#define TEST_CASE(...)                                                              \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                           \
+    ZEROERR_EXPAND(ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase),     \
+                                            __VA_ARGS__))                           \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
-#define SUB_CASE(name, ...)                                                          \
+#define ZEROERR_CREATE_SUB_CASE(name, ...)                                                  \
     zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \
         << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
+
+#define SUB_CASE(...)                                                         \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                     \
+    ZEROERR_EXPAND(ZEROERR_CREATE_SUB_CASE(__VA_ARGS__))                      \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name, ...)                   \
     class classname : public fixture {                                                       \
@@ -4237,12 +4300,13 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
         instance.funcname(_ZEROERR_TEST_CONTEXT);                                            \
     }                                                                                        \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                           \
-        {name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname), {__VA_ARGS__}});            \
+        zeroerr::TestCase(name, __FILE__, __LINE__, ZEROERR_CAT(call_, funcname),            \
+                          {__VA_ARGS__}));                                                   \
     inline void classname::funcname(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE_FIXTURE(fixture, name, ...)                           \
-    ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
-                              ZEROERR_NAMEGEN(_zeroerr_test_method), name, __VA_ARGS__)
+#define TEST_CASE_FIXTURE(fixture, ...)                                              \
+    ZEROERR_EXPAND(ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
+                              ZEROERR_NAMEGEN(_zeroerr_test_method), __VA_ARGS__))
 
 
 #define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT->save_output();
@@ -4562,8 +4626,8 @@ public:
     // Called on each assertion, return true can skip the assertion
     virtual bool onAssertion() { return false; }
 
-    // Called when the test finished, return true means the test containing errors
-    virtual bool onFinish(const TestCase&, const TestContext&) { return false; }
+    // Called when the test finished, return true means the test containing changes
+    virtual bool onFinish(const TestCase&, TestContext&) { return false; }
 };
 
 Decorator* skip(bool isSkip = true);
@@ -4602,8 +4666,10 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
         {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, zeroerr::TestType::fuzz_test); \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define FUZZ_TEST_CASE(name, ...) \
-    ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), name, __VA_ARGS__)
+#define FUZZ_TEST_CASE(...) \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH \
+    ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), __VA_ARGS__) \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 #define FUZZ_FUNC(func) zeroerr::FuzzFunction(func, _ZEROERR_TEST_CONTEXT)
 
@@ -5259,8 +5325,8 @@ LogIterator::LogIterator(LogStream& stream, std::string message, std::string fun
                          int line)
     : p(stream.first),
       q(stream.first->begin()),
-      message_filter(message),
       function_name_filter(function_name),
+      message_filter(message),
       line_filter(line) {
     while (!check_filter() && p) next();
 }
@@ -6147,11 +6213,14 @@ static bool runOnExecution(const TestCase& tc) {
     return false;
 }
 
-static bool runOnFinish(const TestCase& tc, const TestContext& ctx) {
+static bool runOnFinish(const TestCase& tc, TestContext& ctx) {
+    bool contain_changes = false;
     for (auto& decorator : tc.decorators) {
-        if (decorator->onFinish(tc, ctx)) return true;
+        if (decorator->onFinish(tc, ctx)) {
+            contain_changes = true;
+        }
     }
-    return false;
+    return contain_changes;
 }
 
 int UnitTest::run() {
@@ -6193,20 +6262,16 @@ int UnitTest::run() {
             context.duration = end - start;
             std::cerr.rdbuf(orig_buf);
         }
+        // Decorators may rewrite pass/fail before results are accumulated.
+        runOnFinish(tc, context);
         int type = sum.add(context);
-        if (runOnFinish(tc, context)) {
-            if (type != 2) {
-                sum.failed += 1;
-                type = 2;
-            }
-        }
         reporter->testCaseEnd(tc, new_buf, context, type);
         context.reset();
         new_buf.str("");
     }
     reporter->testEnd(sum);
     delete reporter;
-    return 0;
+    return (sum.failed > 0 || sum.failed_as > 0) ? 1 : 0;
 }
 
 // sorted by file names and line numbers
@@ -6279,12 +6344,13 @@ public:
 
     virtual void testCaseStart(const TestCase& tc, std::stringbuf&) override {
         std::cerr << "TEST CASE " << Dim << "[" << getFileName(tc.file) << ":" << tc.line << "] "
-                  << Reset << FgCyan << tc.name << Reset << std::endl;
+                  << Reset << FgCyan << tc.name << Reset;
     }
 
     virtual void testCaseEnd(const TestCase&, std::stringbuf& sb, const TestContext&,
                              int type) override {
-        if (!(ut.silent && type == 0)) std::cerr << insertIndentation(sb.str()) << std::endl;
+        if (!(ut.silent && type == 0)) std::cerr << "  " << (type == 0 ? "✅" : type == 1 ? "⚠️" : "❌")
+        << std::endl << insertIndentation(sb.str()) << std::endl;
     }
 
     virtual void subCaseStart(const TestCase& tc, std::stringbuf&) override {
@@ -6742,7 +6808,7 @@ public:
     TimeoutDecorator() : timeout(0) {}
     TimeoutDecorator(float timeout) : timeout(timeout) {}
 
-    bool onFinish(const TestCase& tc, const TestContext& ctx) override {
+    bool onFinish(const TestCase&, TestContext& ctx) override {
         if (ctx.duration > std::chrono::duration<double>(timeout)) {
             std::cerr << FgRed <<  "Timeout: " << Reset << ctx.duration.count() << "s > " << timeout << "s" << std::endl;
             return true;
@@ -6763,6 +6829,32 @@ class FailureDecorator : public Decorator {
 public:
     enum FailureType { may_fail, should_fail };
     FailureDecorator(FailureType type) : type(type) {}
+
+    bool onFinish(const TestCase& tc, TestContext& ctx) override {
+        if (type == FailureType::may_fail) {
+            // Treat failures as warnings so the suite can continue cleanly.
+            ctx.warning_as += ctx.failed_as;
+            ctx.failed_as = 0;
+            ctx.warning += ctx.failed;
+            ctx.failed = 0;
+            return true;
+        }
+        if (type == FailureType::should_fail) {
+            if (ctx.failed_as > 0 || ctx.failed > 0) {
+                ctx.passed_as += ctx.failed_as;
+                ctx.failed_as = 0;
+                ctx.passed += ctx.failed;
+                ctx.failed = 0;
+            } else {
+                ctx.failed_as = ctx.passed_as > 0 ? ctx.passed_as : 1;
+                ctx.passed_as = 0;
+                ctx.failed = 1;
+                ctx.passed = 0;
+            }
+            return true;
+        }
+        return false;
+    }
 
 private:
     FailureType type;
@@ -6785,10 +6877,11 @@ Decorator* should_fail(bool isShouldFail) {
 }  // namespace zeroerr
 
 
+#ifndef ZEROERR_NO_MAIN
 int main(int argc, const char** argv) {
-    zeroerr::UnitTest().parseArgs(argc, argv).run();
-    std::_Exit(0);
+    return zeroerr::UnitTest().parseArgs(argc, argv).run();
 }
+#endif
 
 
 
@@ -6961,9 +7054,11 @@ static void to_string(IRObject obj, std::stringstream& ss) {
 
 static IRObject from_string(std::stringstream& ss, std::string& token) {
     IRObject obj;
+    if (token.empty()) return obj;
     if (token == "{") {
         std::vector<IRObject> children;
         while (ss >> token) {
+            if (token.empty()) return obj;
             if (token == "}") break;
             IRObject child = from_string(ss, token);
             if (child.type == IRObject::Type::Undefined)

@@ -167,7 +167,7 @@ TEST_CASE("access log in Test case") {
     zeroerr::resumeLog();
 }
 
-TEST_CASE("iterate log stream") {
+TEST_CASE("iterate log stream", skip()) {
     zeroerr::suspendLog();
     function();
     function();

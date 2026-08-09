@@ -1,2 +1,2 @@
 CompileFlags:
-  CompilationDatabase: ./build/linux
+  CompilationDatabase: build/win32-debug

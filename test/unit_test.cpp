@@ -3,6 +3,7 @@
 #include "zeroerr/dbg.h"
 #include "zeroerr/print.h"
 #include "zeroerr/unittest.h"
+#include <string>
 #include <thread>
 
 using namespace zeroerr;
@@ -115,6 +116,17 @@ TEST_CASE("traditional check macro") {
     int a = 1;
     int b = 2;
     CHECK_EQ(a, b);
+}
+
+// Regression: CHECK/REQUIRE with no message args must expand on Windows/clang
+// (ZEROERR_PRINT_ASSERT previously required a pattern and failed with empty __VA_ARGS__).
+TEST_CASE("assert empty message va_args") {
+    std::string s = "x";
+    CHECK(true);
+    CHECK(!s.empty());
+    REQUIRE(!s.empty());
+    CHECK_EQ(s.empty(), false);
+    CHECK(s.size() == 1, " expected size 1");
 }
 
 TEST_CASE("parsing arguments") {

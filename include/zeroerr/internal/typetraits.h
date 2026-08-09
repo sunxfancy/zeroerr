@@ -126,12 +126,33 @@ struct is_string
 };
 
 
-// Check if a type can use arr[0] like an array
+// Completeness check that SFINAE-fails for incomplete T.
 template <typename T, typename = void>
-struct is_array : std::false_type {};
+struct is_complete_type : std::false_type {};
+template <typename T>
+struct is_complete_type<T, decltype(void(sizeof(T)))> : std::true_type {};
+
+// Non-pointer [0] detection. Must not be instantiated for pointer-to-incomplete:
+// GCC treats that subscript as a hard error inside void_t, not SFINAE.
+template <typename T, typename = void>
+struct is_indexable_non_pointer : std::false_type {};
+template <typename T>
+struct is_indexable_non_pointer<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
+
+// Dispatch on is_pointer first so pointer-to-incomplete never reaches [0].
+template <typename T,
+          bool = std::is_pointer<
+              typename std::remove_cv<typename std::remove_reference<T>::type>::type>::value>
+struct is_array_dispatch : is_indexable_non_pointer<T> {};
 
 template <typename T>
-struct is_array<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
+struct is_array_dispatch<T, true>
+    : is_complete_type<typename std::remove_pointer<
+          typename std::remove_cv<typename std::remove_reference<T>::type>::type>::type> {};
+
+// Check if a type can use arr[0] like an array.
+template <typename T>
+struct is_array : is_array_dispatch<T> {};
 
 
 template <typename T, typename = void>
