@@ -178,16 +178,16 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
             filters->name.push_back(std::regex(arg.substr(9)));
             return true;
         }
-        if (arg.substr(0, 14) == "testcase-exclude") {
-            filters->name_exclude.push_back(std::regex(arg.substr(15)));
+        if (arg.substr(0, 16) == "testcase-exclude=") {
+            filters->name_exclude.push_back(std::regex(arg.substr(16)));
             return true;
         }
-        if (arg.substr(0, 5) == "file") {
-            filters->file.push_back(std::regex(arg.substr(6)));
+        if (arg.substr(0, 5) == "file=") {
+            filters->file.push_back(std::regex(arg.substr(5)));
             return true;
         }
-        if (arg.substr(0, 11) == "file-exclude") {
-            filters->file_exclude.push_back(std::regex(arg.substr(12)));
+        if (arg.substr(0, 13) == "file-exclude=") {
+            filters->file_exclude.push_back(std::regex(arg.substr(13)));
             return true;
         }
         return false;
