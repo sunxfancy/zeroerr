@@ -1,0 +1,422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: src/table.cpp 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('table_8cpp.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">类</a> &#124;
+<a href="#namespaces">命名空间</a> &#124;
+<a href="#define-members">宏定义</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle"><div class="title">table.cpp 文件参考</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="table_8h_source.html">zeroerr/table.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="assert_8h_source.html">zeroerr/assert.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="log_8h_source.html">zeroerr/log.h</a>&quot;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;map&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+table.cpp 的引用(Include)关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="table_8cpp__incl.png" border="0" usemap="#asrc_2table_8cpp" alt=""/></div>
+<map name="asrc_2table_8cpp" id="asrc_2table_8cpp">
+<area shape="rect" title=" " alt="" coords="1399,5,1505,31"/>
+<area shape="rect" href="table_8h.html" title=" " alt="" coords="847,152,964,177"/>
+<area shape="poly" title=" " alt="" coords="1409,33,962,151,961,146,1408,28"/>
+<area shape="rect" title=" " alt="" coords="1479,445,1553,471"/>
+<area shape="poly" title=" " alt="" coords="1505,24,1605,43,1718,72,1770,91,1812,112,1841,136,1849,149,1852,163,1852,313,1850,335,1843,355,1820,388,1786,413,1744,432,1698,445,1651,453,1567,460,1567,454,1650,448,1697,440,1742,427,1783,409,1816,384,1839,352,1844,334,1847,313,1847,164,1844,151,1837,139,1809,116,1768,95,1717,77,1603,48,1504,30"/>
+<area shape="rect" href="assert_8h.html" title=" " alt="" coords="502,79,626,104"/>
+<area shape="poly" title=" " alt="" coords="1399,26,640,87,640,81,1399,21"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="1247,152,1351,177"/>
+<area shape="poly" title=" " alt="" coords="1441,33,1323,144,1319,141,1437,29"/>
+<area shape="rect" title=" " alt="" coords="1761,225,1812,251"/>
+<area shape="poly" title=" " alt="" coords="1471,28,1759,215,1756,220,1468,33"/>
+<area shape="rect" title=" " alt="" coords="1887,79,1972,104"/>
+<area shape="poly" title=" " alt="" coords="1506,24,1868,76,1873,77,1873,82,1867,81,1505,29"/>
+<area shape="rect" href="dbg_8h.html" title=" " alt="" coords="573,225,681,251"/>
+<area shape="poly" title=" " alt="" coords="861,180,685,224,684,219,860,175"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="591,445,769,471"/>
+<area shape="poly" title=" " alt="" coords="847,178,561,228,549,238,537,244,527,249,523,256,525,270,537,296,601,396,622,418,646,436,643,441,618,422,596,399,533,299,520,272,518,255,524,245,534,239,546,233,559,223,846,173"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="724,299,839,324"/>
+<area shape="poly" title=" " alt="" coords="872,180,835,198,818,211,803,227,790,256,785,285,779,284,785,254,799,224,814,207,832,194,870,175"/>
+<area shape="rect" title=" " alt="" coords="957,445,1033,471"/>
+<area shape="poly" title=" " alt="" coords="892,180,871,200,854,226,852,238,854,250,879,306,911,357,945,401,975,434,971,437,941,405,907,360,874,308,849,251,846,238,849,224,867,197,888,176"/>
+<area shape="rect" title=" " alt="" coords="1075,445,1133,471"/>
+<area shape="poly" title=" " alt="" coords="903,178,896,211,895,231,900,250,915,281,935,310,983,363,1032,406,1075,436,1072,440,1029,410,979,367,931,314,911,284,895,252,890,232,890,211,898,177"/>
+<area shape="rect" title=" " alt="" coords="909,225,971,251"/>
+<area shape="poly" title=" " alt="" coords="913,176,931,212,926,214,909,179"/>
+<area shape="poly" title=" " alt="" coords="624,252,615,279,606,316,604,357,606,377,613,396,628,418,649,436,645,440,624,422,608,399,601,378,598,357,601,315,609,277,619,250"/>
+<area shape="rect" href="color_8h.html" title=" " alt="" coords="623,372,737,397"/>
+<area shape="poly" title=" " alt="" coords="633,250,673,358,668,360,628,252"/>
+<area shape="poly" title=" " alt="" coords="652,248,745,290,742,295,650,253"/>
+<area shape="rect" title=" " alt="" coords="863,445,918,471"/>
+<area shape="poly" title=" " alt="" coords="639,249,714,322,794,386,864,435,860,440,791,390,710,326,635,253"/>
+<area shape="rect" title=" " alt="" coords="417,299,497,324"/>
+<area shape="poly" title=" " alt="" coords="600,253,499,296,497,291,598,248"/>
+<area shape="poly" title=" " alt="" coords="683,398,683,432,677,432,677,398"/>
+<area shape="poly" title=" " alt="" coords="781,325,771,360,751,399,732,421,711,439,707,435,728,417,747,396,766,358,776,324"/>
+<area shape="poly" title=" " alt="" coords="766,326,709,366,706,362,763,322"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="1202,372,1403,397"/>
+<area shape="poly" title=" " alt="" coords="839,318,1206,368,1205,373,839,323"/>
+<area shape="poly" title=" " alt="" coords="1203,400,782,448,782,442,1202,395"/>
+<area shape="poly" title=" " alt="" coords="1254,400,1046,447,1045,442,1252,395"/>
+<area shape="poly" title=" " alt="" coords="1338,395,1469,438,1468,443,1336,400"/>
+<area shape="poly" title=" " alt="" coords="1272,400,1148,444,1146,439,1270,395"/>
+<area shape="poly" title=" " alt="" coords="1229,400,946,448,932,451,931,445,945,443,1228,395"/>
+<area shape="rect" title=" " alt="" coords="1259,445,1351,471"/>
+<area shape="poly" title=" " alt="" coords="1306,398,1307,432,1302,432,1300,398"/>
+<area shape="rect" title=" " alt="" coords="1375,445,1454,471"/>
+<area shape="poly" title=" " alt="" coords="1322,395,1386,435,1383,440,1319,400"/>
+<area shape="rect" title=" " alt="" coords="1157,445,1235,471"/>
+<area shape="poly" title=" " alt="" coords="1287,400,1226,440,1223,435,1284,395"/>
+<area shape="poly" title=" " alt="" coords="502,98,231,118,102,134,58,144,33,154,17,172,11,190,9,237,9,312,13,332,25,350,45,366,70,381,138,405,222,423,314,436,409,445,578,453,577,458,408,450,314,442,221,428,137,410,68,385,42,370,21,354,8,334,4,313,4,237,5,189,13,169,30,150,56,139,101,129,230,113,502,93"/>
+<area shape="poly" title=" " alt="" coords="606,102,651,121,695,150,723,183,746,219,776,285,771,287,742,222,719,186,691,154,649,125,604,107"/>
+<area shape="poly" title=" " alt="" coords="502,96,420,100,328,109,246,127,216,139,196,154,181,178,176,201,181,224,197,249,209,260,229,269,283,285,345,296,403,303,403,308,345,301,282,290,227,274,207,264,193,252,177,226,171,201,176,176,193,150,214,134,245,121,327,104,419,94,502,91"/>
+<area shape="rect" href="format_8h.html" title=" " alt="" coords="1097,225,1225,251"/>
+<area shape="poly" title=" " alt="" coords="626,93,787,110,882,126,977,149,1061,182,1130,216,1128,221,1059,187,975,155,881,132,786,116,626,99"/>
+<area shape="rect" href="debugbreak_8h.html" title=" " alt="" coords="207,152,422,177"/>
+<area shape="poly" title=" " alt="" coords="525,107,369,151,367,146,523,101"/>
+<area shape="rect" href="decomposition_8h.html" title=" " alt="" coords="447,152,681,177"/>
+<area shape="poly" title=" " alt="" coords="567,104,567,138,561,138,561,104"/>
+<area shape="rect" title=" " alt="" coords="756,152,823,177"/>
+<area shape="poly" title=" " alt="" coords="601,101,743,146,742,151,599,107"/>
+<area shape="rect" title=" " alt="" coords="45,152,131,177"/>
+<area shape="poly" title=" " alt="" coords="502,104,151,155,145,156,144,150,150,149,501,98"/>
+<area shape="poly" title=" " alt="" coords="1101,253,853,299,852,294,1100,248"/>
+<area shape="poly" title=" " alt="" coords="1189,248,1291,297,1355,331,1417,370,1460,402,1496,434,1492,438,1457,406,1414,374,1352,336,1289,302,1186,253"/>
+<area shape="poly" title=" " alt="" coords="1161,251,1148,299,1113,433,1108,431,1143,298,1156,250"/>
+<area shape="rect" title=" " alt="" coords="207,225,281,251"/>
+<area shape="poly" title=" " alt="" coords="305,180,267,218,263,214,301,176"/>
+<area shape="rect" title=" " alt="" coords="305,225,378,251"/>
+<area shape="poly" title=" " alt="" coords="321,177,335,212,330,214,316,179"/>
+<area shape="poly" title=" " alt="" coords="576,176,609,213,605,217,572,179"/>
+<area shape="poly" title=" " alt="" coords="536,180,487,203,438,237,418,256,405,277,401,299,408,323,423,346,442,367,489,400,541,424,593,440,591,445,539,429,486,405,439,371,419,350,403,325,396,300,400,275,414,253,434,232,485,199,533,175"/>
+<area shape="poly" title=" " alt="" coords="562,178,554,213,555,232,562,249,584,265,621,278,711,298,710,303,620,284,582,270,558,252,549,233,548,213,556,177"/>
+<area shape="poly" title=" " alt="" coords="1247,174,694,232,694,227,1246,169"/>
+<area shape="poly" title=" " alt="" coords="1247,179,1170,199,1086,228,1007,268,900,328,712,440,709,436,898,323,1004,263,1084,223,1169,194,1246,174"/>
+<area shape="poly" title=" " alt="" coords="1247,178,1151,198,1042,228,985,253,840,298,839,293,983,248,1040,223,1150,193,1246,172"/>
+<area shape="poly" title=" " alt="" coords="1351,166,1382,172,1415,183,1445,200,1469,224,1478,247,1476,269,1465,291,1446,310,1397,344,1346,369,1344,364,1394,339,1443,306,1460,287,1471,268,1473,248,1464,227,1441,204,1413,188,1381,178,1350,172"/>
+<area shape="poly" title=" " alt="" coords="1293,179,1121,435,1117,432,1289,176"/>
+<area shape="poly" title=" " alt="" coords="1247,178,991,228,985,229,984,224,990,223,1246,173"/>
+<area shape="poly" title=" " alt="" coords="1278,180,1197,221,1194,217,1275,175"/>
+<area shape="rect" href="threadsafe_8h.html" title=" " alt="" coords="1529,225,1737,251"/>
+<area shape="poly" title=" " alt="" coords="1351,174,1567,220,1565,225,1350,180"/>
+<area shape="rect" title=" " alt="" coords="1300,225,1367,251"/>
+<area shape="poly" title=" " alt="" coords="1307,176,1324,212,1319,214,1302,179"/>
+<area shape="rect" title=" " alt="" coords="1391,225,1455,251"/>
+<area shape="poly" title=" " alt="" coords="1320,175,1392,216,1389,221,1317,180"/>
+<area shape="poly" title=" " alt="" coords="1351,167,1524,186,1634,202,1748,223,1747,228,1633,207,1523,191,1350,173"/>
+<area shape="poly" title=" " alt="" coords="1584,253,744,445,742,440,1583,248"/>
+<area shape="rect" title=" " alt="" coords="1565,299,1632,324"/>
+<area shape="poly" title=" " alt="" coords="1630,252,1613,287,1608,285,1625,250"/>
+<area shape="rect" title=" " alt="" coords="1656,299,1720,324"/>
+<area shape="poly" title=" " alt="" coords="1644,249,1673,286,1669,289,1640,253"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1StyleManager.html">zeroerr::StyleManager</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+命名空间</h2></td></tr>
+<tr class="memitem:namespacezeroerr" id="r_namespacezeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+宏定义</h2></td></tr>
+<tr class="memitem:a428f8207615465afdfcf1d31547ffef3" id="r_a428f8207615465afdfcf1d31547ffef3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a428f8207615465afdfcf1d31547ffef3">left</a>&#160;&#160;&#160;(c.show_lr_border ? s.m_args[p] : &quot;&quot;)</td></tr>
+<tr class="separator:a428f8207615465afdfcf1d31547ffef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4452d769b760cabbdf6acbfaf8826320" id="r_a4452d769b760cabbdf6acbfaf8826320"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a4452d769b760cabbdf6acbfaf8826320">space</a>&#160;&#160;&#160;s.m_args[p + 1]</td></tr>
+<tr class="separator:a4452d769b760cabbdf6acbfaf8826320"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d5b153eb806e86d4bf91a3cd15fc043" id="r_a7d5b153eb806e86d4bf91a3cd15fc043"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a7d5b153eb806e86d4bf91a3cd15fc043">bar</a>&#160;&#160;&#160;(c.show_col_split ? s.m_args[p + 2] : s.m_args[p + 1])</td></tr>
+<tr class="separator:a7d5b153eb806e86d4bf91a3cd15fc043"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae545bf658b2c876abbbae55a7d12875f" id="r_ae545bf658b2c876abbbae55a7d12875f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#ae545bf658b2c876abbbae55a7d12875f">right</a>&#160;&#160;&#160;(c.show_lr_border ? s.m_args[p + 3] : &quot;&quot;)</td></tr>
+<tr class="separator:ae545bf658b2c876abbbae55a7d12875f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66d3fd8f1383b174b0226daecfb6c487" id="r_a66d3fd8f1383b174b0226daecfb6c487"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a66d3fd8f1383b174b0226daecfb6c487">last</a>&#160;&#160;&#160;(i == header.size() - 1)</td></tr>
+<tr class="separator:a66d3fd8f1383b174b0226daecfb6c487"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cc5731012321f47c611df9bd65ea7e9" id="r_a4cc5731012321f47c611df9bd65ea7e9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a4cc5731012321f47c611df9bd65ea7e9">for_row</a></td></tr>
+<tr class="separator:a4cc5731012321f47c611df9bd65ea7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cfcc50e0d455a2d6602d9218cc8c43b" id="r_a2cfcc50e0d455a2d6602d9218cc8c43b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a2cfcc50e0d455a2d6602d9218cc8c43b">rep</a>(k,  t)&#160;&#160;&#160;_rept(k, t, s)</td></tr>
+<tr class="separator:a2cfcc50e0d455a2d6602d9218cc8c43b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a167a622ca5db934eb13fff8f07993401" id="r_a167a622ca5db934eb13fff8f07993401"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="table_8cpp.html#a167a622ca5db934eb13fff8f07993401">remain</a>(k)&#160;&#160;&#160;(col_width[i] - static_cast&lt;unsigned&gt;(k.size()))</td></tr>
+<tr class="separator:a167a622ca5db934eb13fff8f07993401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:a80ae33f2d450e4b9d5dc2dd910503a96" id="r_a80ae33f2d450e4b9d5dc2dd910503a96"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a80ae33f2d450e4b9d5dc2dd910503a96">zeroerr::_rept</a> (unsigned k, std::string j, <a class="el" href="structzeroerr_1_1Table_1_1Style.html">Table::Style</a> &amp;)</td></tr>
+<tr class="separator:a80ae33f2d450e4b9d5dc2dd910503a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">宏定义说明</h2>
+<a id="a7d5b153eb806e86d4bf91a3cd15fc043" name="a7d5b153eb806e86d4bf91a3cd15fc043"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d5b153eb806e86d4bf91a3cd15fc043">&#9670;&#160;</a></span>bar</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define bar&#160;&#160;&#160;(c.show_col_split ? s.m_args[p + 2] : s.m_args[p + 1])</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4cc5731012321f47c611df9bd65ea7e9" name="a4cc5731012321f47c611df9bd65ea7e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cc5731012321f47c611df9bd65ea7e9">&#9670;&#160;</a></span>for_row</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define for_row</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>值:</b><div class="fragment"><div class="line">    <span class="keywordflow">if</span> (!skip_lb)        \</div>
+<div class="line">        ss &lt;&lt; std::endl; \</div>
+<div class="line">    else                 \</div>
+<div class="line">        skip_lb = <span class="keyword">false</span>; \</div>
+<div class="line">    ss &lt;&lt; <a class="code hl_define" href="table_8cpp.html#a428f8207615465afdfcf1d31547ffef3">left</a>;          \</div>
+<div class="line">    for (<span class="keywordtype">size_t</span> i = 0; i &lt; header.size(); ++i)</div>
+<div class="ttc" id="atable_8cpp_html_a428f8207615465afdfcf1d31547ffef3"><div class="ttname"><a href="table_8cpp.html#a428f8207615465afdfcf1d31547ffef3">left</a></div><div class="ttdeci">#define left</div><div class="ttdef"><b>Definition</b> table.cpp:250</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a66d3fd8f1383b174b0226daecfb6c487" name="a66d3fd8f1383b174b0226daecfb6c487"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66d3fd8f1383b174b0226daecfb6c487">&#9670;&#160;</a></span>last</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define last&#160;&#160;&#160;(i == header.size() - 1)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a428f8207615465afdfcf1d31547ffef3" name="a428f8207615465afdfcf1d31547ffef3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a428f8207615465afdfcf1d31547ffef3">&#9670;&#160;</a></span>left</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define left&#160;&#160;&#160;(c.show_lr_border ? s.m_args[p] : &quot;&quot;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a167a622ca5db934eb13fff8f07993401" name="a167a622ca5db934eb13fff8f07993401"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a167a622ca5db934eb13fff8f07993401">&#9670;&#160;</a></span>remain</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define remain</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">k</td><td>)</td>
+          <td>&#160;&#160;&#160;(col_width[i] - static_cast&lt;unsigned&gt;(k.size()))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2cfcc50e0d455a2d6602d9218cc8c43b" name="a2cfcc50e0d455a2d6602d9218cc8c43b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cfcc50e0d455a2d6602d9218cc8c43b">&#9670;&#160;</a></span>rep</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define rep</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">k, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">t&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;_rept(k, t, s)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae545bf658b2c876abbbae55a7d12875f" name="ae545bf658b2c876abbbae55a7d12875f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae545bf658b2c876abbbae55a7d12875f">&#9670;&#160;</a></span>right</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define right&#160;&#160;&#160;(c.show_lr_border ? s.m_args[p + 3] : &quot;&quot;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4452d769b760cabbdf6acbfaf8826320" name="a4452d769b760cabbdf6acbfaf8826320"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4452d769b760cabbdf6acbfaf8826320">&#9670;&#160;</a></span>space</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define space&#160;&#160;&#160;s.m_args[p + 1]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="table_8cpp.html">table.cpp</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

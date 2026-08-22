@@ -1,0 +1,23 @@
+<map id="include/zeroerr/format.h" name="include/zeroerr/format.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="319,5,498,31"/>
+<area shape="rect" id="Node000002" href="$assert_8h.html" title=" " alt="" coords="416,79,591,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="436,37,489,76,486,81,433,41"/>
+<area shape="rect" id="Node000008" href="$log_8h.html" title=" " alt="" coords="237,79,391,104"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="384,41,331,81,328,76,381,37"/>
+<area shape="rect" id="Node000003" href="$zeroerr_8h.html" title=" " alt="" coords="122,152,253,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="440,110,239,154,238,149,439,104"/>
+<area shape="rect" id="Node000004" href="$fuzztest_8cpp.html" title=" " alt="" coords="277,152,401,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="465,112,367,154,365,149,463,107"/>
+<area shape="rect" id="Node000005" href="$serialization_8cpp.html" title=" " alt="" coords="702,152,854,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="561,105,734,149,733,154,560,110"/>
+<area shape="rect" id="Node000006" href="$table_8cpp.html" title=" " alt="" coords="425,152,531,177"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="497,118,485,153,480,151,492,116"/>
+<area shape="rect" id="Node000007" href="$unittest_8cpp.html" title=" " alt="" coords="555,152,678,177"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="535,109,600,150,597,154,532,114"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="283,113,209,154,207,149,280,108"/>
+<area shape="poly" id="edge9_Node000008_Node000004" title=" " alt="" coords="325,116,338,151,333,153,320,118"/>
+<area shape="poly" id="edge11_Node000008_Node000006" title=" " alt="" coords="354,107,452,149,450,154,352,112"/>
+<area shape="poly" id="edge12_Node000008_Node000007" title=" " alt="" coords="376,104,568,149,567,154,375,110"/>
+<area shape="rect" id="Node000009" href="$log_8cpp.html" title=" " alt="" coords="5,152,97,177"/>
+<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="259,110,95,154,93,149,258,105"/>
+</map>

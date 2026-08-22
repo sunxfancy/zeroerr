@@ -1,0 +1,556 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: zeroerr::XmlReporter类 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('classzeroerr_1_1XmlReporter.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">类</a> &#124;
+<a href="#pub-methods">Public 成员函数</a> &#124;
+<a href="#pub-attribs">Public 属性</a> &#124;
+<a href="classzeroerr_1_1XmlReporter-members.html">所有成员列表</a>  </div>
+  <div class="headertitle"><div class="title">zeroerr::XmlReporter类 参考</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="dynheader">
+类 zeroerr::XmlReporter 继承关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzeroerr_1_1XmlReporter__inherit__graph.png" border="0" usemap="#azeroerr_1_1XmlReporter_inherit__map" alt="Inheritance graph"/></div>
+<map name="azeroerr_1_1XmlReporter_inherit__map" id="azeroerr_1_1XmlReporter_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,79,164,104"/>
+<area shape="rect" href="classzeroerr_1_1IReporter.html" title="IReporter is an interface that is used to report the test results. You can create a new reporter by i..." alt="" coords="17,5,153,31"/>
+<area shape="poly" title=" " alt="" coords="87,44,87,79,82,79,82,44"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">图例</a>]</span></center></div>
+<div class="dynheader">
+zeroerr::XmlReporter 的协作图:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzeroerr_1_1XmlReporter__coll__graph.png" border="0" usemap="#azeroerr_1_1XmlReporter_coll__map" alt="Collaboration graph"/></div>
+<map name="azeroerr_1_1XmlReporter_coll__map" id="azeroerr_1_1XmlReporter_coll__map">
+<area shape="rect" title=" " alt="" coords="1551,141,1709,166"/>
+<area shape="rect" href="classzeroerr_1_1IReporter.html" title="IReporter is an interface that is used to report the test results. You can create a new reporter by i..." alt="" coords="1064,147,1200,173"/>
+<area shape="poly" title=" " alt="" coords="1214,156,1550,152,1550,157,1214,162"/>
+<area shape="rect" href="structzeroerr_1_1UnitTest.html" title="UnitTest is a class that holds the test configuration. There are several options that can be set to c..." alt="" coords="636,163,765,189"/>
+<area shape="poly" title=" " alt="" coords="779,170,1064,160,1064,165,779,176"/>
+<area shape="rect" title=" " alt="" coords="369,101,455,126"/>
+<area shape="poly" title=" " alt="" coords="443,131,476,150,513,165,575,176,636,178,636,183,575,181,511,171,473,155,440,136"/>
+<area shape="rect" href="structzeroerr_1_1TestCase.html" title="TestCase is a class that holds the test case information. There are several fields that are used to s..." alt="" coords="633,73,768,98"/>
+<area shape="poly" title=" " alt="" coords="469,105,633,89,633,94,469,111"/>
+<area shape="rect" title=" " alt="" coords="29,93,168,133"/>
+<area shape="poly" title=" " alt="" coords="182,111,368,111,368,116,182,116"/>
+<area shape="rect" href="structzeroerr_1_1Filters.html" title=" " alt="" coords="354,207,470,233"/>
+<area shape="poly" title=" " alt="" coords="484,224,545,224,609,216,646,203,678,186,680,191,648,208,610,221,545,230,484,229"/>
+<area shape="rect" title=" " alt="" coords="5,207,192,233"/>
+<area shape="poly" title=" " alt="" coords="206,217,354,217,354,223,206,223"/>
+<area shape="rect" href="classzeroerr_1_1detail_1_1XmlWriter.html" title=" " alt="" coords="1245,191,1431,217"/>
+<area shape="poly" title=" " alt="" coords="1444,196,1526,184,1595,163,1597,169,1527,189,1445,201"/>
+<area shape="rect" title=" " alt="" coords="1224,44,1452,84"/>
+<area shape="poly" title=" " alt="" coords="1418,85,1588,138,1587,143,1416,91"/>
+<area shape="rect" href="structzeroerr_1_1XmlReporter_1_1TestCaseTemp.html" title=" " alt="" coords="881,24,1040,64"/>
+<area shape="poly" title=" " alt="" coords="1054,46,1224,55,1224,61,1053,52"/>
+<area shape="poly" title=" " alt="" coords="781,70,881,54,881,59,782,75"/>
+<area shape="rect" title=" " alt="" coords="885,92,1037,132"/>
+<area shape="poly" title=" " alt="" coords="782,91,885,102,884,107,781,96"/>
+<area shape="poly" title=" " alt="" coords="871,135,831,137,791,132,752,118,720,100,723,96,755,113,793,127,832,131,871,129"/>
+<area shape="rect" title=" " alt="" coords="336,5,488,45"/>
+<area shape="poly" title=" " alt="" coords="502,36,610,57,658,70,657,75,609,63,501,42"/>
+<area shape="rect" href="classzeroerr_1_1Decorator.html" title=" " alt="" coords="29,13,169,38"/>
+<area shape="poly" title=" " alt="" coords="183,23,336,23,336,28,183,28"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">图例</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1XmlReporter_1_1TestCaseTemp.html">TestCaseTemp</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:a14ef41be27013599a6bd19739f8b2b46" id="r_a14ef41be27013599a6bd19739f8b2b46"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1XmlReporter.html#a14ef41be27013599a6bd19739f8b2b46">getName</a> () const override</td></tr>
+<tr class="separator:a14ef41be27013599a6bd19739f8b2b46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a941e063145143d73ee5470190a75e536" id="r_a941e063145143d73ee5470190a75e536"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1XmlReporter.html#a941e063145143d73ee5470190a75e536">testStart</a> () override</td></tr>
+<tr class="separator:a941e063145143d73ee5470190a75e536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3d5c83590f7c5e1a1d3401e35682cc6" id="r_ab3d5c83590f7c5e1a1d3401e35682cc6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1XmlReporter.html#ab3d5c83590f7c5e1a1d3401e35682cc6">testCaseStart</a> (const <a class="el" href="structzeroerr_1_1TestCase.html">TestCase</a> &amp;tc, std::stringbuf &amp;) override</td></tr>
+<tr class="separator:ab3d5c83590f7c5e1a1d3401e35682cc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3094e4427809c3bffe2ae150a6633d6" id="r_ac3094e4427809c3bffe2ae150a6633d6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1XmlReporter.html#ac3094e4427809c3bffe2ae150a6633d6">testCaseEnd</a> (<a class="el" href="config_8h.html#a5a6e28def9ba92d7cdaf0243e889491a">ZEROERR_UNUSED</a>(const <a class="el" href="structzeroerr_1_1TestCase.html">TestCase</a> &amp;), std::stringbuf &amp;sb, const <a class="el" href="classzeroerr_1_1TestContext.html">TestContext</a> &amp;ctx, int) override</td></tr>
+<tr class="separator:ac3094e4427809c3bffe2ae150a6633d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b73cd9f7c64bbc387135ff6c99a2f34" id="r_a9b73cd9f7c64bbc387135ff6c99a2f34"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1XmlReporter.html#a9b73cd9f7c64bbc387135ff6c99a2f34">subCaseStart</a> (const <a class="el" href="structzeroerr_1_1TestCase.html">TestCase</a> &amp;tc, std::stringbuf &amp;sb) override</td></tr>
+<tr class="separator:a9b73cd9f7c64bbc387135ff6c99a2f34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56c05415cc8a21ec5e5f53d433da1c32" id="r_a56c05415cc8a21ec5e5f53d433da1c32"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1XmlReporter.html#a56c05415cc8a21ec5e5f53d433da1c32">subCaseEnd</a> (const <a class="el" href="structzeroerr_1_1TestCase.html">TestCase</a> &amp;tc, std::stringbuf &amp;sb, const <a class="el" href="classzeroerr_1_1TestContext.html">TestContext</a> &amp;ctx, int) override</td></tr>
+<tr class="separator:a56c05415cc8a21ec5e5f53d433da1c32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e7252f62043c663aaf5a6a4af4a2f37" id="r_a8e7252f62043c663aaf5a6a4af4a2f37"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1XmlReporter.html#a8e7252f62043c663aaf5a6a4af4a2f37">testEnd</a> (const <a class="el" href="classzeroerr_1_1TestContext.html">TestContext</a> &amp;tc) override</td></tr>
+<tr class="separator:a8e7252f62043c663aaf5a6a4af4a2f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c8492bf838f36814810a4e877e1392c" id="r_a9c8492bf838f36814810a4e877e1392c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1XmlReporter.html#a9c8492bf838f36814810a4e877e1392c">XmlReporter</a> (<a class="el" href="structzeroerr_1_1UnitTest.html">UnitTest</a> &amp;<a class="el" href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">ut</a>)</td></tr>
+<tr class="separator:a9c8492bf838f36814810a4e877e1392c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classzeroerr_1_1IReporter"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classzeroerr_1_1IReporter')"><img src="closed.png" alt="-"/>&#160;Public 成员函数 继承自 <a class="el" href="classzeroerr_1_1IReporter.html">zeroerr::IReporter</a></td></tr>
+<tr class="memitem:a3286c817db165d55b22191717197cb28 inherit pub_methods_classzeroerr_1_1IReporter" id="r_a3286c817db165d55b22191717197cb28"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1IReporter.html#a3286c817db165d55b22191717197cb28">~IReporter</a> ()=default</td></tr>
+<tr class="separator:a3286c817db165d55b22191717197cb28 inherit pub_methods_classzeroerr_1_1IReporter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae82c65c0fd8a38bd8cb89181bd3812f4 inherit pub_methods_classzeroerr_1_1IReporter" id="r_ae82c65c0fd8a38bd8cb89181bd3812f4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1IReporter.html#ae82c65c0fd8a38bd8cb89181bd3812f4">testCaseEnd</a> (const <a class="el" href="structzeroerr_1_1TestCase.html">TestCase</a> &amp;tc, std::stringbuf &amp;sb, const <a class="el" href="classzeroerr_1_1TestContext.html">TestContext</a> &amp;ctx, int type)=0</td></tr>
+<tr class="separator:ae82c65c0fd8a38bd8cb89181bd3812f4 inherit pub_methods_classzeroerr_1_1IReporter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ca1a32ceba930c6d5ed4a7a9181c314 inherit pub_methods_classzeroerr_1_1IReporter" id="r_a9ca1a32ceba930c6d5ed4a7a9181c314"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1IReporter.html#a9ca1a32ceba930c6d5ed4a7a9181c314">IReporter</a> (<a class="el" href="structzeroerr_1_1UnitTest.html">UnitTest</a> &amp;<a class="el" href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">ut</a>)</td></tr>
+<tr class="separator:a9ca1a32ceba930c6d5ed4a7a9181c314 inherit pub_methods_classzeroerr_1_1IReporter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public 属性</h2></td></tr>
+<tr class="memitem:ac52b19d44558dcbf6a4cba2ac69d7aec" id="r_ac52b19d44558dcbf6a4cba2ac69d7aec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1detail_1_1XmlWriter.html">detail::XmlWriter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1XmlReporter.html#ac52b19d44558dcbf6a4cba2ac69d7aec">xml</a></td></tr>
+<tr class="separator:ac52b19d44558dcbf6a4cba2ac69d7aec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b97bccee15c1d4f32b7bc83d6cc5aa2" id="r_a3b97bccee15c1d4f32b7bc83d6cc5aa2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structzeroerr_1_1XmlReporter_1_1TestCaseTemp.html">TestCaseTemp</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1XmlReporter.html#a3b97bccee15c1d4f32b7bc83d6cc5aa2">current</a></td></tr>
+<tr class="separator:a3b97bccee15c1d4f32b7bc83d6cc5aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+额外继承的成员函数</h2></td></tr>
+<tr class="inherit_header pub_static_methods_classzeroerr_1_1IReporter"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classzeroerr_1_1IReporter')"><img src="closed.png" alt="-"/>&#160;静态 Public 成员函数 继承自 <a class="el" href="classzeroerr_1_1IReporter.html">zeroerr::IReporter</a></td></tr>
+<tr class="memitem:a2f720cfc0ed15b5e303e95fbdf65a204 inherit pub_static_methods_classzeroerr_1_1IReporter" id="r_a2f720cfc0ed15b5e303e95fbdf65a204"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classzeroerr_1_1IReporter.html">IReporter</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1IReporter.html#a2f720cfc0ed15b5e303e95fbdf65a204">create</a> (const std::string &amp;name, <a class="el" href="structzeroerr_1_1UnitTest.html">UnitTest</a> &amp;<a class="el" href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">ut</a>)</td></tr>
+<tr class="memdesc:a2f720cfc0ed15b5e303e95fbdf65a204 inherit pub_static_methods_classzeroerr_1_1IReporter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create the reporter object with the given name.  <br /></td></tr>
+<tr class="separator:a2f720cfc0ed15b5e303e95fbdf65a204 inherit pub_static_methods_classzeroerr_1_1IReporter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classzeroerr_1_1IReporter"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classzeroerr_1_1IReporter')"><img src="closed.png" alt="-"/>&#160;Protected 属性 继承自 <a class="el" href="classzeroerr_1_1IReporter.html">zeroerr::IReporter</a></td></tr>
+<tr class="memitem:a966cb4c9c3cd32e3d18884c79a54ccba inherit pro_attribs_classzeroerr_1_1IReporter" id="r_a966cb4c9c3cd32e3d18884c79a54ccba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structzeroerr_1_1UnitTest.html">UnitTest</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1IReporter.html#a966cb4c9c3cd32e3d18884c79a54ccba">ut</a></td></tr>
+<tr class="separator:a966cb4c9c3cd32e3d18884c79a54ccba inherit pro_attribs_classzeroerr_1_1IReporter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">构造及析构函数说明</h2>
+<a id="a9c8492bf838f36814810a4e877e1392c" name="a9c8492bf838f36814810a4e877e1392c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c8492bf838f36814810a4e877e1392c">&#9670;&#160;</a></span>XmlReporter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">zeroerr::XmlReporter::XmlReporter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structzeroerr_1_1UnitTest.html">UnitTest</a> &amp;&#160;</td>
+          <td class="paramname"><em>ut</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">成员函数说明</h2>
+<a id="a14ef41be27013599a6bd19739f8b2b46" name="a14ef41be27013599a6bd19739f8b2b46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14ef41be27013599a6bd19739f8b2b46">&#9670;&#160;</a></span>getName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::string zeroerr::XmlReporter::getName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>实现了 <a class="el" href="classzeroerr_1_1IReporter.html#a8792d1cb430543b3cc2b39d5ed19ce49">zeroerr::IReporter</a>.</p>
+
+</div>
+</div>
+<a id="a56c05415cc8a21ec5e5f53d433da1c32" name="a56c05415cc8a21ec5e5f53d433da1c32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56c05415cc8a21ec5e5f53d433da1c32">&#9670;&#160;</a></span>subCaseEnd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void zeroerr::XmlReporter::subCaseEnd </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structzeroerr_1_1TestCase.html">TestCase</a> &amp;&#160;</td>
+          <td class="paramname"><em>tc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::stringbuf &amp;&#160;</td>
+          <td class="paramname"><em>sb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classzeroerr_1_1TestContext.html">TestContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>实现了 <a class="el" href="classzeroerr_1_1IReporter.html#a5e085a06899e975e3fb2c2e1669d3b34">zeroerr::IReporter</a>.</p>
+
+</div>
+</div>
+<a id="a9b73cd9f7c64bbc387135ff6c99a2f34" name="a9b73cd9f7c64bbc387135ff6c99a2f34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b73cd9f7c64bbc387135ff6c99a2f34">&#9670;&#160;</a></span>subCaseStart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void zeroerr::XmlReporter::subCaseStart </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structzeroerr_1_1TestCase.html">TestCase</a> &amp;&#160;</td>
+          <td class="paramname"><em>tc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::stringbuf &amp;&#160;</td>
+          <td class="paramname"><em>sb</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>实现了 <a class="el" href="classzeroerr_1_1IReporter.html#a292a702139d500153b5db8e009b298d3">zeroerr::IReporter</a>.</p>
+
+</div>
+</div>
+<a id="ac3094e4427809c3bffe2ae150a6633d6" name="ac3094e4427809c3bffe2ae150a6633d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3094e4427809c3bffe2ae150a6633d6">&#9670;&#160;</a></span>testCaseEnd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void zeroerr::XmlReporter::testCaseEnd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="config_8h.html#a5a6e28def9ba92d7cdaf0243e889491a">ZEROERR_UNUSED</a>(const <a class="el" href="structzeroerr_1_1TestCase.html">TestCase</a> &amp;)&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::stringbuf &amp;&#160;</td>
+          <td class="paramname"><em>sb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classzeroerr_1_1TestContext.html">TestContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>ctx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab3d5c83590f7c5e1a1d3401e35682cc6" name="ab3d5c83590f7c5e1a1d3401e35682cc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3d5c83590f7c5e1a1d3401e35682cc6">&#9670;&#160;</a></span>testCaseStart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void zeroerr::XmlReporter::testCaseStart </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structzeroerr_1_1TestCase.html">TestCase</a> &amp;&#160;</td>
+          <td class="paramname"><em>tc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::stringbuf &amp;&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>实现了 <a class="el" href="classzeroerr_1_1IReporter.html#a3d810cfe76a19d74479802d51957078b">zeroerr::IReporter</a>.</p>
+
+</div>
+</div>
+<a id="a8e7252f62043c663aaf5a6a4af4a2f37" name="a8e7252f62043c663aaf5a6a4af4a2f37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e7252f62043c663aaf5a6a4af4a2f37">&#9670;&#160;</a></span>testEnd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void zeroerr::XmlReporter::testEnd </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classzeroerr_1_1TestContext.html">TestContext</a> &amp;&#160;</td>
+          <td class="paramname"><em>tc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>实现了 <a class="el" href="classzeroerr_1_1IReporter.html#a84fc992650de17540a8876a8d9a7d637">zeroerr::IReporter</a>.</p>
+
+</div>
+</div>
+<a id="a941e063145143d73ee5470190a75e536" name="a941e063145143d73ee5470190a75e536"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a941e063145143d73ee5470190a75e536">&#9670;&#160;</a></span>testStart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void zeroerr::XmlReporter::testStart </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>实现了 <a class="el" href="classzeroerr_1_1IReporter.html#a36d2c079f5506824da2020c5eeb92af5">zeroerr::IReporter</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">类成员变量说明</h2>
+<a id="a3b97bccee15c1d4f32b7bc83d6cc5aa2" name="a3b97bccee15c1d4f32b7bc83d6cc5aa2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b97bccee15c1d4f32b7bc83d6cc5aa2">&#9670;&#160;</a></span>current</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="structzeroerr_1_1XmlReporter_1_1TestCaseTemp.html">TestCaseTemp</a>&gt; zeroerr::XmlReporter::current</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac52b19d44558dcbf6a4cba2ac69d7aec" name="ac52b19d44558dcbf6a4cba2ac69d7aec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac52b19d44558dcbf6a4cba2ac69d7aec">&#9670;&#160;</a></span>xml</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classzeroerr_1_1detail_1_1XmlWriter.html">detail::XmlWriter</a> zeroerr::XmlReporter::xml</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>该类的文档由以下文件生成:<ul>
+<li>src/<a class="el" href="unittest_8cpp.html">unittest.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespacezeroerr.html">zeroerr</a></li><li class="navelem"><a class="el" href="classzeroerr_1_1XmlReporter.html">XmlReporter</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

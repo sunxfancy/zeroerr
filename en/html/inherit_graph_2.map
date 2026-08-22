@@ -1,0 +1,29 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,375,124,401"/>
+<area shape="rect" id="Node000001" href="$structzeroerr_1_1detail_1_1is__complete__type.html" title=" " alt="" coords="194,5,389,104"/>
+<area shape="poly" id="edge4_Node000000_Node000001" title=" " alt="" coords="67,361,78,311,97,246,127,177,147,144,170,114,192,95,195,99,174,118,151,147,132,179,102,248,83,312,73,362"/>
+<area shape="rect" id="Node000003" href="$structzeroerr_1_1detail_1_1ele__type__is__pair.html" title=" " alt="" coords="181,128,401,168"/>
+<area shape="poly" id="edge6_Node000000_Node000003" title=" " alt="" coords="69,361,82,321,102,271,131,221,149,198,170,178,189,166,192,170,174,182,153,202,135,224,107,273,87,322,75,363"/>
+<area shape="rect" id="Node000004" href="$structzeroerr_1_1detail_1_1has__extension.html" title="has_extension is a type trait to check if user defined PrinterExt for a type" alt="" coords="189,192,394,232"/>
+<area shape="poly" id="edge7_Node000000_Node000004" title=" " alt="" coords="76,361,112,301,139,269,170,242,192,230,195,235,174,246,143,273,117,304,80,364"/>
+<area shape="rect" id="Node000005" href="$structzeroerr_1_1detail_1_1is__associative__container.html" title=" " alt="" coords="206,257,377,311"/>
+<area shape="poly" id="edge8_Node000000_Node000005" title=" " alt="" coords="94,365,171,322,205,308,207,312,173,326,97,370"/>
+<area shape="rect" id="Node000006" href="$structzeroerr_1_1detail_1_1is__complete__type.html" title=" " alt="" coords="172,336,411,376"/>
+<area shape="poly" id="edge9_Node000000_Node000006" title=" " alt="" coords="137,375,171,370,172,376,138,380"/>
+<area shape="rect" id="Node000007" href="$structzeroerr_1_1detail_1_1is__container.html" title=" " alt="" coords="190,400,393,440"/>
+<area shape="poly" id="edge10_Node000000_Node000007" title=" " alt="" coords="138,396,190,403,190,408,137,401"/>
+<area shape="rect" id="Node000008" href="$structzeroerr_1_1detail_1_1is__indexable__non__pointer.html" title=" " alt="" coords="203,465,380,519"/>
+<area shape="poly" id="edge11_Node000000_Node000008" title=" " alt="" coords="97,406,173,450,203,462,201,467,171,454,94,411"/>
+<area shape="rect" id="Node000011" href="$structzeroerr_1_1detail_1_1is__modifiable.html" title=" " alt="" coords="186,544,397,584"/>
+<area shape="poly" id="edge14_Node000000_Node000011" title=" " alt="" coords="80,412,117,472,143,503,174,530,195,541,192,546,170,534,139,507,112,475,76,415"/>
+<area shape="rect" id="Node000012" href="$structzeroerr_1_1detail_1_1is__specialization.html" title=" " alt="" coords="209,609,373,663"/>
+<area shape="poly" id="edge15_Node000000_Node000012" title=" " alt="" coords="75,413,87,453,107,501,136,551,174,594,211,616,208,620,170,598,132,554,103,504,82,455,70,415"/>
+<area shape="rect" id="Node000013" href="$structzeroerr_1_1detail_1_1is__streamable.html" title=" " alt="" coords="176,688,407,728"/>
+<area shape="poly" id="edge16_Node000000_Node000013" title=" " alt="" coords="71,414,78,469,95,539,109,576,126,612,148,645,174,674,190,686,187,690,170,678,143,648,121,614,104,578,90,541,73,470,65,415"/>
+<area shape="rect" id="Node000002" href="$structzeroerr_1_1detail_1_1is__array__dispatch_3_01T_00_01true_01_4.html" title=" " alt="" coords="459,27,611,82"/>
+<area shape="poly" id="edge5_Node000001_Node000002" title=" " alt="" coords="403,52,458,52,458,57,403,57"/>
+<area shape="rect" id="Node000009" href="$structzeroerr_1_1detail_1_1is__array__dispatch.html" title=" " alt="" coords="459,465,611,519"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="394,489,459,489,459,495,394,495"/>
+<area shape="rect" id="Node000010" href="$structzeroerr_1_1detail_1_1is__array.html" title=" " alt="" coords="659,472,791,512"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="624,489,658,489,658,495,624,495"/>
+</map>

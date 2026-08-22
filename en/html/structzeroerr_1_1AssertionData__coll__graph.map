@@ -1,0 +1,11 @@
+<map id="zeroerr::AssertionData" name="zeroerr::AssertionData">
+<area shape="rect" id="Node000001" title="AssertionData is a struct that contains all the information of an assertion. It will be thrown as an ..." alt="" coords="135,197,303,223"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,95,120,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,125,202,195,200,200,90,130"/>
+<area shape="rect" id="Node000003" href="$structzeroerr_1_1assert__info.html" title="This is a one&#45;byte assert info struct, which is used to collect the meta info of an assertion." alt="" coords="145,95,293,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,134,221,197,216,197,216,134"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="317,95,403,120"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="334,130,236,200,233,195,331,126"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="291,5,429,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="363,59,363,94,357,94,357,59"/>
+</map>
