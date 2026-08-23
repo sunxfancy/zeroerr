@@ -122,8 +122,11 @@ public:
  * * run_bench       : If true, the test will run the benchmark tests.
  * * run_fuzz        : If true, the test will run the fuzz tests.
  * * list_test_cases : If true, the test will list the test cases.
+ * * list_format     : The format used when listing test cases ("console" or "plain").
  * * no_color        : If true, the test will not print the test results with color.
  * * log_to_report   : If true, the test will log the test results to the report.
+ * * show_help       : If true, print the command line usage and exit.
+ * * invalid_args    : If true, a command line argument could not be parsed.
  * * correct_output_path : The path that the golden files will be saved.
  * * reporter_name   : The name of the reporter that will be used to report the test results.
  * * binary          : The binary name that will be used to run the test.
@@ -156,12 +159,15 @@ struct UnitTest {
     bool            run_bench       = false;
     bool            run_fuzz        = false;
     bool            list_test_cases = false;
+    std::string     list_format     = "console";
     bool            no_color        = false;
     bool            log_to_report   = false;
+    bool            show_help       = false;
+    bool            invalid_args    = false;
     std::string     correct_output_path;
     std::string     reporter_name = "console";
     std::string     binary;
-    struct Filters* filters;
+    struct Filters* filters = nullptr;
 };
 
 /**
