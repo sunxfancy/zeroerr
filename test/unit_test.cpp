@@ -1,8 +1,10 @@
 #define ZEROERR_ENABLE_PFR
 #include "zeroerr/assert.h"
 #include "zeroerr/dbg.h"
+#include "zeroerr/log.h"
 #include "zeroerr/print.h"
 #include "zeroerr/unittest.h"
+#include <memory>
 #include <string>
 #include <thread>
 
@@ -151,6 +153,113 @@ TEST_CASE("parsing arguments") {
 
     ut.parseArgs(argc, argvs[3]);
     CHECK_EQ(ut.silent, true);
+}
+
+TEST_CASE("parsing filter arguments") {
+    // Regression: --testcase-exclude= used to be swallowed by the --testcase
+    // prefix check and parsed as an include filter, so exclusions never worked.
+    const char* argv[] = {
+        "test",
+        "--testcase=^cli\\.keep$",
+        "--testcase-exclude=^cli\\.skip.*",
+        "--file=^.*\\.cpp$",
+        "--file-exclude=^.*generated.*$",
+    };
+
+    zeroerr::UnitTest ut;
+    ut.parseArgs(5, argv);
+
+    // Name include filter applies.
+    CHECK(ut.run_filter(zeroerr::TestCase("cli.keep", "src/main.cpp", 10, {})));
+    CHECK(!ut.run_filter(zeroerr::TestCase("other.case", "src/main.cpp", 10, {})));
+    // Name exclude filter actually excludes (bug: it used to be parsed as an
+    // include filter with the bogus pattern "exclude=^cli\.skip", failing every
+    // regex_match and silently filtering out all tests).
+    CHECK(!ut.run_filter(zeroerr::TestCase("cli.skip.me", "src/main.cpp", 10, {})));
+    // File include/exclude filters.
+    CHECK(!ut.run_filter(zeroerr::TestCase("cli.keep", "src/generated.cpp", 10, {})));
+    CHECK(!ut.run_filter(zeroerr::TestCase("cli.keep", "src/main.h", 10, {})));
+}
+
+TEST_CASE("parsing list and help options") {
+    const char* argv[] = {"test", "--list-test-cases", "--list-format=plain", "--help"};
+    zeroerr::UnitTest ut;
+    ut.parseArgs(4, argv);
+    CHECK(ut.list_test_cases);
+    CHECK(ut.list_format == "plain");
+    CHECK(ut.show_help);
+
+    const char* argv2[] = {"test", "-h"};
+    zeroerr::UnitTest ut2;
+    ut2.parseArgs(2, argv2);
+    CHECK(ut2.show_help);
+
+    const char* argv3[] = {"test", "-l"};
+    zeroerr::UnitTest ut3;
+    ut3.parseArgs(2, argv3);
+    CHECK(ut3.list_test_cases);
+}
+
+TEST_CASE("parsing invalid arguments") {
+    const char* argv[] = {"test", "--testcase=[unclosed"};
+    zeroerr::UnitTest ut;
+    ut.parseArgs(2, argv);
+    CHECK(ut.invalid_args);
+
+    const char* argv2[] = {"test", "--list-format="};
+    zeroerr::UnitTest ut2;
+    ut2.parseArgs(2, argv2);
+    CHECK_EQ(ut2.invalid_args, false);
+    CHECK_EQ(ut2.list_format, "");
+}
+
+enum class TestColor { Red, Green, Blue };
+
+TEST_CASE("enum class in CHECK", should_fail()) {
+    // Regression: enum class used to fail to compile in CHECK because the
+    // printer fell back to `os << enum`, which has no operator<<. It now
+    // prints the underlying numeric value.
+    TestColor c = TestColor::Green;
+    REQUIRE(c == TestColor::Red);
+}
+
+TEST_CASE("enum class in CHECK passes") {
+    TestColor c = TestColor::Green;
+    CHECK(c == TestColor::Green);
+    CHECK(static_cast<int>(c) == 1);
+}
+
+TEST_CASE("smart pointers in CHECK") {
+    std::unique_ptr<int> up(new int(7));
+    CHECK(up != nullptr);
+    CHECK(up);  // explicit operator bool must be honored
+
+    std::shared_ptr<int> sp(new int(7));
+    CHECK(sp != nullptr);
+    CHECK(sp);
+    CHECK(sp == sp);
+
+    std::shared_ptr<int> empty;
+    CHECK(!empty);
+}
+
+TEST_CASE("shared_ptr null in CHECK", should_fail()) {
+    // Regression: CHECK(sp) used to pass silently for a null shared_ptr
+    // because the explicit operator bool was not detected.
+    std::shared_ptr<int> empty;
+    REQUIRE(empty);
+}
+
+TEST_CASE("unique_ptr null in CHECK", should_fail()) {
+    // Regression: CHECK(up) used to fail to compile (unique_ptr is not
+    // copyable and the printer took its arguments by value).
+    std::unique_ptr<int> up;
+    REQUIRE(up);
+}
+
+TEST_CASE("LOG with move-only type") {
+    std::unique_ptr<int> up(new int(42));
+    LOG("up = {p}", std::move(up));
 }
 
 struct Node

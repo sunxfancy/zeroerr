@@ -1352,7 +1352,7 @@ constexpr unsigned max_rank = 5;
 
 struct Printer;
 template <typename T>
-void PrinterExt(Printer&, T, unsigned, const char*, rank<0>);
+void PrinterExt(Printer&, T&&, unsigned, const char*, rank<0>);
 
 namespace detail {
 
@@ -1403,13 +1403,13 @@ struct Printer {
     }
 
     template <typename T, typename... V>
-    void call(T value, V... others) {
+    void call(T&& value, V&&... others) {
         PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
         call(std::forward<V>(others)...);
     }
 
     template <typename T>
-    void call(T value) {
+    void call(T&& value) {
         PrinterExt(*this, std::forward<T>(value), 0, "", rank<max_rank>{});
         os << line_break;
         os.flush();
@@ -1440,7 +1440,11 @@ struct Printer {
     print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
 #else
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
-    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
+    print(T value, unsigned level, const char* lb, rank<0>) {
+        // enum class has no operator<< and no implicit conversion, so fall back
+        // to its underlying numeric value instead of failing to compile.
+        os << tab(level) << static_cast<typename std::underlying_type<T>::type>(value) << lb;
+    }
 #endif
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_INT || ZEROERR_IS_FLOAT)
@@ -1515,7 +1519,7 @@ struct Printer {
 
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_AUTOPTR)
-    print(T value, unsigned level, const char* lb, rank<3>) {
+    print(const T& value, unsigned level, const char* lb, rank<3>) {
         if (value.get() == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
@@ -1607,7 +1611,7 @@ struct Printer {
  * @param r  the rank of the rule. 0 is lowest priority.
  */
 template <class T>
-void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0>) {
+void PrinterExt(Printer& P, T&& v, unsigned level, const char* lb, rank<0>) {
     P.print(std::forward<T>(v), level, lb, rank<max_rank>{});
 }
 
@@ -1736,13 +1740,27 @@ struct ExprResult {
 };
 
 namespace details {
+// Detect whether a type can be explicitly converted to bool. This covers
+// explicit operator bool (std::unique_ptr/std::shared_ptr), which
+// std::is_convertible would miss. Scoped enums are excluded so that a bare
+// CHECK(enum) does not silently turn into "value != 0"; unscoped enums keep
+// their historical implicit-conversion behavior.
+template <typename T, typename = void>
+struct has_bool_conversion : std::false_type {};
+
 template <typename T>
-typename std::enable_if<std::is_convertible<T, bool>::value, bool>::type getBool(T&& lhs) {
+struct has_bool_conversion<T, decltype(static_cast<bool>(std::declval<T>()), void())>
+    : std::integral_constant<
+          bool, !(std::is_enum<typename std::decay<T>::type>::value &&
+                  !std::is_convertible<typename std::decay<T>::type, int>::value)> {};
+
+template <typename T>
+typename std::enable_if<has_bool_conversion<T>::value, bool>::type getBool(T&& lhs) {
     return static_cast<bool>(lhs);
 }
 
 template <typename T>
-typename std::enable_if<!std::is_convertible<T, bool>::value, bool>::type getBool(T&&) {
+typename std::enable_if<!has_bool_conversion<T>::value, bool>::type getBool(T&&) {
     return true;
 }
 }  // namespace details
@@ -1934,6 +1952,7 @@ start_with(T&& s) {
 
 ZEROERR_SUPPRESS_COMPARE_POP
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
 #pragma once
 
 
@@ -3368,6 +3387,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 #include <sstream>
 #include <string>
+#include <utility>
 
 namespace zeroerr {
 
@@ -3387,7 +3407,7 @@ namespace zeroerr {
  * 
  */
 template <typename... T>
-std::string format(const char* fmt, T... args) {
+std::string format(const char* fmt, T&&... args) {
     std::stringstream ss;
     bool              parse_name = false;
     Printer           print;
@@ -3395,7 +3415,7 @@ std::string format(const char* fmt, T... args) {
     print.isQuoted         = false;
     print.isCompact        = true;
     print.line_break       = "";
-    std::string str_args[] = {print(args)...};
+    std::string str_args[] = {print(std::forward<T>(args))...};
 
     int j = 0;
     for (const char* i = fmt; *i != '\0'; i++) {
@@ -3429,6 +3449,7 @@ std::string format(const char* fmt, T... args) {
 #include <iosfwd>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -3752,7 +3773,7 @@ struct LogMessage {
 template <typename... T>
 struct LogMessageImpl final : LogMessage {
     std::tuple<T...> args;
-    LogMessageImpl(T... args) : LogMessage(), args(args...) {}
+    LogMessageImpl(T... args) : LogMessage(), args(std::move(args)...) {}
 
     std::string str() const override {
         return gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
@@ -3934,8 +3955,8 @@ public:
             p = alloc_block_lockfree(size);
         else
             p = alloc_block(size);
-        // LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
-        LogMessage* msg = new (p) LogMessageImpl<detail::to_store_type_t<T>...>(args...);
+        LogMessage* msg =
+            new (p) LogMessageImpl<detail::to_store_type_t<T>...>(std::forward<T>(args)...);
         return {msg, size, *this};
     }
 
@@ -4086,6 +4107,7 @@ ContextScope<F> MakeContextScope(const F& f) {
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
 #pragma once
 
 
@@ -4269,19 +4291,18 @@ protected:
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
-#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                              \
-    static void                     function(zeroerr::TestContext*);               \
-    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                 \
-        zeroerr::TestCase(name, __FILE__, __LINE__, function, {__VA_ARGS__}));     \
+#define ZEROERR_CREATE_TEST_FUNC(function, name, ...)                          \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                      \
+    static void                     function(zeroerr::TestContext*);           \
+    static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(             \
+        zeroerr::TestCase(name, __FILE__, __LINE__, function, {__VA_ARGS__})); \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP;                                      \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE(...)                                                              \
-    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                           \
-    ZEROERR_EXPAND(ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase),     \
-                                            __VA_ARGS__))                           \
-    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+#define TEST_CASE(...) \
+    ZEROERR_EXPAND(ZEROERR_CREATE_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), __VA_ARGS__))
 
-#define ZEROERR_CREATE_SUB_CASE(name, ...)                                                  \
+#define ZEROERR_CREATE_SUB_CASE(name, ...)                                           \
     zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \
         << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
@@ -4383,8 +4404,11 @@ public:
  * * run_bench       : If true, the test will run the benchmark tests.
  * * run_fuzz        : If true, the test will run the fuzz tests.
  * * list_test_cases : If true, the test will list the test cases.
+ * * list_format     : The format used when listing test cases ("console" or "plain").
  * * no_color        : If true, the test will not print the test results with color.
  * * log_to_report   : If true, the test will log the test results to the report.
+ * * show_help       : If true, print the command line usage and exit.
+ * * invalid_args    : If true, a command line argument could not be parsed.
  * * correct_output_path : The path that the golden files will be saved.
  * * reporter_name   : The name of the reporter that will be used to report the test results.
  * * binary          : The binary name that will be used to run the test.
@@ -4417,12 +4441,15 @@ struct UnitTest {
     bool            run_bench       = false;
     bool            run_fuzz        = false;
     bool            list_test_cases = false;
+    std::string     list_format     = "console";
     bool            no_color        = false;
     bool            log_to_report   = false;
+    bool            show_help       = false;
+    bool            invalid_args    = false;
     std::string     correct_output_path;
     std::string     reporter_name = "console";
     std::string     binary;
-    struct Filters* filters;
+    struct Filters* filters = nullptr;
 };
 
 /**
@@ -4638,6 +4665,7 @@ Decorator* should_fail(bool isShouldFail = true);
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
 #pragma once
 
 
@@ -6077,8 +6105,42 @@ struct Filters {
     std::vector<std::regex> file, file_exclude;
 };
 
+static void printUsage() {
+    std::cout << "Usage: <test-binary> [options]\n"
+              << "\n"
+              << "Options:\n"
+              << "  -h, --help                Show this help message\n"
+              << "  -v, --verbose             Print all test results\n"
+              << "  -q, --quiet               Suppress output for passing tests\n"
+              << "  -l, --list-test-cases     List registered test cases\n"
+              << "  -b, --bench               Also run benchmark tests\n"
+              << "  -f, --fuzz                Also run fuzz tests\n"
+              << "      --list-format=FORMAT  Listing format: \"console\" (default) or \"plain\"\n"
+              << "      --testcase=REGEX      Run only test cases whose name matches REGEX\n"
+              << "      --testcase-exclude=REGEX\n"
+              << "                            Skip test cases whose name matches REGEX\n"
+              << "      --file=REGEX          Run only test cases in files matching REGEX\n"
+              << "      --file-exclude=REGEX  Skip test cases in files matching REGEX\n"
+              << "      --reporters=NAME      Reporter to use: \"console\" or \"xml\"\n"
+              << "  -x                        Shortcut for --reporters=xml\n"
+              << "      --no-color            Disable colored output\n"
+              << "      --log-to-report       Include log messages in the report\n";
+}
+
 UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
-    filters             = new Filters();
+    delete filters;
+    filters = new Filters();
+
+    auto add_regex = [&](std::vector<std::regex>& vec, const std::string& pattern,
+                         const char* option) {
+        try {
+            vec.push_back(std::regex(pattern));
+        } catch (const std::regex_error& e) {
+            std::cerr << "Invalid regex for " << option << ": " << e.what() << std::endl;
+            this->invalid_args = true;
+        }
+    };
+
     auto convert_to_vec = [=]() {
         std::vector<std::string> result;
         for (int i = 1; i < argc; i++) {
@@ -6112,6 +6174,10 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
             this->reporter_name = "xml";
             return true;
         }
+        if (arg == 'h') {
+            this->show_help = true;
+            return true;
+        }
         return false;
     };
 
@@ -6126,40 +6192,59 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         }
         if (arg == "bench") {
             this->run_bench = true;
+            return true;
         }
         if (arg == "fuzz") {
             this->run_fuzz = true;
+            return true;
         }
         if (arg == "list-test-cases") {
             this->list_test_cases = true;
+            return true;
         }
         if (arg == "no-color") {
             this->no_color = true;
             disableColorOutput();
+            return true;
         }
         if (arg == "log-to-report") {
             this->log_to_report = true;
+            return true;
         }
-        if (arg.substr(0, 9) == "reporters") {
+        if (arg == "help") {
+            this->show_help = true;
+            return true;
+        }
+        if (arg.compare(0, 12, "list-format=") == 0) {
+            this->list_format = arg.substr(12);
+            return true;
+        }
+        if (arg.compare(0, 10, "reporters=") == 0) {
             this->reporter_name = arg.substr(10);
             return true;
         }
-        if (arg.substr(0, 8) == "testcase") {
-            filters->name.push_back(std::regex(arg.substr(9)));
+        // Keep the longest prefixes first. The '='-suffixed comparisons are
+        // already unambiguous ("testcase=" != "testcase-exclude="), but a bare
+        // prefix check such as `testcase` would swallow `testcase-exclude=...`
+        // and parse it as an include filter.
+        if (arg.compare(0, 17, "testcase-exclude=") == 0) {
+            add_regex(filters->name_exclude, arg.substr(17), "--testcase-exclude=");
             return true;
         }
-        if (arg.substr(0, 14) == "testcase-exclude") {
-            filters->name_exclude.push_back(std::regex(arg.substr(15)));
+        if (arg.compare(0, 9, "testcase=") == 0) {
+            add_regex(filters->name, arg.substr(9), "--testcase=");
             return true;
         }
-        if (arg.substr(0, 5) == "file") {
-            filters->file.push_back(std::regex(arg.substr(6)));
+        if (arg.compare(0, 13, "file-exclude=") == 0) {
+            add_regex(filters->file_exclude, arg.substr(13), "--file-exclude=");
             return true;
         }
-        if (arg.substr(0, 11) == "file-exclude") {
-            filters->file_exclude.push_back(std::regex(arg.substr(12)));
+        if (arg.compare(0, 5, "file=") == 0) {
+            add_regex(filters->file, arg.substr(5), "--file=");
             return true;
         }
+        std::cerr << "Unknown option: --" << arg << std::endl;
+        this->invalid_args = true;
         return false;
     };
 
@@ -6224,17 +6309,37 @@ static bool runOnFinish(const TestCase& tc, TestContext& ctx) {
 }
 
 int UnitTest::run() {
+    if (show_help) {
+        printUsage();
+        return 0;
+    }
+    if (invalid_args) {
+        return 1;
+    }
+
+    unsigned types = TestType::test_case;
+    if (run_bench) types |= TestType::bench;
+    if (run_fuzz) types |= TestType::fuzz_test;
+    std::set<TestCase> test_cases = detail::getRegisteredTests(types);
+
+    // Machine-readable listing: one "<name>\t<basename>:<line>" entry per test
+    // case on stdout. This is the format consumed by CTest discovery scripts
+    // (e.g. EVEngine's cmake/ZeroErrDiscoverTestsImpl.cmake).
+    if (list_test_cases && list_format == "plain") {
+        for (auto& tc : test_cases) {
+            if (!run_filter(tc)) continue;
+            if (runOnExecution(tc)) continue;
+            std::cout << tc.name << '\t' << getFileName(tc.file) << ':' << tc.line << '\n';
+        }
+        return 0;
+    }
+
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
 
     TestContext context(*reporter), sum(*reporter);
     reporter->testStart();
     std::stringbuf new_buf;
-
-    unsigned types = TestType::test_case;
-    if (run_bench) types |= TestType::bench;
-    if (run_fuzz) types |= TestType::fuzz_test;
-    std::set<TestCase> test_cases = detail::getRegisteredTests(types);
 
     for (auto& tc : test_cases) {
         if (!run_filter(tc)) continue;
