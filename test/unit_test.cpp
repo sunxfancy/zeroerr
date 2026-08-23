@@ -1,8 +1,10 @@
 #define ZEROERR_ENABLE_PFR
 #include "zeroerr/assert.h"
 #include "zeroerr/dbg.h"
+#include "zeroerr/log.h"
 #include "zeroerr/print.h"
 #include "zeroerr/unittest.h"
+#include <memory>
 #include <string>
 #include <thread>
 
@@ -209,6 +211,55 @@ TEST_CASE("parsing invalid arguments") {
     ut2.parseArgs(2, argv2);
     CHECK_EQ(ut2.invalid_args, false);
     CHECK_EQ(ut2.list_format, "");
+}
+
+enum class TestColor { Red, Green, Blue };
+
+TEST_CASE("enum class in CHECK", should_fail()) {
+    // Regression: enum class used to fail to compile in CHECK because the
+    // printer fell back to `os << enum`, which has no operator<<. It now
+    // prints the underlying numeric value.
+    TestColor c = TestColor::Green;
+    REQUIRE(c == TestColor::Red);
+}
+
+TEST_CASE("enum class in CHECK passes") {
+    TestColor c = TestColor::Green;
+    CHECK(c == TestColor::Green);
+    CHECK(static_cast<int>(c) == 1);
+}
+
+TEST_CASE("smart pointers in CHECK") {
+    std::unique_ptr<int> up(new int(7));
+    CHECK(up != nullptr);
+    CHECK(up);  // explicit operator bool must be honored
+
+    std::shared_ptr<int> sp(new int(7));
+    CHECK(sp != nullptr);
+    CHECK(sp);
+    CHECK(sp == sp);
+
+    std::shared_ptr<int> empty;
+    CHECK(!empty);
+}
+
+TEST_CASE("shared_ptr null in CHECK", should_fail()) {
+    // Regression: CHECK(sp) used to pass silently for a null shared_ptr
+    // because the explicit operator bool was not detected.
+    std::shared_ptr<int> empty;
+    REQUIRE(empty);
+}
+
+TEST_CASE("unique_ptr null in CHECK", should_fail()) {
+    // Regression: CHECK(up) used to fail to compile (unique_ptr is not
+    // copyable and the printer took its arguments by value).
+    std::unique_ptr<int> up;
+    REQUIRE(up);
+}
+
+TEST_CASE("LOG with move-only type") {
+    std::unique_ptr<int> up(new int(42));
+    LOG("up = {p}", std::move(up));
 }
 
 struct Node

@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <string>
+#include <utility>
 
 namespace zeroerr {
 
@@ -22,7 +23,7 @@ namespace zeroerr {
  * 
  */
 template <typename... T>
-std::string format(const char* fmt, T... args) {
+std::string format(const char* fmt, T&&... args) {
     std::stringstream ss;
     bool              parse_name = false;
     Printer           print;
@@ -30,7 +31,7 @@ std::string format(const char* fmt, T... args) {
     print.isQuoted         = false;
     print.isCompact        = true;
     print.line_break       = "";
-    std::string str_args[] = {print(args)...};
+    std::string str_args[] = {print(std::forward<T>(args))...};
 
     int j = 0;
     for (const char* i = fmt; *i != '\0'; i++) {

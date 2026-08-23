@@ -12,6 +12,7 @@
 #include <iosfwd>
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -335,7 +336,7 @@ struct LogMessage {
 template <typename... T>
 struct LogMessageImpl final : LogMessage {
     std::tuple<T...> args;
-    LogMessageImpl(T... args) : LogMessage(), args(args...) {}
+    LogMessageImpl(T... args) : LogMessage(), args(std::move(args)...) {}
 
     std::string str() const override {
         return gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
@@ -517,8 +518,8 @@ public:
             p = alloc_block_lockfree(size);
         else
             p = alloc_block(size);
-        // LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
-        LogMessage* msg = new (p) LogMessageImpl<detail::to_store_type_t<T>...>(args...);
+        LogMessage* msg =
+            new (p) LogMessageImpl<detail::to_store_type_t<T>...>(std::forward<T>(args)...);
         return {msg, size, *this};
     }
 

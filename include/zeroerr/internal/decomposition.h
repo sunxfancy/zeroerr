@@ -115,13 +115,27 @@ struct ExprResult {
 };
 
 namespace details {
+// Detect whether a type can be explicitly converted to bool. This covers
+// explicit operator bool (std::unique_ptr/std::shared_ptr), which
+// std::is_convertible would miss. Scoped enums are excluded so that a bare
+// CHECK(enum) does not silently turn into "value != 0"; unscoped enums keep
+// their historical implicit-conversion behavior.
+template <typename T, typename = void>
+struct has_bool_conversion : std::false_type {};
+
 template <typename T>
-typename std::enable_if<std::is_convertible<T, bool>::value, bool>::type getBool(T&& lhs) {
+struct has_bool_conversion<T, decltype(static_cast<bool>(std::declval<T>()), void())>
+    : std::integral_constant<
+          bool, !(std::is_enum<typename std::decay<T>::type>::value &&
+                  !std::is_convertible<typename std::decay<T>::type, int>::value)> {};
+
+template <typename T>
+typename std::enable_if<has_bool_conversion<T>::value, bool>::type getBool(T&& lhs) {
     return static_cast<bool>(lhs);
 }
 
 template <typename T>
-typename std::enable_if<!std::is_convertible<T, bool>::value, bool>::type getBool(T&&) {
+typename std::enable_if<!has_bool_conversion<T>::value, bool>::type getBool(T&&) {
     return true;
 }
 }  // namespace details
