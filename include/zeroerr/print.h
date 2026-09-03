@@ -120,9 +120,11 @@ struct Printer {
 #else
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
     print(T value, unsigned level, const char* lb, rank<0>) {
-        // enum class has no operator<< and no implicit conversion, so fall back
-        // to its underlying numeric value instead of failing to compile.
-        os << tab(level) << static_cast<typename std::underlying_type<T>::type>(value) << lb;
+        if constexpr (detail::is_streamable<std::ostream, T>::value) {
+            os << tab(level) << value << lb;
+        } else {
+            os << tab(level) << "<unprintable enum " << type(value) << ">" << lb;
+        }
     }
 #endif
 
