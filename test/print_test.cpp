@@ -16,6 +16,16 @@
 
 using namespace zeroerr;
 
+enum class UnstreamableState { Ready };
+
+TEST_CASE("unstreamable enum has a diagnostic fallback") {
+    std::stringstream output;
+    Printer           print(output);
+    print(UnstreamableState::Ready);
+    CHECK(output.str().find("<unprintable enum ") != std::string::npos);
+    CHECK(output.str().find("UnstreamableState") != std::string::npos);
+}
+
 TEST_CASE("print_test") {
     if (detail::is_streamable<std::ostream, int>::value) {
         std::cerr << "int is streamable" << std::endl;
