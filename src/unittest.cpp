@@ -937,7 +937,7 @@ public:
     enum FailureType { may_fail, should_fail };
     FailureDecorator(FailureType type) : type(type) {}
 
-    bool onFinish(const TestCase& tc, TestContext& ctx) override {
+    bool onFinish(const TestCase&, TestContext& ctx) override {
         if (type == FailureType::may_fail) {
             // Treat failures as warnings so the suite can continue cleanly.
             ctx.warning_as += ctx.failed_as;

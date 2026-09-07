@@ -186,11 +186,11 @@ extern int _ZEROERR_G_VERBOSE;
 #undef ZEROERR_G_CONTEXT_SCOPE
 #endif
 
-#define ZEROERR_G_CONTEXT_SCOPE(x)                                 \
-    if (x) {                                                       \
-        for (auto* i : zeroerr::_ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
-            i->str(std::cerr);                                     \
-        }                                                          \
+#define ZEROERR_G_CONTEXT_SCOPE(x)                                                     \
+    if (x) {                                                                           \
+        for (auto* zeroerr_context_scope : zeroerr::_ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
+            zeroerr_context_scope->str(std::cerr);                                     \
+        }                                                                              \
     }
 
 #ifdef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER

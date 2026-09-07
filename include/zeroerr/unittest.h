@@ -24,10 +24,9 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
     zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \
         << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
-#define SUB_CASE(...)                                                         \
-    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                     \
-    ZEROERR_EXPAND(ZEROERR_CREATE_SUB_CASE(__VA_ARGS__))                      \
-    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+// The caller supplies the lambda body, so no diagnostic pragma may follow
+// the lambda declarator (GCC rejects it before the opening brace).
+#define SUB_CASE(...) ZEROERR_EXPAND(ZEROERR_CREATE_SUB_CASE(__VA_ARGS__))
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name, ...)                   \
     class classname : public fixture {                                                       \

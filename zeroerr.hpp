@@ -226,6 +226,17 @@
 // == COMPILER WARNINGS ============================================================================
 // =================================================================================================
 
+// Clang warning groups vary across upstream, Apple and Android releases.
+// Test support instead of emitting an unknown diagnostic from the suppression itself.
+#define ZEROERR_CLANG_SUPPRESS_VARIADIC_OMITTED
+#if ZEROERR_CLANG && !ZEROERR_ICC
+#if __has_warning("-Wvariadic-macro-arguments-omitted")
+#undef ZEROERR_CLANG_SUPPRESS_VARIADIC_OMITTED
+#define ZEROERR_CLANG_SUPPRESS_VARIADIC_OMITTED \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wvariadic-macro-arguments-omitted")
+#endif
+#endif
+
 // both the header and the implementation suppress all of these,
 // so it only makes sense to aggregate them like so
 #define ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                                      \
@@ -236,7 +247,7 @@
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wmissing-prototypes")                                         \
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wc++98-compat")                                               \
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wc++98-compat-pedantic")                                      \
-    ZEROERR_CLANG_SUPPRESS_WARNING("-Wvariadic-macro-arguments-omitted")                           \
+    ZEROERR_CLANG_SUPPRESS_VARIADIC_OMITTED                                                        \
                                                                                                    \
     ZEROERR_GCC_SUPPRESS_WARNING_PUSH                                                              \
     ZEROERR_GCC_SUPPRESS_WARNING("-Wunknown-pragmas")                                              \
@@ -307,7 +318,7 @@
 
 #define ZEROERR_SUPPRESS_VARIADIC_MACRO                                             \
     ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments") \
-    ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wvariadic-macro-arguments-omitted")
+    ZEROERR_CLANG_SUPPRESS_VARIADIC_OMITTED
 
 #define ZEROERR_SUPPRESS_VARIADIC_MACRO_POP ZEROERR_CLANG_SUPPRESS_WARNING_POP
 
@@ -1441,9 +1452,11 @@ struct Printer {
 #else
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
     print(T value, unsigned level, const char* lb, rank<0>) {
-        // enum class has no operator<< and no implicit conversion, so fall back
-        // to its underlying numeric value instead of failing to compile.
-        os << tab(level) << static_cast<typename std::underlying_type<T>::type>(value) << lb;
+        if constexpr (detail::is_streamable<std::ostream, T>::value) {
+            os << tab(level) << value << lb;
+        } else {
+            os << tab(level) << "<unprintable enum " << type(value) << ">" << lb;
+        }
     }
 #endif
 
@@ -3623,11 +3636,11 @@ extern int _ZEROERR_G_VERBOSE;
 #undef ZEROERR_G_CONTEXT_SCOPE
 #endif
 
-#define ZEROERR_G_CONTEXT_SCOPE(x)                                 \
-    if (x) {                                                       \
-        for (auto* i : zeroerr::_ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
-            i->str(std::cerr);                                     \
-        }                                                          \
+#define ZEROERR_G_CONTEXT_SCOPE(x)                                                     \
+    if (x) {                                                                           \
+        for (auto* zeroerr_context_scope : zeroerr::_ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
+            zeroerr_context_scope->str(std::cerr);                                     \
+        }                                                                              \
     }
 
 #ifdef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER
@@ -4306,10 +4319,9 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
     zeroerr::SubCase(name, __FILE__, __LINE__, _ZEROERR_TEST_CONTEXT, {__VA_ARGS__}) \
         << [=](ZEROERR_UNUSED(zeroerr::TestContext * _ZEROERR_TEST_CONTEXT)) mutable
 
-#define SUB_CASE(...)                                                         \
-    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                     \
-    ZEROERR_EXPAND(ZEROERR_CREATE_SUB_CASE(__VA_ARGS__))                      \
-    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+// The caller supplies the lambda body, so no diagnostic pragma may follow
+// the lambda declarator (GCC rejects it before the opening brace).
+#define SUB_CASE(...) ZEROERR_EXPAND(ZEROERR_CREATE_SUB_CASE(__VA_ARGS__))
 
 #define ZEROERR_CREATE_TEST_CLASS(fixture, classname, funcname, name, ...)                   \
     class classname : public fixture {                                                       \
@@ -4689,15 +4701,15 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
 #define ZEROERR_CREATE_FUZZ_TEST_FUNC(function, name, ...)                                  \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                                   \
     static void                     function(zeroerr::TestContext*);                        \
     static zeroerr::detail::regTest ZEROERR_NAMEGEN(_zeroerr_reg)(                          \
         {name, __FILE__, __LINE__, function, {__VA_ARGS__}}, zeroerr::TestType::fuzz_test); \
+    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP                                                    \
     static void function(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
 #define FUZZ_TEST_CASE(...) \
-    ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH \
-    ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), __VA_ARGS__) \
-    ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+    ZEROERR_CREATE_FUZZ_TEST_FUNC(ZEROERR_NAMEGEN(_zeroerr_testcase), __VA_ARGS__)
 
 #define FUZZ_FUNC(func) zeroerr::FuzzFunction(func, _ZEROERR_TEST_CONTEXT)
 
@@ -4903,6 +4915,7 @@ std::vector<T> ReadCorpusFromDir(std::string dir);
 
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
 #ifdef ZEROERR_IMPLEMENTATION
 
 
@@ -5178,6 +5191,10 @@ TerminalSize getTerminalWidth() {
 
 #include <iomanip>
 #include <unordered_set>
+
+// The implementation uses the portable CRT API. Keep this diagnostic local;
+// callers must retain their own deprecation warnings.
+ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH(4996)
 
 #ifdef _WIN32
 #include <windows.h>
@@ -5645,6 +5662,8 @@ static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
 #undef zeroerr_color
 
 }  // namespace zeroerr
+
+ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
 
 
@@ -6935,7 +6954,7 @@ public:
     enum FailureType { may_fail, should_fail };
     FailureDecorator(FailureType type) : type(type) {}
 
-    bool onFinish(const TestCase& tc, TestContext& ctx) override {
+    bool onFinish(const TestCase&, TestContext& ctx) override {
         if (type == FailureType::may_fail) {
             // Treat failures as warnings so the suite can continue cleanly.
             ctx.warning_as += ctx.failed_as;
