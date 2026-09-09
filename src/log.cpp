@@ -4,6 +4,10 @@
 #include <iomanip>
 #include <unordered_set>
 
+// The implementation uses the portable CRT API. Keep this diagnostic local;
+// callers must retain their own deprecation warnings.
+ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH(4996)
+
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -470,3 +474,5 @@ static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
 #undef zeroerr_color
 
 }  // namespace zeroerr
+
+ZEROERR_MSVC_SUPPRESS_WARNING_POP
