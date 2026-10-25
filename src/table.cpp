@@ -1,3 +1,4 @@
+#include <sstream>
 #include "zeroerr/table.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/log.h"

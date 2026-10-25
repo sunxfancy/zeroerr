@@ -1,10 +1,12 @@
 #pragma once
+#include <tuple>
 #include "zeroerr/internal/config.h"
 
 #include "zeroerr/internal/typetraits.h"
 
 #include <cstdint>
 #include <cstring>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <vector>
