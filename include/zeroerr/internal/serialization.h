@@ -1,4 +1,5 @@
 #pragma once
+#include <tuple>
 #include "zeroerr/internal/config.h"
 
 #include "zeroerr/internal/typetraits.h"

@@ -8,6 +8,8 @@
 #include <type_traits>
 
 #include <memory>
+#include <cstddef>
+#include <utility>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -36,8 +38,7 @@ struct rank<0> {};
 
 class StringBuffer;
 namespace detail {
-template <class T, class = void> struct is_complex : std::false_type {};
-template <class T> struct is_complex<T, decltype(void(std::declval<T>().real()), void(std::declval<T>().imag()))> : std::true_type {};
+
 
 
 // C++11 void_t
@@ -67,7 +68,7 @@ template <unsigned N, unsigned... Is>
 struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
 
 template <unsigned... Is>
-struct gen_seq<0, Is...> : seq<Is...> {};
+struct gen_seq<0, Is...> : seq<Is...> { using type = seq<Is...>; };
 
 
 // Some utility structs to check template specialization
@@ -81,7 +82,7 @@ struct is_specialization<Ref<Args...>, Ref> : std::true_type {};
 // Check if a type is stream writable, i.e., std::cout << foo;
 // Usage: is_streamable<std::ostream, int>::value
 template <typename S, typename T>
-using has_stream_operator = void_t<decltype(std::declval<S&>() << std::declval<T>())>;
+using has_stream_operator = void_t<decltype(std::declval<S&>() << std::declval<const T&>())>;
 
 template <typename S, typename T, typename = void>
 struct is_streamable : std::false_type {};
@@ -94,7 +95,12 @@ struct is_streamable<S, T, has_stream_operator<S, T>> : std::true_type {};
 // Usage: is_container<std::vector<int>>::value
 template <typename T>
 using has_begin_end =
-    void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end())>;
+    void_t<decltype(std::declval<const T&>().begin()),
+           decltype(std::declval<const T&>().end()),
+           decltype(*std::declval<decltype(std::declval<const T&>().begin())&>()),
+           decltype(++std::declval<decltype(std::declval<const T&>().begin())&>()),
+           decltype(std::declval<const T&>().begin() != std::declval<const T&>().end()),
+           decltype(std::declval<const T&>().begin() == std::declval<const T&>().end())>;
 
 template <typename T, typename = void>
 struct is_container : std::false_type {};
@@ -116,9 +122,71 @@ template <typename T>
 struct is_associative_container<T, has_begin_end_find_insert<T>> : std::true_type {};
 
 
+template <typename T, typename = void>
+struct is_string_like : std::false_type {};
+
 template <typename T>
-struct is_string : std::integral_constant<bool, StringLike<T>::value ||
-    std::is_same<T, const char*>::value || std::is_same<T, char*>::value> {};
+struct is_string_like<T, void_t<typename T::traits_type::char_type,
+                                decltype(std::declval<const T&>().data()),
+                                decltype(std::declval<const T&>().size())>>
+    : std::integral_constant<bool,
+          std::is_same<typename T::traits_type::char_type, char>::value &&
+          std::is_convertible<decltype(std::declval<const T&>().data()), const char*>::value &&
+          std::is_convertible<decltype(std::declval<const T&>().size()), std::size_t>::value> {};
+
+template<> struct is_string_like<zeroerr::String> : std::true_type {};
+
+template <class T>
+struct is_string : std::integral_constant<bool,
+    is_string_like<T>::value ||
+    (std::is_convertible<const T&, const char*>::value && !std::is_same<T, std::nullptr_t>::value)> {};
+
+template <typename T, typename = void>
+struct is_complex : std::false_type {};
+
+template <typename T>
+struct is_complex<T, void_t<decltype(std::declval<const T&>().real()),
+                            decltype(std::declval<const T&>().imag())>>
+    : std::integral_constant<bool,
+          std::is_arithmetic<decltype(std::declval<const T&>().real())>::value &&
+          std::is_arithmetic<decltype(std::declval<const T&>().imag())>::value> {};
+
+template <typename T, typename = void>
+struct is_pointer_like : std::false_type {};
+
+template <typename T>
+struct is_pointer_like<T, void_t<decltype(std::declval<const T&>().get())>>
+    : std::is_convertible<decltype(std::declval<const T&>().get()), const void*> {};
+
+template <typename T, typename = void>
+struct is_weak_pointer_like : std::false_type {};
+
+template <typename T>
+struct is_weak_pointer_like<T, void_t<decltype(std::declval<const T&>().lock())>>
+    : is_pointer_like<decltype(std::declval<const T&>().lock())> {};
+
+// Unqualified, dependent lookup finds get in the value's associated namespace,
+// including declarations introduced after this header. Never declare in std.
+template <std::size_t I>
+void get() = delete;
+template <std::size_t I, typename T>
+auto tuple_get(T&& value) -> decltype(get<I>(std::forward<T>(value))) {
+    return get<I>(std::forward<T>(value));
+}
+
+template <typename T, typename Sequence, typename = void>
+struct has_tuple_get : std::false_type {};
+
+template <typename T, unsigned... I>
+struct has_tuple_get<T, seq<I...>, void_t<decltype(tuple_get<I>(std::declval<const T&>()))...>>
+    : std::true_type {};
+
+template <typename T, typename = void>
+struct is_tuple_like : std::false_type {};
+
+template <typename T>
+struct is_tuple_like<T, void_t<decltype(std::tuple_size<T>::value)>>
+    : has_tuple_get<T, typename gen_seq<std::tuple_size<T>::value>::type> {};
 
 // Completeness check that SFINAE-fails for incomplete T.
 template <typename T, typename = void>
@@ -131,7 +199,7 @@ struct is_complete_type<T, decltype(void(sizeof(T)))> : std::true_type {};
 template <typename T, typename = void>
 struct is_indexable_non_pointer : std::false_type {};
 template <typename T>
-struct is_indexable_non_pointer<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
+struct is_indexable_non_pointer<T, void_t<decltype(std::declval<const T&>()[0])>> : std::true_type {};
 
 // Dispatch on is_pointer first so pointer-to-incomplete never reaches [0].
 template <typename T,
@@ -168,8 +236,9 @@ struct is_modifiable<T, void_t<decltype(
 // Check if a type has the element type as std::pair
 template <typename T>
 using has_pair_type =
-    void_t<typename T::value_type, decltype(std::declval<typename T::value_type>().first),
-           decltype(std::declval<typename T::value_type>().second)>;
+    void_t<decltype((*std::declval<const T&>().begin()).first),
+           decltype((*std::declval<const T&>().begin()).second)>;
+
 template <typename T, typename = void>
 struct ele_type_is_pair : std::false_type {};
 
@@ -212,7 +281,7 @@ struct visit_impl {
     template <typename T, typename F>
     static void visit(T& tup, size_t idx, F&& fun) {
         if (idx == I - 1)
-            fun(std::get<I - 1>(tup));
+            fun(tuple_get<I - 1>(tup));
         else
             visit_impl<I - 1>::visit(tup, idx, std::forward<F>(fun));
     }
@@ -224,23 +293,18 @@ struct visit_impl<0> {
     static void visit(T&, size_t, F&&) {}
 };
 
-template <typename F, typename... Ts>
-void visit_at(const std::tuple<Ts...>& tup, size_t idx, F&& fun) {
-    visit_impl<sizeof...(Ts)>::visit(tup, idx, std::forward<F>(fun));
+template <typename F, typename T>
+void visit_at(T& tup, size_t idx, F&& fun) {
+    visit_impl<std::tuple_size<typename std::remove_cv<T>::type>::value>::visit(
+        tup, idx, std::forward<F>(fun));
 }
-
-template <typename F, typename... Ts>
-void visit_at(std::tuple<Ts...>& tup, size_t idx, F&& fun) {
-    visit_impl<sizeof...(Ts)>::visit(tup, idx, std::forward<F>(fun));
-}
-
 
 template <size_t I>
 struct visit2_impl {
     template <typename T1, typename T2, typename F>
-    static void visit(T1 tup1, T2 tup2, size_t idx, F&& fun) {
+    static void visit(T1& tup1, T2& tup2, size_t idx, F&& fun) {
         if (idx == I - 1)
-            fun(std::get<I - 1>(tup1), std::get<I - 1>(tup2));
+            fun(tuple_get<I - 1>(tup1), tuple_get<I - 1>(tup2));
         else
             visit2_impl<I - 1>::visit(tup1, tup2, idx, std::forward<F>(fun));
     }
@@ -252,24 +316,10 @@ struct visit2_impl<0> {
     static void visit(T1&, T2&, size_t, F&&) {}
 };
 
-template <typename F, typename... Ts, typename... T2s>
-void visit2_at(const std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
-    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
-}
-
-template <typename F, typename... Ts, typename... T2s>
-void visit2_at(std::tuple<Ts...>& tup1, std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
-    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
-}
-
-template <typename F, typename... Ts, typename... T2s>
-void visit2_at(const std::tuple<Ts...>& tup1, std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
-    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
-}
-
-template <typename F, typename... Ts, typename... T2s>
-void visit2_at(std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
-    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
+template <typename F, typename T1, typename T2>
+void visit2_at(T1& tup1, T2& tup2, size_t idx, F&& fun) {
+    visit2_impl<std::tuple_size<typename std::remove_cv<T1>::type>::value>::visit(
+        tup1, tup2, idx, std::forward<F>(fun));
 }
 
 #define ZEROERR_ENABLE_IF(x) \
@@ -288,10 +338,7 @@ void visit2_at(std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t i
 #define ZEROERR_IS_ARRAY      detail::is_array<T>::value
 #define ZEROERR_IS_COMPLEX    detail::is_complex<T>::value
 #define ZEROERR_IS_BOOL       std::is_same<T, bool>::value
-#define ZEROERR_IS_AUTOPTR                                   \
-    (detail::is_specialization<T, std::unique_ptr>::value || \
-     detail::is_specialization<T, std::shared_ptr>::value || \
-     detail::is_specialization<T, std::weak_ptr>::value)
+#define ZEROERR_IS_AUTOPTR detail::is_pointer_like<T>::value
 #define ZEROERR_IS_MAP detail::ele_type_is_pair<T>::value
 #define ZEROERR_IS_POD std::is_standard_layout<T>::value
 #define ZEROERR_IS_EXT detail::has_extension<T>::value

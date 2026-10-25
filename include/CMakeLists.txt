@@ -6,6 +6,7 @@ set(include_files
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/fuzz_signal.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/string.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/text.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/typetraits.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/config.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/console.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/debugbreak.h

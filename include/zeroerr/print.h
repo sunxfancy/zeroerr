@@ -8,6 +8,8 @@
 #include <functional>
 
 #include <memory>
+#include <initializer_list>
+#include <typeinfo>
 
 #if defined(ZEROERR_ENABLE_PFR) && (ZEROERR_CXX_STANDARD >= 14)
 #include "pfr.hpp"
@@ -32,7 +34,7 @@ constexpr unsigned max_rank = 5;
 
 struct Printer;
 template <typename T>
-void PrinterExt(Printer&, T&&, unsigned, const char*, rank<0>);
+void PrinterExt(Printer&, const T&, unsigned, const char*, rank<0>);
 
 namespace detail {
 
@@ -118,10 +120,10 @@ public:
 
 #if defined(ZEROERR_ENABLE_MAGIC_ENUM) && (ZEROERR_CXX_STANDARD >= 17)
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
-    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
+    print(const T& value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
 #else
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
-    print(T value, unsigned level, const char* lb, rank<0>) {
+    print(const T& value, unsigned level, const char* lb, rank<0>) {
         if constexpr (detail::is_streamable<std::ostream, T>::value) {
             os << tab(level) << value << lb;
         } else {
@@ -131,11 +133,11 @@ public:
 #endif
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_INT || ZEROERR_IS_FLOAT)
-    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
+    print(const T& value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_POINTER &&
                       !std::is_function<typename std::remove_pointer<T>::type>::value)
-    print(T value, unsigned level, const char* lb, rank<0>) {
+    print(const T& value, unsigned level, const char* lb, rank<0>) {
         if (value == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
@@ -162,14 +164,21 @@ public:
     }
 
 
+    // Preserve the pointer fallback for built-in arrays; character arrays use
+    // the higher-priority string rule.
+    template <typename T, std::size_t N>
+    void print(const T (&value)[N], unsigned level, const char* lb, rank<0>) {
+        print(value + 0, level, lb, rank<max_rank>{});
+    }
+
     ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS)
-    print(T value, unsigned level, const char* lb, rank<0>) {
+    print(const T& value, unsigned level, const char* lb, rank<0>) {
         os << tab(level) << type(value) << lb;
     }
 
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_CHAR || ZEROERR_IS_WCHAR)
-    print(T value, unsigned level, const char* lb, rank<1>) {
+    print(const T& value, unsigned level, const char* lb, rank<1>) {
         os << tab(level) << '\'' << value << '\'' << lb;
     }
 
@@ -190,12 +199,12 @@ public:
 #endif
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_BOOL)
-    print(T value, unsigned level, const char* lb, rank<2>) {
+    print(const T& value, unsigned level, const char* lb, rank<2>) {
         os << tab(level) << (value ? "true" : "false") << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS && ZEROERR_IS_STREAMABLE)
-    print(T value, unsigned level, const char* lb, rank<2>) { os << tab(level) << value << lb; }
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS && ZEROERR_IS_STREAMABLE && !ZEROERR_IS_CONTAINER)
+    print(const T& value, unsigned level, const char* lb, rank<2>) { os << tab(level) << value << lb; }
 
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER)
@@ -203,7 +212,8 @@ public:
         os << tab(level) << "{" << (isCompact ? "" : line_break);
         bool last = false;
         for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            auto next = iter; ++next;
+            auto next = iter;
+            ++next;
             if (next == value.end()) last = true;
             print(*iter, level + 1, isCompact ? (last ? "" : ", ") : line_break, rank<max_rank>{});
         }
@@ -215,7 +225,8 @@ public:
         os << tab(level) << "[";
         bool last = false;
         for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            auto next = iter; ++next;
+            auto next = iter;
+            ++next;
             if (next == value.end()) last = true;
             print(*iter, 0, last ? "" : ", ", rank<max_rank>{});
         }
@@ -223,38 +234,57 @@ public:
     }
 
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_AUTOPTR)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_AUTOPTR && !ZEROERR_IS_CONTAINER)
     print(const T& value, unsigned level, const char* lb, rank<3>) {
         if (value.get() == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
-            os << tab(level) << "<" << type(value) << " at " << value.get() << ">" << lb;
+            os << tab(level) << "<" << type(value) << " at " << static_cast<const void*>(value.get()) << ">" << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER && ZEROERR_IS_MAP)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER && ZEROERR_IS_MAP && !ZEROERR_IS_STRING &&
+                      !ZEROERR_IS_COMPLEX && !detail::is_weak_pointer_like<T>::value)
     print(const T& value, unsigned level, const char* lb, rank<4>) {
         os << tab(level) << "{" << (isCompact ? "" : line_break);
         bool last = false;
         for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            auto next = iter; ++next;
+            auto next = iter;
+            ++next;
             if (next == value.end()) last = true;
-            print(iter->first, level + 1, " : ", rank<max_rank>{});
-            print(iter->second, level + 1, isCompact ? (last ? "" : ", ") : line_break,
+            print((*iter).first, level + 1, " : ", rank<max_rank>{});
+            print((*iter).second, level + 1, isCompact ? (last ? "" : ", ") : line_break,
                   rank<max_rank>{});
         }
         os << tab(level) << "}" << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_COMPLEX)
-    print(T value, unsigned level, const char* lb, rank<4>) {
+    ZEROERR_ENABLE_IF(detail::is_weak_pointer_like<T>::value && !ZEROERR_IS_STRING && !ZEROERR_IS_COMPLEX)
+    print(const T& value, unsigned level, const char* lb, rank<4>) {
+        const auto locked = value.lock();
+        print(locked, level, lb, rank<3>{});
+    }
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_COMPLEX && !ZEROERR_IS_STRING)
+    print(const T& value, unsigned level, const char* lb, rank<4>) {
         os << tab(level) << "(" << value.real() << "+" << value.imag() << "i)" << lb;
     }
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_STRING)
-    print(T value, unsigned level, const char* lb, rank<4>) {
+    print(const T& value, unsigned level, const char* lb, rank<4>) {
         os << tab(level) << quote();
-        print_text(value);
+        write_string(value, typename detail::is_string_like<T>::type{});
         os << quote() << lb;
+    }
+
+    template <class T>
+    void write_string(const T& value, std::true_type) {
+        if (value.size() != 0)
+            os.write(value.data(), static_cast<std::size_t>(value.size()));
+    }
+    template <class T>
+    void write_string(const T& value, std::false_type) {
+        const char* text = value;
+        os << (text ? text : "nullptr");
     }
 
     template <class TupType>
@@ -263,14 +293,14 @@ public:
     template <class TupType, unsigned... I>
     inline void print_tuple(const TupType& _tup, unsigned level, const char*, detail::seq<I...>) {
         int _[] = {(os << (I == 0 ? "" : ", "),
-                    print(std::get<I>(_tup), level + 1, "", rank<max_rank>{}), 0)...};
+                    print(detail::tuple_get<I>(_tup), level + 1, "", rank<max_rank>{}), 0)...};
         (void)_;
     }
 
-    template <class... Args>
-    void print(const std::tuple<Args...>& value, unsigned level, const char* lb, rank<3>) {
+    ZEROERR_ENABLE_IF(detail::is_tuple_like<T>::value && !ZEROERR_IS_CONTAINER && !ZEROERR_IS_AUTOPTR)
+    print(const T& value, unsigned level, const char* lb, rank<3>) {
         os << tab(level) << "(";
-        print_tuple(value, level, isCompact ? " " : line_break, detail::gen_seq<sizeof...(Args)>{});
+        print_tuple(value, level, isCompact ? " " : line_break, detail::gen_seq<std::tuple_size<T>::value>{});
         os << ")" << lb;
     }
 
@@ -328,8 +358,8 @@ DiagnosticValue makeDiagnosticValue(T& value) {
  * @param r  the rank of the rule. 0 is lowest priority.
  */
 template <class T>
-void PrinterExt(Printer& P, T&& v, unsigned level, const char* lb, rank<0>) {
-    P.print(std::forward<T>(v), level, lb, rank<max_rank>{});
+void PrinterExt(Printer& P, const T& v, unsigned level, const char* lb, rank<0>) {
+    P.print(v, level, lb, rank<max_rank>{});
 }
 
 extern Printer& getStdoutPrinter();

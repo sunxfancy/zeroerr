@@ -1038,6 +1038,8 @@ public:
 #include <type_traits>
 
 #include <memory>
+#include <cstddef>
+#include <utility>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -1066,8 +1068,7 @@ struct rank<0> {};
 
 class StringBuffer;
 namespace detail {
-template <class T, class = void> struct is_complex : std::false_type {};
-template <class T> struct is_complex<T, decltype(void(std::declval<T>().real()), void(std::declval<T>().imag()))> : std::true_type {};
+
 
 
 // C++11 void_t
@@ -1097,7 +1098,7 @@ template <unsigned N, unsigned... Is>
 struct gen_seq : gen_seq<N - 1, N - 1, Is...> {};
 
 template <unsigned... Is>
-struct gen_seq<0, Is...> : seq<Is...> {};
+struct gen_seq<0, Is...> : seq<Is...> { using type = seq<Is...>; };
 
 
 // Some utility structs to check template specialization
@@ -1111,7 +1112,7 @@ struct is_specialization<Ref<Args...>, Ref> : std::true_type {};
 // Check if a type is stream writable, i.e., std::cout << foo;
 // Usage: is_streamable<std::ostream, int>::value
 template <typename S, typename T>
-using has_stream_operator = void_t<decltype(std::declval<S&>() << std::declval<T>())>;
+using has_stream_operator = void_t<decltype(std::declval<S&>() << std::declval<const T&>())>;
 
 template <typename S, typename T, typename = void>
 struct is_streamable : std::false_type {};
@@ -1124,7 +1125,12 @@ struct is_streamable<S, T, has_stream_operator<S, T>> : std::true_type {};
 // Usage: is_container<std::vector<int>>::value
 template <typename T>
 using has_begin_end =
-    void_t<decltype(std::declval<T>().begin()), decltype(std::declval<T>().end())>;
+    void_t<decltype(std::declval<const T&>().begin()),
+           decltype(std::declval<const T&>().end()),
+           decltype(*std::declval<decltype(std::declval<const T&>().begin())&>()),
+           decltype(++std::declval<decltype(std::declval<const T&>().begin())&>()),
+           decltype(std::declval<const T&>().begin() != std::declval<const T&>().end()),
+           decltype(std::declval<const T&>().begin() == std::declval<const T&>().end())>;
 
 template <typename T, typename = void>
 struct is_container : std::false_type {};
@@ -1146,9 +1152,71 @@ template <typename T>
 struct is_associative_container<T, has_begin_end_find_insert<T>> : std::true_type {};
 
 
+template <typename T, typename = void>
+struct is_string_like : std::false_type {};
+
 template <typename T>
-struct is_string : std::integral_constant<bool, StringLike<T>::value ||
-    std::is_same<T, const char*>::value || std::is_same<T, char*>::value> {};
+struct is_string_like<T, void_t<typename T::traits_type::char_type,
+                                decltype(std::declval<const T&>().data()),
+                                decltype(std::declval<const T&>().size())>>
+    : std::integral_constant<bool,
+          std::is_same<typename T::traits_type::char_type, char>::value &&
+          std::is_convertible<decltype(std::declval<const T&>().data()), const char*>::value &&
+          std::is_convertible<decltype(std::declval<const T&>().size()), std::size_t>::value> {};
+
+template<> struct is_string_like<zeroerr::String> : std::true_type {};
+
+template <class T>
+struct is_string : std::integral_constant<bool,
+    is_string_like<T>::value ||
+    (std::is_convertible<const T&, const char*>::value && !std::is_same<T, std::nullptr_t>::value)> {};
+
+template <typename T, typename = void>
+struct is_complex : std::false_type {};
+
+template <typename T>
+struct is_complex<T, void_t<decltype(std::declval<const T&>().real()),
+                            decltype(std::declval<const T&>().imag())>>
+    : std::integral_constant<bool,
+          std::is_arithmetic<decltype(std::declval<const T&>().real())>::value &&
+          std::is_arithmetic<decltype(std::declval<const T&>().imag())>::value> {};
+
+template <typename T, typename = void>
+struct is_pointer_like : std::false_type {};
+
+template <typename T>
+struct is_pointer_like<T, void_t<decltype(std::declval<const T&>().get())>>
+    : std::is_convertible<decltype(std::declval<const T&>().get()), const void*> {};
+
+template <typename T, typename = void>
+struct is_weak_pointer_like : std::false_type {};
+
+template <typename T>
+struct is_weak_pointer_like<T, void_t<decltype(std::declval<const T&>().lock())>>
+    : is_pointer_like<decltype(std::declval<const T&>().lock())> {};
+
+// Unqualified, dependent lookup finds get in the value's associated namespace,
+// including declarations introduced after this header. Never declare in std.
+template <std::size_t I>
+void get() = delete;
+template <std::size_t I, typename T>
+auto tuple_get(T&& value) -> decltype(get<I>(std::forward<T>(value))) {
+    return get<I>(std::forward<T>(value));
+}
+
+template <typename T, typename Sequence, typename = void>
+struct has_tuple_get : std::false_type {};
+
+template <typename T, unsigned... I>
+struct has_tuple_get<T, seq<I...>, void_t<decltype(tuple_get<I>(std::declval<const T&>()))...>>
+    : std::true_type {};
+
+template <typename T, typename = void>
+struct is_tuple_like : std::false_type {};
+
+template <typename T>
+struct is_tuple_like<T, void_t<decltype(std::tuple_size<T>::value)>>
+    : has_tuple_get<T, typename gen_seq<std::tuple_size<T>::value>::type> {};
 
 // Completeness check that SFINAE-fails for incomplete T.
 template <typename T, typename = void>
@@ -1161,7 +1229,7 @@ struct is_complete_type<T, decltype(void(sizeof(T)))> : std::true_type {};
 template <typename T, typename = void>
 struct is_indexable_non_pointer : std::false_type {};
 template <typename T>
-struct is_indexable_non_pointer<T, void_t<decltype(std::declval<T>()[0])>> : std::true_type {};
+struct is_indexable_non_pointer<T, void_t<decltype(std::declval<const T&>()[0])>> : std::true_type {};
 
 // Dispatch on is_pointer first so pointer-to-incomplete never reaches [0].
 template <typename T,
@@ -1198,8 +1266,9 @@ struct is_modifiable<T, void_t<decltype(
 // Check if a type has the element type as std::pair
 template <typename T>
 using has_pair_type =
-    void_t<typename T::value_type, decltype(std::declval<typename T::value_type>().first),
-           decltype(std::declval<typename T::value_type>().second)>;
+    void_t<decltype((*std::declval<const T&>().begin()).first),
+           decltype((*std::declval<const T&>().begin()).second)>;
+
 template <typename T, typename = void>
 struct ele_type_is_pair : std::false_type {};
 
@@ -1242,7 +1311,7 @@ struct visit_impl {
     template <typename T, typename F>
     static void visit(T& tup, size_t idx, F&& fun) {
         if (idx == I - 1)
-            fun(std::get<I - 1>(tup));
+            fun(tuple_get<I - 1>(tup));
         else
             visit_impl<I - 1>::visit(tup, idx, std::forward<F>(fun));
     }
@@ -1254,23 +1323,18 @@ struct visit_impl<0> {
     static void visit(T&, size_t, F&&) {}
 };
 
-template <typename F, typename... Ts>
-void visit_at(const std::tuple<Ts...>& tup, size_t idx, F&& fun) {
-    visit_impl<sizeof...(Ts)>::visit(tup, idx, std::forward<F>(fun));
+template <typename F, typename T>
+void visit_at(T& tup, size_t idx, F&& fun) {
+    visit_impl<std::tuple_size<typename std::remove_cv<T>::type>::value>::visit(
+        tup, idx, std::forward<F>(fun));
 }
-
-template <typename F, typename... Ts>
-void visit_at(std::tuple<Ts...>& tup, size_t idx, F&& fun) {
-    visit_impl<sizeof...(Ts)>::visit(tup, idx, std::forward<F>(fun));
-}
-
 
 template <size_t I>
 struct visit2_impl {
     template <typename T1, typename T2, typename F>
-    static void visit(T1 tup1, T2 tup2, size_t idx, F&& fun) {
+    static void visit(T1& tup1, T2& tup2, size_t idx, F&& fun) {
         if (idx == I - 1)
-            fun(std::get<I - 1>(tup1), std::get<I - 1>(tup2));
+            fun(tuple_get<I - 1>(tup1), tuple_get<I - 1>(tup2));
         else
             visit2_impl<I - 1>::visit(tup1, tup2, idx, std::forward<F>(fun));
     }
@@ -1282,24 +1346,10 @@ struct visit2_impl<0> {
     static void visit(T1&, T2&, size_t, F&&) {}
 };
 
-template <typename F, typename... Ts, typename... T2s>
-void visit2_at(const std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
-    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
-}
-
-template <typename F, typename... Ts, typename... T2s>
-void visit2_at(std::tuple<Ts...>& tup1, std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
-    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
-}
-
-template <typename F, typename... Ts, typename... T2s>
-void visit2_at(const std::tuple<Ts...>& tup1, std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
-    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
-}
-
-template <typename F, typename... Ts, typename... T2s>
-void visit2_at(std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t idx, F&& fun) {
-    visit2_impl<sizeof...(Ts)>::visit(tup1, tup2, idx, std::forward<F>(fun));
+template <typename F, typename T1, typename T2>
+void visit2_at(T1& tup1, T2& tup2, size_t idx, F&& fun) {
+    visit2_impl<std::tuple_size<typename std::remove_cv<T1>::type>::value>::visit(
+        tup1, tup2, idx, std::forward<F>(fun));
 }
 
 #define ZEROERR_ENABLE_IF(x) \
@@ -1318,10 +1368,7 @@ void visit2_at(std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t i
 #define ZEROERR_IS_ARRAY      detail::is_array<T>::value
 #define ZEROERR_IS_COMPLEX    detail::is_complex<T>::value
 #define ZEROERR_IS_BOOL       std::is_same<T, bool>::value
-#define ZEROERR_IS_AUTOPTR                                   \
-    (detail::is_specialization<T, std::unique_ptr>::value || \
-     detail::is_specialization<T, std::shared_ptr>::value || \
-     detail::is_specialization<T, std::weak_ptr>::value)
+#define ZEROERR_IS_AUTOPTR detail::is_pointer_like<T>::value
 #define ZEROERR_IS_MAP detail::ele_type_is_pair<T>::value
 #define ZEROERR_IS_POD std::is_standard_layout<T>::value
 #define ZEROERR_IS_EXT detail::has_extension<T>::value
@@ -1409,6 +1456,8 @@ zeroerr::String assertionText(const zeroerr::String& condition, const zeroerr::S
 #include <functional>
 
 #include <memory>
+#include <initializer_list>
+#include <typeinfo>
 
 #if defined(ZEROERR_ENABLE_PFR) && (ZEROERR_CXX_STANDARD >= 14)
 #include "pfr.hpp"
@@ -1433,7 +1482,7 @@ constexpr unsigned max_rank = 5;
 
 struct Printer;
 template <typename T>
-void PrinterExt(Printer&, T&&, unsigned, const char*, rank<0>);
+void PrinterExt(Printer&, const T&, unsigned, const char*, rank<0>);
 
 namespace detail {
 
@@ -1519,10 +1568,10 @@ public:
 
 #if defined(ZEROERR_ENABLE_MAGIC_ENUM) && (ZEROERR_CXX_STANDARD >= 17)
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
-    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
+    print(const T& value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
 #else
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
-    print(T value, unsigned level, const char* lb, rank<0>) {
+    print(const T& value, unsigned level, const char* lb, rank<0>) {
         if constexpr (detail::is_streamable<std::ostream, T>::value) {
             os << tab(level) << value << lb;
         } else {
@@ -1532,11 +1581,11 @@ public:
 #endif
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_INT || ZEROERR_IS_FLOAT)
-    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
+    print(const T& value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_POINTER &&
                       !std::is_function<typename std::remove_pointer<T>::type>::value)
-    print(T value, unsigned level, const char* lb, rank<0>) {
+    print(const T& value, unsigned level, const char* lb, rank<0>) {
         if (value == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
@@ -1563,14 +1612,21 @@ public:
     }
 
 
+    // Preserve the pointer fallback for built-in arrays; character arrays use
+    // the higher-priority string rule.
+    template <typename T, std::size_t N>
+    void print(const T (&value)[N], unsigned level, const char* lb, rank<0>) {
+        print(value + 0, level, lb, rank<max_rank>{});
+    }
+
     ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS)
-    print(T value, unsigned level, const char* lb, rank<0>) {
+    print(const T& value, unsigned level, const char* lb, rank<0>) {
         os << tab(level) << type(value) << lb;
     }
 
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_CHAR || ZEROERR_IS_WCHAR)
-    print(T value, unsigned level, const char* lb, rank<1>) {
+    print(const T& value, unsigned level, const char* lb, rank<1>) {
         os << tab(level) << '\'' << value << '\'' << lb;
     }
 
@@ -1591,12 +1647,12 @@ public:
 #endif
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_BOOL)
-    print(T value, unsigned level, const char* lb, rank<2>) {
+    print(const T& value, unsigned level, const char* lb, rank<2>) {
         os << tab(level) << (value ? "true" : "false") << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS && ZEROERR_IS_STREAMABLE)
-    print(T value, unsigned level, const char* lb, rank<2>) { os << tab(level) << value << lb; }
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS && ZEROERR_IS_STREAMABLE && !ZEROERR_IS_CONTAINER)
+    print(const T& value, unsigned level, const char* lb, rank<2>) { os << tab(level) << value << lb; }
 
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER)
@@ -1604,7 +1660,8 @@ public:
         os << tab(level) << "{" << (isCompact ? "" : line_break);
         bool last = false;
         for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            auto next = iter; ++next;
+            auto next = iter;
+            ++next;
             if (next == value.end()) last = true;
             print(*iter, level + 1, isCompact ? (last ? "" : ", ") : line_break, rank<max_rank>{});
         }
@@ -1616,7 +1673,8 @@ public:
         os << tab(level) << "[";
         bool last = false;
         for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            auto next = iter; ++next;
+            auto next = iter;
+            ++next;
             if (next == value.end()) last = true;
             print(*iter, 0, last ? "" : ", ", rank<max_rank>{});
         }
@@ -1624,38 +1682,57 @@ public:
     }
 
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_AUTOPTR)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_AUTOPTR && !ZEROERR_IS_CONTAINER)
     print(const T& value, unsigned level, const char* lb, rank<3>) {
         if (value.get() == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
-            os << tab(level) << "<" << type(value) << " at " << value.get() << ">" << lb;
+            os << tab(level) << "<" << type(value) << " at " << static_cast<const void*>(value.get()) << ">" << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER && ZEROERR_IS_MAP)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER && ZEROERR_IS_MAP && !ZEROERR_IS_STRING &&
+                      !ZEROERR_IS_COMPLEX && !detail::is_weak_pointer_like<T>::value)
     print(const T& value, unsigned level, const char* lb, rank<4>) {
         os << tab(level) << "{" << (isCompact ? "" : line_break);
         bool last = false;
         for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            auto next = iter; ++next;
+            auto next = iter;
+            ++next;
             if (next == value.end()) last = true;
-            print(iter->first, level + 1, " : ", rank<max_rank>{});
-            print(iter->second, level + 1, isCompact ? (last ? "" : ", ") : line_break,
+            print((*iter).first, level + 1, " : ", rank<max_rank>{});
+            print((*iter).second, level + 1, isCompact ? (last ? "" : ", ") : line_break,
                   rank<max_rank>{});
         }
         os << tab(level) << "}" << lb;
     }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_COMPLEX)
-    print(T value, unsigned level, const char* lb, rank<4>) {
+    ZEROERR_ENABLE_IF(detail::is_weak_pointer_like<T>::value && !ZEROERR_IS_STRING && !ZEROERR_IS_COMPLEX)
+    print(const T& value, unsigned level, const char* lb, rank<4>) {
+        const auto locked = value.lock();
+        print(locked, level, lb, rank<3>{});
+    }
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_COMPLEX && !ZEROERR_IS_STRING)
+    print(const T& value, unsigned level, const char* lb, rank<4>) {
         os << tab(level) << "(" << value.real() << "+" << value.imag() << "i)" << lb;
     }
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_STRING)
-    print(T value, unsigned level, const char* lb, rank<4>) {
+    print(const T& value, unsigned level, const char* lb, rank<4>) {
         os << tab(level) << quote();
-        print_text(value);
+        write_string(value, typename detail::is_string_like<T>::type{});
         os << quote() << lb;
+    }
+
+    template <class T>
+    void write_string(const T& value, std::true_type) {
+        if (value.size() != 0)
+            os.write(value.data(), static_cast<std::size_t>(value.size()));
+    }
+    template <class T>
+    void write_string(const T& value, std::false_type) {
+        const char* text = value;
+        os << (text ? text : "nullptr");
     }
 
     template <class TupType>
@@ -1664,14 +1741,14 @@ public:
     template <class TupType, unsigned... I>
     inline void print_tuple(const TupType& _tup, unsigned level, const char*, detail::seq<I...>) {
         int _[] = {(os << (I == 0 ? "" : ", "),
-                    print(std::get<I>(_tup), level + 1, "", rank<max_rank>{}), 0)...};
+                    print(detail::tuple_get<I>(_tup), level + 1, "", rank<max_rank>{}), 0)...};
         (void)_;
     }
 
-    template <class... Args>
-    void print(const std::tuple<Args...>& value, unsigned level, const char* lb, rank<3>) {
+    ZEROERR_ENABLE_IF(detail::is_tuple_like<T>::value && !ZEROERR_IS_CONTAINER && !ZEROERR_IS_AUTOPTR)
+    print(const T& value, unsigned level, const char* lb, rank<3>) {
         os << tab(level) << "(";
-        print_tuple(value, level, isCompact ? " " : line_break, detail::gen_seq<sizeof...(Args)>{});
+        print_tuple(value, level, isCompact ? " " : line_break, detail::gen_seq<std::tuple_size<T>::value>{});
         os << ")" << lb;
     }
 
@@ -1729,8 +1806,8 @@ DiagnosticValue makeDiagnosticValue(T& value) {
  * @param r  the rank of the rule. 0 is lowest priority.
  */
 template <class T>
-void PrinterExt(Printer& P, T&& v, unsigned level, const char* lb, rank<0>) {
-    P.print(std::forward<T>(v), level, lb, rank<max_rank>{});
+void PrinterExt(Printer& P, const T& v, unsigned level, const char* lb, rank<0>) {
+    P.print(v, level, lb, rank<max_rank>{});
 }
 
 extern Printer& getStdoutPrinter();
@@ -1742,6 +1819,7 @@ extern Printer& getStderrPrinter();
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 #pragma once
+#include <sstream>
 
 
 
@@ -3721,6 +3799,7 @@ private:
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #pragma once
+#include <tuple>
 
 
 
@@ -5342,7 +5421,10 @@ operator<<(StringBuffer& buffer, const T& value) {
 
 template <class T>
 typename std::enable_if<std::is_class<typename std::decay<T>::type>::value && !detail::is_string<typename std::decay<T>::type>::value &&
-                            !detail::is_container<typename std::decay<T>::type>::value && !detail::is_complex<typename std::decay<T>::type>::value &&
+                            !detail::is_container<typename std::decay<T>::type>::value &&
+                            !detail::is_pointer_like<typename std::decay<T>::type>::value &&
+                            !detail::is_weak_pointer_like<typename std::decay<T>::type>::value &&
+                            !detail::is_tuple_like<typename std::decay<T>::type>::value && !detail::is_complex<typename std::decay<T>::type>::value &&
                             detail::is_streamable<std::ostream, T>::value,
                         void>::type
 PrinterExt(Printer& printer, T&& value, unsigned level, const char* lb, rank<1>) {

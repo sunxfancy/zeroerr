@@ -72,7 +72,10 @@ operator<<(StringBuffer& buffer, const T& value) {
 
 template <class T>
 typename std::enable_if<std::is_class<typename std::decay<T>::type>::value && !detail::is_string<typename std::decay<T>::type>::value &&
-                            !detail::is_container<typename std::decay<T>::type>::value && !detail::is_complex<typename std::decay<T>::type>::value &&
+                            !detail::is_container<typename std::decay<T>::type>::value &&
+                            !detail::is_pointer_like<typename std::decay<T>::type>::value &&
+                            !detail::is_weak_pointer_like<typename std::decay<T>::type>::value &&
+                            !detail::is_tuple_like<typename std::decay<T>::type>::value && !detail::is_complex<typename std::decay<T>::type>::value &&
                             detail::is_streamable<std::ostream, T>::value,
                         void>::type
 PrinterExt(Printer& printer, T&& value, unsigned level, const char* lb, rank<1>) {
