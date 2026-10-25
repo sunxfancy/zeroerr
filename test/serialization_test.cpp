@@ -1,4 +1,5 @@
 #include "zeroerr/assert.h"
+#include "zeroerr/std_adapter.h"
 #include "zeroerr/internal/serialization.h"
 #include "zeroerr/unittest.h"
 

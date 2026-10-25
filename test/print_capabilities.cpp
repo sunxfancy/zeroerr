@@ -3,6 +3,7 @@
 #include "print_capabilities_stl.h"
 #endif
 #include "zeroerr/print.h"
+#include "zeroerr/std_adapter.h"
 #ifndef ZEROERR_TEST_STL_FIRST
 #include "print_capabilities_stl.h"
 #endif

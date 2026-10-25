@@ -5,7 +5,6 @@
 
 #include <algorithm>
 #include <map>
-#include <sstream>
 
 namespace zeroerr {
 
@@ -216,7 +215,7 @@ static Table::Style DOUBLE_EDGE{
 // clang-format on
 
 struct StyleManager {
-    std::map<std::string, Table::Style> styles;
+    std::map<zeroerr::String, Table::Style> styles;
 
     static StyleManager& instance() {
         static StyleManager instance;
@@ -242,10 +241,10 @@ struct StyleManager {
     }
 };
 
-void Table::registerStyle(std::string name, Table::Style style) {
+void Table::registerStyle(zeroerr::String name, Table::Style style) {
     StyleManager::instance().styles[name] = style;
 }
-Table::Style Table::getStyle(std::string name) { return StyleManager::instance().styles[name]; }
+Table::Style Table::getStyle(zeroerr::String name) { return StyleManager::instance().styles[name]; }
 
 // TODO: Refactor those macros into functions
 #define left  (c.show_lr_border ? s.m_args[p] : "")
@@ -263,7 +262,7 @@ Table::Style Table::getStyle(std::string name) { return StyleManager::instance()
     for (size_t i = 0; i < header.size(); ++i)
 
 
-inline std::string _rept(unsigned k, std::string j, Table::Style&) {
+inline zeroerr::String _rept(unsigned k, zeroerr::String j, Table::Style&) {
     std::stringstream ss;
     for (unsigned i = 0; i < k; i++) {
         ss << j;
@@ -274,7 +273,7 @@ inline std::string _rept(unsigned k, std::string j, Table::Style&) {
 #define rep(k, t) _rept(k, t, s)
 #define remain(k) (col_width[i] - static_cast<unsigned>(k.size()))
 
-std::string Table::str(Config c, Table::Style s) {
+zeroerr::String Table::str(Config c, Table::Style s) {
     std::stringstream ss;
 
     for (auto& row : cells) {

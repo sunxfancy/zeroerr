@@ -1,4 +1,13 @@
 #pragma once
+
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
 #include "zeroerr/internal/config.h"
 
 #include "zeroerr/internal/threadsafe.h"
@@ -8,10 +17,10 @@
 #include "zeroerr/format.h"
 #include "zeroerr/print.h"
 
-#include <chrono>
+#include "zeroerr/internal/time.h"
 #include <iosfwd>
 #include <map>
-#include <string>
+#include "zeroerr/string.h"
 #include <utility>
 #include <vector>
 
@@ -176,8 +185,8 @@ extern int _ZEROERR_G_VERBOSE;
     ZEROERR_INFO_IMPL(ZEROERR_NAMEGEN(_capture_), ZEROERR_NAMEGEN(_capture_), __VA_ARGS__)
 
 #define ZEROERR_INFO_IMPL(mb_name, v_name, ...)                                \
-    auto v_name = zeroerr::MakeContextScope([&](std::ostream& _capture_name) { \
-        Printer print(_capture_name);                                          \
+    auto v_name = zeroerr::MakeContextScope([&](zeroerr::StringBuffer& _capture_name) { \
+        zeroerr::Printer print(_capture_name);                                          \
         print.isQuoted = false;                                                \
         print(__VA_ARGS__);                                                    \
     })
@@ -189,7 +198,7 @@ extern int _ZEROERR_G_VERBOSE;
 #define ZEROERR_G_CONTEXT_SCOPE(x)                                                     \
     if (x) {                                                                           \
         for (auto* zeroerr_context_scope : zeroerr::_ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
-            zeroerr_context_scope->str(std::cerr);                                     \
+            zeroerr_context_scope->str(zeroerr::getStderrPrinter().os);                                     \
         }                                                                              \
     }
 
@@ -209,12 +218,12 @@ extern int _ZEROERR_G_VERBOSE;
 namespace detail {
 
 template <typename T, unsigned... I>
-std::string gen_str(const char* msg, const T& args, seq<I...>) {
+zeroerr::String gen_str(const char* msg, const T& args, seq<I...>) {
     return format(msg, std::get<I>(args)...);
 }
 
 template <typename T>
-std::string gen_str(const char* msg, const T&, seq<>) {
+zeroerr::String gen_str(const char* msg, const T&, seq<>) {
     return msg;
 }
 
@@ -250,7 +259,7 @@ enum LogSeverity {
  *          __LINE__,
  *          sizeof("Hello, world!"),
  *          LogSeverity::INFO_l);
- *      LogMessage* logdata = new LogMessageImpl<std::string>("John");
+ *      LogMessage* logdata = new LogMessageImpl<zeroerr::String>("John");
  *      logdata->info = &log_info;
  *    }
  */
@@ -262,14 +271,14 @@ struct LogInfo {
     unsigned                   line;
     unsigned                   size;
     LogSeverity                severity;
-    std::map<std::string, int> names;
+    std::map<zeroerr::String, int> names;
 
     LogInfo(const char* filename, const char* function, const char* message, const char* category,
             unsigned line, unsigned size, LogSeverity severity);
 };
 
 struct LogMessage;
-typedef std::string (*LogCustomCallback)(const LogMessage&, bool colorful);
+typedef zeroerr::String (*LogCustomCallback)(const LogMessage&, bool colorful);
 
 /**
  * @brief set the log level
@@ -306,24 +315,24 @@ extern void resumeLog();
  */
 struct LogMessage {
     // time is assigned when the log message is created
-    LogMessage() { time = std::chrono::system_clock::now(); }
+    LogMessage();
 
     // convert the log message to a string
-    virtual std::string str() const = 0;
+    virtual zeroerr::String str() const = 0;
 
     // get the raw data pointer of the field with the name
-    virtual void* getRawLog(std::string name) const = 0;
+    virtual void* getRawLog(zeroerr::String name) const = 0;
 
     // a map of the data indexing by the field name
     // for example: log("print {i}", 1);
     // a map of {"i": "1"} will be returned
-    virtual std::map<std::string, std::string> getData() const = 0;
+    virtual std::map<zeroerr::String, zeroerr::String> getData() const = 0;
 
     // meta data of this log message
     const LogInfo* info;
 
     // recorded wall time
-    std::chrono::system_clock::time_point time;
+    Timestamp time;
 };
 
 
@@ -338,7 +347,7 @@ struct LogMessageImpl final : LogMessage {
     std::tuple<T...> args;
     LogMessageImpl(T... args) : LogMessage(), args(std::move(args)...) {}
 
-    std::string str() const override {
+    zeroerr::String str() const override {
         return gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
     }
 
@@ -351,16 +360,16 @@ struct LogMessageImpl final : LogMessage {
         }
     };
 
-    void* getRawLog(std::string name) const override {
+    void* getRawLog(zeroerr::String name) const override {
         GetTuplePtr f;
         detail::visit_at(args, info->names.at(name), f);
         return f.ptr;
     }
 
     struct PrintTupleData {
-        std::map<std::string, std::string> data;
+        std::map<zeroerr::String, zeroerr::String> data;
         Printer                            print;
-        std::string                        name;
+        zeroerr::String                        name;
 
         PrintTupleData() : print() {
             print.isCompact  = true;
@@ -373,7 +382,7 @@ struct LogMessageImpl final : LogMessage {
         }
     };
 
-    std::map<std::string, std::string> getData() const override {
+    std::map<zeroerr::String, zeroerr::String> getData() const override {
         PrintTupleData printer;
         for (auto it = info->names.begin(); it != info->names.end(); ++it) {
             printer.name = it->first;
@@ -419,7 +428,7 @@ struct PushResult {
 class LogIterator {
 public:
     LogIterator() : p(nullptr), q(nullptr) {}
-    LogIterator(LogStream& stream, std::string message = "", std::string function_name = "",
+    LogIterator(LogStream& stream, zeroerr::String message = "", zeroerr::String function_name = "",
                 int line = -1);
     LogIterator(const LogIterator& rhs) : p(rhs.p), q(rhs.q) {}
     LogIterator& operator=(const LogIterator& rhs) {
@@ -436,7 +445,7 @@ public:
     }
 
     template <typename T>
-    T get(std::string name) {
+    T get(zeroerr::String name) {
         void* data = q->getRawLog(name);
         if (data) return *(T*)(data);
         return T{};
@@ -460,8 +469,8 @@ protected:
     DataBlock*  p;
     LogMessage* q;
 
-    std::string function_name_filter;
-    std::string message_filter;
+    zeroerr::String function_name_filter;
+    zeroerr::String message_filter;
     int         line_filter = -1;
 };
 
@@ -505,7 +514,7 @@ public:
      *
      * The stored data type is determined by the to_store_type_t<T> template.
      * For all the string type in raw pointer like const char* or char[],
-     * it will be converted to std::string.
+     * it will be converted to zeroerr::String.
      * All reference type (including right value reference) will be converted
      * to the original type.
      */
@@ -536,7 +545,7 @@ public:
      * T. However, this type must be specified by the caller.
      */
     template <typename T>
-    T getLog(std::string func, unsigned line, std::string name) {
+    T getLog(zeroerr::String func, unsigned line, zeroerr::String name) {
         void* data = getRawLog(func, line, name);
         if (data) return *(T*)(data);
         return T{};
@@ -554,20 +563,20 @@ public:
      * T. However, this type must be specified by the caller.
      */
     template <typename T>
-    T getLog(std::string func, std::string msg, std::string name) {
+    T getLog(zeroerr::String func, zeroerr::String msg, zeroerr::String name) {
         void* data = getRawLog(func, msg, name);
         if (data) return *(T*)(data);
         return T{};
     }
 
-    LogIterator begin(std::string message = "", std::string function_name = "", int line = -1) {
+    LogIterator begin(zeroerr::String message = "", zeroerr::String function_name = "", int line = -1) {
         return LogIterator(*this, message, function_name, line);
     }
     LogIterator end() { return LogIterator(); }
-    LogIterator current(std::string message = "", std::string function_name = "", int line = -1);
+    LogIterator current(zeroerr::String message = "", zeroerr::String function_name = "", int line = -1);
 
     void flush();
-    void setFileLogger(std::string name, DirMode mode1 = SINGLE_FILE, DirMode mode2 = SINGLE_FILE,
+    void setFileLogger(zeroerr::String name, DirMode mode1 = SINGLE_FILE, DirMode mode2 = SINGLE_FILE,
                        DirMode mode3 = SINGLE_FILE);
     void setStdoutLogger();
     void setStderrLogger();
@@ -596,7 +605,7 @@ private:
     FlushMode flush_mode = FLUSH_AT_ONCE;
     LogMode   log_mode   = SYNC;
 #ifndef ZEROERR_NO_THREAD_SAFE
-    std::mutex* mutex;
+    detail::Mutex* mutex;
 #endif
 
     // The implementation of alloc objects by giving a size
@@ -605,8 +614,8 @@ private:
 
     // The implementation of getLog which returns a raw pointer
     // This way can reduce the overhead of code generation by template
-    void* getRawLog(std::string func, unsigned line, std::string name);
-    void* getRawLog(std::string func, std::string msg, std::string name);
+    void* getRawLog(zeroerr::String func, unsigned line, zeroerr::String name);
+    void* getRawLog(zeroerr::String func, zeroerr::String msg, zeroerr::String name);
 };
 
 
@@ -623,7 +632,7 @@ PushResult log(LogStream& stream, T&&... args) {
 
 /**
  * @brief ContextScope is a helper class created in each basic block where you use INFO().
- * The context scope can has lazy evaluated function F(std::ostream&) that is called when the
+ * The context scope can has lazy evaluated function F(zeroerr::StringBuffer&) that is called when the
  * assertation is failed
  */
 class IContextScope {
@@ -632,7 +641,7 @@ public:
      * @brief Output context information to a stream
      * @param os The output stream to write context to
      */
-    virtual void str(std::ostream& os) const = 0;
+    virtual void str(zeroerr::StringBuffer& os) const = 0;
 };
 
 extern thread_local std::vector<IContextScope*> _ZEROERR_G_CONTEXT_SCOPE_VECTOR;
@@ -649,7 +658,7 @@ public:
     ContextScope(F f) : f_(f) { _ZEROERR_G_CONTEXT_SCOPE_VECTOR.push_back(this); }
     ~ContextScope() { _ZEROERR_G_CONTEXT_SCOPE_VECTOR.pop_back(); }
 
-    virtual void str(std::ostream& os) const override { return f_(os); }
+    virtual void str(zeroerr::StringBuffer& os) const override { return f_(os); }
 
 protected:
     F f_;
@@ -670,3 +679,5 @@ ContextScope<F> MakeContextScope(const F& f) {
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")

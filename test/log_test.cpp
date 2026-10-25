@@ -1,6 +1,8 @@
+#include <iostream>
 #define ZEROERR_ENABLE_PFR
 #define ZEROERR_ENABLE_SPEED_TEST
 
+#include "zeroerr/std_adapter.h"
 #include "zeroerr/log.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/benchmark.h"

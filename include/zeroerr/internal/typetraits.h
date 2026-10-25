@@ -1,10 +1,23 @@
 #pragma once
+
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
 #include "zeroerr/internal/config.h"
 
-#include <cstddef>
-#include <iosfwd>
-#include <string>
+
+
+#include "zeroerr/string.h"
+#include <tuple>  // this should be removed
 #include <type_traits>
+
+#include <memory>
+#include <cstddef>
 #include <utility>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -32,7 +45,10 @@ template <>
 struct rank<0> {};
 
 
+class StringBuffer;
 namespace detail {
+
+
 
 // C++11 void_t
 template <typename... Ts>
@@ -115,7 +131,6 @@ template <typename T>
 struct is_associative_container<T, has_begin_end_find_insert<T>> : std::true_type {};
 
 
-// Detect the operations used by the printer, without naming STL wrappers.
 template <typename T, typename = void>
 struct is_string_like : std::false_type {};
 
@@ -127,6 +142,8 @@ struct is_string_like<T, void_t<typename T::traits_type::char_type,
           std::is_same<typename T::traits_type::char_type, char>::value &&
           std::is_convertible<decltype(std::declval<const T&>().data()), const char*>::value &&
           std::is_convertible<decltype(std::declval<const T&>().size()), std::size_t>::value> {};
+
+template<> struct is_string_like<zeroerr::String> : std::true_type {};
 
 template <class T>
 struct is_string : std::integral_constant<bool,
@@ -244,12 +261,12 @@ struct to_store_type {
 
 template <>
 struct to_store_type<const char*> {
-    using type = std::string;
+    using type = zeroerr::String;
 };
 
 template <>
 struct to_store_type<const char (&)[]> {
-    using type = std::string;
+    using type = zeroerr::String;
 };
 
 template <typename T>
@@ -326,7 +343,7 @@ void visit2_at(T1& tup1, T2& tup2, size_t idx, F&& fun) {
 #define ZEROERR_IS_CHAR       std::is_same<T, char>::value
 #define ZEROERR_IS_WCHAR      std::is_same<T, wchar_t>::value
 #define ZEROERR_IS_CLASS      std::is_class<T>::value
-#define ZEROERR_IS_STREAMABLE detail::is_streamable<std::ostream, T>::value
+#define ZEROERR_IS_STREAMABLE detail::is_streamable<zeroerr::StringBuffer, T>::value
 #define ZEROERR_IS_ARRAY      detail::is_array<T>::value
 #define ZEROERR_IS_COMPLEX    detail::is_complex<T>::value
 #define ZEROERR_IS_BOOL       std::is_same<T, bool>::value
@@ -341,3 +358,4 @@ void visit2_at(T1& tup1, T2& tup2, size_t idx, F&& fun) {
 
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")

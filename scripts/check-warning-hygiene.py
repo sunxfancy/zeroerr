@@ -40,7 +40,7 @@ def main():
                           ["/W4", "/we4456", "/we4458"] if msvc else [])
         # Pragmas cannot separate a function/lambda declarator from its body.
         for header in ("zeroerr/fuzztest.h", "zeroerr.hpp"):
-            compile_probe(f'#include "{header}"\n'
+            compile_probe('#define ZEROERR_ENABLE_FUZZTEST\n' + f'#include "{header}"\n'
                           'FUZZ_TEST_CASE("fuzz declaration") {}\n'
                           'TEST_CASE("subcase declaration") { SUB_CASE("child") {}; }\n', [])
         implementation = '#define ZEROERR_IMPLEMENTATION\n#include "zeroerr.hpp"\n'

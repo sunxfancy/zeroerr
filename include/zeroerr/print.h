@@ -1,12 +1,23 @@
 #pragma once
+
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
 #include "zeroerr/internal/config.h"
 
 #include "zeroerr/color.h"
+#include "zeroerr/internal/text.h"
+#include "zeroerr/buffer.h"
 #include "zeroerr/internal/typetraits.h"
 #include <functional>
 
+#include <memory>
 #include <initializer_list>
-#include <ostream>
 #include <typeinfo>
 
 #if defined(ZEROERR_ENABLE_PFR) && (ZEROERR_CXX_STANDARD >= 14)
@@ -74,7 +85,9 @@ struct Printer {
         return *this;
     }
 
-    void check_stream();
+    void check_stream() {
+        if (use_stringstream && clear_stream_before_printing) os.clear();
+    }
 
     template <typename T, typename... V>
     void call(T&& value, V&&... others) {
@@ -89,23 +102,28 @@ struct Printer {
         os.flush();
     }
 
-    Printer(std::ostream& os) : os(os) {}
-    Printer();
-    ~Printer() {
-        if (use_stringstream) delete &os;
-    }
+private:
+    StringBuffer storage_;
+public:
+    Printer() : os(storage_) { use_stringstream = true; }
+    template <class Stream>
+    explicit Printer(Stream& stream) : os(storage_) { storage_.attach(stream); }
+    Printer(const Printer& other) : storage_(other.storage_), isColorful(other.isColorful),
+        isCompact(other.isCompact), isQuoted(other.isQuoted), indent(other.indent),
+        line_break(other.line_break), os(storage_), use_stringstream(other.use_stringstream),
+        clear_stream_before_printing(other.clear_stream_before_printing) {}
 
     bool          isColorful = true;   // colorful output
     bool          isCompact  = false;  // compact mode
     bool          isQuoted   = true;   // string is quoted
     int           indent     = 2;
     const char*   line_break = "\n";
-    std::ostream& os;
+    StringBuffer& os;
     bool          use_stringstream             = false;
     bool          clear_stream_before_printing = true;
 
     template <class T>
-    static std::string type(const T& t) {
+    static zeroerr::String type(const T& t) {
         return demangle(typeid(t).name());
     }
 
@@ -270,7 +288,7 @@ struct Printer {
     template <class T>
     void write_string(const T& value, std::true_type) {
         if (value.size() != 0)
-            os.write(value.data(), static_cast<std::streamsize>(value.size()));
+            os.write(value.data(), static_cast<std::size_t>(value.size()));
     }
     template <class T>
     void write_string(const T& value, std::false_type) {
@@ -295,19 +313,42 @@ struct Printer {
         os << ")" << lb;
     }
 
-    std::string tab(unsigned level) { return std::string((isCompact ? 0 : level * indent), ' '); }
+    void print_text(const char* value) { os << value; }
+    template <class T> void print_text(const T& value) { os.write(value.data(), value.size()); }
+    zeroerr::String tab(unsigned level);
     const char* quote() { return isQuoted ? "\"" : ""; }
 
-    static std::string demangle(const char* name);
+    static zeroerr::String demangle(const char* name);
 
-    std::string str() const;
-    operator std::string() const { return str(); }
+    zeroerr::String str() const;
+    operator zeroerr::String() const { return str(); }
+    template <class T, typename std::enable_if<detail::StringLike<T>::owning &&
+        !std::is_same<T, String>::value, int>::type = 0>
+    operator T() const { return str(); }
 
-    friend std::ostream& operator<<(std::ostream& os, const Printer& P) {
-        if (P.use_stringstream) os << P.str();
-        return os;
-    }
 };
+
+inline StringBuffer& operator<<(StringBuffer& buffer, const Printer& printer) {
+    if (printer.use_stringstream) buffer << printer.str();
+    return buffer;
+}
+
+namespace detail {
+
+// Only the concrete value dispatch is templated. Stream construction, printing
+// order, formatting and cleanup all live in the shared implementation.
+template <typename T>
+void printDiagnosticValue(Printer& printer, const void* value) {
+    printer.call(*static_cast<T*>(const_cast<void*>(value)));
+}
+
+template <typename T>
+DiagnosticValue makeDiagnosticValue(T& value) {
+    return {const_cast<const void*>(static_cast<const volatile void*>(std::addressof(value))),
+            &printDiagnosticValue<T>};
+}
+
+}  // namespace detail
 
 /**
  * @brief PrinterExt is an extension of Printer that allows user to write custom rules for printing.
@@ -337,3 +378,5 @@ extern Printer& getStderrPrinter();
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")

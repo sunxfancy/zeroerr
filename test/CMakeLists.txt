@@ -87,6 +87,13 @@ endif()
 
 enable_testing()
 add_test(NAME RunUnitTest COMMAND unittest)
+
+# Keep the existing unittest workload unchanged for code-size comparisons.
+add_executable(text_test text_test.cpp)
+target_link_libraries(text_test PRIVATE zeroerr)
+add_test(NAME RunTextTest COMMAND text_test)
+
+add_subdirectory(lightweight)
 # Separate translation units ensure neither include order is masked by a PCH.
 foreach(order IN ITEMS zeroerr_first stl_first)
     add_executable(print_capabilities_${order} print_capabilities.cpp)

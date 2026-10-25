@@ -1,3 +1,7 @@
+#include <stdexcept>
+#include <sstream>
+#include <iostream>
+#include <chrono>
 #include "zeroerr/log.h"
 #include "zeroerr/internal/threadsafe.h"
 
@@ -21,7 +25,7 @@ int _ZEROERR_G_VERBOSE = 0;
 
 thread_local std::vector<IContextScope*> _ZEROERR_G_CONTEXT_SCOPE_VECTOR;
 
-static std::string       DefaultLogCallback(const LogMessage& msg, bool colorful);
+static zeroerr::String       DefaultLogCallback(const LogMessage& msg, bool colorful);
 static LogCustomCallback log_custom_callback = DefaultLogCallback;
 void setLogCustomCallback(LogCustomCallback callback) { log_custom_callback = callback; }
 
@@ -41,7 +45,7 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
             const char* q = p + 1;
             while (*q && *q != '}') q++;
             if (*q == '}') {
-                std::string N(p + 1, (size_t)(q - p - 1));
+                zeroerr::String N(p + 1, (size_t)(q - p - 1));
                 names[N] = static_cast<int>(names.size());
                 p        = q;
             }
@@ -66,7 +70,7 @@ LogStream::LogStream() {
     first = m_last = new DataBlock();
     prepare        = new DataBlock();
 #ifndef ZEROERR_NO_THREAD_SAFE
-    mutex = new std::mutex();
+    mutex = new detail::Mutex();
 #endif
     setStderrLogger();
 }
@@ -131,7 +135,7 @@ void* LogStream::alloc_block_lockfree(unsigned size) {
     return alloc_block(size);
 #endif
 }
-LogIterator LogStream::current(std::string message, std::string function_name, int line) {
+LogIterator LogStream::current(zeroerr::String message, zeroerr::String function_name, int line) {
     LogIterator iter(*this, message, function_name, line);
     DataBlock*  last = ZEROERR_LOAD(m_last);
     iter.p           = last;
@@ -157,18 +161,18 @@ static LogMessage* moveBytes(LogMessage* p, unsigned size) {
     return (LogMessage*)dst;
 }
 
-void* LogStream::getRawLog(std::string func, unsigned line, std::string name) {
+void* LogStream::getRawLog(zeroerr::String func, unsigned line, zeroerr::String name) {
     for (DataBlock* p = first; p; p = p->next)
         for (auto q = p->begin(); q < p->end(); q = moveBytes(q, q->info->size))
             if (line == q->info->line && func == q->info->function) return q->getRawLog(name);
     return nullptr;
 }
 
-static bool startWith(const std::string& str, const std::string& prefix) {
+static bool startWith(const zeroerr::String& str, const zeroerr::String& prefix) {
     return str.rfind(prefix, 0) == 0;
 }
 
-void* LogStream::getRawLog(std::string func, std::string msg, std::string name) {
+void* LogStream::getRawLog(zeroerr::String func, zeroerr::String msg, zeroerr::String name) {
     for (DataBlock* p = first; p; p = p->next)
         for (auto q = p->begin(); q < p->end(); q = moveBytes(q, q->info->size))
             if (startWith(q->info->message, msg) && func == q->info->function)
@@ -176,7 +180,7 @@ void* LogStream::getRawLog(std::string func, std::string msg, std::string name) 
     return nullptr;
 }
 
-LogIterator::LogIterator(LogStream& stream, std::string message, std::string function_name,
+LogIterator::LogIterator(LogStream& stream, zeroerr::String message, zeroerr::String function_name,
                          int line)
     : p(stream.first),
       q(stream.first->begin()),
@@ -220,7 +224,7 @@ bool LogIterator::check_filter() {
     return true;
 }
 
-static FILE* openLogFile(const std::string& name) {
+static FILE* openLogFile(const zeroerr::String& name) {
 #ifdef _MSC_VER
     FILE* file = nullptr;
     fopen_s(&file, name.c_str(), "w");
@@ -244,7 +248,7 @@ static std::tm logLocalTime(std::time_t time) {
 
 class FileLogger : public Logger {
 public:
-    FileLogger(std::string name) { file = openLogFile(name); }
+    FileLogger(zeroerr::String name) { file = openLogFile(name); }
     ~FileLogger() {
         if (file) fclose(file);
     }
@@ -269,11 +273,11 @@ static char split = '\\';
 static char split = '/';
 #endif
 
-static void make_dir(std::string path) {
+static void make_dir(zeroerr::String path) {
     size_t pos = 0;
     do {
         pos             = path.find_first_of(split, pos + 1);
-        std::string sub = path.substr(0, pos);
+        zeroerr::String sub = path.substr(0, pos);
 #ifdef _WIN32
         CreateDirectory(sub.c_str(), NULL);
 #else
@@ -282,22 +286,22 @@ static void make_dir(std::string path) {
             mkdir(sub.c_str(), 0755);
         }
 #endif
-    } while (pos != std::string::npos);
+    } while (pos != zeroerr::String::npos);
 }
 
 struct FileCache {
-    std::map<std::string, FILE*> files;
+    std::map<zeroerr::String, FILE*> files;
     ~FileCache() {
         for (auto& p : files) {
             fclose(p.second);
         }
     }
 
-    FILE* get(const std::string& name) {
+    FILE* get(const zeroerr::String& name) {
         auto it = files.find(name);
         if (it != files.end()) return it->second;
         auto        p    = name.find_last_of(split);
-        std::string path = name.substr(0, p);
+        zeroerr::String path = name.substr(0, p);
         make_dir(path.c_str());
 
         FILE* file = openLogFile(name);
@@ -312,7 +316,7 @@ struct FileCache {
 
 class DirectoryLogger : public Logger {
 public:
-    DirectoryLogger(std::string path, LogStream::DirMode dir_mode[3]) : dirpath(path) {
+    DirectoryLogger(zeroerr::String path, LogStream::DirMode dir_mode[3]) : dirpath(path) {
         make_dir(path.c_str());
         for (int i = 0; i < 3; i++) {
             this->dir_mode[i] = dir_mode[i];
@@ -334,7 +338,7 @@ public:
                 if (last != 0 && dir_mode[i] != 0) path << split;
                 switch (dir_mode[i]) {
                     case LogStream::DAILY_FILE: {
-                        std::time_t t  = std::chrono::system_clock::to_time_t(p->time);
+                        std::time_t t  = static_cast<std::time_t>(p->time.nanoseconds / 1000000000);
                         std::tm     tm = logLocalTime(t);
                         path << std::put_time(&tm, "%Y-%m-%d");
                         break;
@@ -359,7 +363,7 @@ public:
     }
 
 protected:
-    std::string to_string(LogSeverity severity) {
+    zeroerr::String to_string(LogSeverity severity) {
         switch (severity) {
             case INFO_l:  return "INFO";
             case LOG_l:   return "LOG";
@@ -370,8 +374,8 @@ protected:
         return "";
     }
 
-    std::string to_category(const char* category) {
-        std::string cat = category;
+    zeroerr::String to_category(const char* category) {
+        zeroerr::String cat = category;
         for (auto& c : cat) {
             if (c == '/') c = split;
         }
@@ -379,7 +383,7 @@ protected:
     }
 
     LogStream::DirMode dir_mode[3];
-    std::string        dirpath;
+    zeroerr::String        dirpath;
 };
 
 class OStreamLogger : public Logger {
@@ -403,7 +407,7 @@ LogStream& LogStream::getDefault() {
     return stream;
 }
 
-void LogStream::setFileLogger(std::string name, DirMode mode1, DirMode mode2, DirMode mode3) {
+void LogStream::setFileLogger(zeroerr::String name, DirMode mode1, DirMode mode2, DirMode mode3) {
     if (logger) delete logger;
 
     if (mode1 == 0 || mode2 == 0 || mode3 == 0)
@@ -428,16 +432,16 @@ void LogStream::setStderrLogger() {
 
 static LogSeverity LogLevel;
 
-static std::unordered_set<std::string> LogCategory;
-static std::vector<std::string>        AllLogCategory;
+static std::unordered_set<zeroerr::String> LogCategory;
+static std::vector<zeroerr::String>        AllLogCategory;
 
 
 void setLogLevel(LogSeverity level) { LogLevel = level; }
 
 void setLogCategory(const char* categories) {
     LogCategory.clear();
-    std::string str = categories;
-    std::string cat;
+    zeroerr::String str = categories;
+    zeroerr::String cat;
     for (auto c : str) {
         if (c == ',') {
             LogCategory.insert(cat);
@@ -464,9 +468,9 @@ void resumeLog() {
 }
 
 #define zeroerr_color(x) (colorful ? x : "")
-static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
+static zeroerr::String DefaultLogCallback(const LogMessage& msg, bool colorful) {
     std::stringstream ss;
-    std::time_t       t  = std::chrono::system_clock::to_time_t(msg.time);
+    std::time_t       t  = static_cast<std::time_t>(msg.time.nanoseconds / 1000000000);
     std::tm           tm = logLocalTime(t);
 
     ss << zeroerr_color(Dim) << '[' << zeroerr_color(Reset);
@@ -479,12 +483,12 @@ static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
     }
     ss << " " << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
 
-    std::string fileName(msg.info->filename);
+    zeroerr::String fileName(msg.info->filename);
 
     auto p = fileName.find_last_of('/');
-    if (p != std::string::npos) fileName = fileName.substr(p + 1);
+    if (p != zeroerr::String::npos) fileName = fileName.substr(p + 1);
     auto q = fileName.find_last_of('\\');
-    if (q != std::string::npos) fileName = fileName.substr(q + 1);
+    if (q != zeroerr::String::npos) fileName = fileName.substr(q + 1);
 
     ss << " " << fileName << ":" << msg.info->line;
     ss << zeroerr_color(Dim) << ']' << zeroerr_color(Reset) << "  " << msg.str();
@@ -494,3 +498,10 @@ static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
 #undef zeroerr_color
 
 }  // namespace zeroerr
+
+namespace zeroerr {
+LogMessage::LogMessage() {
+    time.nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+}
+}

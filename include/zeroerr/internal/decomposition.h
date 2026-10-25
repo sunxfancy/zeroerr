@@ -1,5 +1,4 @@
 #pragma once
-#include <sstream>
 
 #include "zeroerr/internal/config.h"
 
@@ -36,44 +35,27 @@ struct deferred_false {
 
 #define ZEROERR_EXPRESSION_COMPARISON(op, op_name)                                                 \
     template <typename R>                                                                          \
-    ZEROERR_SFINAE_OP(Expression<R>, op)                                                           \
-    operator op(R && rhs) {                                                                        \
-        std::stringstream ss;                                                                      \
-        Printer           print(ss);                                                               \
-        print.isCompact  = true;                                                                   \
-        print.line_break = "";                                                                     \
-        if (decomp.empty()) {                                                                      \
-            print(lhs);                                                                            \
-            res = true;                                                                            \
-        } else                                                                                     \
-            ss << decomp;                                                                          \
-        ss << " " #op " ";                                                                         \
-        print(rhs);                                                                                \
-        return Expression<R>(static_cast<R&&>(rhs), res && (lhs op rhs), ss.str());                \
+    ZEROERR_DIAGNOSTIC_NOINLINE ZEROERR_SFINAE_OP(Expression<R>, op) operator op(R&& rhs) {        \
+        zeroerr::String text =                                                                         \
+            detail::comparisonText(decomp, detail::makeDiagnosticValue(lhs), " " #op " ",          \
+                                   detail::makeDiagnosticValue(rhs), res);                         \
+        return Expression<R>(static_cast<R&&>(rhs), res && (lhs op rhs), std::move(text));         \
     }                                                                                              \
     template <typename R,                                                                          \
               typename std::enable_if<!std::is_rvalue_reference<R>::value, void>::type* = nullptr> \
-    ZEROERR_SFINAE_OP(Expression<const R&>, op)                                                    \
-    operator op(const R & rhs) {                                                                   \
-        std::stringstream ss;                                                                      \
-        Printer           print(ss);                                                               \
-        print.isCompact  = true;                                                                   \
-        print.line_break = "";                                                                     \
-        if (decomp.empty()) {                                                                      \
-            print(lhs);                                                                            \
-            res = true;                                                                            \
-        } else                                                                                     \
-            ss << decomp;                                                                          \
-        ss << " " #op " ";                                                                         \
-        print(rhs);                                                                                \
-        return Expression<const R&>(rhs, res && (lhs op rhs), ss.str());                           \
+    ZEROERR_DIAGNOSTIC_NOINLINE ZEROERR_SFINAE_OP(Expression<const R&>, op) operator op(           \
+        const R& rhs) {                                                                            \
+        zeroerr::String text =                                                                         \
+            detail::comparisonText(decomp, detail::makeDiagnosticValue(lhs), " " #op " ",          \
+                                   detail::makeDiagnosticValue(rhs), res);                         \
+        return Expression<const R&>(rhs, res && (lhs op rhs), std::move(text));                    \
     }
 
-#define ZEROERR_EXPRESSION_ANDOR(op, op_name)        \
-    ExprResult operator op(ExprResult rhs) {         \
-        std::stringstream ss;                        \
-        ss << decomp << " " #op " " << rhs.decomp;   \
-        return ExprResult(res op rhs.res, ss.str()); \
+
+#define ZEROERR_EXPRESSION_ANDOR(op, op_name)                                       \
+    ExprResult operator op(ExprResult rhs) {                                        \
+        return ExprResult(res op rhs.res,                                           \
+                          detail::joinDiagnostic(decomp, " " #op " ", rhs.decomp)); \
     }
 
 
@@ -87,9 +69,9 @@ struct deferred_false {
 
 struct ExprResult {
     bool        res;
-    std::string decomp;
+    zeroerr::String decomp;
 
-    ExprResult(bool res, std::string decomposition = "") : res(res), decomp(decomposition) {}
+    ExprResult(bool res, zeroerr::String decomposition = "") : res(res), decomp(decomposition) {}
 
     ZEROERR_EXPRESSION_ANDOR(&&, and)
     ZEROERR_EXPRESSION_ANDOR(||, or)
@@ -145,18 +127,15 @@ template <typename L>
 struct Expression {
     L           lhs;
     bool        res = true;
-    std::string decomp;
+    zeroerr::String decomp;
 
     explicit Expression(L&& in) : lhs(static_cast<L&&>(in)) { res = details::getBool(lhs); }
-    explicit Expression(L&& in, bool res, std::string&& decomp)
-        : lhs(static_cast<L&&>(in)), res(res), decomp(static_cast<std::string&&>(decomp)) {}
+    explicit Expression(L&& in, bool res, zeroerr::String&& decomp)
+        : lhs(static_cast<L&&>(in)), res(res), decomp(static_cast<zeroerr::String&&>(decomp)) {}
 
     operator ExprResult() {
         if (decomp.empty()) {
-            Printer print;
-            print.isCompact  = true;
-            print.line_break = "";
-            decomp           = print(lhs).str();
+            decomp = detail::valueText(detail::makeDiagnosticValue(lhs));
         }
         return ExprResult(res, decomp);
     }
@@ -318,10 +297,10 @@ struct StartWithMatcher : public IMatcher<T> {
 };
 
 template <typename T>
-typename std::enable_if<std::is_constructible<std::string, T>::value,
-                        IMatcherRef<std::string>>::type
+typename std::enable_if<std::is_constructible<zeroerr::String, T>::value,
+                        IMatcherRef<zeroerr::String>>::type
 start_with(T&& s) {
-    return new StartWithMatcher<std::string>(std::string(s));
+    return new StartWithMatcher<zeroerr::String>(zeroerr::String(s));
 }
 
 }  // namespace zeroerr

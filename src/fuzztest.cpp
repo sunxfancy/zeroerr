@@ -1,3 +1,4 @@
+#include <string>
 #include "zeroerr/fuzztest.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/log.h"
@@ -16,7 +17,7 @@ static IFuzzTest* current_fuzz_test = nullptr;
 }  // namespace zeroerr
 
 size_t LLVMFuzzerCustomMutator(uint8_t* data, size_t size, size_t max_size, unsigned int seed) {
-    const std::string mutated_data =
+    const zeroerr::String mutated_data =
         zeroerr::current_fuzz_test->MutateData(data, size, max_size, seed);
     if (mutated_data.size() > max_size) {
         WARN("Mutated data is larger than the limit({limit}). Returning the original data ({ori})",
@@ -34,7 +35,7 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
 #ifdef ZEROERR_ENABLE_FUZZING
     current_fuzz_test  = &fuzz_test;
     int         argc   = 6;
-    std::string argv[] = {
+    zeroerr::String argv[] = {
         "fuzztest",
         "-max_len=" + std::to_string(max_len),
         "-timeout=" + std::to_string(timeout),

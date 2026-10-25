@@ -34,7 +34,7 @@ namespace zeroerr {
  * Example:
  * ```cpp
  * auto domain = Arbitrary<int>(); // Generates random integers
- * auto domain = Arbitrary<std::string>(); // Generates random strings
+ * auto domain = Arbitrary<zeroerr::String>(); // Generates random strings
  * ```
  */
 
@@ -114,7 +114,7 @@ public:
 
 template <typename T>
 using is_string =
-    typename std::enable_if<detail::is_specialization<T, std::basic_string>::value>::type;
+    typename std::enable_if<detail::StringLike<T>::owning>::type;
 
 template <typename T>
 class Arbitrary<T, 2, is_string<T>> : public Domain<T, std::vector<typename T::value_type>> {

@@ -8,7 +8,7 @@
 
 #include <chrono>
 #include <cstdint>
-#include <string>
+#include "zeroerr/string.h"
 #include <vector>
 
 
@@ -95,7 +95,7 @@ struct BenchResult {
         branch_misses       = 1 << 7,
         all                 = (1 << 8) - 1,
     };
-    std::string                       name;
+    zeroerr::String                       name;
     std::vector<PerfCountSet<double>> epoch_details;
     PerfCountSet<bool>                has;
 
@@ -112,7 +112,7 @@ void        destroyBenchState(BenchState* state);
 
 size_t getNumIter(BenchState* state);
 void   runIteration(BenchState* state);
-void   moveResult(BenchState* state, std::string name);
+void   moveResult(BenchState* state, zeroerr::String name);
 
 
 /**
@@ -121,7 +121,7 @@ void   moveResult(BenchState* state, std::string name);
  * row of data. Report will print the data in console.
  */
 struct Benchmark {
-    std::string title          = "benchmark";
+    zeroerr::String title          = "benchmark";
     const char* op_unit        = "op";
     const char* time_unit      = "ns";
     uint64_t    epochs         = 10;
@@ -137,11 +137,11 @@ struct Benchmark {
 
     uint64_t minimalResolutionMutipler = 1000;
 
-    Benchmark(std::string title) { this->title = title; }
+    Benchmark(zeroerr::String title) { this->title = title; }
 
 
     template <typename Op>
-    Benchmark& run(std::string name, Op&& op) {
+    Benchmark& run(zeroerr::String name, Op&& op) {
         auto* s  = createBenchState(*this);
         auto& pc = PerformanceCounter::inst();
         while (auto n = getNumIter(s)) {

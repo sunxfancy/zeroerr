@@ -1,10 +1,20 @@
 #pragma once
 
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
+
 #include "zeroerr/internal/config.h"
 
-#include <chrono>
+#include "zeroerr/internal/time.h"
+#include <iosfwd>
 #include <functional>
-#include <string>
+#include "zeroerr/string.h"
 #include <vector>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -85,7 +95,7 @@ public:
     unsigned failed_as  = 0;
     unsigned skipped_as = 0;
 
-    std::chrono::duration<double> duration = std::chrono::duration<double>::zero();
+    Duration duration;
 
     IReporter& reporter;
 
@@ -158,14 +168,14 @@ struct UnitTest {
     bool            run_bench       = false;
     bool            run_fuzz        = false;
     bool            list_test_cases = false;
-    std::string     list_format     = "console";
+    zeroerr::String     list_format     = "console";
     bool            no_color        = false;
     bool            log_to_report   = false;
     bool            show_help       = false;
     bool            invalid_args    = false;
-    std::string     correct_output_path;
-    std::string     reporter_name = "console";
-    std::string     binary;
+    zeroerr::String     correct_output_path;
+    zeroerr::String     reporter_name = "console";
+    zeroerr::String     binary;
     struct Filters* filters = nullptr;
 };
 
@@ -179,8 +189,8 @@ struct UnitTest {
  * * subcases : The subcases that are defined in the test case.
  */
 struct TestCase {
-    std::string                       name;
-    std::string                       file;
+    zeroerr::String                       name;
+    zeroerr::String                       file;
     unsigned                          line;
     std::function<void(TestContext*)> func;
     std::vector<TestCase*>            subcases;
@@ -198,7 +208,7 @@ struct TestCase {
      * @param file The file that the test case is defined.
      * @param line The line that the test case is defined.
      */
-    TestCase(std::string name, std::string file, unsigned line, std::vector<Decorator*> decorators)
+    TestCase(zeroerr::String name, zeroerr::String file, unsigned line, std::vector<Decorator*> decorators)
         : name(name), file(file), line(line), decorators(decorators) {}
 
     /**
@@ -209,7 +219,7 @@ struct TestCase {
      * @param func The function that will be run to test the test case.
      * @param decorators The decorators that will be used to decorate the test case.
      */
-    TestCase(std::string name, std::string file, unsigned line,
+    TestCase(zeroerr::String name, zeroerr::String file, unsigned line,
              std::function<void(TestContext*)> func, std::vector<Decorator*> decorators)
         : name(name), file(file), line(line), func(func), decorators(decorators) {}
 };
@@ -219,7 +229,7 @@ struct TestCase {
  * @brief SubCase is a class that holds the subcase information.
  */
 struct SubCase : TestCase {
-    SubCase(std::string name, std::string file, unsigned line, TestContext* context,
+    SubCase(zeroerr::String name, zeroerr::String file, unsigned line, TestContext* context,
             std::vector<Decorator*> decorators);
     ~SubCase() = default;
     TestContext* context;
@@ -249,7 +259,7 @@ class IReporter {
 public:
     virtual ~IReporter() = default;
 
-    virtual std::string getName() const = 0;
+    virtual zeroerr::String getName() const = 0;
 
     // There are a list of events
     virtual void testStart()                                           = 0;
@@ -266,7 +276,7 @@ public:
      * @param name The name of the reporter. Available reporters are: console, xml.
      * @param ut The unit test object that will be used to configure the test.
      */
-    static IReporter* create(const std::string& name, UnitTest& ut);
+    static IReporter* create(const zeroerr::String& name, UnitTest& ut);
 
     IReporter(UnitTest& ut) : ut(ut) {}
 
@@ -382,3 +392,5 @@ Decorator* should_fail(bool isShouldFail = true);
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")

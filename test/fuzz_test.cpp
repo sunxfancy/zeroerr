@@ -1,5 +1,6 @@
 #include "zeroerr/fuzztest.h"
 
+#include "zeroerr/std_adapter.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/log.h"
 #include "zeroerr/unittest.h"

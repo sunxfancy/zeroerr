@@ -1,4 +1,5 @@
 #include "zeroerr/table.h"
+#include "zeroerr/std_adapter.h"
 #include "zeroerr/unittest.h"
 
 #include <iostream>

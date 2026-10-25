@@ -18,7 +18,7 @@ namespace zeroerr {
  * Example:
  * ```cpp
  * // Generate random values from a set of strings
- * auto domain = ElementOf<std::string>({"red", "green", "blue"});
+ * auto domain = ElementOf<zeroerr::String>({"red", "green", "blue"});
  * 
  * // Generate random values from a set of integers
  * auto domain = ElementOf<int>({1, 2, 3, 4, 5});
