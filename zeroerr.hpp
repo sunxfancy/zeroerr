@@ -1089,6 +1089,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 #include <cstdint>
 #include <cstring>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 #include <vector>
