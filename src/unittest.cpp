@@ -1,3 +1,4 @@
+#include <sstream>
 #include "zeroerr/unittest.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/color.h"

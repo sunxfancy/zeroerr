@@ -1,3 +1,4 @@
+#include <sstream>
 #include "zeroerr/internal/serialization.h"
 #include "zeroerr/assert.h"
 
