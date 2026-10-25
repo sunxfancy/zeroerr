@@ -1,7 +1,8 @@
+#include <sstream>
+#include <string>
 #include "zeroerr/internal/serialization.h"
 #include "zeroerr/assert.h"
 
-#include <sstream>
 namespace zeroerr {
 
 IRObject* IRObject::alloc(size_t size) {
@@ -16,8 +17,8 @@ char* IRObject::alloc_str(size_t size) {
     return s;
 }
 
-static std::string escape(std::string str) {
-    std::string result;
+static zeroerr::String escape(zeroerr::String str) {
+    zeroerr::String result;
     for (char c : str) {
         switch (c) {
             case ' ': result += "\\s"; break;
@@ -42,8 +43,8 @@ static std::string escape(std::string str) {
     return result;
 }
 
-static std::string unescape(std::string str) {
-    std::string result;
+static zeroerr::String unescape(zeroerr::String str) {
+    zeroerr::String result;
     for (size_t i = 0; i < str.size(); ++i) {
         if (str[i] == '\\') {
             switch (str[++i]) {
@@ -96,7 +97,7 @@ static void to_string(IRObject obj, std::stringstream& ss) {
     }
 }
 
-static IRObject from_string(std::stringstream& ss, std::string& token) {
+static IRObject from_string(std::stringstream& ss, zeroerr::String& token) {
     IRObject obj;
     if (token.empty()) return obj;
     if (token == "{") {
@@ -132,15 +133,15 @@ static IRObject from_string(std::stringstream& ss, std::string& token) {
     return obj;
 }
 
-std::string IRObject::ToString(IRObject obj) {
+zeroerr::String IRObject::ToString(IRObject obj) {
     std::stringstream ss;
     to_string(obj, ss);
     return ss.str();
 }
 
-IRObject IRObject::FromString(std::string str) {
+IRObject IRObject::FromString(zeroerr::String str) {
     std::stringstream ss(str);
-    std::string       token;
+    zeroerr::String       token;
     ss >> token;
     return from_string(ss, token);
 }

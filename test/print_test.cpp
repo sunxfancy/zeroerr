@@ -1,6 +1,7 @@
 #define ZEROERR_ENABLE_PFR
 
 
+#include "zeroerr/std_adapter.h"
 #include "zeroerr/print.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/dbg.h"

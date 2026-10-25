@@ -1,7 +1,11 @@
+#include <stdexcept>
+#include <sstream>
+#include <fstream>
+#include <chrono>
 #include "zeroerr/unittest.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/color.h"
-#include "zeroerr/fuzztest.h"
+#include "zeroerr/internal/fuzz_signal.h"
 #include "zeroerr/internal/threadsafe.h"
 #include "zeroerr/log.h"
 
@@ -10,7 +14,7 @@
 #include <ostream>
 #include <regex>
 #include <set>
-#include <string>
+#include "zeroerr/string.h"
 #include <vector>
 
 namespace zeroerr {
@@ -67,15 +71,15 @@ void TestContext::reset() {
     passed_as = warning_as = failed_as = skipped_as = 0;
 }
 
-static inline std::string getFileName(std::string file) {
-    std::string fileName(file);
+static inline zeroerr::String getFileName(zeroerr::String file) {
+    zeroerr::String fileName(file);
     auto        p = fileName.find_last_of('/');
-    if (p == std::string::npos) p = fileName.find_last_of('\\');
-    if (p != std::string::npos) fileName = fileName.substr(p + 1);
+    if (p == zeroerr::String::npos) p = fileName.find_last_of('\\');
+    if (p != zeroerr::String::npos) fileName = fileName.substr(p + 1);
     return fileName;
 }
 
-SubCase::SubCase(std::string name, std::string file, unsigned line, TestContext* context,
+SubCase::SubCase(zeroerr::String name, zeroerr::String file, unsigned line, TestContext* context,
                  std::vector<Decorator*> decorators)
     : TestCase(name, file, line, decorators), context(context) {}
 
@@ -110,7 +114,7 @@ struct Filters {
 UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
     filters             = new Filters();
     auto convert_to_vec = [=]() {
-        std::vector<std::string> result;
+        std::vector<zeroerr::String> result;
         for (int i = 1; i < argc; i++) {
             result.emplace_back(argv[i]);
         }
@@ -145,7 +149,7 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         return false;
     };
 
-    auto parse_token = [&](std::string arg) {
+    auto parse_token = [&](zeroerr::String arg) {
         if (arg == "verbose") {
             this->silent = false;
             return true;
@@ -175,25 +179,25 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
             return true;
         }
         if (arg.substr(0, 8) == "testcase") {
-            filters->name.push_back(std::regex(arg.substr(9)));
+            filters->name.push_back(std::regex(arg.substr(9).c_str()));
             return true;
         }
         if (arg.substr(0, 16) == "testcase-exclude=") {
-            filters->name_exclude.push_back(std::regex(arg.substr(16)));
+            filters->name_exclude.push_back(std::regex(arg.substr(16).c_str()));
             return true;
         }
         if (arg.substr(0, 5) == "file=") {
-            filters->file.push_back(std::regex(arg.substr(5)));
+            filters->file.push_back(std::regex(arg.substr(5).c_str()));
             return true;
         }
         if (arg.substr(0, 13) == "file-exclude=") {
-            filters->file_exclude.push_back(std::regex(arg.substr(13)));
+            filters->file_exclude.push_back(std::regex(arg.substr(13).c_str()));
             return true;
         }
         return false;
     };
 
-    auto parse_pos = [&](const std::vector<std::string>& args, size_t pos) {
+    auto parse_pos = [&](const std::vector<zeroerr::String>& args, size_t pos) {
         if (args[pos].size() == 2 && args[pos][0] == '-') {
             return parse_char(args[pos][1]);
         }
@@ -211,12 +215,12 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
 }
 
 
-static std::string insertIndentation(std::string str) {
+static zeroerr::String insertIndentation(zeroerr::String str) {
     std::stringstream result;
     std::stringstream ss(str);
 
-    std::string line;
-    while (std::getline(ss, line)) {
+    zeroerr::String line;
+    while (zeroerr::getline(ss, line)) {
         result << line << std::endl << "    ";
     }
 
@@ -226,13 +230,13 @@ static std::string insertIndentation(std::string str) {
 bool UnitTest::run_filter(const TestCase& tc) {
     if (filters == nullptr) return true;
     for (auto& r : filters->name)
-        if (!std::regex_match(tc.name, r)) return false;
+        if (!std::regex_match(tc.name.c_str(), r)) return false;
     for (auto& r : filters->name_exclude)
-        if (std::regex_match(tc.name, r)) return false;
+        if (std::regex_match(tc.name.c_str(), r)) return false;
     for (auto& r : filters->file)
-        if (!std::regex_match(tc.file, r)) return false;
+        if (!std::regex_match(tc.file.c_str(), r)) return false;
     for (auto& r : filters->file_exclude)
-        if (std::regex_match(tc.file, r)) return false;
+        if (std::regex_match(tc.file.c_str(), r)) return false;
     return true;
 }
 
@@ -289,7 +293,7 @@ int UnitTest::run() {
                 }
             }
             auto end         = std::chrono::high_resolution_clock::now();
-            context.duration = end - start;
+            context.duration.seconds = std::chrono::duration<double>(end - start).count();
             std::cerr.rdbuf(orig_buf);
         }
         // Decorators may rewrite pass/fail before results are accumulated.
@@ -351,7 +355,7 @@ regReporter::regReporter(IReporter* reporter) { getRegisteredReporters().insert(
 
 class ConsoleReporter : public IReporter {
 public:
-    std::string getName() const override { return "console"; }
+    zeroerr::String getName() const override { return "console"; }
 
     virtual void testStart() override {
         setlocale(LC_ALL, "en_US.utf8");
@@ -405,12 +409,12 @@ namespace detail {
 class XmlEncode {
 public:
     enum ForWhat { ForTextNodes, ForAttributes };
-    XmlEncode(const std::string& str, ForWhat forWhat = ForTextNodes);
+    XmlEncode(const zeroerr::String& str, ForWhat forWhat = ForTextNodes);
     void                 encodeTo(std::ostream& os) const;
     friend std::ostream& operator<<(std::ostream& os, const XmlEncode& xmlEncode);
 
 private:
-    std::string m_str;
+    zeroerr::String m_str;
     ForWhat     m_forWhat;
 };
 
@@ -423,10 +427,10 @@ public:
         ScopedElement& operator=(ScopedElement&& other) noexcept;
         ~ScopedElement();
 
-        ScopedElement& writeText(const std::string& text, bool indent = true, bool new_line = true);
+        ScopedElement& writeText(const zeroerr::String& text, bool indent = true, bool new_line = true);
 
         template <typename T>
-        ScopedElement& writeAttribute(const std::string& name, const T& attribute) {
+        ScopedElement& writeAttribute(const zeroerr::String& name, const T& attribute) {
             m_writer->writeAttribute(name, attribute);
             return *this;
         }
@@ -441,22 +445,22 @@ public:
     XmlWriter(const XmlWriter&)            = delete;
     XmlWriter& operator=(const XmlWriter&) = delete;
 
-    XmlWriter&    startElement(const std::string& name);
-    ScopedElement scopedElement(const std::string& name);
+    XmlWriter&    startElement(const zeroerr::String& name);
+    ScopedElement scopedElement(const zeroerr::String& name);
     XmlWriter&    endElement();
 
-    XmlWriter& writeAttribute(const std::string& name, const std::string& attribute);
-    XmlWriter& writeAttribute(const std::string& name, const char* attribute);
-    XmlWriter& writeAttribute(const std::string& name, bool attribute);
+    XmlWriter& writeAttribute(const zeroerr::String& name, const zeroerr::String& attribute);
+    XmlWriter& writeAttribute(const zeroerr::String& name, const char* attribute);
+    XmlWriter& writeAttribute(const zeroerr::String& name, bool attribute);
 
     template <typename T>
-    XmlWriter& writeAttribute(const std::string& name, const T& attribute) {
+    XmlWriter& writeAttribute(const zeroerr::String& name, const T& attribute) {
         std::stringstream rss;
         rss << attribute;
-        return writeAttribute(name, rss.str());
+        return writeAttribute(name, zeroerr::String(rss.str()));
     }
 
-    XmlWriter& writeText(const std::string& text, bool indent = true, bool new_line = true);
+    XmlWriter& writeText(const zeroerr::String& text, bool indent = true, bool new_line = true);
 
     void ensureTagClosed(bool new_line = true);
     void writeDeclaration();
@@ -467,8 +471,8 @@ private:
     bool                     m_tagIsOpen    = false;
     bool                     m_needsNewline = false;
     bool                     m_needsIndent  = false;
-    std::vector<std::string> m_tags;
-    std::string              m_indent;
+    std::vector<zeroerr::String> m_tags;
+    zeroerr::String              m_indent;
     std::ostream&            m_os;
 };
 
@@ -507,7 +511,7 @@ static void hexEscapeChar(std::ostream& os, unsigned char c) {
     os.flags(f);
 }
 
-XmlEncode::XmlEncode(const std::string& str, ForWhat forWhat) : m_str(str), m_forWhat(forWhat) {}
+XmlEncode::XmlEncode(const zeroerr::String& str, ForWhat forWhat) : m_str(str), m_forWhat(forWhat) {}
 
 void XmlEncode::encodeTo(std::ostream& os) const {
     // Apostrophe escaping not necessary if we always use " to write attributes
@@ -624,7 +628,7 @@ XmlWriter::ScopedElement::~ScopedElement() {
     if (m_writer) m_writer->endElement();
 }
 
-XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const std::string& text, bool indent,
+XmlWriter::ScopedElement& XmlWriter::ScopedElement::writeText(const zeroerr::String& text, bool indent,
                                                               bool new_line) {
     m_writer->writeText(text, indent, new_line);
     return *this;
@@ -636,7 +640,7 @@ XmlWriter::~XmlWriter() {
     while (!m_tags.empty()) endElement();
 }
 
-XmlWriter& XmlWriter::startElement(const std::string& name) {
+XmlWriter& XmlWriter::startElement(const zeroerr::String& name) {
     ensureTagClosed();
     newlineIfNecessary();
     m_os << m_indent << '<' << name;
@@ -646,7 +650,7 @@ XmlWriter& XmlWriter::startElement(const std::string& name) {
     return *this;
 }
 
-XmlWriter::ScopedElement XmlWriter::scopedElement(const std::string& name) {
+XmlWriter::ScopedElement XmlWriter::scopedElement(const zeroerr::String& name) {
     ScopedElement scoped(this);
     startElement(name);
     return scoped;
@@ -670,24 +674,24 @@ XmlWriter& XmlWriter::endElement() {
     return *this;
 }
 
-XmlWriter& XmlWriter::writeAttribute(const std::string& name, const std::string& attribute) {
+XmlWriter& XmlWriter::writeAttribute(const zeroerr::String& name, const zeroerr::String& attribute) {
     if (!name.empty() && !attribute.empty())
         m_os << ' ' << name << "=\"" << XmlEncode(attribute, XmlEncode::ForAttributes) << '"';
     return *this;
 }
 
-XmlWriter& XmlWriter::writeAttribute(const std::string& name, const char* attribute) {
+XmlWriter& XmlWriter::writeAttribute(const zeroerr::String& name, const char* attribute) {
     if (!name.empty() && attribute && attribute[0] != '\0')
         m_os << ' ' << name << "=\"" << XmlEncode(attribute, XmlEncode::ForAttributes) << '"';
     return *this;
 }
 
-XmlWriter& XmlWriter::writeAttribute(const std::string& name, bool attribute) {
+XmlWriter& XmlWriter::writeAttribute(const zeroerr::String& name, bool attribute) {
     m_os << ' ' << name << "=\"" << (attribute ? "true" : "false") << '"';
     return *this;
 }
 
-XmlWriter& XmlWriter::writeText(const std::string& text, bool indent, bool new_line) {
+XmlWriter& XmlWriter::writeText(const zeroerr::String& text, bool indent, bool new_line) {
     if (!text.empty()) {
         bool tagWasOpen = m_tagIsOpen;
         ensureTagClosed(new_line);
@@ -731,7 +735,7 @@ public:
 
     std::vector<TestCaseTemp> current;
 
-    virtual std::string getName() const override { return "xml"; }
+    virtual zeroerr::String getName() const override { return "xml"; }
 
     // There are a list of events
     virtual void testStart() override {
@@ -814,7 +818,7 @@ public:
     XmlReporter(UnitTest& ut) : IReporter(ut), xml(std::cout) {}
 };
 
-IReporter* IReporter::create(const std::string& name, UnitTest& ut) {
+IReporter* IReporter::create(const zeroerr::String& name, UnitTest& ut) {
     if (name == "console") return new ConsoleReporter(ut);
     if (name == "xml") return new XmlReporter(ut);
     return nullptr;

@@ -1,5 +1,11 @@
 
 set(include_files
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/buffer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/std_adapter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/time.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/fuzz_signal.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/string.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/text.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/config.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/console.h
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/debugbreak.h
@@ -20,4 +26,9 @@ set(include_files
     ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/unittest.h
 )
 
-set(include_files ${include_files} PARENT_SCOPE)
+set(include_files
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/buffer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/std_adapter.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/time.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/internal/fuzz_signal.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/zeroerr/string.h ${include_files} PARENT_SCOPE)

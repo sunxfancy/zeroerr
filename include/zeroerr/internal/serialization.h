@@ -4,8 +4,9 @@
 #include "zeroerr/internal/typetraits.h"
 
 #include <cstdint>
+#include <stdexcept>
 #include <cstring>
-#include <string>
+#include "zeroerr/string.h"
 #include <type_traits>
 #include <vector>
 
@@ -83,11 +84,11 @@ struct IRObject {
     }
 
     template <typename T>
-    typename std::enable_if<std::is_same<T, std::string>::value, T>::type GetScalar() {
+    typename std::enable_if<detail::StringLike<T>::owning, T>::type GetScalar() {
         if (type == Type::String)
-            return std::string(s);
+            return T(s);
         else if (type == Type::ShortString)
-            return std::string(ss);
+            return T(ss);
         return "";
     }
 
@@ -109,7 +110,7 @@ struct IRObject {
     }
 
     template <typename T>
-    typename std::enable_if<std::is_same<T, std::string>::value, void>::type SetScalar(T val) {
+    typename std::enable_if<detail::StringLike<T>::owning, void>::type SetScalar(T val) {
         size_t size = val.size();
         if (size > 14) {
             s = alloc_str(size);
@@ -143,7 +144,7 @@ struct IRObject {
     template <typename T>
     static
         typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value ||
-                                    std::is_same<T, std::string>::value || std::is_enum<T>::value,
+                                    detail::StringLike<T>::owning || std::is_enum<T>::value,
                                 IRObject>::type
         FromCorpus(T val) {
         IRObject obj;
@@ -153,7 +154,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<
-        detail::is_container<T>::value && !std::is_same<T, std::string>::value, IRObject>::type
+        detail::is_container<T>::value && !detail::StringLike<T>::owning, IRObject>::type
     FromCorpus(const T& val) {
         IRObject* children = alloc(val.size());
         IRObject  obj;
@@ -212,7 +213,7 @@ struct IRObject {
     }
 
     template <typename T>
-    static typename std::enable_if<std::is_same<T, std::string>::value, T>::type ToCorpus(
+    static typename std::enable_if<detail::StringLike<T>::owning, T>::type ToCorpus(
         IRObject obj) {
         if (obj.type != IRObject::String && obj.type != IRObject::ShortString) {
             throw std::runtime_error("Invalid type conversion.");
@@ -229,7 +230,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<
-        detail::is_container<T>::value && !std::is_same<T, std::string>::value, T>::type
+        detail::is_container<T>::value && !detail::StringLike<T>::owning, T>::type
     ToCorpus(IRObject obj) {
         if (obj.type != IRObject::Object) {
             throw std::runtime_error("Invalid type conversion.");
@@ -269,8 +270,8 @@ struct IRObject {
     static IRObject* alloc(size_t size);
 
     // Serialize the object as a string.
-    static std::string ToString(IRObject obj);
-    static IRObject    FromString(std::string str);
+    static zeroerr::String ToString(IRObject obj);
+    static IRObject    FromString(zeroerr::String str);
 
     static std::vector<uint8_t> ToBinary(IRObject obj);
     static IRObject             FromBinary(std::vector<uint8_t> bin);

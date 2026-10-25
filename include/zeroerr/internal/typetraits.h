@@ -1,12 +1,12 @@
 #pragma once
 #include "zeroerr/internal/config.h"
 
-#include <ostream>
-#include <sstream>
-#include <string>
+
+
+#include "zeroerr/string.h"
 #include <tuple>  // this should be removed
 #include <type_traits>
-#include <complex>
+
 #include <memory>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -34,7 +34,11 @@ template <>
 struct rank<0> {};
 
 
+class StringBuffer;
 namespace detail {
+template <class T, class = void> struct is_complex : std::false_type {};
+template <class T> struct is_complex<T, decltype(void(std::declval<T>().real()), void(std::declval<T>().imag()))> : std::true_type {};
+
 
 // C++11 void_t
 template <typename... Ts>
@@ -112,19 +116,9 @@ template <typename T>
 struct is_associative_container<T, has_begin_end_find_insert<T>> : std::true_type {};
 
 
-#if ZEROERR_CXX_STANDARD >= 17
-#define ZEROERR_STRING_VIEW std::is_same<T, std::string_view>::value
-#else
-#define ZEROERR_STRING_VIEW 0
-#endif
-
-// Check if a type is a string type
-template <class T>
-struct is_string
-    : std::integral_constant<bool, std::is_same<T, std::string>::value ||
-                                       std::is_same<T, const char*>::value || ZEROERR_STRING_VIEW> {
-};
-
+template <typename T>
+struct is_string : std::integral_constant<bool, StringLike<T>::value ||
+    std::is_same<T, const char*>::value || std::is_same<T, char*>::value> {};
 
 // Completeness check that SFINAE-fails for incomplete T.
 template <typename T, typename = void>
@@ -189,12 +183,12 @@ struct to_store_type {
 
 template <>
 struct to_store_type<const char*> {
-    using type = std::string;
+    using type = zeroerr::String;
 };
 
 template <>
 struct to_store_type<const char (&)[]> {
-    using type = std::string;
+    using type = zeroerr::String;
 };
 
 template <typename T>
@@ -290,9 +284,9 @@ void visit2_at(std::tuple<Ts...>& tup1, const std::tuple<T2s...>& tup2, size_t i
 #define ZEROERR_IS_CHAR       std::is_same<T, char>::value
 #define ZEROERR_IS_WCHAR      std::is_same<T, wchar_t>::value
 #define ZEROERR_IS_CLASS      std::is_class<T>::value
-#define ZEROERR_IS_STREAMABLE detail::is_streamable<std::ostream, T>::value
+#define ZEROERR_IS_STREAMABLE detail::is_streamable<zeroerr::StringBuffer, T>::value
 #define ZEROERR_IS_ARRAY      detail::is_array<T>::value
-#define ZEROERR_IS_COMPLEX    detail::is_specialization<T, std::complex>::value
+#define ZEROERR_IS_COMPLEX    detail::is_complex<T>::value
 #define ZEROERR_IS_BOOL       std::is_same<T, bool>::value
 #define ZEROERR_IS_AUTOPTR                                   \
     (detail::is_specialization<T, std::unique_ptr>::value || \

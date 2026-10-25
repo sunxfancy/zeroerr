@@ -2,11 +2,11 @@
 #include "zeroerr/internal/config.h"
 
 #include "zeroerr/color.h"
+#include "zeroerr/internal/text.h"
+#include "zeroerr/buffer.h"
 #include "zeroerr/internal/typetraits.h"
 
-#ifdef __GNUG__
-#include <cxxabi.h>
-#endif
+#include <memory>
 
 #if defined(ZEROERR_ENABLE_PFR) && (ZEROERR_CXX_STANDARD >= 14)
 #include "pfr.hpp"
@@ -74,11 +74,7 @@ struct Printer {
     }
 
     void check_stream() {
-        if (use_stringstream && clear_stream_before_printing) {
-            auto& ss = static_cast<std::stringstream&>(os);
-            ss.str(std::string());
-            ss.clear();
-        }
+        if (use_stringstream && clear_stream_before_printing) os.clear();
     }
 
     template <typename T, typename... V>
@@ -94,23 +90,28 @@ struct Printer {
         os.flush();
     }
 
-    Printer(std::ostream& os) : os(os) {}
-    Printer() : os(*new std::stringstream()) { use_stringstream = true; }
-    ~Printer() {
-        if (use_stringstream) delete &os;
-    }
+private:
+    StringBuffer storage_;
+public:
+    Printer() : os(storage_) { use_stringstream = true; }
+    template <class Stream>
+    explicit Printer(Stream& stream) : os(storage_) { storage_.attach(stream); }
+    Printer(const Printer& other) : storage_(other.storage_), isColorful(other.isColorful),
+        isCompact(other.isCompact), isQuoted(other.isQuoted), indent(other.indent),
+        line_break(other.line_break), os(storage_), use_stringstream(other.use_stringstream),
+        clear_stream_before_printing(other.clear_stream_before_printing) {}
 
     bool          isColorful = true;   // colorful output
     bool          isCompact  = false;  // compact mode
     bool          isQuoted   = true;   // string is quoted
     int           indent     = 2;
     const char*   line_break = "\n";
-    std::ostream& os;
+    StringBuffer& os;
     bool          use_stringstream             = false;
     bool          clear_stream_before_printing = true;
 
     template <class T>
-    static std::string type(const T& t) {
+    static zeroerr::String type(const T& t) {
         return demangle(typeid(t).name());
     }
 
@@ -175,7 +176,8 @@ struct Printer {
         os << tab(level) << "{" << (isCompact ? "" : line_break);
         bool last = false;
         for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            if (std::next(iter) == value.end()) last = true;
+            auto next = iter; ++next;
+            if (next == value.end()) last = true;
             print(*iter, level + 1, isCompact ? (last ? "" : ", ") : line_break, rank<max_rank>{});
         }
         os << tab(level) << "}" << lb;
@@ -186,7 +188,8 @@ struct Printer {
         os << tab(level) << "[";
         bool last = false;
         for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            if (std::next(iter) == value.end()) last = true;
+            auto next = iter; ++next;
+            if (next == value.end()) last = true;
             print(*iter, 0, last ? "" : ", ", rank<max_rank>{});
         }
         os << tab(level) << "]" << lb;
@@ -206,7 +209,8 @@ struct Printer {
         os << tab(level) << "{" << (isCompact ? "" : line_break);
         bool last = false;
         for (auto iter = value.begin(); iter != value.end(); ++iter) {
-            if (std::next(iter) == value.end()) last = true;
+            auto next = iter; ++next;
+            if (next == value.end()) last = true;
             print(iter->first, level + 1, " : ", rank<max_rank>{});
             print(iter->second, level + 1, isCompact ? (last ? "" : ", ") : line_break,
                   rank<max_rank>{});
@@ -221,7 +225,9 @@ struct Printer {
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_STRING)
     print(T value, unsigned level, const char* lb, rank<4>) {
-        os << tab(level) << quote() << value << quote() << lb;
+        os << tab(level) << quote();
+        print_text(value);
+        os << quote() << lb;
     }
 
     template <class TupType>
@@ -241,33 +247,42 @@ struct Printer {
         os << ")" << lb;
     }
 
-    std::string tab(unsigned level) { return std::string((isCompact ? 0 : level * indent), ' '); }
+    void print_text(const char* value) { os << value; }
+    template <class T> void print_text(const T& value) { os.write(value.data(), value.size()); }
+    zeroerr::String tab(unsigned level);
     const char* quote() { return isQuoted ? "\"" : ""; }
 
-    static std::string demangle(const char* name) {
-#ifdef __GNUG__
-        int         status = -4;
-        char*       res    = abi::__cxa_demangle(name, NULL, NULL, &status);
-        std::string ret    = (status == 0) ? res : name;
-        std::free(res);
-        return ret;
-#else
-        return name;
-#endif
-    }
+    static zeroerr::String demangle(const char* name);
 
-    std::string str() const {
-        if (use_stringstream == false)
-            throw std::runtime_error("Printer is not using stringstream");
-        return static_cast<std::stringstream&>(os).str();
-    }
-    operator std::string() const { return str(); }
+    zeroerr::String str() const;
+    operator zeroerr::String() const { return str(); }
+    template <class T, typename std::enable_if<detail::StringLike<T>::owning &&
+        !std::is_same<T, String>::value, int>::type = 0>
+    operator T() const { return str(); }
 
-    friend std::ostream& operator<<(std::ostream& os, const Printer& P) {
-        if (P.use_stringstream) os << P.str();
-        return os;
-    }
 };
+
+inline StringBuffer& operator<<(StringBuffer& buffer, const Printer& printer) {
+    if (printer.use_stringstream) buffer << printer.str();
+    return buffer;
+}
+
+namespace detail {
+
+// Only the concrete value dispatch is templated. Stream construction, printing
+// order, formatting and cleanup all live in the shared implementation.
+template <typename T>
+void printDiagnosticValue(Printer& printer, const void* value) {
+    printer.call(*static_cast<T*>(const_cast<void*>(value)));
+}
+
+template <typename T>
+DiagnosticValue makeDiagnosticValue(T& value) {
+    return {const_cast<const void*>(static_cast<const volatile void*>(std::addressof(value))),
+            &printDiagnosticValue<T>};
+}
+
+}  // namespace detail
 
 /**
  * @brief PrinterExt is an extension of Printer that allows user to write custom rules for printing.

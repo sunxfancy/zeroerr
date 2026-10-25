@@ -9,7 +9,7 @@
 
 #include <cstdint>
 #include <exception>
-#include <iostream>
+
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -37,16 +37,16 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
         if (cond) {                                                               \
             switch (zeroerr::assert_level::ZEROERR_CAT(level, _l)) {              \
                 case zeroerr::assert_level::ZEROERR_WARN_l:                       \
-                    std::cerr << zeroerr::FgYellow << "WARN" << zeroerr::Reset;   \
+                    zeroerr::getStderrPrinter().os << zeroerr::FgYellow << "WARN" << zeroerr::Reset;   \
                     break;                                                        \
                 case zeroerr::assert_level::ZEROERR_ERROR_l:                      \
-                    std::cerr << zeroerr::FgRed << "ERROR" << zeroerr::Reset;     \
+                    zeroerr::getStderrPrinter().os << zeroerr::FgRed << "ERROR" << zeroerr::Reset;     \
                     break;                                                        \
                 case zeroerr::assert_level::ZEROERR_FATAL_l:                      \
-                    std::cerr << zeroerr::FgMagenta << "FATAL" << zeroerr::Reset; \
+                    zeroerr::getStderrPrinter().os << zeroerr::FgMagenta << "FATAL" << zeroerr::Reset; \
                     break;                                                        \
             }                                                                     \
-            std::cerr << zeroerr::format(__VA_ARGS__) << std::endl;               \
+            zeroerr::getStderrPrinter().os << zeroerr::format(__VA_ARGS__) << '\n';               \
         }                                                                         \
     } while (0)
 #endif
@@ -243,15 +243,15 @@ struct AssertionData : std::exception {
     unsigned    line;     // line number
     assert_info info;     // assert info
     bool        passed;   // if the assertion passed
-    std::string message;  // the message of the assertion
-    std::string cond;     // the condition of the assertion
+    zeroerr::String message;  // the message of the assertion
+    zeroerr::String cond;     // the condition of the assertion
 
     AssertionData(const char* file, unsigned line, const char* cond, assert_info info)
         : file(file), line(line), info(info) {
-        static std::string pattern = "zeroerr::ExpressionDecomposer() << ";
-        std::string        cond_str(cond);
+        static zeroerr::String pattern = "zeroerr::ExpressionDecomposer() << ";
+        zeroerr::String        cond_str(cond);
         size_t             pos = cond_str.find(pattern);
-        if (pos != std::string::npos) cond_str.replace(pos, pos + pattern.size(), "");
+        if (pos != zeroerr::String::npos) cond_str.replace(pos, pos + pattern.size(), "");
         this->cond = cond_str;
     }
 
@@ -269,11 +269,8 @@ struct AssertionData : std::exception {
         message = e.what();
     }
 
-    std::string log() {
-        std::stringstream ss;
-        ss << "    " << cond << "  expands to  " << message << std::endl;
-        ss << Dim << "(" << file << ":" << line << ")" << Reset << std::endl;
-        return ss.str();
+    zeroerr::String log() {
+        return detail::assertionText(cond, message, file, line);
     }
 
     // throw the exception

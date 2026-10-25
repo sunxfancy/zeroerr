@@ -4,7 +4,7 @@
 #include "zeroerr/color.h"
 #include "zeroerr/print.h"
 
-#include <iostream>
+
 #include <tuple>  // for std::get and std::tie
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -44,22 +44,22 @@ auto get_last(Args&&... args) -> typename last<Args...>::type {
 template <typename... T>
 auto DebugExpr(const char* file, unsigned line, const char* func, const char* exprs, T... t) ->
     typename last<T...>::type {
-    std::string fileName(file);
+    zeroerr::String fileName(file);
     auto        p = fileName.find_last_of('/');
-    if (p != std::string::npos) fileName = fileName.substr(p + 1);
+    if (p != zeroerr::String::npos) fileName = fileName.substr(p + 1);
 
-    std::cerr << Dim << "[" << fileName << ":" << line << " " << func << "] " << Reset;
-    std::cerr << FgCyan << exprs << Reset << " = ";
-    Printer print(std::cerr);
+    getStderrPrinter().os << Dim << "[" << fileName << ":" << line << " " << func << "] " << Reset;
+    getStderrPrinter().os << FgCyan << exprs << Reset << " = ";
+    Printer print(getStderrPrinter().os);
     print.line_break = "";
     print(t...);
-    std::cerr << " (" << FgGreen;
-    std::string typenames[] = {print.type(t)...};
+    getStderrPrinter().os << " (" << FgGreen;
+    zeroerr::String typenames[] = {print.type(t)...};
     for (unsigned i = 0; i < sizeof...(T); ++i) {
-        if (i != 0) std::cerr << ", ";
-        std::cerr << typenames[i];
+        if (i != 0) getStderrPrinter().os << ", ";
+        getStderrPrinter().os << typenames[i];
     }
-    std::cerr << Reset << ")" << std::endl;
+    getStderrPrinter().os << Reset << ")" << '\n';
     return get_last(t...);
 }
 

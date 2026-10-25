@@ -11,9 +11,9 @@
 #include "zeroerr/internal/rng.h"
 
 
-#include <exception>
+#include "zeroerr/internal/fuzz_signal.h"
 #include <functional>
-#include <string>
+#include "zeroerr/string.h"
 #include <tuple>
 #include <type_traits>
 #include <vector>
@@ -93,17 +93,14 @@ struct FuzzTestWithDomain;
 struct IFuzzTest {
     virtual void        Run(int count = 1000, int seed = 0)          = 0;
     virtual void        RunOneTime(const uint8_t* data, size_t size) = 0;
-    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
+    virtual zeroerr::String MutateData(const uint8_t* data, size_t size, size_t max_size,
                                    unsigned int seed)                = 0;
 
     int  count = 0, max_count = 0;
     bool should_stop() { return count == max_count; }
 };
 
-class FuzzFinishedException : public std::exception {
-public:
-    virtual const char* what() const throw() { return "Fuzzing finished"; }
-};
+
 
 // The details are described in the declaration of the class.
 template <typename TargetFunction, typename FuncType>
@@ -145,7 +142,7 @@ struct FuzzTest : IFuzzTest {
     // This should create default domains
     virtual void        Run(int = 1000, int = 0) {}
     virtual void        RunOneTime(const uint8_t*, size_t) {}
-    virtual std::string MutateData(const uint8_t*, size_t, size_t, unsigned int) { return ""; }
+    virtual zeroerr::String MutateData(const uint8_t*, size_t, size_t, unsigned int) { return ""; }
 
     TargetFunction         func;
     TestContext*           context;
@@ -184,7 +181,7 @@ struct FuzzTestWithDomain : public Base {
         return m_domain.GetRandomCorpus(rng);
     }
 
-    typename Domain::CorpusType TryParse(const std::string& input) {
+    typename Domain::CorpusType TryParse(const zeroerr::String& input) {
         try {
             IRObject obj = IRObject::FromString(input);
             if (obj.type == IRObject::Type::Undefined) return GetRandomCorpus();
@@ -201,16 +198,16 @@ struct FuzzTestWithDomain : public Base {
 
     virtual void RunOneTime(const uint8_t* data, size_t size) override {
         Base::count++;
-        std::string                 input  = std::string((const char*)data, size);
+        zeroerr::String                 input  = zeroerr::String((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
         typename Domain::ValueType  value  = m_domain.GetValue(corpus);
         apply(value, detail::gen_seq<std::tuple_size<typename Domain::ValueType>::value>{});
     }
 
-    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
+    virtual zeroerr::String MutateData(const uint8_t* data, size_t size, size_t max_size,
                                    unsigned int seed) override {
         Rng                         rng(seed);
-        std::string                 input  = std::string((const char*)data, size);
+        zeroerr::String                 input  = zeroerr::String((const char*)data, size);
         typename Domain::CorpusType corpus = TryParse(input);
         m_domain.Mutate(rng, corpus, false);
         IRObject mutated_obj = m_domain.SerializeCorpus(corpus);
@@ -228,7 +225,7 @@ FuzzTest<T> FuzzFunction(T func, TestContext* context) {
 }
 
 template <typename T>
-std::vector<T> ReadCorpusFromDir(std::string dir);
+std::vector<T> ReadCorpusFromDir(zeroerr::String dir);
 
 
 }  // namespace zeroerr

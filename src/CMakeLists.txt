@@ -1,11 +1,16 @@
 
 set(source_files
+    ${CMAKE_CURRENT_SOURCE_DIR}/threadsafe.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/buffer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/string.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/rng.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/benchmark.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/color.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/console.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/fuzztest.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/log.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/assert_text.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/print.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/table.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/unittest.cpp
