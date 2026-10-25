@@ -207,7 +207,7 @@ struct FuzzTestWithDomain : public Base {
         apply(value, detail::gen_seq<std::tuple_size<typename Domain::ValueType>::value>{});
     }
 
-    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
+    virtual std::string MutateData(const uint8_t* data, size_t size, size_t /*max_size*/,
                                    unsigned int seed) override {
         Rng                         rng(seed);
         std::string                 input  = std::string((const char*)data, size);

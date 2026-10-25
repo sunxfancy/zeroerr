@@ -71,7 +71,6 @@ TEST_CASE("assert in if") {
 
 int f() {
     throw std::runtime_error("error");
-    return 0;
 }
 
 int g() {
@@ -372,7 +371,7 @@ TEST_CASE("Test skip", skip()) {
     CHECK(0 == 1);
 }
 
-TEST_CASE("Test timeout", timeout(0.10)) {
+TEST_CASE("Test timeout", timeout(0.10f)) {
     std::this_thread::sleep_for(std::chrono::duration<double>(0.05));
 }
 

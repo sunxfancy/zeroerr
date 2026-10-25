@@ -43,7 +43,7 @@ TEST_CASE("print_test") {
     print(a, b, c);
 
     std::vector<int> vec = {1, 5, 2};
-    print(vec, "hello", dbg(std::complex<float>(1, 2.54)));
+    print(vec, "hello", dbg(std::complex<float>(1, 2.54f)));
 
     auto& myvec = vec;
     print(myvec);

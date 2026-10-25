@@ -35,6 +35,6 @@ TEST_CASE("table coverted from vector") {
     Table table("demo table");
     table.set_header({"col1", "col2", "col3"});
     table.add_row("test", 1.25, 'p');
-    table.add_rows(std::vector<float>{1.25, 2.56, 231.2}, std::vector<int>{1, 2, 3});
+    table.add_rows(std::vector<float>{1.25f, 2.56f, 231.2f}, std::vector<int>{1, 2, 3});
     std::cerr << table.str() << std::endl;
 }
