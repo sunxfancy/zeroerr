@@ -1,4 +1,13 @@
 #pragma once
+
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
 #include "zeroerr/internal/config.h"
 
 
@@ -349,3 +358,4 @@ void visit2_at(T1& tup1, T2& tup2, size_t idx, F&& fun) {
 
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")

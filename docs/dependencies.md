@@ -28,3 +28,5 @@ Public timing fields use `zeroerr::Duration` (seconds, with `count()`) and `zero
 ## Verification
 
 `cmake -S test/lightweight -B build-lightweight`, followed by a build and CTest, checks modular and single-header consumers, include order, internal string behavior, XML reporting and explicitly enabled optional modules. The runtime translation unit is deliberately outside the forbidden-header check.
+
+For libc++ versions with compatibility transitive includes, core headers temporarily set `_LIBCPP_REMOVE_TRANSITIVE_INCLUDES` while loading their explicit standard dependencies, then restore the caller's setting with `push_macro`/`pop_macro`. This suppresses incidental compatibility includes without changing library types or the caller's configuration.

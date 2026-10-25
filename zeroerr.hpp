@@ -368,6 +368,15 @@
 
 #pragma once
 
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
+
 #include <cstddef>
 #include <functional>
 #include <type_traits>
@@ -529,6 +538,8 @@ struct hash<zeroerr::String> {
     }
 };
 }  // namespace std
+
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
 
 #pragma once
 #include <type_traits>
@@ -957,6 +968,15 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() { retur
 #endif /* ifndef DEBUG_BREAK_H */
 #pragma once
 
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
+
 
 /**
  * @brief Thread safety support
@@ -1000,6 +1020,8 @@ private: Mutex& mutex_;
 
 #endif
 
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+
 #pragma once
 namespace zeroerr {
 struct Duration {
@@ -1029,6 +1051,15 @@ public:
 }  // namespace zeroerr
 
 #pragma once
+
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
 
 
 
@@ -1379,6 +1410,8 @@ void visit2_at(T1& tup1, T2& tup2, size_t idx, F&& fun) {
 
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+
 #pragma once
 
 #include <cstddef>
@@ -1447,6 +1480,15 @@ zeroerr::String assertionText(const zeroerr::String& condition, const zeroerr::S
 }  // namespace zeroerr
 
 #pragma once
+
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
 
 
 
@@ -1818,8 +1860,9 @@ extern Printer& getStderrPrinter();
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+
 #pragma once
-#include <sstream>
 
 
 
@@ -2553,6 +2596,15 @@ struct context_helper<T, false> {
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #pragma once
 
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
+
 
 
 
@@ -3224,7 +3276,18 @@ ContextScope<F> MakeContextScope(const F& f) {
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+
 #pragma once
+
+// libc++ offers compatibility-only transitive includes through C++20.
+// Suppress those while loading our explicit dependencies, then restore the
+// caller's setting. This does not change standard-library types or ABI.
+#pragma push_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
+#ifndef _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES
+#endif
+
 
 
 
@@ -3609,6 +3672,8 @@ Decorator* should_fail(bool isShouldFail = true);
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
+#pragma pop_macro("_LIBCPP_REMOVE_TRANSITIVE_INCLUDES")
 
 #if defined(ZEROERR_ENABLE_FUZZTEST)
 #pragma once

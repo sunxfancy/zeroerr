@@ -7,3 +7,7 @@
     defined(_LIBCPP_CHRONO) || defined(_LIBCPP_REGEX) || defined(_LIBCPP_MUTEX) || defined(_LIBCPP_COMPLEX)
 #error "Default zeroerr consumer introduced a forbidden string, stream, clock, regex, mutex or complex header"
 #endif
+
+#if defined(_LIBCPP_REMOVE_TRANSITIVE_INCLUDES) && !defined(ZEROERR_TEST_TRANSITIVE_INCLUDES_PRESET)
+#error "zeroerr leaked the libc++ transitive include setting"
+#endif
