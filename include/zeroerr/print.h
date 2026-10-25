@@ -3,6 +3,7 @@
 
 #include "zeroerr/color.h"
 #include "zeroerr/internal/typetraits.h"
+#include <functional>
 
 #ifdef __GNUG__
 #include <cxxabi.h>
@@ -131,12 +132,32 @@ struct Printer {
     ZEROERR_ENABLE_IF(ZEROERR_IS_INT || ZEROERR_IS_FLOAT)
     print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_POINTER)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_POINTER &&
+                      !std::is_function<typename std::remove_pointer<T>::type>::value)
     print(T value, unsigned level, const char* lb, rank<0>) {
         if (value == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
             os << tab(level) << "<" << type(value) << " at " << static_cast<const void*>(value) << ">" << lb;
+    }
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_POINTER &&
+                      std::is_function<typename std::remove_pointer<T>::type>::value)
+    print(T value, unsigned level, const char* lb, rank<1>) {
+        if (value == nullptr)
+            os << tab(level) << "nullptr" << lb;
+        else
+            os << tab(level) << "<" << type(value) << " at "
+               << reinterpret_cast<const void*>(value) << ">" << lb;
+    }
+
+    template <class R, class... Args>
+    void print(const std::function<R(Args...)>& value, unsigned level, const char* lb, rank<3>) {
+        if (!value)
+            os << tab(level) << "nullptr" << lb;
+        else
+            os << tab(level) << "<" << type(value) << " holding "
+               << demangle(value.target_type().name()) << ">" << lb;
     }
 
 
