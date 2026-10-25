@@ -146,12 +146,12 @@ IRObject IRObject::FromString(std::string str) {
     return from_string(ss, token);
 }
 
-std::vector<uint8_t> IRObject::ToBinary(IRObject obj) {
+std::vector<uint8_t> IRObject::ToBinary(IRObject /*obj*/) {
     std::vector<uint8_t> bin;
     return bin;
 }
 
-IRObject IRObject::FromBinary(std::vector<uint8_t> bin) {
+IRObject IRObject::FromBinary(std::vector<uint8_t> /*bin*/) {
     IRObject obj;
     return obj;
 }

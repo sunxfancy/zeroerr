@@ -4957,7 +4957,7 @@ struct FuzzTestWithDomain : public Base {
         apply(value, detail::gen_seq<std::tuple_size<typename Domain::ValueType>::value>{});
     }
 
-    virtual std::string MutateData(const uint8_t* data, size_t size, size_t max_size,
+    virtual std::string MutateData(const uint8_t* data, size_t size, size_t /*max_size*/,
                                    unsigned int seed) override {
         Rng                         rng(seed);
         std::string                 input  = std::string((const char*)data, size);
@@ -5293,12 +5293,10 @@ TerminalSize getTerminalWidth() {
 
 
 
+#include <cstdio>
+#include <ctime>
 #include <iomanip>
 #include <unordered_set>
-
-// The implementation uses the portable CRT API. Keep this diagnostic local;
-// callers must retain their own deprecation warnings.
-ZEROERR_MSVC_SUPPRESS_WARNING_WITH_PUSH(4996)
 
 #ifdef _WIN32
 #include <windows.h>
@@ -5514,9 +5512,31 @@ bool LogIterator::check_filter() {
     return true;
 }
 
+static FILE* openLogFile(const std::string& name) {
+#ifdef _MSC_VER
+    FILE* file = nullptr;
+    fopen_s(&file, name.c_str(), "w");
+    return file;
+#else
+    return std::fopen(name.c_str(), "w");
+#endif
+}
+
+static std::tm logLocalTime(std::time_t time) {
+    std::tm result{};
+#ifdef _MSC_VER
+    localtime_s(&result, &time);
+#elif defined(__unix__) || defined(__APPLE__)
+    localtime_r(&time, &result);
+#else
+    if (const std::tm* value = std::localtime(&time)) result = *value;
+#endif
+    return result;
+}
+
 class FileLogger : public Logger {
 public:
-    FileLogger(std::string name) { file = fopen(name.c_str(), "w"); }
+    FileLogger(std::string name) { file = openLogFile(name); }
     ~FileLogger() {
         if (file) fclose(file);
     }
@@ -5572,7 +5592,7 @@ struct FileCache {
         std::string path = name.substr(0, p);
         make_dir(path.c_str());
 
-        FILE* file = fopen(name.c_str(), "w");
+        FILE* file = openLogFile(name);
         if (file) {
             files[name] = file;
             return file;
@@ -5607,7 +5627,7 @@ public:
                 switch (dir_mode[i]) {
                     case LogStream::DAILY_FILE: {
                         std::time_t t  = std::chrono::system_clock::to_time_t(p->time);
-                        std::tm     tm = *std::localtime(&t);
+                        std::tm     tm = logLocalTime(t);
                         path << std::put_time(&tm, "%Y-%m-%d");
                         break;
                     }
@@ -5739,7 +5759,7 @@ void resumeLog() {
 static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
     std::stringstream ss;
     std::time_t       t  = std::chrono::system_clock::to_time_t(msg.time);
-    std::tm           tm = *std::localtime(&t);
+    std::tm           tm = logLocalTime(t);
 
     ss << zeroerr_color(Dim) << '[' << zeroerr_color(Reset);
     switch (msg.info->severity) {
@@ -5766,8 +5786,6 @@ static std::string DefaultLogCallback(const LogMessage& msg, bool colorful) {
 #undef zeroerr_color
 
 }  // namespace zeroerr
-
-ZEROERR_MSVC_SUPPRESS_WARNING_POP
 
 #include <sstream>
 
@@ -7332,12 +7350,12 @@ IRObject IRObject::FromString(std::string str) {
     return from_string(ss, token);
 }
 
-std::vector<uint8_t> IRObject::ToBinary(IRObject obj) {
+std::vector<uint8_t> IRObject::ToBinary(IRObject /*obj*/) {
     std::vector<uint8_t> bin;
     return bin;
 }
 
-IRObject IRObject::FromBinary(std::vector<uint8_t> bin) {
+IRObject IRObject::FromBinary(std::vector<uint8_t> /*bin*/) {
     IRObject obj;
     return obj;
 }
