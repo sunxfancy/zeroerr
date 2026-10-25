@@ -254,3 +254,4 @@ While logging at the end, we can record the time consuming for this function.
 
 Thanks to the `tiv` tool:
 https://github.com/stefanhaustein/TerminalImageViewer
+See [header dependencies and optional modules](docs/dependencies.md) for the lightweight consumer contract, runtime dependencies and migration notes.

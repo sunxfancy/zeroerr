@@ -1,3 +1,4 @@
+
 #include "zeroerr/benchmark.h"
 #include "zeroerr/internal/rng.h"
 #include "zeroerr/table.h"
@@ -176,7 +177,7 @@ void runIteration(BenchState* state) {
     }
 }
 
-void moveResult(BenchState* state, std::string name) {
+void moveResult(BenchState* state, zeroerr::String name) {
     auto& pc           = PerformanceCounter::inst();
     state->result.name = name;
     state->result.has  = pc.has();
@@ -238,7 +239,7 @@ void Benchmark::report() {
     };
     std::cerr << "" << title << ":" << std::endl;
 
-    std::vector<std::string> headers{""};
+    std::vector<zeroerr::String> headers{""};
     for (unsigned i = 0; i < sizeof(names) / sizeof(names[0]); i++) {
         if (result[0].has.data[i]) headers.push_back(names[i]);
     }
@@ -506,7 +507,7 @@ struct LinuxPerformanceCounter {
 namespace detail {
 struct WindowsPerformanceCounter {
     TRACEHANDLE             mTraceHandle;
-    std::string             name = "ZeroErr ETW";
+    zeroerr::String             name = "ZeroErr ETW";
     PEVENT_TRACE_PROPERTIES traceProperties;
 
     inline void beginMeasure() {

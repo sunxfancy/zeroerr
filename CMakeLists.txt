@@ -97,6 +97,7 @@ if(MAIN_PROJECT)
     endif()
 
     if(BUILD_TEST)
+        enable_testing()
         add_subdirectory(test)
     endif()
 
@@ -152,7 +153,7 @@ if(MAIN_PROJECT)
     # # Install
     install(TARGETS zeroerr DESTINATION lib)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zeroerr.hpp DESTINATION include)
-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include DESTINATION include/..)
+    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include)
 else()
     # Export Headerfiles
     set(ZEROERR_INCLUDE_DIR ${header_dirs} PARENT_SCOPE)

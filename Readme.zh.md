@@ -216,3 +216,5 @@ cmake --build ./build
 
 
 
+
+See [header dependencies and optional modules](docs/dependencies.md) for the lightweight consumer contract, runtime dependencies and migration notes.

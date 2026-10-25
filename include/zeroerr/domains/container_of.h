@@ -23,7 +23,7 @@ namespace zeroerr {
  * auto domain = ContainerOf<std::vector<int>>(InRange(0, 100));
  * 
  * // Generate sets of strings
- * auto domain = ContainerOf<std::set<std::string>>(Arbitrary<std::string>());
+ * auto domain = ContainerOf<std::set<zeroerr::String>>(Arbitrary<zeroerr::String>());
  * 
  * // Configure size constraints
  * domain.WithMinSize(5);  // At least 5 elements

@@ -145,7 +145,9 @@ __attribute__((always_inline)) __inline__ static void debug_break(void) { raise(
 
 // Here is for checking the debugger is running
 
-#include <fstream>
+#include <cstdio>
+#include <cerrno>
+#include <cstring>
 
 #ifdef IS_DEBUGGER_ACTIVE
 __attribute__((always_inline)) __inline__ static bool isDebuggerActive() {
@@ -165,19 +167,24 @@ private:
 // https://github.com/catchorg/Catch2/blob/v2.13.1/include/internal/catch_debugger.cpp#L79-L102
 __attribute__((always_inline)) __inline__ static bool isDebuggerActive() {
     ErrnoGuard    guard;
-    std::ifstream in("/proc/self/status");
-    for (std::string line; std::getline(in, line);) {
-        static const int PREFIX_LEN = 11;
-        if (line.compare(0, PREFIX_LEN, "TracerPid:\t") == 0) {
-            return line.length() > PREFIX_LEN && line[PREFIX_LEN] != '0';
+    FILE* in = std::fopen("/proc/self/status", "r");
+    if (!in) return false;
+    char line[256];
+    while (std::fgets(line, sizeof(line), in)) {
+        static const unsigned PREFIX_LEN = 11;
+        if (std::strncmp(line, "TracerPid:\t", PREFIX_LEN) == 0) {
+            bool active = line[PREFIX_LEN] != '0';
+            std::fclose(in);
+            return active;
         }
     }
+    std::fclose(in);
     return false;
 }
 #elif defined(__APPLE__)
 #include <sys/sysctl.h>
 #include <unistd.h>
-#include <iostream>
+
 // The following function is taken directly from the following technical note:
 // https://developer.apple.com/library/archive/qa/qa1361/_index.html
 // Returns true if the current process is being debugged (either
@@ -198,7 +205,7 @@ __attribute__((always_inline)) __inline__ static bool isDebuggerActive() {
     // Call sysctl.
     size = sizeof(info);
     if (sysctl(mib, (sizeof(mib) / sizeof(*mib)), &info, &size, 0, 0) != 0) {
-        std::cerr << "\nCall to sysctl failed - unable to determine if debugger is active **\n";
+        std::fputs("\nCall to sysctl failed - unable to determine if debugger is active **\n", stderr);
         return false;
     }
     // We're being debugged if the P_TRACED flag is set.

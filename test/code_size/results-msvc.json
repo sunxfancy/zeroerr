@@ -1,0 +1,197 @@
+{
+  "baseline_revision": "43c31f64ca1144ca8dd3aad36ce2915136dcab0d",
+  "compiler": "MSVC 19.51.36248.0 (VS 18 2026), x64",
+  "standard": "C++17",
+  "measurements": {
+    "Release_code_size_probe": {
+      "before": {
+        "configuration": "Release",
+        "target": "code_size_probe",
+        "executable_bytes": 45568,
+        "executable_text_bytes": 28952,
+        "target_object_bytes": 710020,
+        "target_object_text_bytes": 100416,
+        "library_object_bytes": 3921589,
+        "library_object_text_bytes": 399424
+      },
+      "after": {
+        "configuration": "Release",
+        "target": "code_size_probe",
+        "executable_bytes": 57856,
+        "executable_text_bytes": 41336,
+        "target_object_bytes": 471995,
+        "target_object_text_bytes": 76924,
+        "library_object_bytes": 3951134,
+        "library_object_text_bytes": 398588
+      },
+      "change_percent": {
+        "executable_bytes": 26.97,
+        "executable_text_bytes": 42.77,
+        "target_object_bytes": -33.52,
+        "target_object_text_bytes": -23.39,
+        "library_object_bytes": 0.75,
+        "library_object_text_bytes": -0.21
+      },
+      "optimized": {
+        "configuration": "Release",
+        "target": "code_size_probe",
+        "executable_bytes": 43520,
+        "executable_text_bytes": 28200,
+        "target_object_bytes": 441087,
+        "target_object_text_bytes": 60195,
+        "library_object_bytes": 3945664,
+        "library_object_text_bytes": 395575
+      },
+      "optimized_vs_baseline_percent": {
+        "executable_bytes": -4.49,
+        "executable_text_bytes": -2.6,
+        "target_object_bytes": -37.88,
+        "target_object_text_bytes": -40.05,
+        "library_object_bytes": 0.61,
+        "library_object_text_bytes": -0.96
+      },
+      "optimized_vs_round1_percent": {
+        "executable_bytes": -24.78,
+        "executable_text_bytes": -31.78,
+        "target_object_bytes": -6.55,
+        "target_object_text_bytes": -21.75,
+        "library_object_bytes": -0.14,
+        "library_object_text_bytes": -0.76
+      },
+      "internal_string": {
+        "configuration": "Release",
+        "target": "code_size_probe",
+        "executable_bytes": 46592,
+        "executable_text_bytes": 29032,
+        "target_object_bytes": 526998,
+        "target_object_text_bytes": 71691,
+        "library_object_bytes": 3227597,
+        "library_object_text_bytes": 325242
+      }
+    },
+    "Debug_code_size_probe": {
+      "before": {
+        "configuration": "Debug",
+        "target": "code_size_probe",
+        "executable_bytes": 267776,
+        "executable_text_bytes": 176119,
+        "target_object_bytes": 1264933,
+        "target_object_text_bytes": 104258,
+        "library_object_bytes": 9709280,
+        "library_object_text_bytes": 593440,
+        "pdb_bytes": 1863680
+      },
+      "after": {
+        "configuration": "Debug",
+        "target": "code_size_probe",
+        "executable_bytes": 240128,
+        "executable_text_bytes": 156089,
+        "target_object_bytes": 967556,
+        "target_object_text_bytes": 79027,
+        "library_object_bytes": 9842474,
+        "library_object_text_bytes": 596812,
+        "pdb_bytes": 1970176
+      },
+      "change_percent": {
+        "executable_bytes": -10.33,
+        "executable_text_bytes": -11.37,
+        "target_object_bytes": -23.51,
+        "target_object_text_bytes": -24.2,
+        "library_object_bytes": 1.37,
+        "library_object_text_bytes": 0.57,
+        "pdb_bytes": 5.71
+      },
+      "optimized": {
+        "configuration": "Debug",
+        "target": "code_size_probe",
+        "executable_bytes": 232960,
+        "executable_text_bytes": 153721,
+        "target_object_bytes": 973561,
+        "target_object_text_bytes": 81084,
+        "library_object_bytes": 9903828,
+        "library_object_text_bytes": 597962,
+        "pdb_bytes": 1953792
+      },
+      "optimized_vs_baseline_percent": {
+        "executable_bytes": -13.0,
+        "executable_text_bytes": -12.72,
+        "target_object_bytes": -23.03,
+        "target_object_text_bytes": -22.23,
+        "library_object_bytes": 2.0,
+        "library_object_text_bytes": 0.76,
+        "pdb_bytes": 4.84
+      },
+      "optimized_vs_round1_percent": {
+        "executable_bytes": -2.99,
+        "executable_text_bytes": -1.52,
+        "target_object_bytes": 0.62,
+        "target_object_text_bytes": 2.6,
+        "library_object_bytes": 0.62,
+        "library_object_text_bytes": 0.19,
+        "pdb_bytes": -0.83
+      }
+    },
+    "Release_unittest": {
+      "before": {
+        "configuration": "Release",
+        "target": "unittest",
+        "executable_bytes": 916992,
+        "executable_text_bytes": 721425,
+        "target_object_bytes": 10422621,
+        "target_object_text_bytes": 1037530,
+        "library_object_bytes": 3929094,
+        "library_object_text_bytes": 401323
+      },
+      "after": {
+        "configuration": "Release",
+        "target": "unittest",
+        "executable_bytes": 832000,
+        "executable_text_bytes": 636721,
+        "target_object_bytes": 9826908,
+        "target_object_text_bytes": 905686,
+        "library_object_bytes": 3958623,
+        "library_object_text_bytes": 400487
+      },
+      "change_percent": {
+        "executable_bytes": -9.27,
+        "executable_text_bytes": -11.74,
+        "target_object_bytes": -5.72,
+        "target_object_text_bytes": -12.71,
+        "library_object_bytes": 0.75,
+        "library_object_text_bytes": -0.21
+      },
+      "optimized": {
+        "configuration": "Release",
+        "target": "unittest",
+        "executable_bytes": 818176,
+        "executable_text_bytes": 623889,
+        "target_object_bytes": 9745717,
+        "target_object_text_bytes": 883762,
+        "library_object_bytes": 3953145,
+        "library_object_text_bytes": 397474
+      },
+      "optimized_vs_baseline_percent": {
+        "executable_bytes": -10.78,
+        "executable_text_bytes": -13.52,
+        "target_object_bytes": -6.49,
+        "target_object_text_bytes": -14.82,
+        "library_object_bytes": 0.61,
+        "library_object_text_bytes": -0.96
+      },
+      "optimized_vs_round1_percent": {
+        "executable_bytes": -1.66,
+        "executable_text_bytes": -2.02,
+        "target_object_bytes": -0.83,
+        "target_object_text_bytes": -2.42,
+        "library_object_bytes": -0.14,
+        "library_object_text_bytes": -0.75
+      }
+    }
+  },
+  "stages": {
+    "before": "Original commit",
+    "after": "First TextBuffer implementation",
+    "optimized": "Shared rendering lifecycle, plain buffer, isolated assertion text and noinline diagnostic entry points",
+    "internal_string": "Internal String and StringBuffer; lightweight default consumers, explicit standard adapter in probe"
+  }
+}

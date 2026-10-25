@@ -223,6 +223,17 @@
 // == COMPILER WARNINGS ============================================================================
 // =================================================================================================
 
+// Clang warning groups vary across upstream, Apple and Android releases.
+// Test support instead of emitting an unknown diagnostic from the suppression itself.
+#define ZEROERR_CLANG_SUPPRESS_VARIADIC_OMITTED
+#if ZEROERR_CLANG && !ZEROERR_ICC
+#if __has_warning("-Wvariadic-macro-arguments-omitted")
+#undef ZEROERR_CLANG_SUPPRESS_VARIADIC_OMITTED
+#define ZEROERR_CLANG_SUPPRESS_VARIADIC_OMITTED \
+    ZEROERR_CLANG_SUPPRESS_WARNING("-Wvariadic-macro-arguments-omitted")
+#endif
+#endif
+
 // both the header and the implementation suppress all of these,
 // so it only makes sense to aggregate them like so
 #define ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH                                                      \
@@ -233,7 +244,7 @@
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wmissing-prototypes")                                         \
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wc++98-compat")                                               \
     ZEROERR_CLANG_SUPPRESS_WARNING("-Wc++98-compat-pedantic")                                      \
-    ZEROERR_CLANG_SUPPRESS_WARNING("-Wvariadic-macro-arguments-omitted")                           \
+    ZEROERR_CLANG_SUPPRESS_VARIADIC_OMITTED                                                        \
                                                                                                    \
     ZEROERR_GCC_SUPPRESS_WARNING_PUSH                                                              \
     ZEROERR_GCC_SUPPRESS_WARNING("-Wunknown-pragmas")                                              \
@@ -304,7 +315,7 @@
 
 #define ZEROERR_SUPPRESS_VARIADIC_MACRO                                             \
     ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments") \
-    ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wvariadic-macro-arguments-omitted")
+    ZEROERR_CLANG_SUPPRESS_VARIADIC_OMITTED
 
 #define ZEROERR_SUPPRESS_VARIADIC_MACRO_POP ZEROERR_CLANG_SUPPRESS_WARNING_POP
 

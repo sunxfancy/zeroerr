@@ -1,6 +1,8 @@
+#include <iostream>
 #define ZEROERR_ENABLE_PFR
 #define ZEROERR_ENABLE_SPEED_TEST
 
+#include "zeroerr/std_adapter.h"
 #include "zeroerr/log.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/benchmark.h"
@@ -115,6 +117,7 @@ TEST_CASE("cross function info") {
 
 TEST_CASE("debug log") {
     int sum = 0;
+    (void)sum;  // DLOG does not evaluate its arguments in release builds.
     DLOG(LOG_FIRST, sum < 5, "debug log i = {i}", 1);
     DLOG(WARN_IF, sum < 5, "debug log i = {i}, sum = {sum}", 2, sum);
 }

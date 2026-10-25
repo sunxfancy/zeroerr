@@ -5,7 +5,7 @@
 #include <zeroerr/print.h>
 
 #include <ostream>
-#include <string>
+#include "zeroerr/string.h"
 #include <vector>
 
 namespace zeroerr {
@@ -15,14 +15,14 @@ namespace zeroerr {
  */
 struct Card {
     Card() : title(), width(0), height(0) {}
-    Card(std::string title) : title(title), width(0), height(0) {}
+    Card(zeroerr::String title) : title(title), width(0), height(0) {}
     Card(unsigned width, unsigned height) : title(), width(width), height(height) {}
-    Card(std::string title, unsigned width, unsigned height)
+    Card(zeroerr::String title, unsigned width, unsigned height)
         : title(title), width(width), height(height) {}
-    std::string title;
+    zeroerr::String title;
     unsigned    width, height;
 
-    void show(std::ostream& os, std::string str);
+    void show(std::ostream& os, zeroerr::String str);
 };
 
 /**
@@ -31,9 +31,9 @@ struct Card {
 class Table : public Card {
 public:
     Table() : Card() {}
-    Table(std::string title) : Card(title) {}
+    Table(zeroerr::String title) : Card(title) {}
     Table(unsigned width, unsigned height) : Card(width, height) {}
-    Table(std::string title, unsigned width, unsigned height) : Card(title, width, height) {}
+    Table(zeroerr::String title, unsigned width, unsigned height) : Card(title, width, height) {}
     ~Table() {}
 
     /**
@@ -41,13 +41,13 @@ public:
      */
     struct Style {
         Style() {}
-        Style(std::initializer_list<std::string> args) : m_args(args) {}
-        std::vector<std::string> m_args;
+        Style(std::initializer_list<zeroerr::String> args) : m_args(args) {}
+        std::vector<zeroerr::String> m_args;
 
         operator bool() const { return !m_args.empty(); }
     };
 
-    static void registerStyle(std::string name, Style style);
+    static void registerStyle(zeroerr::String name, Style style);
 
     /**
      * @brief getStyle can load predefined style from the StyleManager.
@@ -72,7 +72,7 @@ public:
      *  "minimal_heavy_head"
      *  "minimal_double_hea
      */
-    static Style getStyle(std::string name);
+    static Style getStyle(zeroerr::String name);
 
     /**
      * @brief Config is used to configure the table style how it is displayed.
@@ -98,26 +98,26 @@ public:
      * @param config decides how the table is displayed.
      * @param style decides the border style of the table.
      */
-    std::string str(Config config = Config(), Style style = Table::getStyle("square_double_head"));
+    zeroerr::String str(Config config = Config(), Style style = Table::getStyle("square_double_head"));
 
-    void set_header(std::vector<std::string> _header) { header = _header; }
-    void add_row(std::initializer_list<std::string> _row) { cells.push_back(_row); }
+    void set_header(std::vector<zeroerr::String> _header) { header = _header; }
+    void add_row(std::initializer_list<zeroerr::String> _row) { cells.push_back(_row); }
 
     template <typename T, typename... Args>
-    void push_back(std::vector<std::string>& row, T&& t, Args&&... args) {
+    void push_back(std::vector<zeroerr::String>& row, T&& t, Args&&... args) {
         _push_back(rank<2>{}, row, std::forward<T>(t));
         push_back(row, std::forward<Args>(args)...);
     }
 
     template <typename T>
-    void push_back(std::vector<std::string>& row, T&& t) {
+    void push_back(std::vector<zeroerr::String>& row, T&& t) {
         _push_back(rank<2>{}, row, std::forward<T>(t));
     }
 
 
     template <typename... Args>
     void add_row(Args&&... args) {
-        std::vector<std::string> row;
+        std::vector<zeroerr::String> row;
         push_back(row, std::forward<Args>(args)...);
         cells.push_back(row);
     }
@@ -135,7 +135,7 @@ public:
 
 protected:
     ZEROERR_ENABLE_IF(!ZEROERR_IS_CONTAINER)
-    _push_back(rank<0>, std::vector<std::string>& row, T&& t) {
+    _push_back(rank<0>, std::vector<zeroerr::String>& row, T&& t) {
         Printer print;
         print.isCompact  = true;
         print.isQuoted   = false;
@@ -145,12 +145,12 @@ protected:
     }
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_STRING)
-    _push_back(rank<2>, std::vector<std::string>& row, T t) {
-        row.push_back(std::forward<std::string>(t));
+    _push_back(rank<2>, std::vector<zeroerr::String>& row, T t) {
+        row.push_back(std::forward<zeroerr::String>(t));
     }
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_CONTAINER)
-    _push_back(rank<1>, std::vector<std::string>& row, const T& t) {
+    _push_back(rank<1>, std::vector<zeroerr::String>& row, const T& t) {
         for (auto& ele : t) {
             Printer print;
             print.isCompact  = true;
@@ -162,8 +162,8 @@ protected:
     }
 
     std::vector<unsigned>                 col_width;
-    std::vector<std::string>              header, footer;
-    std::vector<std::vector<std::string>> cells;
+    std::vector<zeroerr::String>              header, footer;
+    std::vector<std::vector<zeroerr::String>> cells;
 };
 
 

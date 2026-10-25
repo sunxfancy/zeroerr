@@ -1,6 +1,7 @@
 #define ZEROERR_ENABLE_PFR
 
 
+#include "zeroerr/std_adapter.h"
 #include "zeroerr/print.h"
 #include "zeroerr/assert.h"
 #include "zeroerr/dbg.h"
@@ -15,6 +16,16 @@
 
 
 using namespace zeroerr;
+
+enum class UnstreamableState { Ready };
+
+TEST_CASE("unstreamable enum has a diagnostic fallback") {
+    std::stringstream output;
+    Printer           print(output);
+    print(UnstreamableState::Ready);
+    CHECK(output.str().find("<unprintable enum ") != std::string::npos);
+    CHECK(output.str().find("UnstreamableState") != std::string::npos);
+}
 
 TEST_CASE("print_test") {
     if (detail::is_streamable<std::ostream, int>::value) {
@@ -33,7 +44,7 @@ TEST_CASE("print_test") {
     print(a, b, c);
 
     std::vector<int> vec = {1, 5, 2};
-    print(vec, "hello", dbg(std::complex<float>(1, 2.54)));
+    print(vec, "hello", dbg(std::complex<float>(1, 2.54f)));
 
     auto& myvec = vec;
     print(myvec);
@@ -103,4 +114,52 @@ TEST_CASE("print in stream") {
     Printer print;
     print.isCompact = true;
     std::cerr << "map: " << print(bar) << std::endl;
+}
+
+namespace {
+int printable_function(int value) { return value; }
+void printable_variadic_function(const char*, ...) {}
+void printable_noexcept_function() noexcept {}
+}
+
+TEST_CASE("print function pointers") {
+    Printer print;
+    auto pointer = &printable_function;
+    std::ostringstream expected;
+    expected << "<" << Printer::type(pointer) << " at "
+             << reinterpret_cast<const void*>(pointer) << ">\n";
+    CHECK(print(pointer).str() == expected.str());
+    CHECK(print(printable_function).str() == expected.str());
+    CHECK(print(static_cast<decltype(pointer)>(nullptr)).str() == "nullptr\n");
+    CHECK(print(&printable_variadic_function).str().find(" at ") != std::string::npos);
+    CHECK(print(&printable_noexcept_function).str().find(" at ") != std::string::npos);
+
+    print.isCompact = true;
+    std::vector<decltype(pointer)> pointers{pointer, nullptr};
+    CHECK(print(pointers).str() == "[" + expected.str().substr(0, expected.str().size() - 1) +
+                                     ", nullptr]\n");
+}
+
+TEST_CASE("print std function") {
+    Printer print;
+    std::function<int(int)> empty;
+    CHECK(print(empty).str() == "nullptr\n");
+    std::function<int(int)> null_pointer = static_cast<int (*)(int)>(nullptr);
+    CHECK(print(null_pointer).str() == "nullptr\n");
+
+    std::function<int(int)> function = printable_function;
+    const std::string expected = "<" + Printer::type(function) + " holding " +
+                                 Printer::demangle(function.target_type().name()) + ">";
+    CHECK(print(function).str() == expected + "\n");
+
+    int calls = 0;
+    auto lambda = [&calls](int value) { ++calls; return value; };
+    function = lambda;
+    CHECK(print(function).str() == "<" + Printer::type(function) + " holding " +
+                                      Printer::type(lambda) + ">\n");
+    CHECK(calls == 0);
+
+    print.isCompact = true;
+    std::vector<std::function<int(int)>> functions{printable_function, empty};
+    CHECK(print(functions).str() == "[" + expected + ", nullptr]\n");
 }

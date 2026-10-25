@@ -12,7 +12,7 @@ TEST_CASE("1. basic log test") {
     LOG("log with basic thype {} {} {} {}", 1, true, 1.0, "string");
 
     std::vector<std::tuple<int, float, std::string>> data = {
-        {1, 1.0, "string"}, {2, 2.0, "string"}
+        {1, 1.0f, "string"}, {2, 2.0f, "string"}
     };
     LOG("log with complex type: {data}", data);
 
@@ -30,7 +30,7 @@ struct Expr {
     virtual ~Expr() {}
 };
 
-Expr* parse_the_input(std::string input) {
+Expr* parse_the_input(std::string /*input*/) {
     return new Expr();
 }
 
@@ -51,12 +51,13 @@ Expr* parseExpr(std::string input)
 TEST_CASE("parsing test") {
     zeroerr::suspendLog();
     std::string log;
-    Expr* e1 = parseExpr("1 + 2");
+    parseExpr("1 + 2");
     log = LOG_GET(parseExpr, "CacheHit", input, std::string);
     CHECK(log == std::string{});
     Expr* e2 = parseExpr("1 + 2");
     log = zeroerr::LogStream::getDefault()
         .getLog<std::string>("parseExpr", "CacheHit", "input");
+    delete e2;
     CHECK(log == "1 + 2"); 
     zeroerr::resumeLog();
 }
