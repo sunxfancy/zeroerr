@@ -12,6 +12,7 @@
 #include <iosfwd>
 #include <map>
 #include "zeroerr/string.h"
+#include <utility>
 #include <vector>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -185,11 +186,11 @@ extern int _ZEROERR_G_VERBOSE;
 #undef ZEROERR_G_CONTEXT_SCOPE
 #endif
 
-#define ZEROERR_G_CONTEXT_SCOPE(x)                                 \
-    if (x) {                                                       \
-        for (auto* i : zeroerr::_ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
-            i->str(zeroerr::getStderrPrinter().os);                                     \
-        }                                                          \
+#define ZEROERR_G_CONTEXT_SCOPE(x)                                                     \
+    if (x) {                                                                           \
+        for (auto* zeroerr_context_scope : zeroerr::_ZEROERR_G_CONTEXT_SCOPE_VECTOR) { \
+            zeroerr_context_scope->str(zeroerr::getStderrPrinter().os);                                     \
+        }                                                                              \
     }
 
 #ifdef ZEROERR_PRINT_ASSERT_DEFAULT_PRINTER
@@ -335,7 +336,7 @@ struct LogMessage {
 template <typename... T>
 struct LogMessageImpl final : LogMessage {
     std::tuple<T...> args;
-    LogMessageImpl(T... args) : LogMessage(), args(args...) {}
+    LogMessageImpl(T... args) : LogMessage(), args(std::move(args)...) {}
 
     zeroerr::String str() const override {
         return gen_str(info->message, args, detail::gen_seq<sizeof...(T)>{});
@@ -517,8 +518,8 @@ public:
             p = alloc_block_lockfree(size);
         else
             p = alloc_block(size);
-        // LogMessage* msg = new (p) LogMessageImpl<T...>(std::forward<T>(args)...);
-        LogMessage* msg = new (p) LogMessageImpl<detail::to_store_type_t<T>...>(args...);
+        LogMessage* msg =
+            new (p) LogMessageImpl<detail::to_store_type_t<T>...>(std::forward<T>(args)...);
         return {msg, size, *this};
     }
 

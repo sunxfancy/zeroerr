@@ -2,9 +2,9 @@ name: CMake
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "dev" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "dev" ]
 
 jobs:
   build:
@@ -19,6 +19,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
+    - name: Check Clang warning hygiene
+      if: runner.os != 'Windows'
+      run: python3 scripts/check-warning-hygiene.py --compiler clang++
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. 

@@ -1,8 +1,7 @@
-#include <sstream>
-#include <string>
 #include "zeroerr/internal/serialization.h"
 #include "zeroerr/assert.h"
 
+#include <sstream>
 namespace zeroerr {
 
 IRObject* IRObject::alloc(size_t size) {
@@ -146,12 +145,12 @@ IRObject IRObject::FromString(zeroerr::String str) {
     return from_string(ss, token);
 }
 
-std::vector<uint8_t> IRObject::ToBinary(IRObject obj) {
+std::vector<uint8_t> IRObject::ToBinary(IRObject /*obj*/) {
     std::vector<uint8_t> bin;
     return bin;
 }
 
-IRObject IRObject::FromBinary(std::vector<uint8_t> bin) {
+IRObject IRObject::FromBinary(std::vector<uint8_t> /*bin*/) {
     IRObject obj;
     return obj;
 }

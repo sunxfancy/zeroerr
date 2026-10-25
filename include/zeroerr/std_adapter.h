@@ -71,11 +71,11 @@ operator<<(StringBuffer& buffer, const T& value) {
 }
 
 template <class T>
-typename std::enable_if<std::is_class<T>::value && !detail::is_string<T>::value &&
-                            !detail::is_container<T>::value && !detail::is_complex<T>::value &&
+typename std::enable_if<std::is_class<typename std::decay<T>::type>::value && !detail::is_string<typename std::decay<T>::type>::value &&
+                            !detail::is_container<typename std::decay<T>::type>::value && !detail::is_complex<typename std::decay<T>::type>::value &&
                             detail::is_streamable<std::ostream, T>::value,
                         void>::type
-PrinterExt(Printer& printer, T value, unsigned level, const char* lb, rank<1>) {
+PrinterExt(Printer& printer, T&& value, unsigned level, const char* lb, rank<1>) {
     printer.os << printer.tab(level);
     detail::standardInsert(printer.os, value);
     printer.os << lb;

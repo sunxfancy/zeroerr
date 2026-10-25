@@ -2,6 +2,7 @@
 #include "zeroerr/print.h"
 
 #include "zeroerr/string.h"
+#include <utility>
 
 namespace zeroerr {
 
@@ -23,7 +24,7 @@ namespace zeroerr {
  * 
  */
 template <typename... T>
-ZEROERR_DIAGNOSTIC_NOINLINE zeroerr::String format(const char* fmt, T... args) {
+ZEROERR_DIAGNOSTIC_NOINLINE zeroerr::String format(const char* fmt, T&&... args) {
     // The sentinel keeps the array valid for an empty parameter pack.
     const detail::DiagnosticValue values[] = {detail::makeDiagnosticValue(args)...,
                                               {nullptr, nullptr}};

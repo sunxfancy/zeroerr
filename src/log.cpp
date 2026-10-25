@@ -5,6 +5,8 @@
 #include "zeroerr/log.h"
 #include "zeroerr/internal/threadsafe.h"
 
+#include <cstdio>
+#include <ctime>
 #include <iomanip>
 #include <unordered_set>
 
@@ -222,9 +224,31 @@ bool LogIterator::check_filter() {
     return true;
 }
 
+static FILE* openLogFile(const zeroerr::String& name) {
+#ifdef _MSC_VER
+    FILE* file = nullptr;
+    fopen_s(&file, name.c_str(), "w");
+    return file;
+#else
+    return std::fopen(name.c_str(), "w");
+#endif
+}
+
+static std::tm logLocalTime(std::time_t time) {
+    std::tm result{};
+#ifdef _MSC_VER
+    localtime_s(&result, &time);
+#elif defined(__unix__) || defined(__APPLE__)
+    localtime_r(&time, &result);
+#else
+    if (const std::tm* value = std::localtime(&time)) result = *value;
+#endif
+    return result;
+}
+
 class FileLogger : public Logger {
 public:
-    FileLogger(zeroerr::String name) { file = fopen(name.c_str(), "w"); }
+    FileLogger(zeroerr::String name) { file = openLogFile(name); }
     ~FileLogger() {
         if (file) fclose(file);
     }
@@ -280,7 +304,7 @@ struct FileCache {
         zeroerr::String path = name.substr(0, p);
         make_dir(path.c_str());
 
-        FILE* file = fopen(name.c_str(), "w");
+        FILE* file = openLogFile(name);
         if (file) {
             files[name] = file;
             return file;
@@ -315,7 +339,7 @@ public:
                 switch (dir_mode[i]) {
                     case LogStream::DAILY_FILE: {
                         std::time_t t  = static_cast<std::time_t>(p->time.nanoseconds / 1000000000);
-                        std::tm     tm = *std::localtime(&t);
+                        std::tm     tm = logLocalTime(t);
                         path << std::put_time(&tm, "%Y-%m-%d");
                         break;
                     }
@@ -447,7 +471,7 @@ void resumeLog() {
 static zeroerr::String DefaultLogCallback(const LogMessage& msg, bool colorful) {
     std::stringstream ss;
     std::time_t       t  = static_cast<std::time_t>(msg.time.nanoseconds / 1000000000);
-    std::tm           tm = *std::localtime(&t);
+    std::tm           tm = logLocalTime(t);
 
     ss << zeroerr_color(Dim) << '[' << zeroerr_color(Reset);
     switch (msg.info->severity) {

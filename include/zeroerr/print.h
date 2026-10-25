@@ -5,6 +5,7 @@
 #include "zeroerr/internal/text.h"
 #include "zeroerr/buffer.h"
 #include "zeroerr/internal/typetraits.h"
+#include <functional>
 
 #include <memory>
 
@@ -31,7 +32,7 @@ constexpr unsigned max_rank = 5;
 
 struct Printer;
 template <typename T>
-void PrinterExt(Printer&, T, unsigned, const char*, rank<0>);
+void PrinterExt(Printer&, T&&, unsigned, const char*, rank<0>);
 
 namespace detail {
 
@@ -78,13 +79,13 @@ struct Printer {
     }
 
     template <typename T, typename... V>
-    void call(T value, V... others) {
+    void call(T&& value, V&&... others) {
         PrinterExt(*this, std::forward<T>(value), 0, " ", rank<max_rank>{});
         call(std::forward<V>(others)...);
     }
 
     template <typename T>
-    void call(T value) {
+    void call(T&& value) {
         PrinterExt(*this, std::forward<T>(value), 0, "", rank<max_rank>{});
         os << line_break;
         os.flush();
@@ -120,18 +121,44 @@ public:
     print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
 #else
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
-    print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
+    print(T value, unsigned level, const char* lb, rank<0>) {
+        if constexpr (detail::is_streamable<std::ostream, T>::value) {
+            os << tab(level) << value << lb;
+        } else {
+            os << tab(level) << "<unprintable enum " << type(value) << ">" << lb;
+        }
+    }
 #endif
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_INT || ZEROERR_IS_FLOAT)
     print(T value, unsigned level, const char* lb, rank<0>) { os << tab(level) << value << lb; }
 
-    ZEROERR_ENABLE_IF(ZEROERR_IS_POINTER)
+    ZEROERR_ENABLE_IF(ZEROERR_IS_POINTER &&
+                      !std::is_function<typename std::remove_pointer<T>::type>::value)
     print(T value, unsigned level, const char* lb, rank<0>) {
         if (value == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
             os << tab(level) << "<" << type(value) << " at " << static_cast<const void*>(value) << ">" << lb;
+    }
+
+    ZEROERR_ENABLE_IF(ZEROERR_IS_POINTER &&
+                      std::is_function<typename std::remove_pointer<T>::type>::value)
+    print(T value, unsigned level, const char* lb, rank<1>) {
+        if (value == nullptr)
+            os << tab(level) << "nullptr" << lb;
+        else
+            os << tab(level) << "<" << type(value) << " at "
+               << reinterpret_cast<const void*>(value) << ">" << lb;
+    }
+
+    template <class R, class... Args>
+    void print(const std::function<R(Args...)>& value, unsigned level, const char* lb, rank<3>) {
+        if (!value)
+            os << tab(level) << "nullptr" << lb;
+        else
+            os << tab(level) << "<" << type(value) << " holding "
+               << demangle(value.target_type().name()) << ">" << lb;
     }
 
 
@@ -197,7 +224,7 @@ public:
 
 
     ZEROERR_ENABLE_IF(ZEROERR_IS_AUTOPTR)
-    print(T value, unsigned level, const char* lb, rank<3>) {
+    print(const T& value, unsigned level, const char* lb, rank<3>) {
         if (value.get() == nullptr)
             os << tab(level) << "nullptr" << lb;
         else
@@ -301,7 +328,7 @@ DiagnosticValue makeDiagnosticValue(T& value) {
  * @param r  the rank of the rule. 0 is lowest priority.
  */
 template <class T>
-void PrinterExt(Printer& P, T v, unsigned level, const char* lb, rank<0>) {
+void PrinterExt(Printer& P, T&& v, unsigned level, const char* lb, rank<0>) {
     P.print(std::forward<T>(v), level, lb, rank<max_rank>{});
 }
 

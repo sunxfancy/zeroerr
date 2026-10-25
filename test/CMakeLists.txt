@@ -1,6 +1,6 @@
 ## LLVM Support
 
-find_package(LLVM CONFIG)
+find_package(LLVM CONFIG QUIET)
 if(LLVM_FOUND)
     if(CMAKE_CXX_STANDARD GREATER_EQUAL 14)
         message(STATUS " Found LLVM ${LLVM_PACKAGE_VERSION} ")
