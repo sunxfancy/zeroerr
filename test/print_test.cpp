@@ -163,3 +163,5 @@ TEST_CASE("print std function") {
     std::vector<std::function<int(int)>> functions{printable_function, empty};
     CHECK(print(functions).str() == "[" + expected + ", nullptr]\n");
 }
+
+#include "smart_character_pointer_cases.h"

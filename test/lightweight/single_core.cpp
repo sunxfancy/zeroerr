@@ -22,3 +22,5 @@ TEST_CASE("default core has no standard string or streams") {
     INFO("context", 12);
     CHECK(1 == 1);
 }
+
+#include "../smart_character_pointer_cases.h"
