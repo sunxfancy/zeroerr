@@ -1,0 +1,23 @@
+name: Clang per-test coverage
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install LLVM coverage tools
+        run: sudo apt-get update && sudo apt-get install -y clang llvm libclang-rt-dev ninja-build
+      - name: Configure
+        run: >-
+          cmake -S . -B build-coverage -G Ninja
+          -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+          -DBUILD_TEST=ON -DZEROERR_ENABLE_COVERAGE=ON -DUSE_MOLD=OFF
+          -DCMAKE_DISABLE_FIND_PACKAGE_LLVM=ON -DCMAKE_BUILD_TYPE=Debug
+      - name: Build
+        run: cmake --build build-coverage -j 2
+      - name: Test real per-test profiles
+        run: ctest --test-dir build-coverage/test --output-on-failure
