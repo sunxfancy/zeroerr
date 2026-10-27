@@ -106,3 +106,5 @@ foreach(order IN ITEMS zeroerr_first stl_first)
     endif()
     add_test(NAME PrintCapabilities_${order} COMMAND print_capabilities_${order})
 endforeach()
+
+add_subdirectory(native_fixture_identity)
