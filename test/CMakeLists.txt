@@ -108,3 +108,4 @@ foreach(order IN ITEMS zeroerr_first stl_first)
 endforeach()
 
 add_subdirectory(native_fixture_identity)
+add_subdirectory(assertion_contract)

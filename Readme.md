@@ -255,3 +255,13 @@ While logging at the end, we can record the time consuming for this function.
 Thanks to the `tiv` tool:
 https://github.com/stefanhaustein/TerminalImageViewer
 See [header dependencies and optional modules](docs/dependencies.md) for the lightweight consumer contract, runtime dependencies and migration notes.
+
+### Strict check failures
+
+`CHECK` and its comparison variants keep their warning-only behavior by default.
+Define `ZEROERR_CHECK_AS_ERROR` for the zeroerr library and its consumers to make
+these checks count as errors and make assertion warnings fail the runner. With
+CMake, `target_compile_definitions(zeroerr PUBLIC ZEROERR_CHECK_AS_ERROR)` applies
+the policy consistently. Failed `REQUIRE`/`ASSERT` calls from context-free helpers
+also fail the enclosing test or subcase. Comparisons evaluate each operand once,
+including when formatting diagnostics for temporary operands.
