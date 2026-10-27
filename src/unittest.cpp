@@ -12,13 +12,201 @@
 
 #include <iomanip>
 #include <iostream>
+#include <memory>
+#include <locale>
 #include <ostream>
+#include <sstream>
 #include <regex>
 #include <set>
 #include <string>
 #include <vector>
 
+#ifdef ZEROERR_ENABLE_COVERAGE
+#include <cstdint>
+#include <filesystem>
+#include <fstream>
+#include <cstdlib>
+#include <cerrno>
+#ifdef _WIN32
+#include <process.h>
+#else
+#include <sys/wait.h>
+#include <unistd.h>
+#endif
+
+#ifndef ZEROERR_COVERAGE_PYTHON
+#define ZEROERR_COVERAGE_PYTHON "python3"
+#endif
+#ifndef ZEROERR_COVERAGE_SCRIPT
+#define ZEROERR_COVERAGE_SCRIPT ""
+#endif
+#ifndef ZEROERR_COVERAGE_SOURCE_ROOT
+#define ZEROERR_COVERAGE_SOURCE_ROOT ""
+#endif
+#ifndef ZEROERR_COVERAGE_PROFDATA
+#define ZEROERR_COVERAGE_PROFDATA "llvm-profdata"
+#endif
+#ifndef ZEROERR_COVERAGE_COV
+#define ZEROERR_COVERAGE_COV "llvm-cov"
+#endif
+
+extern "C" {
+void __llvm_profile_reset_counters(void);
+uint64_t __llvm_profile_get_size_for_buffer(void);
+int __llvm_profile_write_buffer(char* buffer);
+}
+#endif
+
 namespace zeroerr {
+
+#ifdef ZEROERR_ENABLE_COVERAGE
+namespace {
+int coverageCommand(const UnitTest& config) {
+    const char* python_override = std::getenv("ZEROERR_COVERAGE_PYTHON");
+    const char* script_override = std::getenv("ZEROERR_COVERAGE_SCRIPT");
+    std::filesystem::path script = script_override ? script_override : ZEROERR_COVERAGE_SCRIPT;
+    if (!script_override && (script.empty() || !std::filesystem::is_regular_file(script)))
+        script = std::filesystem::absolute(config.binary.c_str()).parent_path() / "zeroerr-coverage.py";
+    if (!std::filesystem::is_regular_file(script)) {
+        std::cerr << "Coverage helper not found. Set ZEROERR_COVERAGE_SCRIPT to coverage-report.py, "
+                     "or place zeroerr-coverage.py beside the executable.\n";
+        return 2;
+    }
+    std::vector<std::string> arguments = {
+        python_override ? python_override : ZEROERR_COVERAGE_PYTHON,
+        script.string(), "--run", config.binary,
+        "--llvm-profdata", ZEROERR_COVERAGE_PROFDATA,
+        "--llvm-cov", ZEROERR_COVERAGE_COV,
+    };
+    if (std::string(ZEROERR_COVERAGE_SOURCE_ROOT).size()) {
+        arguments.push_back("--source-root");
+        arguments.push_back(ZEROERR_COVERAGE_SOURCE_ROOT);
+    }
+    std::vector<std::string> test_arguments;
+    for (const auto& stored_arg : config.coverage_arguments) {
+        const std::string arg(stored_arg.c_str());
+        if (arg == "--coverage" || arg == "-c") continue;
+        const std::pair<const char*, const char*> options[] = {
+            {"--coverage-output=", "--output-dir"},
+            {"--coverage-include=", "--include"},
+            {"--coverage-exclude=", "--exclude"},
+        };
+        bool consumed = false;
+        for (const auto& option : options) {
+            const std::string prefix(option.first);
+            if (arg.compare(0, prefix.size(), prefix) == 0) {
+                arguments.push_back(option.second);
+                arguments.push_back(arg.substr(prefix.size()));
+                consumed = true;
+                break;
+            }
+        }
+        if (!consumed) test_arguments.push_back(arg);
+    }
+    arguments.push_back("--");
+    arguments.insert(arguments.end(), test_arguments.begin(), test_arguments.end());
+    // Pass an argv array, never shell-interpolate paths, regexes or test names.
+#ifdef _WIN32
+    // The Windows spawn API joins argv into a command line without quoting it.
+    // Encode each argument using the receiving CRT's backslash/quote rules.
+    const std::string program = arguments[0];
+    for (auto& arg : arguments) {
+        std::string quoted = "\"";
+        size_t slashes = 0;
+        for (char c : arg) {
+            if (c == '\\') { ++slashes; continue; }
+            quoted.append(c == '"' ? slashes * 2 + 1 : slashes, '\\');
+            quoted += c;
+            slashes = 0;
+        }
+        quoted.append(slashes * 2, '\\');
+        arg = quoted + '"';
+    }
+#endif
+    std::vector<char*> argv;
+    for (auto& arg : arguments) argv.push_back(const_cast<char*>(arg.c_str()));
+    argv.push_back(nullptr);
+#ifdef _WIN32
+    const auto status = _spawnvp(_P_WAIT, program.c_str(), argv.data());
+    if (status >= 0) return static_cast<int>(status);
+#else
+    const pid_t pid = fork();
+    if (pid == 0) {
+        execvp(argv[0], argv.data());
+        std::cerr << "Could not start Python; set ZEROERR_COVERAGE_PYTHON to a Python 3 executable.\n";
+        _exit(2);
+    }
+    if (pid > 0) {
+        int status = 0;
+        pid_t waited;
+        do { waited = waitpid(pid, &status, 0); } while (waited < 0 && errno == EINTR);
+        if (waited == pid && WIFEXITED(status)) return WEXITSTATUS(status);
+    }
+#endif
+    std::cerr << "Could not run coverage helper; check Python and ZEROERR_COVERAGE_PYTHON.\n";
+    return 2;
+}
+
+std::string coverageJsonString(const std::string& value) {
+    std::ostringstream out;
+    out << '"';
+    for (unsigned char c : value) {
+        if (c == '"' || c == '\\') out << '\\' << c;
+        else if (c < 0x20) {
+            out << "\\u00" << "0123456789abcdef"[c >> 4] << "0123456789abcdef"[c & 15];
+        } else out << c;
+    }
+    out << '"';
+    return out.str();
+}
+
+// Buffer snapshots avoid filename merging and the runtime's exit-time writer
+// overwriting the last test. Subcases deliberately share their parent's counters.
+class CoverageSession {
+    std::filesystem::path directory;
+    std::ofstream manifest;
+    unsigned sequence = 0;
+public:
+    explicit CoverageSession(const std::string& output) : directory(output) {
+        if (output.empty()) return;
+        if (!std::filesystem::create_directories(directory))
+            throw std::runtime_error("coverage output directory already exists: " + output);
+        manifest.exceptions(std::ios::badbit | std::ios::failbit);
+        manifest.imbue(std::locale::classic());
+        manifest.open(directory / "manifest.jsonl");
+        manifest << "{\"schema\":1,\"granularity\":\"test_case\"}\n";
+    }
+    void begin() {
+        if (manifest.is_open()) __llvm_profile_reset_counters();
+    }
+    void end(const TestCase& tc, const TestContext& ctx, int result) {
+        if (!manifest.is_open()) return;
+        std::vector<char> buffer(static_cast<size_t>(__llvm_profile_get_size_for_buffer()));
+        if (__llvm_profile_write_buffer(buffer.data()) != 0)
+            throw std::runtime_error("could not snapshot Clang coverage counters");
+        const std::string profile = "test-" + std::to_string(sequence++) + ".profraw";
+        std::ofstream raw;
+        raw.exceptions(std::ios::badbit | std::ios::failbit);
+        raw.open(directory / profile, std::ios::binary);
+        raw.write(buffer.data(), static_cast<std::streamsize>(buffer.size()));
+        raw.close();
+        manifest << "{\"name\":" << coverageJsonString(tc.name)
+                 << ",\"file\":" << coverageJsonString(tc.file)
+                 << ",\"line\":" << tc.line
+                 << ",\"seconds\":" << std::setprecision(17) << ctx.duration.count()
+                 << ",\"result\":" << result
+                 << ",\"profile\":" << coverageJsonString(profile) << "}\n";
+        manifest.flush();
+    }
+    void finish() {
+        if (manifest.is_open()) {
+            manifest << "{\"complete\":true}\n";
+            manifest.close();
+        }
+    }
+};
+} // namespace
+#endif
 
 namespace detail {
 static std::set<TestCase> getRegisteredTests(unsigned type);
@@ -131,7 +319,11 @@ static void printUsage() {
               << "      --reporters=NAME      Reporter to use: \"console\" or \"xml\"\n"
               << "  -x                        Shortcut for --reporters=xml\n"
               << "      --no-color            Disable colored output\n"
-              << "      --log-to-report       Include log messages in the report\n";
+              << "      --log-to-report       Include log messages in the report\n"
+              << "  -c, --coverage           Collect coverage and generate a report (Clang build)\n"
+              << "      --coverage-output=DIR Write profiles to a new directory\n"
+              << "      --coverage-include=REGEX Select source paths for the coverage report\n"
+              << "      --coverage-exclude=REGEX Exclude source paths from the coverage report\n";
 }
 
 UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
@@ -157,6 +349,10 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
     };
 
     auto parse_char = [&](char arg) {
+        if (arg == 'c') {
+            this->run_coverage = true;
+            return true;
+        }
         if (arg == 'v') {
             this->silent = false;
             return true;
@@ -189,6 +385,19 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
     };
 
     auto parse_token = [&](zeroerr::String arg) {
+        if (arg == "coverage") {
+            this->run_coverage = true;
+            return true;
+        }
+        if (arg.substr(0, 16) == "coverage-output=") {
+            this->coverage_output = arg.substr(16);
+            if (coverage_output.empty()) {
+                std::cerr << "coverage-output needs a directory\n";
+                invalid_args = true;
+            }
+            return true;
+        }
+        if (arg.find("coverage-include=") == 0 || arg.find("coverage-exclude=") == 0) return true;
         if (arg == "verbose") {
             this->silent = false;
             return true;
@@ -266,6 +475,7 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
     };
 
     auto args = convert_to_vec();
+    coverage_arguments = args;
     for (size_t i = 0; i < args.size(); ++i) parse_pos(args, i);
 
     binary = argv[0];
@@ -341,6 +551,34 @@ int UnitTest::run() {
         return 0;
     }
 
+    if (run_coverage && !list_test_cases) {
+#ifdef ZEROERR_ENABLE_COVERAGE
+        try { return coverageCommand(*this); }
+        catch (const std::exception& e) {
+            std::cerr << "Coverage: " << e.what() << '\n';
+            return 2;
+        }
+#else
+        std::cerr << "Configure with Clang and -DZEROERR_ENABLE_COVERAGE=ON, then rerun --coverage.\n";
+        return 2;
+#endif
+    }
+#ifndef ZEROERR_ENABLE_COVERAGE
+    if (!coverage_output.empty()) {
+        std::cerr << "Coverage requires a build with ZEROERR_ENABLE_COVERAGE and Clang instrumentation.\n";
+        return 2;
+    }
+#else
+    // Listing must never reset counters or create output files.
+    std::unique_ptr<CoverageSession> coverage;
+    try {
+        coverage.reset(new CoverageSession(list_test_cases ? "" : coverage_output.c_str()));
+    } catch (const std::exception& e) {
+        std::cerr << "Coverage: " << e.what() << '\n';
+        return 2;
+    }
+    bool coverage_failed = false;
+#endif
     IReporter* reporter = IReporter::create(reporter_name, *this);
     if (!reporter) reporter = IReporter::create("console", *this);
 
@@ -359,6 +597,9 @@ int UnitTest::run() {
             std::streambuf* orig_buf = std::cerr.rdbuf();
             std::cerr.rdbuf(&new_buf);
             std::cerr << std::endl;
+#ifdef ZEROERR_ENABLE_COVERAGE
+            coverage->begin();
+#endif
             auto start = std::chrono::high_resolution_clock::now();
             try {
                 tc.func(&context);  // run the test case
@@ -377,12 +618,31 @@ int UnitTest::run() {
         // Decorators may rewrite pass/fail before results are accumulated.
         runOnFinish(tc, context);
         int type = sum.add(context);
+#ifdef ZEROERR_ENABLE_COVERAGE
+        if (!list_test_cases) {
+            try {
+                coverage->end(tc, context, type);
+            } catch (const std::exception& e) {
+                std::cerr << "Coverage: " << e.what() << '\n';
+                coverage_failed = true;
+            }
+        }
+#endif
         reporter->testCaseEnd(tc, new_buf, context, type);
         context.reset();
         new_buf.str("");
     }
     reporter->testEnd(sum);
     delete reporter;
+#ifdef ZEROERR_ENABLE_COVERAGE
+    try {
+        if (!coverage_failed) coverage->finish();
+    } catch (const std::exception& e) {
+        std::cerr << "Coverage: " << e.what() << '\n';
+        coverage_failed = true;
+    }
+    if (coverage_failed) return 2;
+#endif
     return (sum.failed > 0 || sum.failed_as > 0) ? 1 : 0;
 }
 

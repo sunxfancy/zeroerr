@@ -67,6 +67,67 @@ endif()
 option(BUILD_EXAMPLES "Build examples(ON, OFF)" OFF)
 option(BUILD_DOC "Build documentation" OFF)
 option(BUILD_TEST "Build unittest" OFF)
+option(ZEROERR_ENABLE_COVERAGE "Enable Clang per-test source coverage" OFF)
+
+if(ZEROERR_ENABLE_COVERAGE)
+    if(NOT CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|AppleClang)$")
+        message(FATAL_ERROR "zeroerr coverage requires Clang or AppleClang")
+    endif()
+    find_package(Python3 3.9 REQUIRED COMPONENTS Interpreter)
+    get_filename_component(coverage_compiler_dir "${CMAKE_CXX_COMPILER}" DIRECTORY)
+    string(REGEX MATCH "^[0-9]+" coverage_llvm_major "${CMAKE_CXX_COMPILER_VERSION}")
+    find_program(ZEROERR_LLVM_PROFDATA NAMES llvm-profdata-${coverage_llvm_major} llvm-profdata
+        HINTS "${coverage_compiler_dir}")
+    find_program(ZEROERR_LLVM_COV NAMES llvm-cov-${coverage_llvm_major} llvm-cov
+        HINTS "${coverage_compiler_dir}")
+    if(NOT ZEROERR_LLVM_PROFDATA OR NOT ZEROERR_LLVM_COV)
+        message(FATAL_ERROR "Coverage needs llvm-profdata and llvm-cov matching Clang; set ZEROERR_LLVM_PROFDATA/ZEROERR_LLVM_COV")
+    endif()
+endif()
+
+# Apply this helper to separately compiled production libraries as well.
+function(zeroerr_instrument_coverage target)
+    if(NOT CMAKE_CXX_COMPILER_ID MATCHES "^(Clang|AppleClang)$")
+        message(FATAL_ERROR "zeroerr coverage requires Clang or AppleClang")
+    endif()
+    target_compile_options(${target} PUBLIC -fprofile-instr-generate -fcoverage-mapping
+        -fprofile-update=atomic)
+    target_link_options(${target} PUBLIC -fprofile-instr-generate)
+endfunction()
+
+# Call after target_link_libraries(my_tests PRIVATE zeroerr).
+# The generated target builds, collects, analyzes, and prints a report in one command.
+function(zeroerr_add_coverage target)
+    if(NOT TARGET zeroerr OR NOT TARGET ${target})
+        message(FATAL_ERROR "zeroerr_add_coverage requires zeroerr and an existing test target")
+    endif()
+    get_target_property(coverage_python zeroerr ZEROERR_COVERAGE_PYTHON_PATH)
+    if(NOT coverage_python)
+        message(FATAL_ERROR "zeroerr_add_coverage requires ZEROERR_ENABLE_COVERAGE=ON")
+    endif()
+    cmake_parse_arguments(COVERAGE "" "INCLUDE" "EXCLUDE;ARGS" ${ARGN})
+    if(COVERAGE_UNPARSED_ARGUMENTS)
+        message(FATAL_ERROR "Unknown zeroerr_add_coverage arguments: ${COVERAGE_UNPARSED_ARGUMENTS}")
+    endif()
+    get_target_property(coverage_script zeroerr ZEROERR_COVERAGE_SCRIPT_PATH)
+    get_target_property(coverage_profdata zeroerr ZEROERR_COVERAGE_PROFDATA_PATH)
+    get_target_property(coverage_cov zeroerr ZEROERR_COVERAGE_COV_PATH)
+    set(coverage_options)
+    if(DEFINED COVERAGE_INCLUDE)
+        list(APPEND coverage_options --include "${COVERAGE_INCLUDE}")
+    endif()
+    foreach(exclude IN LISTS COVERAGE_EXCLUDE)
+        list(APPEND coverage_options --exclude "${exclude}")
+    endforeach()
+    add_custom_target(${target}-coverage
+        COMMAND "${coverage_python}" "${coverage_script}" --run $<TARGET_FILE:${target}>
+            --source-root "${CMAKE_SOURCE_DIR}"
+            --llvm-profdata "${coverage_profdata}" --llvm-cov "${coverage_cov}"
+            ${coverage_options} -- ${COVERAGE_ARGS}
+        DEPENDS ${target}
+        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+        USES_TERMINAL VERBATIM)
+endfunction()
 
 set(header_dirs
     ${CMAKE_CURRENT_SOURCE_DIR}/include

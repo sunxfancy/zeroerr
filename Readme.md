@@ -192,6 +192,18 @@ clang++ -std=c++11 -fsanitize=fuzzer-no-link -L=`clang++ -print-runtime-dir` -lc
 ```
 
 
+## 4. Per-test Coverage
+
+Build with Clang and `-DZEROERR_ENABLE_COVERAGE=ON`, then run `./my_tests --coverage`
+(or `-c`). Existing test cases work unchanged. ZeroErr collects and reports function,
+region, and branch-outcome coverage per test, execution times, and identical-coverage
+candidates. Reports are generated automatically; matching coverage is not proof that
+tests can be removed. Python 3.9+ and matching LLVM tools are required.
+
+Use `zeroerr_add_coverage(my_tests)` to add a `my_tests-coverage` CMake target.
+See the [quick start](docs/pages/en/6.coverage.md) and
+[standalone example](examples/coverage/CMakeLists.txt).
+
 ## CppCon 24 Talk
 
 If you are interested in the design and internal techiques used in `zeroerr`, please checkout [the talk in CppCon 24](https://youtu.be/otSPZyXqY_M?si=LLSHh8gkfCiQk983). 
