@@ -3292,6 +3292,7 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 
 
+
 #include <iosfwd>
 #include <functional>
 
@@ -3332,9 +3333,10 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
                           {__VA_ARGS__}));                                                   \
     inline void classname::funcname(ZEROERR_UNUSED(zeroerr::TestContext* _ZEROERR_TEST_CONTEXT))
 
-#define TEST_CASE_FIXTURE(fixture, ...)                                              \
-    ZEROERR_EXPAND(ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(_zeroerr_class), \
-                              ZEROERR_NAMEGEN(_zeroerr_test_method), __VA_ARGS__))
+#define TEST_CASE_FIXTURE(fixture, ...)                                                                      \
+    ZEROERR_EXPAND(ZEROERR_CREATE_TEST_CLASS(fixture, ZEROERR_NAMEGEN(ZEROERR_CAT(fixture, _zeroerr_class)), \
+                                             ZEROERR_NAMEGEN(ZEROERR_CAT(fixture, _zeroerr_test_method)),    \
+                                             __VA_ARGS__))
 
 
 #define ZEROERR_HAVE_SAME_OUTPUT _ZEROERR_TEST_CONTEXT->save_output();
