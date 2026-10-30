@@ -1,26 +1,21 @@
 ## LLVM Support
 
+set(llvm_libs "")
+set(zeroerr_test_llvm OFF)
 find_package(LLVM CONFIG QUIET)
 if(LLVM_FOUND)
-    if(CMAKE_CXX_STANDARD GREATER_EQUAL 14)
-        message(STATUS " Found LLVM ${LLVM_PACKAGE_VERSION} ")
-        message(STATUS " Using LLVMConfig.cmake in: ${LLVM_DIR} ")
-        include_directories(${LLVM_INCLUDE_DIRS})
-        link_directories(${LLVM_LIBRARY_DIRS})
-
-        add_definitions(-DHAVE_LLVM)
-
-        # Find the libraries that correspond to the LLVM components
-        # that we wish to use
-        llvm_map_components_to_libnames(llvm_libs support)
-
-        set(llvm_libs ${llvm_libs} LLVM)
-
-        # Link against LLVM libraries
-        message(STATUS " Linking against LLVM libraries: ${llvm_libs} ")
+    # LLVM 16 and newer require C++17; older supported releases require C++14.
+    set(llvm_test_standard 14)
+    if(LLVM_PACKAGE_VERSION VERSION_GREATER_EQUAL 16)
+        set(llvm_test_standard 17)
     endif()
-else()
-    set(llvm_libs "")
+    if(CMAKE_CXX_STANDARD GREATER_EQUAL llvm_test_standard)
+        message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION} in ${LLVM_DIR}")
+        llvm_map_components_to_libnames(llvm_libs core support)
+        set(zeroerr_test_llvm ON)
+    else()
+        message(STATUS "Skipping LLVM ${LLVM_PACKAGE_VERSION} tests: requires C++${llvm_test_standard}")
+    endif()
 endif()
 
 ## CUDA Support
@@ -59,6 +54,10 @@ else()
 endif()
 
 add_executable(unittest ${test_files})
+if(zeroerr_test_llvm)
+    target_include_directories(unittest SYSTEM PRIVATE ${LLVM_INCLUDE_DIRS})
+    target_compile_definitions(unittest PRIVATE HAVE_LLVM)
+endif()
 target_link_libraries(unittest zeroerr ${libfuzzer} ${llvm_libs})
 target_compile_options(unittest PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:/W4 /utf-8>

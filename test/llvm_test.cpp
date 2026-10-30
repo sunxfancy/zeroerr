@@ -7,7 +7,8 @@
 #ifdef HAVE_LLVM
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Module.h"
-#include "llvm/Support/raw_os_ostream.h"
+#include "llvm/Support/raw_ostream.h"
+#include <string>
 
 namespace zeroerr {
 
@@ -29,8 +30,11 @@ PrinterExt(Printer& P, T* s, unsigned level, const char* lb, rank<2>) {
     if (s == nullptr) {
         P.os << P.tab(level) << "nullptr" << lb;
     } else {
-        llvm::raw_os_ostream os(P.os);
+        std::string text;
+        llvm::raw_string_ostream os(text);
         s->print(os);
+        os.flush();
+        P.os.write(text.data(), text.size());
     }
 }
 
@@ -40,8 +44,13 @@ typename std::enable_if<std::is_base_of<llvm::Function, T>::value, void>::type P
     if (s == nullptr) {
         P.os << P.tab(level) << "nullptr" << lb;
     } else {
-        llvm::raw_os_ostream os(P.os);
-        os << P.tab(level) << "Function " << FgCyan << *s << Reset;
+        std::string text;
+        llvm::raw_string_ostream os(text);
+        s->print(os);
+        os.flush();
+        P.os << P.tab(level) << "Function " << FgCyan;
+        P.os.write(text.data(), text.size());
+        P.os << Reset;
     }
 }
 
@@ -61,12 +70,20 @@ TEST_CASE("first check the PrinterExt function support") {
 TEST_CASE("customize printing of LLVM pointers") {
     llvm::LLVMContext        context;
     std::vector<llvm::Type*> args   = {llvm::Type::getInt32Ty(context)};
-    llvm::Module*            module = new llvm::Module("test_module", context);
+    llvm::Module             module("test_module", context);
 
     auto* f =
         llvm::Function::Create(llvm::FunctionType::get(llvm::Type::getVoidTy(context), args, false),
-                               llvm::GlobalValue::ExternalLinkage, "test", module);
+                               llvm::GlobalValue::ExternalLinkage, "test", &module);
     dbg(dbg(f)->getType());
+    zeroerr::Printer print;
+    print(f);
+    REQUIRE(print.str().find("Function ") != zeroerr::String::npos);
+    REQUIRE(print.str().find("@test") != zeroerr::String::npos);
+    print(f->getFunctionType());
+    REQUIRE(print.str().find("void (i32)") != zeroerr::String::npos);
+    print(static_cast<llvm::Function*>(nullptr));
+    REQUIRE(print.str() == "nullptr\n");
 }
 
 #endif
