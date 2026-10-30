@@ -1,5 +1,6 @@
 // clang-format off: the guard must run after the library include.
 #include "zeroerr.hpp"
+#define ZEROERR_TEST_CORE_USES_MEMORY
 #include "forbidden_headers.h"
 // clang-format on
 
@@ -11,7 +12,7 @@
 #error Fuzz tests must be explicitly enabled
 #endif
 int other_printer_size();
-TEST_CASE("default core has no standard string or streams") {
+TEST_CASE("default core printing and logging") {
     zeroerr::Printer print;
     print.isCompact  = true;
     print.line_break = "";
