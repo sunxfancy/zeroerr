@@ -43,19 +43,13 @@ namespace zeroerr {
  */
 
 struct IRObject {
-    IRObject() { memset(this, 0, sizeof(IRObject)); }
-    ~IRObject() {}
-    IRObject(const IRObject& other) { *this = other; }
-    IRObject(IRObject&& other) { *this = std::move(other); }
-    IRObject& operator=(const IRObject& other) {
-        std::memcpy(this, &other, sizeof(IRObject));
-        return *this;
-    }
-    IRObject& operator=(IRObject&& other) {
-        std::memcpy(this, &other, sizeof(IRObject));
-        std::memset(&other, 0, sizeof(IRObject));
-        return *this;
-    }
+    IRObject() noexcept : i(0), others{}, type(Undefined) {}
+    ~IRObject();
+    IRObject(const IRObject& other);
+    IRObject(IRObject&& other) noexcept;
+    IRObject& operator=(const IRObject& other);
+    IRObject& operator=(IRObject&& other) noexcept;
+    void Reset() noexcept;
 
     enum Type { Undefined = 0, Int, Float, String, ShortString, Object };
 
@@ -70,22 +64,22 @@ struct IRObject {
     unsigned char type;
 
     template <typename T>
-    typename std::enable_if<std::is_integral<T>::value, T>::type GetScalar() {
+    typename std::enable_if<std::is_integral<T>::value, T>::type GetScalar() const {
         return static_cast<T>(i);
     }
 
     template <typename T>
-    typename std::enable_if<std::is_floating_point<T>::value, T>::type GetScalar() {
+    typename std::enable_if<std::is_floating_point<T>::value, T>::type GetScalar() const {
         return static_cast<T>(f);
     }
 
     template <typename T>
-    typename std::enable_if<std::is_enum<T>::value, T>::type GetScalar() {
+    typename std::enable_if<std::is_enum<T>::value, T>::type GetScalar() const {
         return GetScalar<typename std::underlying_type<T>::type>();
     }
 
     template <typename T>
-    typename std::enable_if<detail::StringLike<T>::owning, T>::type GetScalar() {
+    typename std::enable_if<detail::StringLike<T>::owning, T>::type GetScalar() const {
         if (type == Type::String)
             return T(s);
         else if (type == Type::ShortString)
@@ -95,12 +89,14 @@ struct IRObject {
 
     template <typename T>
     typename std::enable_if<std::is_integral<T>::value, void>::type SetScalar(T val) {
+        Reset();
         i    = static_cast<int64_t>(val);
         type = Type::Int;
     }
 
     template <typename T>
     typename std::enable_if<std::is_floating_point<T>::value, void>::type SetScalar(T val) {
+        Reset();
         f    = static_cast<double>(val);
         type = Type::Float;
     }
@@ -112,16 +108,19 @@ struct IRObject {
 
     template <typename T>
     typename std::enable_if<detail::StringLike<T>::owning, void>::type SetScalar(T val) {
+        IRObject next;
         size_t size = val.size();
-        if (size > 14) {
-            s = alloc_str(size);
-            strcpy(s, val.c_str());
-            type = Type::String;
+        // Keep the terminator inside ss; adjacent padding is not part of the array.
+        if (size >= sizeof(next.ss)) {
+            next.s = alloc_str(size);
+            std::memcpy(next.s, val.data(), size);
+            next.type = Type::String;
         } else {
-            strcpy(ss, val.c_str());
-            ss[size] = 0;
-            type     = Type::ShortString;
+            std::memcpy(next.ss, val.data(), size);
+            next.ss[size] = 0;
+            next.type = Type::ShortString;
         }
+        *this = std::move(next);
     }
 
     void SetScalar(const IRObject& obj) { *this = obj; }
@@ -130,12 +129,15 @@ struct IRObject {
         int64_t   size;
         IRObject* children;
     };
-    Childrens GetChildren() { 
+    Childrens GetChildren() const {
         if (type != Type::Object) return {0, nullptr};
         return {o->i, o + 1};
     }
 
     void SetChildren(IRObject* children) {
+        if (!children) throw std::invalid_argument("IRObject children cannot be null");
+        if (type == Type::Object && o == children - 1) return;
+        Reset();
         o    = children - 1;
         type = Type::Object;
     }
@@ -197,7 +199,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<std::is_integral<T>::value || std::is_enum<T>::value, T>::type
-    ToCorpus(IRObject obj) {
+    ToCorpus(const IRObject& obj) {
         if (obj.type != IRObject::Int) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -206,7 +208,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<std::is_floating_point<T>::value, T>::type ToCorpus(
-        IRObject obj) {
+        const IRObject& obj) {
         if (obj.type != IRObject::Float) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -215,7 +217,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<detail::StringLike<T>::owning, T>::type ToCorpus(
-        IRObject obj) {
+        const IRObject& obj) {
         if (obj.type != IRObject::String && obj.type != IRObject::ShortString) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -232,7 +234,7 @@ struct IRObject {
     template <typename T>
     static typename std::enable_if<
         detail::is_container<T>::value && !detail::StringLike<T>::owning, T>::type
-    ToCorpus(IRObject obj) {
+    ToCorpus(const IRObject& obj) {
         if (obj.type != IRObject::Object) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -249,7 +251,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<detail::is_specialization<T, std::tuple>::value, T>::type
-    ToCorpus(IRObject obj) {
+    ToCorpus(const IRObject& obj) {
         if (obj.type != IRObject::Object || obj.GetChildren().size != std::tuple_size<T>::value) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -258,7 +260,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<detail::is_specialization<T, std::pair>::value, T>::type
-    ToCorpus(IRObject obj) {
+    ToCorpus(const IRObject& obj) {
         if (obj.type != IRObject::Object || obj.GetChildren().size != 2) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -271,11 +273,14 @@ struct IRObject {
     static IRObject* alloc(size_t size);
 
     // Serialize the object as a string.
-    static zeroerr::String ToString(IRObject obj);
+    static zeroerr::String ToString(const IRObject& obj);
     static IRObject    FromString(zeroerr::String str);
 
     static std::vector<uint8_t> ToBinary(IRObject obj);
     static IRObject             FromBinary(std::vector<uint8_t> bin);
+
+private:
+    void moveFrom(IRObject& other) noexcept;
 };
 
 

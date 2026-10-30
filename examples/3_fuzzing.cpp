@@ -1,5 +1,5 @@
 #define ZEROERR_IMPLEMENTATION
-#define ZEROERR_FUZZING
+#define ZEROERR_ENABLE_FUZZTEST
 #include "zeroerr.hpp"
 
 using namespace zeroerr;

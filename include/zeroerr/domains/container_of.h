@@ -3,6 +3,8 @@
 
 #include "zeroerr/domains/domain.h"
 #include "zeroerr/internal/typetraits.h"
+#include <limits>
+#include <stdexcept>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -34,9 +36,47 @@ namespace zeroerr {
 struct ContainerOfBase {
     int min_size = 0, max_size = 100, size = -1;
 
-    void WithMaxSize(unsigned _max_size) { this->max_size = _max_size; }
-    void WithMinSize(unsigned _min_size) { this->min_size = _min_size; }
-    void WithSize(unsigned _size) { this->size = _size; }
+    void WithMaxSize(unsigned value) { max_size = checkedSize(value); }
+    void WithMinSize(unsigned value) { min_size = checkedSize(value); }
+    void WithSize(unsigned value) { size = checkedSize(value); }
+
+protected:
+    static int checkedSize(unsigned value) {
+        if (value > static_cast<unsigned>((std::numeric_limits<int>::max)()))
+            throw std::invalid_argument("Container size exceeds supported range");
+        return static_cast<int>(value);
+    }
+
+    void validate() const {
+        if (size < -1 || min_size < 0 || max_size < min_size)
+            throw std::invalid_argument("Invalid container size bounds");
+    }
+
+    unsigned randomSize(Rng& rng) const {
+        validate();
+        if (size != -1) return static_cast<unsigned>(size);
+        return rng.bounded(static_cast<uint32_t>(max_size) -
+                           static_cast<uint32_t>(min_size) + 1U) + min_size;
+    }
+
+    template <class Inner, class Corpus>
+    void mutate(Rng& rng, Corpus& v, bool only_shrink, const Inner& inner) const {
+        validate();
+        const size_t lower = static_cast<size_t>(size == -1 ? min_size : size);
+        const size_t upper = static_cast<size_t>(size == -1 ? max_size : size);
+        if (v.size() < lower || v.size() > upper)
+            throw std::invalid_argument("Corpus violates container size bounds");
+        const unsigned action = rng.bounded(5);
+        if (size == -1 && action == 0) {
+            if (v.size() > lower)
+                v.erase(v.begin() + rng.bounded(static_cast<uint32_t>(v.size())));
+        } else if (size == -1 && action == 1 && !only_shrink) {
+            if (v.size() < upper) v.push_back(inner.GetRandomCorpus(rng));
+        } else if (!v.empty()) {
+            inner.Mutate(rng, v[rng.bounded(static_cast<uint32_t>(v.size()))], only_shrink);
+        }
+    }
+
 };
 
 
@@ -68,8 +108,9 @@ public:
     }
 
     CorpusType GetRandomCorpus(Rng& rng) const override {
-        unsigned   E = rng.bounded(max_size - min_size + 1) + min_size;
+        unsigned   E = randomSize(rng);
         CorpusType result;
+        result.reserve(E);
         for (unsigned i = 0; i < E; i++) {
             result.push_back(inner_domain.GetRandomCorpus(rng));
         }
@@ -77,18 +118,7 @@ public:
     }
 
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
-        int action = rng.bounded(5);
-        if (size == -1 && action == 0) {
-            if (static_cast<int>(v.size()) > min_size)
-                v.erase(v.begin() + rng.bounded(static_cast<uint32_t>(v.size())));
-
-        } else if (size == -1 && action == 1) {
-            if (static_cast<int>(v.size()) < max_size)
-                v.push_back(inner_domain.GetRandomCorpus(rng));
-
-        } else {
-            inner_domain.Mutate(rng, v[rng.bounded(static_cast<uint32_t>(v.size()))], only_shrink);
-        }
+        mutate(rng, v, only_shrink, inner_domain);
     }
 };
 
@@ -111,8 +141,9 @@ public:
     }
 
     CorpusType GetRandomCorpus(Rng& rng) const override {
-        unsigned   E = rng.bounded(max_size - min_size + 1) + min_size;
+        unsigned   E = randomSize(rng);
         CorpusType result;
+        result.reserve(E);
         for (unsigned i = 0; i < E; i++) {
             result.push_back(inner_domain.GetRandomCorpus(rng));
         }
@@ -120,16 +151,7 @@ public:
     }
 
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
-        int action = rng.bounded(5);
-        if (size == -1 && action == 0) {
-            if (static_cast<int>(v.size()) > min_size) v.erase(v.begin() + rng.bounded(static_cast<uint32_t>(v.size())));
-
-        } else if (size == -1 && action == 1) {
-            if (static_cast<int>(v.size()) < max_size)
-                v.push_back(inner_domain.GetRandomCorpus(rng));
-        } else {
-            inner_domain.Mutate(rng, v[rng.bounded(static_cast<uint32_t>(v.size()))], only_shrink);
-        }
+        mutate(rng, v, only_shrink, inner_domain);
     }
 };
 

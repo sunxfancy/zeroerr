@@ -34,8 +34,8 @@ public:
      */
     using result_type = uint64_t;
 
-    static uint64_t min();
-    static uint64_t max();
+    static constexpr uint64_t min() { return 0; }
+    static constexpr uint64_t max() { return UINT64_MAX; }
 
     /**
      * As a safety precausion, we don't allow copying. Copying a PRNG would mean you would have
