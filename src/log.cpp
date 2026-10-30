@@ -6,6 +6,7 @@
 #include "zeroerr/internal/threadsafe.h"
 
 #include <cstdio>
+#include <cstddef>
 #include <ctime>
 #include <iomanip>
 #include <unordered_set>
@@ -53,14 +54,25 @@ LogInfo::LogInfo(const char* filename, const char* function, const char* message
 }
 
 
-constexpr size_t LogStreamMaxSize = 1 * 1024 - 16;
+constexpr size_t LogStreamMaxSize = 64 * 1024 - 16;
 
 struct DataBlock {
     ZEROERR_ATOMIC(size_t) size;
     DataBlock* next = nullptr;
-    char       data[LogStreamMaxSize];
+    alignas(std::max_align_t) char data[LogStreamMaxSize];
 
     DataBlock() : size(0) {}
+
+    ~DataBlock() { clear(); }
+    void clear() {
+        size_t offset = 0;
+        while (offset < ZEROERR_LOAD(size)) {
+            auto* message = reinterpret_cast<LogMessage*>(data + offset);
+            offset += message->info->size;
+            message->~LogMessage();
+        }
+        size = 0;
+    }
 
     LogMessage* begin() { return (LogMessage*)data; }
     LogMessage* end() { return (LogMessage*)&data[size]; }
@@ -68,7 +80,6 @@ struct DataBlock {
 
 LogStream::LogStream() {
     first = m_last = new DataBlock();
-    prepare        = new DataBlock();
 #ifndef ZEROERR_NO_THREAD_SAFE
     mutex = new detail::Mutex();
 #endif
@@ -92,49 +103,25 @@ void* LogStream::alloc_block(unsigned size) {
     if (size > LogStreamMaxSize) {
         throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
     }
-    ZEROERR_LOCK(*mutex);
     auto* last = ZEROERR_LOAD(m_last);
     if (last->size + size > LogStreamMaxSize) {
         if (flush_mode == FLUSH_WHEN_FULL) {
             logger->flush(last);
-            last->size = 0;
+            last->clear();
         } else {
             last->next = new DataBlock();
             last       = last->next;
+            m_last     = last;
         }
     }
     void* p = last->data + last->size;
-    last->size += size;
     return p;
 }
 
-void* LogStream::alloc_block_lockfree(unsigned size) {
-#ifndef ZEROERR_NO_THREAD_SAFE
-    if (size > LogStreamMaxSize) {
-        throw std::runtime_error("LogStream::push: size > LogStreamMaxSize");
-    }
-    DataBlock* last = ZEROERR_LOAD(m_last);
-    while (true) {
-        size_t p = last->size.load();
-        if (p <= (LogStreamMaxSize - size)) {
-            if (last->size.compare_exchange_strong(p, p + size)) return last->data + p;
-        } else {
-            if (m_last.compare_exchange_strong(last, prepare)) {
-                if (flush_mode == FLUSH_WHEN_FULL) {
-                    logger->flush(last);
-                    last->size = 0;
-                    prepare    = last;
-                } else {
-                    prepare->next = last;
-                    prepare       = new DataBlock();
-                }
-            }
-        }
-    }
-#else
-    return alloc_block(size);
-#endif
+void LogStream::commit_block(DataBlock* block, unsigned size) {
+    block->size += size;
 }
+
 LogIterator LogStream::current(zeroerr::String message, zeroerr::String function_name, int line) {
     LogIterator iter(*this, message, function_name, line);
     DataBlock*  last = ZEROERR_LOAD(m_last);
@@ -145,13 +132,19 @@ LogIterator LogStream::current(zeroerr::String message, zeroerr::String function
 
 void LogStream::flush() {
     ZEROERR_LOCK(*mutex);
+    flush_unlocked();
+}
+
+void LogStream::flush_unlocked() {
     DataBlock* last = ZEROERR_LOAD(m_last);
-    for (DataBlock* p = first; p != last; p = p->next) {
+    for (DataBlock* p = first; p != last;) {
+        DataBlock* next = p->next;
         logger->flush(p);
         delete p;
+        p = next;
     }
     logger->flush(last);
-    last->size = 0;
+    last->clear();
     first      = last;
 }
 
@@ -254,10 +247,11 @@ public:
     }
     void flush(DataBlock* msg) override {
         if (file) {
+            zeroerr::String batch;
             for (auto p = msg->begin(); p < msg->end(); p = moveBytes(p, p->info->size)) {
-                auto ss = log_custom_callback(*p, false);
-                fwrite(ss.c_str(), ss.size(), 1, file);
+                batch += log_custom_callback(*p, false);
             }
+            fwrite(batch.c_str(), batch.size(), 1, file);
             fflush(file);
         }
     }
