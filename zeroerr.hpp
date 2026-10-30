@@ -7175,7 +7175,9 @@ UnitTest& UnitTest::parseArgs(int argc, const char** argv) {
         }
         if (arg == "no-color") {
             this->no_color = true;
+#if !defined(ZEROERR_ALWAYS_COLORFUL) && !defined(ZEROERR_DISABLE_COLORFUL)
             disableColorOutput();
+#endif
             return true;
         }
         if (arg == "log-to-report") {
