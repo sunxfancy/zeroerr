@@ -96,6 +96,29 @@ TEST_CASE("print test with PFR library") {
     dbg(a);
 }
 
+TEST_CASE("PFR respects the selected reflection backend") {
+    Printer print;
+    print.isCompact = true;
+    A value{"John", 20};
+    print(value);
+#if ZEROERR_CXX_STANDARD >= 14 && (PFR_USE_CPP17 || PFR_USE_LOOPHOLE)
+    REQUIRE(print.str().find("John") != zeroerr::String::npos);
+#else
+    REQUIRE(print.str() == Printer::type(value) + "\n");
+#endif
+#if ZEROERR_CXX_STANDARD >= 14
+    struct FlatPod { int first; double second; };
+    print(FlatPod{1, 2});
+    REQUIRE(print.str() == "{1, 2}\n");
+#if !PFR_USE_CPP17 && !PFR_USE_LOOPHOLE
+    struct LinkedPod { int value; const LinkedPod* next; };
+    LinkedPod linked{1, nullptr};
+    print(linked);
+    REQUIRE(print.str() == Printer::type(linked) + "\n");
+#endif
+#endif
+}
+
 void outside_of_test() {
     int k = 0;
     CHECK(k != 0);
