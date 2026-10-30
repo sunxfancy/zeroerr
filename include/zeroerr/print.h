@@ -61,6 +61,19 @@ using has_printer_ext =
 template <typename T>
 struct has_extension<T, has_printer_ext<T>> : std::true_type {};
 
+#if defined(ZEROERR_ENABLE_PFR) && ZEROERR_CXX_STANDARD >= 14 && !PFR_USE_CPP17 && !PFR_USE_LOOPHOLE
+// Check the bundled classic backend's flat-field constraint before instantiating get().
+// The primary template prevents probing strings and other non-trivial classes.
+template <class T, bool = std::is_class<T>::value && std::is_trivial<T>::value &&
+                          std::is_standard_layout<T>::value>
+struct is_classic_pfr_printable : std::false_type {};
+
+template <class T>
+struct is_classic_pfr_printable<T, true>
+    : std::integral_constant<bool, pfr::detail::is_flat_refelectable<T>(
+          pfr::detail::make_index_sequence<pfr::detail::fields_count<T>()>{})> {};
+#endif
+
 }  // namespace detail
 
 
@@ -131,13 +144,14 @@ public:
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
     print(const T& value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
 #else
-    ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
+    ZEROERR_ENABLE_IF((ZEROERR_IS_ENUM && detail::is_streamable<std::ostream, T>::value))
     print(const T& value, unsigned level, const char* lb, rank<0>) {
-        if constexpr (detail::is_streamable<std::ostream, T>::value) {
-            os << tab(level) << value << lb;
-        } else {
-            os << tab(level) << "<unprintable enum " << type(value) << ">" << lb;
-        }
+        os << tab(level) << value << lb;
+    }
+
+    ZEROERR_ENABLE_IF((ZEROERR_IS_ENUM && !detail::is_streamable<std::ostream, T>::value))
+    print(const T& value, unsigned level, const char* lb, rank<0>) {
+        os << tab(level) << "<unprintable enum " << type(value) << ">" << lb;
     }
 #endif
 
@@ -198,7 +212,11 @@ public:
         (void)_;
     }
 
+#if PFR_USE_CPP17 || PFR_USE_LOOPHOLE
     ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS && ZEROERR_IS_POD)
+#else
+    ZEROERR_ENABLE_IF(detail::is_classic_pfr_printable<T>::value)
+#endif
     print(const T& value, unsigned level, const char* lb, rank<1>) {
         os << tab(level) << "{";
         print_struct(value, level, isCompact ? " " : line_break,

@@ -97,6 +97,36 @@ struct ExprResult {
     ZEROERR_FORBIT_EXPRESSION(ExprResult, |=)
 };
 
+namespace detail {
+
+// Bind operands for one full expression without copying or re-evaluating them.
+// Unlike Expression, a comparison does not first convert its left operand to bool.
+template <class L>
+struct ComparisonLhs {
+    const L& lhs;
+    Printer& printer;
+
+#define ZEROERR_DIRECT_COMPARISON(op)                         \
+    template <class R>                                       \
+    ExprResult operator op(const R& rhs) const {             \
+        return {lhs op rhs, printer(lhs, #op, rhs)};         \
+    }
+    ZEROERR_DIRECT_COMPARISON(==)
+    ZEROERR_DIRECT_COMPARISON(!=)
+    ZEROERR_DIRECT_COMPARISON(<)
+    ZEROERR_DIRECT_COMPARISON(<=)
+    ZEROERR_DIRECT_COMPARISON(>)
+    ZEROERR_DIRECT_COMPARISON(>=)
+#undef ZEROERR_DIRECT_COMPARISON
+};
+
+template <class L>
+ComparisonLhs<L> makeComparisonLhs(const L& lhs, Printer& printer) {
+    return {lhs, printer};
+}
+
+}  // namespace detail
+
 namespace details {
 // Detect whether a type can be explicitly converted to bool. This covers
 // explicit operator bool (std::unique_ptr/std::shared_ptr), which

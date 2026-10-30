@@ -1542,6 +1542,19 @@ using has_printer_ext =
 template <typename T>
 struct has_extension<T, has_printer_ext<T>> : std::true_type {};
 
+#if defined(ZEROERR_ENABLE_PFR) && ZEROERR_CXX_STANDARD >= 14 && !PFR_USE_CPP17 && !PFR_USE_LOOPHOLE
+// Check the bundled classic backend's flat-field constraint before instantiating get().
+// The primary template prevents probing strings and other non-trivial classes.
+template <class T, bool = std::is_class<T>::value && std::is_trivial<T>::value &&
+                          std::is_standard_layout<T>::value>
+struct is_classic_pfr_printable : std::false_type {};
+
+template <class T>
+struct is_classic_pfr_printable<T, true>
+    : std::integral_constant<bool, pfr::detail::is_flat_refelectable<T>(
+          pfr::detail::make_index_sequence<pfr::detail::fields_count<T>()>{})> {};
+#endif
+
 }  // namespace detail
 
 
@@ -1612,13 +1625,14 @@ public:
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
     print(const T& value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
 #else
-    ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
+    ZEROERR_ENABLE_IF((ZEROERR_IS_ENUM && detail::is_streamable<std::ostream, T>::value))
     print(const T& value, unsigned level, const char* lb, rank<0>) {
-        if constexpr (detail::is_streamable<std::ostream, T>::value) {
-            os << tab(level) << value << lb;
-        } else {
-            os << tab(level) << "<unprintable enum " << type(value) << ">" << lb;
-        }
+        os << tab(level) << value << lb;
+    }
+
+    ZEROERR_ENABLE_IF((ZEROERR_IS_ENUM && !detail::is_streamable<std::ostream, T>::value))
+    print(const T& value, unsigned level, const char* lb, rank<0>) {
+        os << tab(level) << "<unprintable enum " << type(value) << ">" << lb;
     }
 #endif
 
@@ -1679,7 +1693,11 @@ public:
         (void)_;
     }
 
+#if PFR_USE_CPP17 || PFR_USE_LOOPHOLE
     ZEROERR_ENABLE_IF(ZEROERR_IS_CLASS && ZEROERR_IS_POD)
+#else
+    ZEROERR_ENABLE_IF(detail::is_classic_pfr_printable<T>::value)
+#endif
     print(const T& value, unsigned level, const char* lb, rank<1>) {
         os << tab(level) << "{";
         print_struct(value, level, isCompact ? " " : line_break,
@@ -1960,6 +1978,36 @@ struct ExprResult {
     ZEROERR_FORBIT_EXPRESSION(ExprResult, ^=)
     ZEROERR_FORBIT_EXPRESSION(ExprResult, |=)
 };
+
+namespace detail {
+
+// Bind operands for one full expression without copying or re-evaluating them.
+// Unlike Expression, a comparison does not first convert its left operand to bool.
+template <class L>
+struct ComparisonLhs {
+    const L& lhs;
+    Printer& printer;
+
+#define ZEROERR_DIRECT_COMPARISON(op)                         \
+    template <class R>                                       \
+    ExprResult operator op(const R& rhs) const {             \
+        return {lhs op rhs, printer(lhs, #op, rhs)};         \
+    }
+    ZEROERR_DIRECT_COMPARISON(==)
+    ZEROERR_DIRECT_COMPARISON(!=)
+    ZEROERR_DIRECT_COMPARISON(<)
+    ZEROERR_DIRECT_COMPARISON(<=)
+    ZEROERR_DIRECT_COMPARISON(>)
+    ZEROERR_DIRECT_COMPARISON(>=)
+#undef ZEROERR_DIRECT_COMPARISON
+};
+
+template <class L>
+ComparisonLhs<L> makeComparisonLhs(const L& lhs, Printer& printer) {
+    return {lhs, printer};
+}
+
+}  // namespace detail
 
 namespace details {
 // Detect whether a type can be explicitly converted to bool. This covers
@@ -2371,7 +2419,9 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
         print.isQuoted = false;                                                                  \
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #lhs " " #op " " #rhs, info);  \
         try {                                                                                    \
-            assertion_data.setResult({(lhs)op(rhs), print(lhs, #op, rhs)});                      \
+            ZEROERR_SUPPRESS_COMPARE                                                           \
+            assertion_data.setResult(zeroerr::detail::makeComparisonLhs((lhs), print) op (rhs)); \
+            ZEROERR_SUPPRESS_COMPARE_POP                                                       \
         } catch (const std::exception& e) {                                                      \
             assertion_data.setException(e);                                                      \
         }                                                                                        \
@@ -2424,9 +2474,16 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
 // clang-format off
 ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 
-#define ZEROERR_CHECK(cond, ...)          ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, false, __VA_ARGS__))
-#define ZEROERR_CHECK_NOT(cond, ...)      ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, no_throw, true, __VA_ARGS__))
-#define ZEROERR_CHECK_THROWS(cond, ...)   ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_WARN, throws, false, __VA_ARGS__))
+// Keep warning-only checks compatible by default. Consumers can opt into runner
+// failure accounting, including context-free helpers, before including zeroerr.
+#ifdef ZEROERR_CHECK_AS_ERROR
+#define ZEROERR_CHECK_LEVEL ZEROERR_ERROR
+#else
+#define ZEROERR_CHECK_LEVEL ZEROERR_WARN
+#endif
+#define ZEROERR_CHECK(cond, ...)          ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_CHECK_LEVEL, no_throw, false, __VA_ARGS__))
+#define ZEROERR_CHECK_NOT(cond, ...)      ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_CHECK_LEVEL, no_throw, true, __VA_ARGS__))
+#define ZEROERR_CHECK_THROWS(cond, ...)   ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_CHECK_LEVEL, throws, false, __VA_ARGS__))
 #define ZEROERR_REQUIRE(cond, ...)        ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, no_throw, false, __VA_ARGS__))
 #define ZEROERR_REQUIRE_NOT(cond, ...)    ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, no_throw, true, __VA_ARGS__))
 #define ZEROERR_REQUIRE_THROWS(cond, ...) ZEROERR_EXPAND(ZEROERR_ASSERT_EXP(cond, ZEROERR_ERROR, throws, false, __VA_ARGS__))
@@ -2444,12 +2501,12 @@ ZEROERR_CLANG_SUPPRESS_WARNING_WITH_PUSH("-Wgnu-zero-variadic-macro-arguments")
 #define ASSERT_NOT(...)     ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_NOT(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 #define ASSERT_THROWS(...)  ZEROERR_SUPPRESS_VARIADIC_MACRO ZEROERR_EXPAND(ZEROERR_ASSERT_THROWS(__VA_ARGS__)) ZEROERR_SUPPRESS_VARIADIC_MACRO_POP
 
-#define ZEROERR_CHECK_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define ZEROERR_CHECK_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define ZEROERR_CHECK_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define ZEROERR_CHECK_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define ZEROERR_CHECK_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
-#define ZEROERR_CHECK_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_WARN, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_CHECK_LEVEL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_CHECK_LEVEL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_LT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <, rhs, ZEROERR_CHECK_LEVEL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_LE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, <=, rhs, ZEROERR_CHECK_LEVEL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_GT(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >, rhs, ZEROERR_CHECK_LEVEL, no_throw, false, __VA_ARGS__)
+#define ZEROERR_CHECK_GE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, >=, rhs, ZEROERR_CHECK_LEVEL, no_throw, false, __VA_ARGS__)
 
 #define ZEROERR_REQUIRE_EQ(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, ==, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
 #define ZEROERR_REQUIRE_NE(lhs, rhs, ...) ZEROERR_ASSERT_CMP(lhs, !=, rhs, ZEROERR_ERROR, no_throw, false, __VA_ARGS__)
@@ -2594,6 +2651,7 @@ struct context_helper<T, false> {
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
 #pragma once
 
 // libc++ offers compatibility-only transitive includes through C++20.
@@ -3714,8 +3772,8 @@ public:
      */
     using result_type = uint64_t;
 
-    static uint64_t min();
-    static uint64_t max();
+    static constexpr uint64_t min() { return 0; }
+    static constexpr uint64_t max() { return UINT64_MAX; }
 
     /**
      * As a safety precausion, we don't allow copying. Copying a PRNG would mean you would have
@@ -3910,19 +3968,13 @@ namespace zeroerr {
  */
 
 struct IRObject {
-    IRObject() { memset(this, 0, sizeof(IRObject)); }
-    ~IRObject() {}
-    IRObject(const IRObject& other) { *this = other; }
-    IRObject(IRObject&& other) { *this = std::move(other); }
-    IRObject& operator=(const IRObject& other) {
-        std::memcpy(this, &other, sizeof(IRObject));
-        return *this;
-    }
-    IRObject& operator=(IRObject&& other) {
-        std::memcpy(this, &other, sizeof(IRObject));
-        std::memset(&other, 0, sizeof(IRObject));
-        return *this;
-    }
+    IRObject() noexcept : i(0), others{}, type(Undefined) {}
+    ~IRObject();
+    IRObject(const IRObject& other);
+    IRObject(IRObject&& other) noexcept;
+    IRObject& operator=(const IRObject& other);
+    IRObject& operator=(IRObject&& other) noexcept;
+    void Reset() noexcept;
 
     enum Type { Undefined = 0, Int, Float, String, ShortString, Object };
 
@@ -3937,22 +3989,22 @@ struct IRObject {
     unsigned char type;
 
     template <typename T>
-    typename std::enable_if<std::is_integral<T>::value, T>::type GetScalar() {
+    typename std::enable_if<std::is_integral<T>::value, T>::type GetScalar() const {
         return static_cast<T>(i);
     }
 
     template <typename T>
-    typename std::enable_if<std::is_floating_point<T>::value, T>::type GetScalar() {
+    typename std::enable_if<std::is_floating_point<T>::value, T>::type GetScalar() const {
         return static_cast<T>(f);
     }
 
     template <typename T>
-    typename std::enable_if<std::is_enum<T>::value, T>::type GetScalar() {
+    typename std::enable_if<std::is_enum<T>::value, T>::type GetScalar() const {
         return GetScalar<typename std::underlying_type<T>::type>();
     }
 
     template <typename T>
-    typename std::enable_if<detail::StringLike<T>::owning, T>::type GetScalar() {
+    typename std::enable_if<detail::StringLike<T>::owning, T>::type GetScalar() const {
         if (type == Type::String)
             return T(s);
         else if (type == Type::ShortString)
@@ -3962,12 +4014,14 @@ struct IRObject {
 
     template <typename T>
     typename std::enable_if<std::is_integral<T>::value, void>::type SetScalar(T val) {
+        Reset();
         i    = static_cast<int64_t>(val);
         type = Type::Int;
     }
 
     template <typename T>
     typename std::enable_if<std::is_floating_point<T>::value, void>::type SetScalar(T val) {
+        Reset();
         f    = static_cast<double>(val);
         type = Type::Float;
     }
@@ -3979,16 +4033,19 @@ struct IRObject {
 
     template <typename T>
     typename std::enable_if<detail::StringLike<T>::owning, void>::type SetScalar(T val) {
+        IRObject next;
         size_t size = val.size();
-        if (size > 14) {
-            s = alloc_str(size);
-            strcpy(s, val.c_str());
-            type = Type::String;
+        // Keep the terminator inside ss; adjacent padding is not part of the array.
+        if (size >= sizeof(next.ss)) {
+            next.s = alloc_str(size);
+            std::memcpy(next.s, val.data(), size);
+            next.type = Type::String;
         } else {
-            strcpy(ss, val.c_str());
-            ss[size] = 0;
-            type     = Type::ShortString;
+            std::memcpy(next.ss, val.data(), size);
+            next.ss[size] = 0;
+            next.type = Type::ShortString;
         }
+        *this = std::move(next);
     }
 
     void SetScalar(const IRObject& obj) { *this = obj; }
@@ -3997,12 +4054,15 @@ struct IRObject {
         int64_t   size;
         IRObject* children;
     };
-    Childrens GetChildren() {
+    Childrens GetChildren() const {
         if (type != Type::Object) return {0, nullptr};
         return {o->i, o + 1};
     }
 
     void SetChildren(IRObject* children) {
+        if (!children) throw std::invalid_argument("IRObject children cannot be null");
+        if (type == Type::Object && o == children - 1) return;
+        Reset();
         o    = children - 1;
         type = Type::Object;
     }
@@ -4064,7 +4124,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<std::is_integral<T>::value || std::is_enum<T>::value, T>::type
-    ToCorpus(IRObject obj) {
+    ToCorpus(const IRObject& obj) {
         if (obj.type != IRObject::Int) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -4073,7 +4133,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<std::is_floating_point<T>::value, T>::type ToCorpus(
-        IRObject obj) {
+        const IRObject& obj) {
         if (obj.type != IRObject::Float) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -4082,7 +4142,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<detail::StringLike<T>::owning, T>::type ToCorpus(
-        IRObject obj) {
+        const IRObject& obj) {
         if (obj.type != IRObject::String && obj.type != IRObject::ShortString) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -4099,7 +4159,7 @@ struct IRObject {
     template <typename T>
     static typename std::enable_if<
         detail::is_container<T>::value && !detail::StringLike<T>::owning, T>::type
-    ToCorpus(IRObject obj) {
+    ToCorpus(const IRObject& obj) {
         if (obj.type != IRObject::Object) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -4116,7 +4176,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<detail::is_specialization<T, std::tuple>::value, T>::type
-    ToCorpus(IRObject obj) {
+    ToCorpus(const IRObject& obj) {
         if (obj.type != IRObject::Object || obj.GetChildren().size != std::tuple_size<T>::value) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -4125,7 +4185,7 @@ struct IRObject {
 
     template <typename T>
     static typename std::enable_if<detail::is_specialization<T, std::pair>::value, T>::type
-    ToCorpus(IRObject obj) {
+    ToCorpus(const IRObject& obj) {
         if (obj.type != IRObject::Object || obj.GetChildren().size != 2) {
             throw std::runtime_error("Invalid type conversion.");
         }
@@ -4138,11 +4198,14 @@ struct IRObject {
     static IRObject* alloc(size_t size);
 
     // Serialize the object as a string.
-    static zeroerr::String ToString(IRObject obj);
+    static zeroerr::String ToString(const IRObject& obj);
     static IRObject    FromString(zeroerr::String str);
 
     static std::vector<uint8_t> ToBinary(IRObject obj);
     static IRObject             FromBinary(std::vector<uint8_t> bin);
+
+private:
+    void moveFrom(IRObject& other) noexcept;
 };
 
 
@@ -4210,6 +4273,9 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 #pragma once
 
 
+#include <cmath>
+#include <random>
+#include <stdexcept>
 
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -4241,25 +4307,48 @@ public:
 
     ValueType min, max;
 
-    InRange(T min, T max) : min(min), max(max) {}
+    InRange(T min, T max) : min(min), max(max) { validate(); }
 
     CorpusType GetRandomCorpus(Rng& rng) const override {
-        ValueType offsize = max - min + 1;
-        ValueType v       = rng.bounded(offsize);
-        v                 = min + v;
-        return v;
+        validate();
+        return sample(rng);
     }
 
     void Mutate(Rng& rng, CorpusType& v, bool) const override {
-        CorpusType offsize = max - min + 1;
-        v                  = rng.bounded(offsize);
-        v                  = min + v;
+        v = GetRandomCorpus(rng);
+    }
+
+private:
+    void validate() const {
+        if (!(min <= max) || !std::isfinite(static_cast<long double>(min)) ||
+            !std::isfinite(static_cast<long double>(max)))
+            throw std::invalid_argument("InRange requires finite ordered bounds");
+    }
+
+    template <class U = T>
+    typename std::enable_if<std::is_integral<U>::value, T>::type sample(Rng& rng) const {
+        // Promote small integers because standard distributions exclude char and bool.
+        using Int = typename std::conditional<std::is_signed<U>::value, int64_t, uint64_t>::type;
+        std::uniform_int_distribution<Int> distribution(min, max);
+        return static_cast<T>(distribution(rng));
+    }
+
+    template <class U = T>
+    typename std::enable_if<std::is_floating_point<U>::value, T>::type sample(Rng& rng) const {
+        if (min == max) return min;
+        const T fraction = static_cast<T>(rng.uniform01());
+        // Opposite-sign extremes may overflow max - min.
+        T value = min < 0 && max > 0
+                      ? min * (T(1) - fraction) + max * fraction
+                      : min + (max - min) * fraction;
+        return value < min ? min : value > max ? max : value;
     }
 };
 
 }  // namespace zeroerr
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
+
 #pragma once
 
 
@@ -4294,9 +4383,11 @@ public:
 
     std::vector<T> elements;
 
-    ElementOf(std::vector<T> elements) : elements(elements) {}
+    ElementOf(std::vector<T> elements) : elements(std::move(elements)) {
+        if (this->elements.empty()) throw std::invalid_argument("ElementOf requires elements");
+    }
 
-    CorpusType GetRandomCorpus(Rng& rng) override { return rng.bounded(elements.size()); }
+    CorpusType GetRandomCorpus(Rng& rng) const override { return rng.bounded(elements.size()); }
 
     ValueType GetValue(const CorpusType& v) const override { return elements[v]; }
 
@@ -4325,6 +4416,8 @@ ZEROERR_SUPPRESS_COMMON_WARNINGS_POP
 
 
 
+#include <limits>
+#include <stdexcept>
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
 
@@ -4356,9 +4449,47 @@ namespace zeroerr {
 struct ContainerOfBase {
     int min_size = 0, max_size = 100, size = -1;
 
-    void WithMaxSize(unsigned _max_size) { this->max_size = _max_size; }
-    void WithMinSize(unsigned _min_size) { this->min_size = _min_size; }
-    void WithSize(unsigned _size) { this->size = _size; }
+    void WithMaxSize(unsigned value) { max_size = checkedSize(value); }
+    void WithMinSize(unsigned value) { min_size = checkedSize(value); }
+    void WithSize(unsigned value) { size = checkedSize(value); }
+
+protected:
+    static int checkedSize(unsigned value) {
+        if (value > static_cast<unsigned>((std::numeric_limits<int>::max)()))
+            throw std::invalid_argument("Container size exceeds supported range");
+        return static_cast<int>(value);
+    }
+
+    void validate() const {
+        if (size < -1 || min_size < 0 || max_size < min_size)
+            throw std::invalid_argument("Invalid container size bounds");
+    }
+
+    unsigned randomSize(Rng& rng) const {
+        validate();
+        if (size != -1) return static_cast<unsigned>(size);
+        return rng.bounded(static_cast<uint32_t>(max_size) -
+                           static_cast<uint32_t>(min_size) + 1U) + min_size;
+    }
+
+    template <class Inner, class Corpus>
+    void mutate(Rng& rng, Corpus& v, bool only_shrink, const Inner& inner) const {
+        validate();
+        const size_t lower = static_cast<size_t>(size == -1 ? min_size : size);
+        const size_t upper = static_cast<size_t>(size == -1 ? max_size : size);
+        if (v.size() < lower || v.size() > upper)
+            throw std::invalid_argument("Corpus violates container size bounds");
+        const unsigned action = rng.bounded(5);
+        if (size == -1 && action == 0) {
+            if (v.size() > lower)
+                v.erase(v.begin() + rng.bounded(static_cast<uint32_t>(v.size())));
+        } else if (size == -1 && action == 1 && !only_shrink) {
+            if (v.size() < upper) v.push_back(inner.GetRandomCorpus(rng));
+        } else if (!v.empty()) {
+            inner.Mutate(rng, v[rng.bounded(static_cast<uint32_t>(v.size()))], only_shrink);
+        }
+    }
+
 };
 
 
@@ -4390,8 +4521,9 @@ public:
     }
 
     CorpusType GetRandomCorpus(Rng& rng) const override {
-        unsigned   E = rng.bounded(max_size - min_size + 1) + min_size;
+        unsigned   E = randomSize(rng);
         CorpusType result;
+        result.reserve(E);
         for (unsigned i = 0; i < E; i++) {
             result.push_back(inner_domain.GetRandomCorpus(rng));
         }
@@ -4399,18 +4531,7 @@ public:
     }
 
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
-        int action = rng.bounded(5);
-        if (size == -1 && action == 0) {
-            if (static_cast<int>(v.size()) > min_size)
-                v.erase(v.begin() + rng.bounded(static_cast<uint32_t>(v.size())));
-
-        } else if (size == -1 && action == 1) {
-            if (static_cast<int>(v.size()) < max_size)
-                v.push_back(inner_domain.GetRandomCorpus(rng));
-
-        } else {
-            inner_domain.Mutate(rng, v[rng.bounded(static_cast<uint32_t>(v.size()))], only_shrink);
-        }
+        mutate(rng, v, only_shrink, inner_domain);
     }
 };
 
@@ -4433,8 +4554,9 @@ public:
     }
 
     CorpusType GetRandomCorpus(Rng& rng) const override {
-        unsigned   E = rng.bounded(max_size - min_size + 1) + min_size;
+        unsigned   E = randomSize(rng);
         CorpusType result;
+        result.reserve(E);
         for (unsigned i = 0; i < E; i++) {
             result.push_back(inner_domain.GetRandomCorpus(rng));
         }
@@ -4442,16 +4564,7 @@ public:
     }
 
     void Mutate(Rng& rng, CorpusType& v, bool only_shrink) const override {
-        int action = rng.bounded(5);
-        if (size == -1 && action == 0) {
-            if (static_cast<int>(v.size()) > min_size) v.erase(v.begin() + rng.bounded(static_cast<uint32_t>(v.size())));
-
-        } else if (size == -1 && action == 1) {
-            if (static_cast<int>(v.size()) < max_size)
-                v.push_back(inner_domain.GetRandomCorpus(rng));
-        } else {
-            inner_domain.Mutate(rng, v[rng.bounded(static_cast<uint32_t>(v.size()))], only_shrink);
-        }
+        mutate(rng, v, only_shrink, inner_domain);
     }
 };
 
@@ -6696,6 +6809,8 @@ void SubCase::operator<<(std::function<void(TestContext*)> op) {
     try {
         op(&local);
     } catch (const AssertionData&) {
+        // A helper may throw without having received this subcase's context.
+        if (local.failed_as == 0) local.failed_as = 1;
     } catch (const FuzzFinishedException&) {
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
@@ -6965,6 +7080,8 @@ int UnitTest::run() {
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
+                // Context-free helper assertions must not disappear at the catch.
+                if (context.failed_as == 0) context.failed_as = 1;
             } catch (const FuzzFinishedException&) {
             } catch (const std::exception& e) {
                 std::cerr << e.what() << std::endl;
@@ -6985,7 +7102,11 @@ int UnitTest::run() {
     }
     reporter->testEnd(sum);
     delete reporter;
+#ifdef ZEROERR_CHECK_AS_ERROR
+    return (sum.failed > 0 || sum.failed_as > 0 || sum.warning_as > 0) ? 1 : 0;
+#else
     return (sum.failed > 0 || sum.failed_as > 0) ? 1 : 0;
+#endif
 }
 
 // sorted by file names and line numbers
@@ -7651,9 +7772,9 @@ std::vector<uint64_t> Rng::state() const {
 }
 
 
-uint64_t Rng::min() { return 0; }
 
-uint64_t Rng::max() { return (std::numeric_limits<uint64_t>::max)(); }
+
+
 
 
 uint64_t Rng::rotl(uint64_t x, unsigned k) noexcept { return (x << k) | (x >> (64U - k)); }
@@ -7735,9 +7856,72 @@ void RunFuzzTest(IFuzzTest& fuzz_test, int seed, int runs, int max_len, int time
 }  // namespace zeroerr
 
 
-
 #include <sstream>
 namespace zeroerr {
+
+void IRObject::Reset() noexcept {
+    if (type == Type::String) delete[] s;
+    if (type == Type::Object) delete[] o;
+    i = 0;
+    type = Type::Undefined;
+}
+
+IRObject::~IRObject() { Reset(); }
+
+IRObject::IRObject(const IRObject& other) : IRObject() {
+    if (other.type == Type::String) {
+        const size_t size = std::strlen(other.s);
+        s = alloc_str(size);
+        std::memcpy(s, other.s, size + 1);
+        type = Type::String;
+    } else if (other.type == Type::Object) {
+        IRObject copy;
+        auto children = other.GetChildren();
+        copy.SetChildren(alloc(static_cast<size_t>(children.size)));
+        for (int64_t j = 0; j < children.size; ++j)
+            copy.o[j + 1] = children.children[j];
+        *this = std::move(copy);
+    } else if (other.type == Type::ShortString) {
+        std::memcpy(ss, other.ss, sizeof(ss));
+        type = other.type;
+    } else {
+        if (other.type == Type::Float) f = other.f;
+        else i = other.i;
+        type = other.type;
+    }
+}
+
+IRObject::IRObject(IRObject&& other) noexcept : IRObject() { moveFrom(other); }
+
+IRObject& IRObject::operator=(const IRObject& other) {
+    if (this != &other) {
+        IRObject copy(other);
+        *this = std::move(copy);
+    }
+    return *this;
+}
+
+IRObject& IRObject::operator=(IRObject&& other) noexcept {
+    if (this == &other) return *this;
+    // Detach first: other may be a child owned by this object.
+    IRObject incoming(std::move(other));
+    Reset();
+    moveFrom(incoming);
+    return *this;
+}
+
+void IRObject::moveFrom(IRObject& other) noexcept {
+    switch (other.type) {
+        case Type::String: s = other.s; break;
+        case Type::Object: o = other.o; break;
+        case Type::ShortString: std::memcpy(ss, other.ss, sizeof(ss)); break;
+        case Type::Float: f = other.f; break;
+        default: i = other.i; break;
+    }
+    type = other.type;
+    other.type = Type::Undefined;
+    other.i = 0;
+}
 
 IRObject* IRObject::alloc(size_t size) {
     IRObject* list = new IRObject[size + 1];
@@ -7751,9 +7935,9 @@ char* IRObject::alloc_str(size_t size) {
     return s;
 }
 
-static zeroerr::String escape(zeroerr::String str) {
+static zeroerr::String escape(const zeroerr::String& str) {
     zeroerr::String result;
-    for (char c : str) {
+    for (unsigned char c : str) {
         switch (c) {
             case ' ': result += "\\s"; break;
             case '\n': result += "\\n"; break;
@@ -7777,43 +7961,42 @@ static zeroerr::String escape(zeroerr::String str) {
     return result;
 }
 
-static zeroerr::String unescape(zeroerr::String str) {
+static unsigned hexDigit(char c) {
+    if (c >= '0' && c <= '9') return static_cast<unsigned>(c - '0');
+    if (c >= 'a' && c <= 'f') return static_cast<unsigned>(c - 'a' + 10);
+    if (c >= 'A' && c <= 'F') return static_cast<unsigned>(c - 'A' + 10);
+    throw std::invalid_argument("Invalid hexadecimal escape");
+}
+
+static zeroerr::String unescape(const zeroerr::String& str) {
     zeroerr::String result;
     for (size_t i = 0; i < str.size(); ++i) {
-        if (str[i] == '\\') {
-            switch (str[++i]) {
-                case 's': result += ' '; break;
-                case 'n': result += '\n'; break;
-                case 't': result += '\t'; break;
-                case 'r': result += '\r'; break;
-                case 'f': result += '\f'; break;
-                case 'v': result += '\v'; break;
-                case '\\': result += '\\'; break;
-                case '"': result += '"'; break;
-                case 'x': {
-                    char c = 0;
-                    for (int j = 0; j < 2; ++j) {
-                        c *= 16;
-                        if (str[i + 1] >= '0' && str[i + 1] <= '9') {
-                            c += str[i + 1] - '0';
-                        } else if (str[i + 1] >= 'a' && str[i + 1] <= 'f') {
-                            c += str[i + 1] - 'a' + 10;
-                        } else if (str[i + 1] >= 'A' && str[i + 1] <= 'F') {
-                            c += str[i + 1] - 'A' + 10;
-                        }
-                    }
-                    result += c;
-                    i += 2;
-                }
-            }
-        } else {
+        if (str[i] != '\\') {
             result += str[i];
+            continue;
+        }
+        if (++i == str.size()) throw std::invalid_argument("Incomplete escape");
+        switch (str[i]) {
+            case 's': result += ' '; break;
+            case 'n': result += '\n'; break;
+            case 't': result += '\t'; break;
+            case 'r': result += '\r'; break;
+            case 'f': result += '\f'; break;
+            case 'v': result += '\v'; break;
+            case '\\': result += '\\'; break;
+            case '"': result += '"'; break;
+            case 'x':
+                if (str.size() - i <= 2) throw std::invalid_argument("Incomplete hexadecimal escape");
+                result += static_cast<char>((hexDigit(str[i + 1]) << 4) | hexDigit(str[i + 2]));
+                i += 2;
+                break;
+            default: throw std::invalid_argument("Unknown escape");
         }
     }
     return result;
 }
 
-static void to_string(IRObject obj, std::stringstream& ss) {
+static void to_string(const IRObject& obj, std::stringstream& ss) {
     switch (obj.type) {
         case IRObject::Type::Int: ss << obj.i; break;
         case IRObject::Type::Float: ss << obj.f << 'f'; break;
@@ -7842,17 +8025,18 @@ static IRObject from_string(std::stringstream& ss, zeroerr::String& token) {
             IRObject child = from_string(ss, token);
             if (child.type == IRObject::Type::Undefined)
                 return obj;
-            children.push_back(child);
+            children.push_back(std::move(child));
         }
         IRObject* child = IRObject::alloc(children.size());
-        for (unsigned i = 0; i < children.size(); ++i) {
-            child[i] = children[i];
-        }
         obj.SetChildren(child);
+        for (unsigned i = 0; i < children.size(); ++i) {
+            child[i] = std::move(children[i]);
+        }
         return obj;
     }
     if (token[0] == '"') {
-        CHECK(token.size() > 1 AND token.back() == '"');
+        if (token.size() < 2 || token.back() != '"')
+            throw std::invalid_argument("Unterminated string");
         obj.SetScalar(unescape(token.substr(1, token.size() - 2)));
         return obj;
     }
@@ -7867,7 +8051,7 @@ static IRObject from_string(std::stringstream& ss, zeroerr::String& token) {
     return obj;
 }
 
-zeroerr::String IRObject::ToString(IRObject obj) {
+zeroerr::String IRObject::ToString(const IRObject& obj) {
     std::stringstream ss;
     to_string(obj, ss);
     return ss.str();
