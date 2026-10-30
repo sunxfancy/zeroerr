@@ -102,7 +102,12 @@ TEST_CASE("PFR respects the selected reflection backend") {
     A value{"John", 20};
     print(value);
 #if ZEROERR_CXX_STANDARD >= 14 && (PFR_USE_CPP17 || PFR_USE_LOOPHOLE)
-    REQUIRE(print.str().find("John") != zeroerr::String::npos);
+    // std::string's layout is implementation-defined (not standard-layout on MSVC).
+    if (std::is_standard_layout<A>::value) {
+        REQUIRE(print.str().find("John") != zeroerr::String::npos);
+    } else {
+        REQUIRE(print.str() == Printer::type(value) + "\n");
+    }
 #else
     REQUIRE(print.str() == Printer::type(value) + "\n");
 #endif
