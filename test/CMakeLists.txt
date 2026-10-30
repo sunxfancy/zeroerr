@@ -115,3 +115,10 @@ if(ZEROERR_ENABLE_COVERAGE)
         ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/coverage-report.py
         ${ZEROERR_LLVM_PROFDATA} ${ZEROERR_LLVM_COV})
 endif()
+
+if(ENABLE_THREAD_SAFE)
+    find_package(Threads REQUIRED)
+    add_executable(log_concurrency log_concurrency.cpp)
+    target_link_libraries(log_concurrency PRIVATE zeroerr Threads::Threads)
+    add_test(NAME LogConcurrency COMMAND log_concurrency)
+endif()
