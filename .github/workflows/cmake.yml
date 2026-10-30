@@ -32,6 +32,13 @@ jobs:
     - name: Test lightweight header checks
       run: ctest --test-dir build-lightweight -C Release --output-on-failure
 
+    - name: Configure full C++17 tests
+      run: cmake -S . -B build-tests -DBUILD_TEST=ON -DBUILD_EXAMPLES=ON -DCMAKE_CXX_STANDARD=17 -DCMAKE_BUILD_TYPE=Debug
+    - name: Build full tests
+      run: cmake --build build-tests --config Debug --parallel 2
+    - name: Run full tests
+      run: ctest --test-dir build-tests -C Debug --output-on-failure
+
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. 
       run: bash ${{github.workspace}}/scripts/build-all.sh config ${{github.workspace}}
@@ -45,3 +52,47 @@ jobs:
     - name: Test
       run: bash ${{github.workspace}}/scripts/build-all.sh test ${{github.workspace}}
 
+
+  compatibility:
+    name: C++${{ matrix.standard }} with ${{ matrix.compiler }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        standard: [11, 14]
+        compiler: [g++, clang++]
+    steps:
+    - uses: actions/checkout@v4
+    # Optional variadic macro arguments are an intentional supported extension;
+    # newer compilers classify them under the broad C++20 warning group.
+    - name: Configure compatibility tests
+      run: >-
+        cmake -S . -B build-compatibility -DBUILD_TEST=ON -DBUILD_EXAMPLES=ON
+        -DUSE_MOLD=OFF -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+        -DCMAKE_CXX_STANDARD=${{ matrix.standard }}
+        -DCMAKE_CXX_STANDARD_REQUIRED=ON -DCMAKE_CXX_EXTENSIONS=OFF
+        -DCMAKE_CXX_FLAGS="-Werror=c++14-extensions -Werror=c++17-extensions"
+    - name: Build compatibility tests
+      run: cmake --build build-compatibility --parallel 2
+    - name: Run compatibility tests
+      run: ctest --test-dir build-compatibility --output-on-failure
+
+  sanitizers:
+    name: Domain and serialization sanitizers
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Configure ASan and UBSan
+      run: >-
+        cmake -S . -B build-sanitizers -DBUILD_TEST=ON -DUSE_MOLD=OFF
+        -DCMAKE_BUILD_TYPE=Debug
+        -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all"
+        -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined"
+    - name: Build regression tests
+      run: cmake --build build-sanitizers --target domain_regression domain_regression_single --parallel 2
+    - name: Run regression tests with leak detection
+      env:
+        ASAN_OPTIONS: detect_leaks=1
+        UBSAN_OPTIONS: halt_on_error=1
+      run: ctest --test-dir build-sanitizers -R DomainRegression --output-on-failure

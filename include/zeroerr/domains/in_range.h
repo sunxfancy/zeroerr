@@ -1,6 +1,9 @@
 #pragma once
 
 #include "zeroerr/domains/domain.h"
+#include <cmath>
+#include <random>
+#include <stdexcept>
 #include "zeroerr/internal/config.h"
 
 ZEROERR_SUPPRESS_COMMON_WARNINGS_PUSH
@@ -32,19 +35,41 @@ public:
 
     ValueType min, max;
 
-    InRange(T min, T max) : min(min), max(max) {}
+    InRange(T min, T max) : min(min), max(max) { validate(); }
 
     CorpusType GetRandomCorpus(Rng& rng) const override {
-        ValueType offsize = max - min + 1;
-        ValueType v       = rng.bounded(offsize);
-        v                 = min + v;
-        return v;
+        validate();
+        return sample(rng);
     }
 
     void Mutate(Rng& rng, CorpusType& v, bool) const override {
-        CorpusType offsize = max - min + 1;
-        v                  = rng.bounded(offsize);
-        v                  = min + v;
+        v = GetRandomCorpus(rng);
+    }
+
+private:
+    void validate() const {
+        if (!(min <= max) || !std::isfinite(static_cast<long double>(min)) ||
+            !std::isfinite(static_cast<long double>(max)))
+            throw std::invalid_argument("InRange requires finite ordered bounds");
+    }
+
+    template <class U = T>
+    typename std::enable_if<std::is_integral<U>::value, T>::type sample(Rng& rng) const {
+        // Promote small integers because standard distributions exclude char and bool.
+        using Int = typename std::conditional<std::is_signed<U>::value, int64_t, uint64_t>::type;
+        std::uniform_int_distribution<Int> distribution(min, max);
+        return static_cast<T>(distribution(rng));
+    }
+
+    template <class U = T>
+    typename std::enable_if<std::is_floating_point<U>::value, T>::type sample(Rng& rng) const {
+        if (min == max) return min;
+        const T fraction = static_cast<T>(rng.uniform01());
+        // Opposite-sign extremes may overflow max - min.
+        T value = min < 0 && max > 0
+                      ? min * (T(1) - fraction) + max * fraction
+                      : min + (max - min) * fraction;
+        return value < min ? min : value > max ? max : value;
     }
 };
 

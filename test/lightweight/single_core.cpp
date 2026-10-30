@@ -22,3 +22,17 @@ TEST_CASE("default core has no standard string or streams") {
     INFO("context", 12);
     CHECK(1 == 1);
 }
+
+#include "../smart_character_pointer_cases.h"
+
+TEST_CASE("comparison macros preserve evaluation in the single header") {
+    int left = 0, right = 0;
+    REQUIRE_EQ(++left, ++right);
+    REQUIRE_EQ(left, 1);
+    REQUIRE_EQ(right, 1);
+    REQUIRE_NE(left, right + 1);
+    REQUIRE_LT(left, right + 1);
+    REQUIRE_LE(left, right);
+    REQUIRE_GT(left + 1, right);
+    REQUIRE_GE(left, right);
+}

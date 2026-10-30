@@ -282,6 +282,8 @@ void SubCase::operator<<(std::function<void(TestContext*)> op) {
     try {
         op(&local);
     } catch (const AssertionData&) {
+        // A helper may throw without having received this subcase's context.
+        if (local.failed_as == 0) local.failed_as = 1;
     } catch (const FuzzFinishedException&) {
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
@@ -604,6 +606,8 @@ int UnitTest::run() {
             try {
                 tc.func(&context);  // run the test case
             } catch (const AssertionData&) {
+                // Context-free helper assertions must not disappear at the catch.
+                if (context.failed_as == 0) context.failed_as = 1;
             } catch (const FuzzFinishedException&) {
             } catch (const std::exception& e) {
                 std::cerr << e.what() << std::endl;
@@ -643,7 +647,11 @@ int UnitTest::run() {
     }
     if (coverage_failed) return 2;
 #endif
+#ifdef ZEROERR_CHECK_AS_ERROR
+    return (sum.failed > 0 || sum.failed_as > 0 || sum.warning_as > 0) ? 1 : 0;
+#else
     return (sum.failed > 0 || sum.failed_as > 0) ? 1 : 0;
+#endif
 }
 
 // sorted by file names and line numbers
