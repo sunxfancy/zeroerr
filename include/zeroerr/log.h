@@ -19,6 +19,7 @@
 
 #include "zeroerr/internal/time.h"
 #include <iosfwd>
+#include <cstddef>
 #include <map>
 #include "zeroerr/string.h"
 #include <utility>
@@ -164,21 +165,20 @@ extern int _ZEROERR_G_VERBOSE;
 
 #define ZEROERR_VERBOSE(v) if (zeroerr::_ZEROERR_G_VERBOSE >= (v))
 
-#define ZEROERR_LOG_(severity, message, ...)                                           \
-    do {                                                                               \
-        ZEROERR_G_CONTEXT_SCOPE(true);                                                 \
-        auto msg = zeroerr::log(__VA_ARGS__);                                          \
-                                                                                       \
-        static zeroerr::LogInfo log_info{__FILE__,                                     \
-                                         __func__,                                     \
-                                         message,                                      \
-                                         ZEROERR_LOG_CATEGORY,                         \
-                                         __LINE__,                                     \
-                                         msg.size,                                     \
-                                         zeroerr::LogSeverity::severity};              \
-        msg.log->info = &log_info;                                                     \
-        if (msg.stream.getFlushMode() == zeroerr::LogStream::FlushMode::FLUSH_AT_ONCE) \
-            msg.stream.flush();                                                        \
+#define ZEROERR_LOG_(severity, message, ...)                                        \
+    do {                                                                            \
+        ZEROERR_G_CONTEXT_SCOPE(true);                                              \
+        auto msg = zeroerr::makeLogRecord(__VA_ARGS__);                             \
+                                                                                    \
+        static zeroerr::LogInfo log_info{__FILE__,                                  \
+                                         __func__,                                  \
+                                         message,                                   \
+                                         ZEROERR_LOG_CATEGORY,                      \
+                                         __LINE__,                                  \
+                                         sizeof(msg.entry),                         \
+                                         zeroerr::LogSeverity::severity};           \
+        msg.entry.info = &log_info;                                                 \
+        msg.stream.write(std::move(msg.entry));                                     \
     } while (0)
 
 #define ZEROERR_INFO_(...) \
@@ -313,7 +313,7 @@ extern void resumeLog();
  * The log message can be converted to a string with the str() function.
  * You can also get the raw pointer of the arguments with the getRawLog() function.
  */
-struct LogMessage {
+struct alignas(std::max_align_t) LogMessage {
     // time is assigned when the log message is created
     LogMessage();
 
@@ -329,7 +329,9 @@ struct LogMessage {
     virtual std::map<zeroerr::String, zeroerr::String> getData() const = 0;
 
     // meta data of this log message
-    const LogInfo* info;
+    const LogInfo* info = nullptr;
+
+    virtual ~LogMessage() = default;
 
     // recorded wall time
     Timestamp time;
@@ -518,20 +520,35 @@ public:
      * All reference type (including right value reference) will be converted
      * to the original type.
      */
+    // Low-level API: callers must externally synchronize metadata assignment
+    // and flush. Prefer LOG/ZEROERR_LOG for concurrent producers.
     template <typename... T>
     PushResult push(T&&... args) {
-        // unsigned size = sizeof(LogMessageImpl<T...>);
+        static_assert(alignof(LogMessageImpl<detail::to_store_type_t<T>...>) <= alignof(std::max_align_t),
+                      "Over-aligned log arguments are not supported");
+        ZEROERR_LOCK(*mutex);
         unsigned size = sizeof(LogMessageImpl<detail::to_store_type_t<T>...>);
-        void*    p;
-        if (use_lock_free)
-            p = alloc_block_lockfree(size);
-        else
-            p = alloc_block(size);
+        void* p = alloc_block(size);
         LogMessage* msg =
             new (p) LogMessageImpl<detail::to_store_type_t<T>...>(std::forward<T>(args)...);
+        commit_block(ZEROERR_LOAD(m_last), size);
         return {msg, size, *this};
     }
 
+
+    // Construct arguments before acquiring the stream lock. Publish only complete
+    // records, so a concurrent flush cannot observe partially initialized data.
+    template <typename... T>
+    void write(LogMessageImpl<T...>&& message) {
+        static_assert(alignof(LogMessageImpl<T...>) <= alignof(std::max_align_t),
+                      "Over-aligned log arguments are not supported");
+        ZEROERR_LOCK(*mutex);
+        void* storage = alloc_block(sizeof(message));
+        new (storage) LogMessageImpl<T...>(std::move(message));
+        auto* last = ZEROERR_LOAD(m_last);
+        commit_block(last, sizeof(message));
+        if (flush_mode == FLUSH_AT_ONCE) flush_unlocked();
+    }
 
     /**
      * @brief get a log message from the stream
@@ -594,12 +611,13 @@ public:
     LogMode   getLogMode() const { return log_mode; }
     void      setLogMode(LogMode mode) { log_mode = mode; }
 
+    // Compatibility flag; publication now always uses the stream mutex.
     bool use_lock_free = true;
 
     friend class LogIterator;
 
 private:
-    DataBlock *first, *prepare;
+    DataBlock* first;
     ZEROERR_ATOMIC(DataBlock*) m_last;
     Logger*   logger     = nullptr;
     FlushMode flush_mode = FLUSH_AT_ONCE;
@@ -610,7 +628,9 @@ private:
 
     // The implementation of alloc objects by giving a size
     void* alloc_block(unsigned size);
-    void* alloc_block_lockfree(unsigned size);
+    void commit_block(DataBlock* block, unsigned size);
+    void flush_unlocked();
+
 
     // The implementation of getLog which returns a raw pointer
     // This way can reduce the overhead of code generation by template
@@ -618,6 +638,25 @@ private:
     void* getRawLog(zeroerr::String func, zeroerr::String msg, zeroerr::String name);
 };
 
+
+// A temporary owns argument storage while producers prepare records in parallel.
+template <typename... T>
+struct LogRecord {
+    LogStream& stream;
+    LogMessageImpl<detail::to_store_type_t<T>...> entry;
+    LogRecord(LogStream& stream, T&&... args)
+        : stream(stream), entry(std::forward<T>(args)...) {}
+};
+
+template <typename... T>
+LogRecord<T...> makeLogRecord(LogStream& stream, T&&... args) {
+    return LogRecord<T...>(stream, std::forward<T>(args)...);
+}
+
+template <typename... T>
+LogRecord<T...> makeLogRecord(T&&... args) {
+    return LogRecord<T...>(LogStream::getDefault(), std::forward<T>(args)...);
+}
 
 template <typename... T>
 PushResult log(T&&... args) {

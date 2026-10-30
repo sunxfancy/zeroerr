@@ -178,6 +178,11 @@ struct UnitTest {
     zeroerr::String     correct_output_path;
     zeroerr::String     reporter_name = "console";
     zeroerr::String     binary;
+    // Fresh output directory for optional Clang per-test raw profiles.
+    zeroerr::String     coverage_output;
+    // Run collection and analysis together, like the optional fuzz mode.
+    bool            run_coverage = false;
+    std::vector<zeroerr::String> coverage_arguments;
     struct Filters* filters = nullptr;
 };
 

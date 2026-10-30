@@ -1,0 +1,175 @@
+name: CI
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev, master]
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        description: Immutable commit to test
+        type: string
+        required: true
+      release:
+        description: Test Debug and Release on every platform
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}-${{ inputs.ref }}
+  cancel-in-progress: ${{ !inputs.release }}
+
+jobs:
+  build:
+    name: ${{ matrix.os }} / ${{ matrix.config }}
+    timeout-minutes: 30
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        config: ${{ fromJSON(inputs.release && '["Debug", "Release"]' || '["Debug"]') }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref || github.sha }}
+        persist-credentials: false
+
+    - name: Check Clang warning hygiene
+      if: runner.os != 'Windows'
+      run: python3 scripts/check-warning-hygiene.py --compiler clang++
+
+    - name: Configure lightweight header checks
+      run: cmake -S test/lightweight -B build-lightweight -DCMAKE_BUILD_TYPE=Release
+    - name: Build lightweight header checks
+      run: cmake --build build-lightweight --config Release --parallel 2
+    - name: Test lightweight header checks
+      run: ctest --test-dir build-lightweight -C Release --output-on-failure
+
+    - name: Configure full C++17 tests
+      run: cmake -S . -B build-tests -DBUILD_TEST=ON -DBUILD_EXAMPLES=ON -DCMAKE_CXX_STANDARD=17 -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+    - name: Build full tests
+      run: cmake --build build-tests --config ${{ matrix.config }} --parallel 2
+    - name: Run full tests
+      run: ctest --test-dir build-tests -C ${{ matrix.config }} --output-on-failure
+
+  compatibility:
+    name: C++${{ matrix.standard }} with ${{ matrix.compiler }}
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        standard: [11, 14, 20]
+        compiler: [g++, clang++]
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref || github.sha }}
+        persist-credentials: false
+    # Optional variadic macro arguments are an intentional supported extension;
+    # newer compilers classify them under the broad C++20 warning group.
+    - name: Configure compatibility tests
+      run: >-
+        cmake -S . -B build-compatibility -DBUILD_TEST=ON -DBUILD_EXAMPLES=ON
+        -DUSE_MOLD=OFF -DCMAKE_BUILD_TYPE=Release
+        -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+        -DCMAKE_CXX_STANDARD=${{ matrix.standard }}
+        -DCMAKE_CXX_STANDARD_REQUIRED=ON -DCMAKE_CXX_EXTENSIONS=OFF
+        -DCMAKE_CXX_FLAGS="${{ matrix.standard < 17 && '-Werror=c++14-extensions -Werror=c++17-extensions' || '' }}"
+    - name: Build compatibility tests
+      run: cmake --build build-compatibility --parallel 2
+    - name: Run compatibility tests
+      run: ctest --test-dir build-compatibility --output-on-failure
+
+  sanitizers:
+    name: Domain and serialization sanitizers
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref || github.sha }}
+        persist-credentials: false
+    - name: Configure ASan and UBSan
+      run: >-
+        cmake -S . -B build-sanitizers -DBUILD_TEST=ON -DUSE_MOLD=OFF
+        -DCMAKE_BUILD_TYPE=Debug
+        -DCMAKE_CXX_FLAGS="-fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all"
+        -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address,undefined"
+    - name: Build regression tests
+      run: cmake --build build-sanitizers --target domain_regression domain_regression_single --parallel 2
+    - name: Run regression tests with leak detection
+      env:
+        ASAN_OPTIONS: detect_leaks=1
+        UBSAN_OPTIONS: halt_on_error=1
+      run: ctest --test-dir build-sanitizers -R DomainRegression --output-on-failure
+  coverage:
+    uses: ./.github/workflows/coverage.yml
+    with:
+      ref: ${{ inputs.ref || github.sha }}
+
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - name: Verify release validation
+        run: python3 -m unittest discover -s scripts -p 'test_release.py' -v
+      - name: Verify generated single header
+        run: |
+          mkdir header-check
+          cd header-check
+          cmake -P ../scripts/gen-single-file.cmake
+          cmp zeroerr.hpp ../zeroerr.hpp
+
+  options:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        color: [AUTO, 'ON', 'OFF']
+        thread: ['ON', 'OFF']
+        init: ['ON', 'OFF']
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          persist-credentials: false
+      - name: Configure option combinations
+        run: >-
+          cmake -S . -B build-options -DBUILD_TEST=ON -DUSE_MOLD=OFF
+          -DCMAKE_DISABLE_FIND_PACKAGE_LLVM=ON -DCMAKE_BUILD_TYPE=Release
+          -DCOLORFUL_OUTPUT=${{ matrix.color }} -DENABLE_THREAD_SAFE=${{ matrix.thread }}
+          -DENABLE_AUTO_INIT=${{ matrix.init }}
+      - run: cmake --build build-options --parallel 2
+      - run: ctest --test-dir build-options --output-on-failure
+
+  result:
+    name: CI result
+    if: always()
+    needs: [build, compatibility, sanitizers, coverage, source, options]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require every test job to succeed
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          python3 - <<'PYCODE'
+          import json, os
+          results = json.loads(os.environ['RESULTS'])
+          failed = [name for name, job in results.items() if job['result'] != 'success']
+          if failed:
+              raise SystemExit('CI did not succeed: ' + ', '.join(failed))
+          PYCODE

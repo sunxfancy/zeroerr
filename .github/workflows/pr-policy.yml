@@ -1,0 +1,31 @@
+name: PR policy
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+
+permissions:
+  contents: read
+
+jobs:
+  target:
+    name: PR target
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Only read event metadata: never execute code from the PR.
+      - name: Require dev, or a dev-to-master release promotion
+        env:
+          BASE: ${{ github.event.pull_request.base.ref }}
+          HEAD: ${{ github.event.pull_request.head.ref }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          if [[ "$BASE" == dev ]]; then
+            exit 0
+          fi
+          if [[ "$BASE" == master && "$HEAD" == dev && "$HEAD_REPO" == "$REPO" ]]; then
+            exit 0
+          fi
+          echo '::error::Target ordinary PRs at dev. Only this repository’s dev branch may promote a release to master.'
+          exit 1

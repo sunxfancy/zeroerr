@@ -3065,7 +3065,9 @@ template <typename Char, typename... Args> class basic_format_string {
                   detail::count_statically_named_args<Args...>()) {
       using checker = detail::format_string_checker<Char, detail::error_handler,
                                                     remove_cvref_t<Args>...>;
-      detail::parse_format_string<true>(str_, checker(s, {}));
+      // Share the exact string view: separate conversions can yield distinct
+      // literal addresses during Clang C++20 constant evaluation.
+      detail::parse_format_string<true>(str_, checker(str_, {}));
     }
 #else
     detail::check_format_string<Args...>(s);

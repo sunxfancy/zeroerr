@@ -105,6 +105,22 @@ foreach(order IN ITEMS zeroerr_first stl_first)
     endif()
     add_test(NAME PrintCapabilities_${order} COMMAND print_capabilities_${order})
 endforeach()
+if(ZEROERR_ENABLE_COVERAGE)
+    zeroerr_add_coverage(unittest INCLUDE "/zeroerr/(src|include)/")
+    add_executable(coverage_fixture coverage_fixture.cpp coverage_subject.cpp)
+    target_link_libraries(coverage_fixture PRIVATE zeroerr)
+    add_test(NAME ClangCoverageIntegration COMMAND ${Python3_EXECUTABLE}
+        ${CMAKE_CURRENT_SOURCE_DIR}/coverage_integration.py $<TARGET_FILE:coverage_fixture>
+        ${CMAKE_CURRENT_SOURCE_DIR}/../scripts/coverage-report.py
+        ${ZEROERR_LLVM_PROFDATA} ${ZEROERR_LLVM_COV})
+endif()
+
+if(ENABLE_THREAD_SAFE)
+    find_package(Threads REQUIRED)
+    add_executable(log_concurrency log_concurrency.cpp)
+    target_link_libraries(log_concurrency PRIVATE zeroerr Threads::Threads)
+    add_test(NAME LogConcurrency COMMAND log_concurrency)
+endif()
 
 add_subdirectory(native_fixture_identity)
 add_subdirectory(assertion_contract)

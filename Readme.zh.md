@@ -194,6 +194,16 @@ clang++ -std=c++11 -fsanitize=fuzzer-no-link -L=`clang++ -print-runtime-dir` -lc
 ```
 
 
+## 4. 逐测试覆盖率
+
+使用 Clang 和 `-DZEROERR_ENABLE_COVERAGE=ON` 构建后，运行 `./my_tests --coverage`
+（或 `-c`）即可。无需修改现有测试，自动采集并统计每个测试的函数、源码区域、分支结果覆盖，
+同时报告耗时和覆盖相同的候选组。覆盖相同不代表测试可以删除。
+需要 Python 3.9+ 和配套 LLVM 工具。
+
+通过 `zeroerr_add_coverage(my_tests)` 可以添加 `my_tests-coverage` CMake 目标。
+参见[快速开始](docs/pages/zh/6.coverage.md)和[独立示例](examples/coverage/CMakeLists.txt)。
+
 ## 项目构建
 
 本项目使用CMake构建，您可以直接将整个目录引入为子项目，也可以选择下载我们提前打包好的整合文件 `zeroerr.hpp`。项目的构建可以在项目根目录下使用如下指令：
