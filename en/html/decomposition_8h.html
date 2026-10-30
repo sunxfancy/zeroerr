@@ -1,0 +1,443 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.15.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/internal/decomposition.h File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.15.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('decomposition_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">decomposition.h File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="config_8h_source.html">zeroerr/internal/config.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="dbg_8h_source.html">zeroerr/dbg.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="print_8h_source.html">zeroerr/print.h</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for decomposition.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="decomposition_8h__incl.png" border="0" usemap="#ainclude_2zeroerr_2internal_2decomposition_8h" loading="lazy" alt=""/></div>
+<map name="ainclude_2zeroerr_2internal_2decomposition_8h" id="ainclude_2zeroerr_2internal_2decomposition_8h">
+<area shape="rect" title=" " alt="" coords="115,5,288,50"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="5,325,182,353"/>
+<area shape="poly" title=" " alt="" coords="169,53,131,86,85,131,44,187,28,218,17,250,14,263,17,276,33,297,55,315,50,318,29,301,12,278,9,264,12,249,23,216,39,184,81,128,127,82,172,48"/>
+<area shape="rect" href="dbg_8h.html" title=" " alt="" coords="148,98,255,126"/>
+<area shape="poly" title=" " alt="" coords="202,48,204,83,199,82,201,53"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="498,174,612,201"/>
+<area shape="poly" title=" " alt="" coords="250,48,514,165,509,168,250,53"/>
+<area shape="poly" title=" " alt="" coords="169,128,135,147,94,174,56,209,27,250,24,268,30,284,43,300,60,315,55,317,39,304,26,287,18,268,22,248,52,205,91,170,133,143,172,124"/>
+<area shape="rect" href="color_8h.html" title=" " alt="" coords="36,249,151,277"/>
+<area shape="poly" title=" " alt="" coords="191,128,114,238,110,235,193,123"/>
+<area shape="poly" title=" " alt="" coords="255,122,485,170,481,173,256,127"/>
+<area shape="rect" title=" " alt="" coords="248,325,302,353"/>
+<area shape="poly" title=" " alt="" coords="207,124,268,310,263,310,204,128"/>
+<area shape="poly" title=" " alt="" coords="94,275,96,310,91,309,93,280"/>
+<area shape="poly" title=" " alt="" coords="496,197,389,218,326,233,265,252,191,284,129,319,126,314,188,280,263,247,325,228,388,213,500,195"/>
+<area shape="poly" title=" " alt="" coords="497,200,170,252,168,252,165,248,169,247,499,195"/>
+<area shape="rect" href="text_8h.html" title=" " alt="" coords="782,249,946,277"/>
+<area shape="poly" title=" " alt="" coords="611,199,796,245,791,246,610,205"/>
+<area shape="rect" href="buffer_8h.html" title=" " alt="" coords="815,325,935,353"/>
+<area shape="poly" title=" " alt="" coords="611,186,702,189,806,198,856,205,900,216,935,230,959,248,965,258,967,268,958,287,940,304,917,319,915,314,936,300,954,284,961,267,960,259,956,251,933,234,898,221,855,211,805,203,702,194,612,191"/>
+<area shape="rect" title=" " alt="" coords="954,476,1041,504"/>
+<area shape="poly" title=" " alt="" coords="611,186,706,188,816,197,869,205,916,215,955,229,981,247,998,272,1010,299,1017,328,1019,358,1016,416,1007,463,1003,459,1011,415,1014,358,1012,329,1005,301,994,274,977,251,952,234,915,221,868,210,816,202,706,194,612,191"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="276,249,476,277"/>
+<area shape="poly" title=" " alt="" coords="521,203,423,245,421,241,525,201"/>
+<area shape="rect" title=" " alt="" coords="566,325,642,353"/>
+<area shape="poly" title=" " alt="" coords="612,191,642,197,672,208,700,225,722,248,728,260,728,272,714,293,689,310,658,324,657,319,686,306,710,289,723,271,723,261,718,251,697,229,670,213,641,203,612,196"/>
+<area shape="rect" title=" " alt="" coords="500,249,610,277"/>
+<area shape="poly" title=" " alt="" coords="556,200,557,235,553,232,553,204"/>
+<area shape="rect" title=" " alt="" coords="633,249,708,277"/>
+<area shape="poly" title=" " alt="" coords="576,199,640,241,635,241,575,205"/>
+<area shape="rect" title=" " alt="" coords="591,476,660,504"/>
+<area shape="poly" title=" " alt="" coords="849,276,787,327,707,403,648,467,645,462,704,399,784,323,844,279"/>
+<area shape="poly" title=" " alt="" coords="868,275,873,311,869,308,865,280"/>
+<area shape="rect" href="string_8h.html" title=" " alt="" coords="717,401,838,428"/>
+<area shape="poly" title=" " alt="" coords="849,276,826,300,805,326,792,356,784,388,780,384,787,355,801,324,822,297,844,279"/>
+<area shape="rect" title=" " alt="" coords="768,476,859,504"/>
+<area shape="poly" title=" " alt="" coords="874,351,866,388,852,429,832,465,829,461,847,427,861,387,870,355"/>
+<area shape="poly" title=" " alt="" coords="860,352,808,394,805,389,855,354"/>
+<area shape="poly" title=" " alt="" coords="753,428,667,472,665,467,748,429"/>
+<area shape="poly" title=" " alt="" coords="785,427,803,463,798,461,783,431"/>
+<area shape="poly" title=" " alt="" coords="817,426,946,471,941,471,816,432"/>
+<area shape="rect" title=" " alt="" coords="684,476,743,504"/>
+<area shape="poly" title=" " alt="" coords="768,428,736,467,734,462,764,430"/>
+<area shape="poly" title=" " alt="" coords="324,280,160,323,158,318,327,275"/>
+<area shape="poly" title=" " alt="" coords="376,275,376,308,378,348,388,390,397,409,410,426,447,455,490,473,535,482,578,489,573,489,534,488,488,478,444,459,406,430,393,412,383,392,373,349,370,308,373,280"/>
+<area shape="poly" title=" " alt="" coords="392,275,438,311,498,350,567,387,639,420,764,471,759,471,637,424,565,392,495,355,435,315,391,280"/>
+<area shape="poly" title=" " alt="" coords="403,275,555,350,630,375,705,397,700,397,629,380,552,355,402,280"/>
+<area shape="poly" title=" " alt="" coords="382,275,418,357,440,400,461,426,486,444,510,454,556,463,607,465,672,476,666,476,606,470,555,468,508,459,484,448,457,430,435,403,413,360,380,280"/>
+<area shape="poly" title=" " alt="" coords="360,276,307,318,304,314,356,279"/>
+<area shape="poly" title=" " alt="" coords="417,275,554,320,549,321,417,280"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="decomposition_8h__dep__incl.png" border="0" usemap="#ainclude_2zeroerr_2internal_2decomposition_8hdep" loading="lazy" alt=""/></div>
+<map name="ainclude_2zeroerr_2internal_2decomposition_8hdep" id="ainclude_2zeroerr_2internal_2decomposition_8hdep">
+<area shape="rect" title=" " alt="" coords="342,5,515,50"/>
+<area shape="rect" href="assert_8h.html" title=" " alt="" coords="342,98,516,126"/>
+<area shape="poly" title=" " alt="" coords="430,63,431,99,426,96,427,68"/>
+<area shape="rect" href="zeroerr_8h.html" title=" " alt="" coords="5,249,135,277"/>
+<area shape="poly" title=" " alt="" coords="324,127,249,146,210,160,173,176,145,193,120,213,83,251,79,247,117,209,142,189,170,171,208,155,248,141,328,124"/>
+<area shape="rect" href="unittest_8h.html" title=" " alt="" coords="183,174,368,201"/>
+<area shape="poly" title=" " alt="" coords="385,134,304,176,301,171,390,131"/>
+<area shape="rect" href="fuzztest_8cpp.html" title=" " alt="" coords="327,325,450,353"/>
+<area shape="poly" title=" " alt="" coords="454,134,480,164,502,200,510,220,513,240,512,259,504,278,491,295,475,308,438,327,436,322,472,304,487,291,500,276,507,258,508,240,505,221,498,203,476,167,453,139"/>
+<area shape="rect" href="unittest_8cpp.html" title=" " alt="" coords="368,249,489,277"/>
+<area shape="poly" title=" " alt="" coords="431,139,431,250,426,248,427,143"/>
+<area shape="rect" href="table_8cpp.html" title=" " alt="" coords="564,174,669,201"/>
+<area shape="poly" title=" " alt="" coords="477,129,586,173,581,174,476,134"/>
+<area shape="poly" title=" " alt="" coords="223,209,108,251,106,246,226,205"/>
+<area shape="rect" href="fuzztest_8h.html" title=" " alt="" coords="158,249,344,277"/>
+<area shape="poly" title=" " alt="" coords="268,215,258,251,253,247,264,218"/>
+<area shape="poly" title=" " alt="" coords="317,206,404,249,399,249,316,211"/>
+<area shape="poly" title=" " alt="" coords="290,282,367,325,362,325,288,287"/>
+</map>
+</div>
+</div>
+<p><a href="decomposition_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:zeroerr_3A_3Adeferred_5Ffalse_3C_20T_20_3E" id="r_zeroerr_3A_3Adeferred_5Ffalse_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1deferred__false.html">zeroerr::deferred_false&lt; T &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3AExprResult" id="r_zeroerr_3A_3AExprResult"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1ExprResult.html">zeroerr::ExprResult</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3AComparisonLhs_3C_20L_20_3E" id="r_zeroerr_3A_3Adetail_3A_3AComparisonLhs_3C_20L_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1ComparisonLhs.html">zeroerr::detail::ComparisonLhs&lt; L &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetails_3A_3Ahas_5Fbool_5Fconversion_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetails_3A_3Ahas_5Fbool_5Fconversion_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1details_1_1has__bool__conversion.html">zeroerr::details::has_bool_conversion&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetails_3A_3Ahas_5Fbool_5Fconversion_3C_20T_2C_20decltype_28static_5Fcast_3C_20bool_20_3E_28std_3A_3Adeclval_3C_20T_20_3E_28_29_29_2C_20void_28_29_29_3E" id="r_zeroerr_3A_3Adetails_3A_3Ahas_5Fbool_5Fconversion_3C_20T_2C_20decltype_28static_5Fcast_3C_20bool_20_3E_28std_3A_3Adeclval_3C_20T_20_3E_28_29_29_2C_20void_28_29_29_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1details_1_1has__bool__conversion_3_01T_00_01decltype_07static__cast_3_01bool_014b2af63a9bd103f3f62b3ea0eeedf605.html">zeroerr::details::has_bool_conversion&lt; T, decltype(static_cast&lt; bool &gt;(std::declval&lt; T &gt;()), void())&gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3AExpression_3C_20L_20_3E" id="r_zeroerr_3A_3AExpression_3C_20L_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1Expression.html">zeroerr::Expression&lt; L &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3AExpressionDecomposer" id="r_zeroerr_3A_3AExpressionDecomposer"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1ExpressionDecomposer.html">zeroerr::ExpressionDecomposer</a></td></tr>
+<tr class="memitem:zeroerr_3A_3AIMatcher_3C_20T_20_3E" id="r_zeroerr_3A_3AIMatcher_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1IMatcher.html">zeroerr::IMatcher&lt; T &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3AIMatcherRef_3C_20T_20_3E" id="r_zeroerr_3A_3AIMatcherRef_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1IMatcherRef.html">zeroerr::IMatcherRef&lt; T &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3ACombinedMatcher_3C_20T_20_3E" id="r_zeroerr_3A_3ACombinedMatcher_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1CombinedMatcher.html">zeroerr::CombinedMatcher&lt; T &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3ANotMatcher_3C_20T_20_3E" id="r_zeroerr_3A_3ANotMatcher_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1NotMatcher.html">zeroerr::NotMatcher&lt; T &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3AStartWithMatcher_3C_20T_20_3E" id="r_zeroerr_3A_3AStartWithMatcher_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1StartWithMatcher.html">zeroerr::StartWithMatcher&lt; T &gt;</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:zeroerr" id="r_zeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail" id="r_zeroerr_3A_3Adetail"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html">zeroerr::detail</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetails" id="r_zeroerr_3A_3Adetails"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1details.html">zeroerr::details</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:acd1b97556dfbbac61063a63031d2f91d" id="r_acd1b97556dfbbac61063a63031d2f91d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd1b97556dfbbac61063a63031d2f91d">AND</a>&#160;&#160;&#160;&amp;&amp;<a class="el" href="structzeroerr_1_1ExpressionDecomposer.html">zeroerr::ExpressionDecomposer</a>() &lt;&lt;</td></tr>
+<tr class="memitem:a3363ca4d6d3cc0230b2804280591c991" id="r_a3363ca4d6d3cc0230b2804280591c991"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3363ca4d6d3cc0230b2804280591c991">OR</a>&#160;&#160;&#160;|| <a class="el" href="structzeroerr_1_1ExpressionDecomposer.html">zeroerr::ExpressionDecomposer</a>() &lt;&lt;</td></tr>
+<tr class="memitem:a3fb83b1f62590e48ab3b48b41a70d453" id="r_a3fb83b1f62590e48ab3b48b41a70d453"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3fb83b1f62590e48ab3b48b41a70d453">ZEROERR_SFINAE_OP</a>(ret,  op)</td></tr>
+<tr class="memitem:a797baa21f304a0938d576d4240821c2a" id="r_a797baa21f304a0938d576d4240821c2a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a797baa21f304a0938d576d4240821c2a">ZEROERR_EXPRESSION_COMPARISON</a>(op,  op_name)</td></tr>
+<tr class="memitem:a63491913b7353e7fe6444e437b45635e" id="r_a63491913b7353e7fe6444e437b45635e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a63491913b7353e7fe6444e437b45635e">ZEROERR_EXPRESSION_ANDOR</a>(op,  op_name)</td></tr>
+<tr class="memitem:a4842b147e4bf769a91d610384ebeeb69" id="r_a4842b147e4bf769a91d610384ebeeb69"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4842b147e4bf769a91d610384ebeeb69">ZEROERR_FORBIT_EXPRESSION</a>(rt,  op)</td></tr>
+<tr class="memitem:a8c7ad9a23f8d512350e0eb94c61c81a7" id="r_a8c7ad9a23f8d512350e0eb94c61c81a7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c7ad9a23f8d512350e0eb94c61c81a7">ZEROERR_DIRECT_COMPARISON</a>(op)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ac7ee2d1222ad017d7c6b30c80fbd7e1c" id="r_ac7ee2d1222ad017d7c6b30c80fbd7e1c"><td class="memTemplParams" colspan="2">template&lt;class L&gt; </td></tr>
+<tr class="memitem:ac7ee2d1222ad017d7c6b30c80fbd7e1c template"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structzeroerr_1_1detail_1_1ComparisonLhs.html">ComparisonLhs</a>&lt; L &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#ac7ee2d1222ad017d7c6b30c80fbd7e1c">zeroerr::detail::makeComparisonLhs</a> (const L &amp;lhs, <a class="el" href="structzeroerr_1_1Printer.html">Printer</a> &amp;printer)</td></tr>
+<tr class="memitem:a8889b9a0f8e29a2c4785f7ba1ed0784a" id="r_a8889b9a0f8e29a2c4785f7ba1ed0784a"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a8889b9a0f8e29a2c4785f7ba1ed0784a template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt; <a class="el" href="structzeroerr_1_1details_1_1has__bool__conversion.html">has_bool_conversion</a>&lt; T &gt;::value, bool &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1details.html#a8889b9a0f8e29a2c4785f7ba1ed0784a">zeroerr::details::getBool</a> (T &amp;&amp;lhs)</td></tr>
+<tr class="memitem:a9e21db05d44092fc6719604e52368993" id="r_a9e21db05d44092fc6719604e52368993"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a9e21db05d44092fc6719604e52368993 template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt;!<a class="el" href="structzeroerr_1_1details_1_1has__bool__conversion.html">has_bool_conversion</a>&lt; T &gt;::value, bool &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1details.html#a9e21db05d44092fc6719604e52368993">zeroerr::details::getBool</a> (T &amp;&amp;)</td></tr>
+<tr class="memitem:affcd245b62b53cb653f3409d7458f750" id="r_affcd245b62b53cb653f3409d7458f750"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:affcd245b62b53cb653f3409d7458f750 template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt; std::is_constructible&lt; <a class="el" href="classzeroerr_1_1String.html">zeroerr::String</a>, T &gt;::value, <a class="el" href="classzeroerr_1_1IMatcherRef.html">IMatcherRef</a>&lt; <a class="el" href="classzeroerr_1_1String.html">zeroerr::String</a> &gt; &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#affcd245b62b53cb653f3409d7458f750">zeroerr::start_with</a> (T &amp;&amp;s)</td></tr>
+</table>
+<a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
+<a id="acd1b97556dfbbac61063a63031d2f91d" name="acd1b97556dfbbac61063a63031d2f91d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd1b97556dfbbac61063a63031d2f91d">&#9670;&#160;</a></span>AND</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define AND&#160;&#160;&#160;&amp;&amp;<a class="el" href="structzeroerr_1_1ExpressionDecomposer.html">zeroerr::ExpressionDecomposer</a>() &lt;&lt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>AND and OR are used to combine expressions in a more readable way. For example: CHECK(1 == 1 AND 2 == 2);</p>
+<p>In its implementation, the expression is decomposed to ExpressionDecomposer() &lt;&lt; 1 == 1 &amp;&amp; ExpressionDecomposer() &lt;&lt; 2 == 2 </p>
+
+</div>
+</div>
+<a id="a3363ca4d6d3cc0230b2804280591c991" name="a3363ca4d6d3cc0230b2804280591c991"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3363ca4d6d3cc0230b2804280591c991">&#9670;&#160;</a></span>OR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define OR&#160;&#160;&#160;|| <a class="el" href="structzeroerr_1_1ExpressionDecomposer.html">zeroerr::ExpressionDecomposer</a>() &lt;&lt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8c7ad9a23f8d512350e0eb94c61c81a7" name="a8c7ad9a23f8d512350e0eb94c61c81a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c7ad9a23f8d512350e0eb94c61c81a7">&#9670;&#160;</a></span>ZEROERR_DIRECT_COMPARISON</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_DIRECT_COMPARISON</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>op</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">class</span> R&gt;                                       \</div>
+<div class="line">    ExprResult <span class="keyword">operator</span> op(<span class="keyword">const</span> R&amp; rhs)<span class="keyword"> const </span>{             \</div>
+<div class="line">        <span class="keywordflow">return</span> {lhs op rhs, printer(lhs, #op, rhs)};         \</div>
+<div class="line">    }</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a63491913b7353e7fe6444e437b45635e" name="a63491913b7353e7fe6444e437b45635e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63491913b7353e7fe6444e437b45635e">&#9670;&#160;</a></span>ZEROERR_EXPRESSION_ANDOR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_EXPRESSION_ANDOR</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>op</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>op_name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    ExprResult <span class="keyword">operator</span> op(ExprResult rhs) {                                        \</div>
+<div class="line">        <span class="keywordflow">return</span> ExprResult(res op rhs.res,                                           \</div>
+<div class="line">                          detail::joinDiagnostic(decomp, <span class="stringliteral">&quot; &quot;</span> #op <span class="stringliteral">&quot; &quot;</span>, rhs.decomp)); \</div>
+<div class="line">    }</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a797baa21f304a0938d576d4240821c2a" name="a797baa21f304a0938d576d4240821c2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a797baa21f304a0938d576d4240821c2a">&#9670;&#160;</a></span>ZEROERR_EXPRESSION_COMPARISON</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_EXPRESSION_COMPARISON</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>op</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>op_name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> R&gt;                                                                          \</div>
+<div class="line">    <a class="code hl_define" href="text_8h.html#a2ddac3d293245504f8f8f073b373ad45">ZEROERR_DIAGNOSTIC_NOINLINE</a> <a class="code hl_define" href="#a3fb83b1f62590e48ab3b48b41a70d453">ZEROERR_SFINAE_OP</a>(Expression&lt;R&gt;, op) <span class="keyword">operator</span> op(R&amp;&amp; rhs) {        \</div>
+<div class="line">        <a class="code hl_class" href="classzeroerr_1_1String.html">zeroerr::String</a> text =                                                                         \</div>
+<div class="line">            detail::comparisonText(decomp, detail::makeDiagnosticValue(lhs), <span class="stringliteral">&quot; &quot;</span> #op <span class="stringliteral">&quot; &quot;</span>,          \</div>
+<div class="line">                                   detail::makeDiagnosticValue(rhs), res);                         \</div>
+<div class="line">        <span class="keywordflow">return</span> Expression&lt;R&gt;(<span class="keyword">static_cast&lt;</span>R&amp;&amp;<span class="keyword">&gt;</span>(rhs), res &amp;&amp; (lhs op rhs), std::move(text));         \</div>
+<div class="line">    }                                                                                              \</div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> R,                                                                          \</div>
+<div class="line">              <span class="keyword">typename</span> std::enable_if&lt;!std::is_rvalue_reference&lt;R&gt;::value, <span class="keywordtype">void</span>&gt;::type* = <span class="keyword">nullptr</span>&gt; \</div>
+<div class="line">    <a class="code hl_define" href="text_8h.html#a2ddac3d293245504f8f8f073b373ad45">ZEROERR_DIAGNOSTIC_NOINLINE</a> <a class="code hl_define" href="#a3fb83b1f62590e48ab3b48b41a70d453">ZEROERR_SFINAE_OP</a>(Expression&lt;const R&amp;&gt;, op) <span class="keyword">operator</span> op(           \</div>
+<div class="line">        <span class="keyword">const</span> R&amp; rhs) {                                                                            \</div>
+<div class="line">        <a class="code hl_class" href="classzeroerr_1_1String.html">zeroerr::String</a> text =                                                                         \</div>
+<div class="line">            detail::comparisonText(decomp, detail::makeDiagnosticValue(lhs), <span class="stringliteral">&quot; &quot;</span> #op <span class="stringliteral">&quot; &quot;</span>,          \</div>
+<div class="line">                                   detail::makeDiagnosticValue(rhs), res);                         \</div>
+<div class="line">        <span class="keywordflow">return</span> Expression&lt;const R&amp;&gt;(rhs, res &amp;&amp; (lhs op rhs), std::move(text));                    \</div>
+<div class="line">    }</div>
+<div class="ttc" id="aclasszeroerr_1_1String_html"><div class="ttname"><a href="classzeroerr_1_1String.html">zeroerr::String</a></div><div class="ttdef"><b>Definition</b> string.h:41</div></div>
+<div class="ttc" id="adecomposition_8h_html_a3fb83b1f62590e48ab3b48b41a70d453"><div class="ttname"><a href="#a3fb83b1f62590e48ab3b48b41a70d453">ZEROERR_SFINAE_OP</a></div><div class="ttdeci">#define ZEROERR_SFINAE_OP(ret, op)</div><div class="ttdef"><b>Definition</b> decomposition.h:28</div></div>
+<div class="ttc" id="atext_8h_html_a2ddac3d293245504f8f8f073b373ad45"><div class="ttname"><a href="text_8h.html#a2ddac3d293245504f8f8f073b373ad45">ZEROERR_DIAGNOSTIC_NOINLINE</a></div><div class="ttdeci">#define ZEROERR_DIAGNOSTIC_NOINLINE</div><div class="ttdef"><b>Definition</b> text.h:15</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a4842b147e4bf769a91d610384ebeeb69" name="a4842b147e4bf769a91d610384ebeeb69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4842b147e4bf769a91d610384ebeeb69">&#9670;&#160;</a></span>ZEROERR_FORBIT_EXPRESSION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_FORBIT_EXPRESSION</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>rt</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>op</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> R&gt;                                                 \</div>
+<div class="line">    rt&amp; <span class="keyword">operator</span> op(<span class="keyword">const</span> R&amp;) {                                           \</div>
+<div class="line">        static_assert(deferred_false&lt;R&gt;::value,                           \</div>
+<div class="line">                      <span class="stringliteral">&quot;Please Rewrite Expression As Binary Comparison!&quot;</span>); \</div>
+<div class="line">        <span class="keywordflow">return</span> *<span class="keyword">this</span>;                                                     \</div>
+<div class="line">    }</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a3fb83b1f62590e48ab3b48b41a70d453" name="a3fb83b1f62590e48ab3b48b41a70d453"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fb83b1f62590e48ab3b48b41a70d453">&#9670;&#160;</a></span>ZEROERR_SFINAE_OP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_SFINAE_OP</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>ret</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>op</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">typename</span> std::decay&lt;decltype(std::declval&lt;L&gt;() op <a class="code hl_namespace" href="namespacestd.html">std</a>::declval&lt;R&gt;(), <a class="code hl_namespace" href="namespacestd.html">std</a>::declval&lt;ret&gt;())&gt;::type</div>
+<div class="ttc" id="anamespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div><div class="ttdoc">STL namespace.</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a href="dir_fe7eac5579a524367d6d162a6d748259.html">internal</a></li><li class="navelem"><a href="decomposition_8h.html">decomposition.h</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
+  </ul>
+</div>
+</body>
+</html>

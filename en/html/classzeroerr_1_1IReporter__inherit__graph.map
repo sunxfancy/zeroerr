@@ -1,0 +1,7 @@
+<map id="zeroerr::IReporter" name="zeroerr::IReporter">
+<area shape="rect" id="Node000001" title="IReporter is an interface that is used to report the test results. You can create a new reporter by i..." alt="" coords="127,5,262,33"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1ConsoleReporter.html" title=" " alt="" coords="5,81,189,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,42,116,83,113,78,163,43"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1XmlReporter.html" title=" " alt="" coords="213,81,370,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="224,40,277,81,272,80,223,45"/>
+</map>

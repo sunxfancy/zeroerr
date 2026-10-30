@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.15.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: 逐测试 Clang 覆盖率</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.15.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','搜索',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('md_docs_2pages_2zh_26_8coverage.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">逐测试 Clang 覆盖率 </div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p><a class="anchor" id="autotoc_md28"></a></p>
+<p>可选的插桩构建用于统计每个顶层 <span class="tt"><a class="el" href="unittest_8h.html#abd6e2aec703006b3da62cf7860c9808f">TEST_CASE</a></span> 执行了哪些业务代码。普通构建不依赖 LLVM 覆盖率运行时。</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
+推荐：像 fuzz 一样一条命令运行</h1>
+<p>已有 <span class="tt"><a class="el" href="unittest_8h.html#abd6e2aec703006b3da62cf7860c9808f">TEST_CASE</a></span> 不用改写。首次使用 Clang 和 <span class="tt">-DZEROERR_ENABLE_COVERAGE=ON</span> 配置构建后：</p>
+<div class="fragment"><div class="line">./my_tests --coverage                 # 也可以用 -c</div>
+<div class="line">./my_tests -c --testcase=&#39;parser.*&#39;    # 保留已有筛选方式</div>
+</div><!-- fragment --><p>这一条命令会运行测试、采集 profile、统计并打印覆盖比例、最慢的十个测试和覆盖相同的候选组。 每次在工作目录下创建独立的 <span class="tt">zeroerr-coverage/run-&lt;id&gt;</span>，保存 <span class="tt">report.json</span>、 <span class="tt">report.summary.txt</span> 和原始 profile，无需手动调用 LLVM 或 Python。 测试失败仍生成报告并返回失败状态；采集或分析错误返回 2。<span class="tt">--list-test-cases</span> 只列出测试。</p>
+<p>CMake 在配置阶段查找 Python 3.9+ 和配套 LLVM 工具。默认统计接入项目源码根目录， 排除已执行测试所在源码文件、zeroerr 框架源码和头文件、<span class="tt">third_party</span>/<span class="tt">_deps</span>。 业务代码与测试在同一文件时，需明确选择该文件。显式 include 会取代自动排除规则； 用户指定的 exclude 始终生效：</p>
+<div class="fragment"><div class="line">./my_tests -c --coverage-include=&#39;/src/&#39; --coverage-exclude=&#39;/generated/&#39;</div>
+<div class="line">./my_tests -c --coverage-output=results/run-001   # 必须是新目录</div>
+</div><!-- fragment --><p>项目可以添加方便复用的 CMake 目标：</p>
+<div class="fragment"><div class="line">add_subdirectory(path/to/zeroerr)</div>
+<div class="line">add_library(my_library STATIC src/library.cpp)</div>
+<div class="line">add_executable(my_tests tests/library_test.cpp)</div>
+<div class="line">target_link_libraries(my_tests PRIVATE my_library zeroerr)</div>
+<div class="line">if(ZEROERR_ENABLE_COVERAGE)</div>
+<div class="line">    zeroerr_instrument_coverage(my_library)</div>
+<div class="line">    zeroerr_add_coverage(my_tests)  # 生成 my_tests-coverage</div>
+<div class="line">endif()</div>
+</div><!-- fragment --><p>之后运行 <span class="tt">cmake --build build --target my_tests-coverage</span>，即可完成构建、运行与统计。 该函数还支持 <span class="tt">INCLUDE "正则"</span>、<span class="tt">EXCLUDE "正则" ...</span>、<span class="tt">ARGS "--testcase=parser.*" ...</span>。 zeroerr 自身的目标为 <span class="tt">unittest-coverage</span>，显式选择 zeroerr 自身作为被测业务代码。</p>
+<p>仓库内提供了可以直接运行的独立示例：</p>
+<div class="fragment"><div class="line">cmake -S examples/coverage -B build-example -G Ninja \</div>
+<div class="line">  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++</div>
+<div class="line">cmake --build build-example --target coverage_example-coverage</div>
+</div><!-- fragment --><p>示例为独立业务库插桩，覆盖 <span class="tt">sign</span> 函数的所有分支结果，并识别两个正数输入测试的相同覆盖。</p>
+<p>手动编译或单头文件模式下，把 <span class="tt">scripts/coverage-report.py</span> 放到可执行文件旁并命名为 <span class="tt">zeroerr-coverage.py</span>，或通过环境变量 <span class="tt">ZEROERR_COVERAGE_SCRIPT</span> 指定位置。 Python 3 和配套的 <span class="tt">llvm-cov</span>/<span class="tt">llvm-profdata</span> 需要在 PATH 中；Python 名称不同时设置 <span class="tt">ZEROERR_COVERAGE_PYTHON</span>。此模式默认源码根目录为当前目录。 也可直接运行启动器： <span class="tt">python coverage-report.py --run ./my_tests --source-root . -- --testcase='parser.*'</span>。 启动器支持用 <span class="tt">--llvm-cov</span>/<span class="tt">--llvm-profdata</span> 指定带版本号的工具。 该辅助脚本是外部依赖，移动二进制时需一起部署；原 checkout 可用时优先使用 CMake 配置的脚本位置。</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md30"></a>
+高级用法：分开采集和分析</h1>
+<div class="fragment"><div class="line">cmake -S . -B build-coverage -G Ninja \</div>
+<div class="line">  -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \</div>
+<div class="line">  -DBUILD_TEST=ON -DZEROERR_ENABLE_COVERAGE=ON -DCMAKE_BUILD_TYPE=Debug</div>
+<div class="line">cmake --build build-coverage</div>
+<div class="line">./build-coverage/test/unittest --coverage-output=build-coverage/run-001</div>
+<div class="line">python scripts/coverage-report.py build-coverage/run-001 \</div>
+<div class="line">  --binary build-coverage/test/unittest \</div>
+<div class="line">  --include &#39;/zeroerr/(src|include)/&#39; \</div>
+<div class="line">  --output build-coverage/report.json</div>
+</div><!-- fragment --><p>使用与编译器配套的 <span class="tt">llvm-profdata</span> 和 <span class="tt">llvm-cov</span>，可通过 <span class="tt">--llvm-profdata /path/to/llvm-profdata-21</span>、<span class="tt">--llvm-cov /path/to/llvm-cov-21</span> 指定路径。统计脚本需要 Python 3.9+，支持带分支信息的 LLVM JSON 导出格式 2 和 3。 当前已在 Linux 的 Clang/LLVM 21 上验证，其他平台尚需验证。</p>
+<p>应用项目链接 CMake 的 <span class="tt"><a class="el" href="namespacezeroerr.html">zeroerr</a></span> target 后，测试目标会继承覆盖率编译、链接选项。 对于单独编译的业务库，还需在引入 zeroerr 子目录后调用 <span class="tt">zeroerr_instrument_coverage(my_library)</span>。已编译且未插桩的库无法采集。 覆盖率构建使用原子计数更新，避免工作线程丢失计数；所有工作线程必须在测试返回前结束。 当前后端面向单个可执行文件及静态链接代码，不采集具有独立插桩运行时的动态库。</p>
+<p>单头文件方式需要在实现翻译单元定义 <span class="tt">ZEROERR_ENABLE_COVERAGE</span>，为被测代码添加 <span class="tt">-fprofile-instr-generate -fcoverage-mapping -fprofile-update=atomic</span>， 链接时添加 <span class="tt">-fprofile-instr-generate</span>。覆盖率模式需要 C++17 的 <span class="tt">std::filesystem</span>。</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md31"></a>
+采集语义</h1>
+<p>每次 <span class="tt">--coverage-output</span> 必须指定**新目录**，已存在的目录会被拒绝且保持原样。 已有测试过滤选项继续生效。列出测试不会创建目录，跳过的测试不产生 profile。 失败测试和捕获的异常也会保存 profile 及结果；统计是独立步骤，可以在测试失败后执行。</p>
+<p>执行器在每个顶层测试之前清零 LLVM 计数，测试结束后通过 LLVM profile buffer API 保存快照。嵌套 <span class="tt"><a class="el" href="unittest_8h.html#a77046e7954bc2594debb5a838ed23b2c">SUB_CASE</a></span>、fixture 构造和析构归入父测试；测试前的全局初始化不计入。 边界内执行的框架代码也可能出现在 profile 中，应通过业务源码范围过滤。 目前不声称提供独立子用例归属。不要在同一进程内并发执行多个测试，也不要让后台工作跨越测试边界。 fork 子进程及外部子进程的覆盖率不在采集范围内。</p>
+<p>目录包含 <span class="tt">manifest.jsonl</span>（名称、源码位置、耗时、结果、profile 文件名）和每个测试的 <span class="tt">.profraw</span> 文件。完成标记用于识别中断或崩溃的不完整采集。 采集 I/O 失败返回退出码 2；未启用覆盖率的构建收到采集选项也返回 2。 LLVM 可能在退出时另外生成普通整体 profile，本统计器不会使用它。</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md32"></a>
+统计与解释</h1>
+<p>离线分析时 <span class="tt">--include</span> 为必填的源码路径正则，路径统一使用正斜杠。可重复传入 <span class="tt">--exclude REGEX</span>。 比较业务覆盖时，应排除测试实现、断言辅助函数、第三方代码。 没有匹配的插桩代码、采集未完成、LLVM 诊断或缺少分支数据都会报错。</p>
+<p>JSON 报告通过共享源码特征字典和每测试特征 ID 集合，分别保存三个指标：</p>
+<ul>
+<li>**函数**：保留修饰后的函数名，区分不同模板实例。</li>
+<li>**源码区域**：LLVM 代码区域的起止行列；排除间隙、跳过区域和展开标记。 展开后的代码区域保留局部文件 ID 以区分归属。</li>
+<li>**分支结果**：LLVM 导出的分支区域的真、假结果，包括实际求值的短路操作数。 这不等于 MC/DC 或路径覆盖。</li>
+</ul>
+<p>每项指标提供覆盖数、总数，以及相对于本次采集集合的逐测试独有覆盖数。 总数来自可执行文件中匹配的覆盖映射，包括所有测试均未命中的映射；未进入二进制的代码不计入。 行、条件、MC/DC、路径明确标为未采集。耗时来自插桩构建中的测试执行，不包含 profile 序列化， 不能当作普通构建的性能基准。</p>
+<p><span class="tt">identical_coverage_candidates</span> 将三个指标的覆盖集合均相同的成功测试分组，空集合不参与。 独有覆盖计算包含所有已采集测试，包括失败测试。 覆盖相同不代表输入、断言或缺陷检测能力等价；不会自动删除或合并测试。 分组采用覆盖签名，避免所有测试两两比较。</p>
+<p>必须使用**采集时的原始可执行文件**分析，并将 profile 与构建一起保存。 报告记录分析时二进制的 SHA-256，但如果二进制在分析前已被替换，无法据此证明它就是采集时的版本。 特征 ID 仅在单份报告内有效，不可跨构建直接比较。延后分析时建议同时归档二进制。 原始 profile 空间随测试数与插桩二进制 profile 大小的乘积增长，当前离线分析逐测试调用 LLVM 工具。 建议按需诊断采集，不在每次编辑后运行。</p>
+<p>参考 <a href="https://clang.llvm.org/docs/SourceBasedCodeCoverage.html">Clang 源码覆盖率</a> 和 <a href="https://llvm.org/docs/CommandGuide/llvm-cov.html#llvm-cov-export">llvm-cov export</a>。 </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
+  </ul>
+</div>
+</body>
+</html>

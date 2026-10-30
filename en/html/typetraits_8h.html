@@ -1,0 +1,649 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.15.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/internal/typetraits.h File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.15.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('typetraits_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">typetraits.h File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &quot;<a class="el" href="config_8h_source.html">zeroerr/internal/config.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="string_8h_source.html">zeroerr/string.h</a>&quot;</code><br />
+<code>#include &lt;tuple&gt;</code><br />
+<code>#include &lt;type_traits&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
+<code>#include &lt;cstddef&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+Include dependency graph for typetraits.h:</div>
+<div class="dyncontent">
+<div class="center"><img src="typetraits_8h__incl.png" border="0" usemap="#ainclude_2zeroerr_2internal_2typetraits_8h" loading="lazy" alt=""/></div>
+<map name="ainclude_2zeroerr_2internal_2typetraits_8h" id="ainclude_2zeroerr_2internal_2typetraits_8h">
+<area shape="rect" title=" " alt="" coords="327,5,500,50"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="5,98,182,126"/>
+<area shape="poly" title=" " alt="" coords="327,53,160,96,159,91,330,48"/>
+<area shape="rect" href="string_8h.html" title=" " alt="" coords="256,98,376,126"/>
+<area shape="poly" title=" " alt="" coords="390,49,345,90,342,86,386,52"/>
+<area shape="rect" title=" " alt="" coords="164,174,234,201"/>
+<area shape="poly" title=" " alt="" coords="326,52,285,73,246,100,224,129,209,160,205,157,219,126,242,96,283,68,330,49"/>
+<area shape="rect" title=" " alt="" coords="368,174,459,201"/>
+<area shape="poly" title=" " alt="" coords="416,48,416,159,411,157,411,52"/>
+<area shape="rect" title=" " alt="" coords="484,174,543,201"/>
+<area shape="poly" title=" " alt="" coords="428,48,500,161,495,160,426,52"/>
+<area shape="rect" title=" " alt="" coords="501,98,555,126"/>
+<area shape="poly" title=" " alt="" coords="444,48,500,89,495,88,443,53"/>
+<area shape="rect" title=" " alt="" coords="579,98,656,126"/>
+<area shape="poly" title=" " alt="" coords="468,48,573,92,568,92,467,53"/>
+<area shape="poly" title=" " alt="" coords="298,126,233,168,231,163,293,127"/>
+<area shape="rect" title=" " alt="" coords="257,174,343,201"/>
+<area shape="poly" title=" " alt="" coords="315,125,308,160,304,157,311,128"/>
+<area shape="poly" title=" " alt="" coords="334,124,387,165,382,164,333,129"/>
+<area shape="poly" title=" " alt="" coords="352,124,472,170,467,170,351,129"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+This graph shows which files directly or indirectly include this file:</div>
+<div class="dyncontent">
+<div class="center"><img src="typetraits_8h__dep__incl.png" border="0" usemap="#ainclude_2zeroerr_2internal_2typetraits_8hdep" loading="lazy" alt=""/></div>
+<map name="ainclude_2zeroerr_2internal_2typetraits_8hdep" id="ainclude_2zeroerr_2internal_2typetraits_8hdep">
+<area shape="rect" title=" " alt="" coords="517,5,690,50"/>
+<area shape="rect" href="arbitrary_8h.html" title=" " alt="" coords="482,452,661,496"/>
+<area shape="poly" title=" " alt="" coords="603,64,575,452,570,451,599,67"/>
+<area shape="rect" href="container__of_8h.html" title=" " alt="" coords="40,359,218,404"/>
+<area shape="poly" title=" " alt="" coords="503,57,420,88,326,132,279,160,234,192,193,228,158,268,145,290,137,314,131,359,126,358,132,313,140,288,153,265,190,224,231,188,276,156,323,128,418,83,507,53"/>
+<area shape="rect" href="serialization_8h.html" title=" " alt="" coords="347,174,519,218"/>
+<area shape="poly" title=" " alt="" coords="568,63,457,175,453,171,572,59"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="748,368,902,395"/>
+<area shape="poly" title=" " alt="" coords="616,63,665,197,694,264,720,309,757,342,798,367,792,367,754,346,716,313,689,267,660,199,614,68"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="992,98,1156,126"/>
+<area shape="poly" title=" " alt="" coords="704,44,1001,96,996,98,705,49"/>
+<area shape="rect" href="fuzztest_8h.html" title=" " alt="" coords="352,544,538,572"/>
+<area shape="poly" title=" " alt="" coords="528,504,466,546,464,541,523,506"/>
+<area shape="rect" href="fuzztest_8cpp.html" title=" " alt="" coords="662,620,785,648"/>
+<area shape="poly" title=" " alt="" coords="509,574,676,619,671,620,508,579"/>
+<area shape="poly" title=" " alt="" coords="233,401,484,453,480,456,233,407"/>
+<area shape="poly" title=" " alt="" coords="54,414,34,431,16,453,8,475,10,485,16,495,38,511,70,524,157,542,257,551,354,557,349,558,257,557,156,547,68,529,35,515,12,498,5,486,3,475,12,450,30,427,57,409"/>
+<area shape="rect" href="domain_8h.html" title=" " alt="" coords="344,266,522,311"/>
+<area shape="poly" title=" " alt="" coords="434,232,435,267,430,265,432,236"/>
+<area shape="rect" href="serialization_8cpp.html" title=" " alt="" coords="168,275,319,302"/>
+<area shape="poly" title=" " alt="" coords="372,227,272,276,269,272,376,224"/>
+<area shape="poly" title=" " alt="" coords="490,317,515,335,536,357,550,380,560,405,571,452,566,450,555,407,545,383,532,361,512,339,490,322"/>
+<area shape="poly" title=" " alt="" coords="344,318,203,361,200,356,347,314"/>
+<area shape="rect" href="aggregate__of_8h.html" title=" " alt="" coords="344,359,522,404"/>
+<area shape="poly" title=" " alt="" coords="434,324,435,360,430,358,431,329"/>
+<area shape="rect" href="element__of_8h.html" title=" " alt="" coords="26,452,205,496"/>
+<area shape="poly" title=" " alt="" coords="380,320,313,361,154,453,151,449,310,357,384,317"/>
+<area shape="rect" href="in__range_8h.html" title=" " alt="" coords="229,452,407,496"/>
+<area shape="poly" title=" " alt="" coords="369,321,351,339,334,360,324,383,319,407,318,452,313,450,314,406,319,381,329,358,347,335,373,318"/>
+<area shape="poly" title=" " alt="" coords="479,410,541,451,536,451,478,415"/>
+<area shape="poly" title=" " alt="" coords="437,417,446,545,441,543,433,421"/>
+<area shape="poly" title=" " alt="" coords="218,498,394,542,390,545,217,503"/>
+<area shape="poly" title=" " alt="" coords="364,502,427,544,422,544,363,507"/>
+<area shape="poly" title=" " alt="" coords="813,407,793,453,755,548,729,622,726,618,750,547,788,451,809,411"/>
+<area shape="rect" href="zeroerr_8h.html" title=" " alt="" coords="1260,544,1389,572"/>
+<area shape="poly" title=" " alt="" coords="824,409,830,455,838,476,852,494,903,506,1013,521,1262,550,1257,551,1013,527,902,511,849,499,833,479,825,456,821,413"/>
+<area shape="rect" href="log_8cpp.html" title=" " alt="" coords="862,460,953,488"/>
+<area shape="poly" title=" " alt="" coords="847,404,898,460,893,459,846,409"/>
+<area shape="rect" href="table_8cpp.html" title=" " alt="" coords="977,460,1081,488"/>
+<area shape="poly" title=" " alt="" coords="868,399,1002,460,996,460,868,404"/>
+<area shape="rect" href="unittest_8cpp.html" title=" " alt="" coords="1057,544,1179,572"/>
+<area shape="poly" title=" " alt="" coords="812,407,804,431,799,453,799,475,808,495,824,507,848,518,913,535,988,545,1060,554,1054,554,987,551,912,540,846,523,821,512,804,498,794,477,793,453,799,429,808,411"/>
+<area shape="poly" title=" " alt="" coords="974,123,908,140,837,167,804,185,775,208,751,235,733,267,726,289,732,310,745,327,760,342,797,367,791,367,757,347,740,331,728,312,721,289,728,265,747,232,772,204,801,181,835,162,906,135,979,121"/>
+<area shape="poly" title=" " alt="" coords="1172,112,1272,117,1380,127,1476,145,1513,157,1541,171,1568,196,1583,221,1590,251,1591,287,1591,383,1586,417,1571,447,1548,472,1520,494,1488,511,1455,526,1391,546,1389,541,1453,521,1486,507,1517,489,1545,468,1566,444,1581,415,1586,382,1586,287,1585,251,1578,223,1564,199,1538,176,1511,162,1474,150,1379,132,1272,122,1172,117"/>
+<area shape="rect" href="assert_8h.html" title=" " alt="" coords="1186,368,1360,395"/>
+<area shape="poly" title=" " alt="" coords="1171,110,1268,113,1370,122,1417,130,1458,141,1492,154,1515,172,1526,188,1531,204,1531,220,1526,236,1505,265,1473,292,1433,317,1390,338,1312,370,1310,365,1388,333,1430,312,1469,288,1501,262,1521,234,1526,219,1526,205,1521,190,1511,176,1489,159,1457,146,1416,135,1369,128,1267,118,1172,115"/>
+<area shape="rect" href="dbg_8h.html" title=" " alt="" coords="879,182,1037,210"/>
+<area shape="poly" title=" " alt="" coords="1046,134,978,184,975,179,1041,136"/>
+<area shape="rect" href="decomposition_8h.html" title=" " alt="" coords="1187,266,1359,311"/>
+<area shape="poly" title=" " alt="" coords="1075,139,1083,180,1090,199,1101,217,1117,228,1141,241,1203,266,1197,266,1139,246,1114,233,1097,220,1086,202,1078,181,1073,144"/>
+<area shape="rect" href="table_8h.html" title=" " alt="" coords="996,275,1163,302"/>
+<area shape="poly" title=" " alt="" coords="974,129,926,144,884,163,870,174,862,187,862,201,870,217,895,242,926,261,961,273,998,283,993,283,959,278,924,265,892,246,865,220,857,202,857,185,866,171,882,158,925,139,979,127"/>
+<area shape="rect" href="format_8h.html" title=" " alt="" coords="742,275,921,302"/>
+<area shape="poly" title=" " alt="" coords="974,118,944,127,911,138,881,154,855,175,840,199,833,226,832,276,828,273,828,226,835,197,851,172,878,149,909,133,942,121,979,116"/>
+<area shape="rect" href="std__adapter_8h.html" title=" " alt="" coords="1111,174,1253,218"/>
+<area shape="poly" title=" " alt="" coords="1104,133,1156,173,1151,173,1103,138"/>
+<area shape="rect" href="print_8cpp.html" title=" " alt="" coords="1277,182,1378,210"/>
+<area shape="poly" title=" " alt="" coords="1131,128,1266,171,1291,182,1286,182,1264,176,1131,133"/>
+<area shape="rect" href="text_8cpp.html" title=" " alt="" coords="1403,182,1500,210"/>
+<area shape="poly" title=" " alt="" coords="1172,126,1278,145,1391,171,1419,182,1413,182,1389,176,1277,150,1172,131"/>
+<area shape="poly" title=" " alt="" coords="1315,400,1347,422,1375,450,1399,482,1416,512,1420,527,1420,543,1415,558,1404,574,1391,582,1371,590,1311,603,1139,620,944,630,786,634,786,629,944,625,1138,615,1310,597,1370,585,1389,578,1400,570,1410,556,1415,542,1415,528,1411,514,1394,485,1371,453,1344,426,1314,406"/>
+<area shape="poly" title=" " alt="" coords="1310,402,1335,423,1354,451,1359,476,1355,503,1335,546,1332,542,1350,501,1354,476,1349,453,1331,427,1308,407"/>
+<area shape="poly" title=" " alt="" coords="1226,400,1065,462,1064,457,1221,402"/>
+<area shape="poly" title=" " alt="" coords="1217,400,1178,424,1146,453,1133,476,1125,501,1120,546,1116,542,1120,499,1128,474,1141,450,1175,420,1212,402"/>
+<area shape="rect" href="unittest_8h.html" title=" " alt="" coords="1155,460,1340,488"/>
+<area shape="poly" title=" " alt="" coords="1267,408,1253,462,1249,458,1263,412"/>
+<area shape="poly" title=" " alt="" coords="1138,491,1093,499,789,530,539,552,538,547,789,525,1092,494,1143,490"/>
+<area shape="poly" title=" " alt="" coords="1271,497,1315,545,1310,543,1269,502"/>
+<area shape="poly" title=" " alt="" coords="1217,496,1140,546,1138,541,1211,497"/>
+<area shape="poly" title=" " alt="" coords="959,223,954,269,946,291,935,313,919,331,899,347,859,369,857,365,896,342,915,327,931,309,941,289,949,267,956,228"/>
+<area shape="poly" title=" " alt="" coords="1052,209,1256,241,1373,264,1394,293,1407,321,1413,348,1412,375,1399,431,1375,497,1360,525,1340,546,1338,542,1356,522,1370,495,1394,430,1407,374,1407,348,1402,322,1390,296,1370,269,1255,246,1053,214"/>
+<area shape="poly" title=" " alt="" coords="1018,212,1200,265,1194,266,1018,217"/>
+<area shape="poly" title=" " alt="" coords="988,216,1064,274,1059,274,987,222"/>
+<area shape="poly" title=" " alt="" coords="1274,325,1275,369,1271,365,1271,329"/>
+<area shape="poly" title=" " alt="" coords="1047,311,1024,334,1007,360,1002,386,1005,413,1023,461,1019,458,1000,415,997,386,1002,358,1020,331,1043,313"/>
+<area shape="rect" href="benchmark_8cpp.html" title=" " alt="" coords="1017,368,1161,395"/>
+<area shape="poly" title=" " alt="" coords="1084,316,1090,369,1085,366,1081,320"/>
+<area shape="poly" title=" " alt="" coords="831,316,828,369,824,366,828,320"/>
+<area shape="poly" title=" " alt="" coords="912,303,1173,356,1214,367,1208,367,1172,362,912,309"/>
+</map>
+</div>
+</div>
+<p><a href="typetraits_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:zeroerr_3A_3Arank_3C_20N_20_3E" id="r_zeroerr_3A_3Arank_3C_20N_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1rank.html">zeroerr::rank&lt; N &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">rank is a helper class for <a class="el" href="structzeroerr_1_1Printer.html" title="A functor class Printer for printing a value of any type.">Printer</a> to define the priority of overloaded functions.  <a href="structzeroerr_1_1rank.html#details">More...</a><br /></td></tr>
+<tr class="memitem:zeroerr_3A_3Arank_3C_200_20_3E" id="r_zeroerr_3A_3Arank_3C_200_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1rank_3_010_01_4.html">zeroerr::rank&lt; 0 &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Aalways_5Ffalse_3C_20T_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Aalways_5Ffalse_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1always__false.html">zeroerr::detail::always_false&lt; T &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Aalways_5Ftrue_3C_20T_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Aalways_5Ftrue_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1always__true.html">zeroerr::detail::always_true&lt; T &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Aseq_3C_2E_2E_2E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Aseq_3C_2E_2E_2E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1seq.html">zeroerr::detail::seq&lt;... &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Agen_5Fseq_3C_20N_2C_20Is_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Agen_5Fseq_3C_20N_2C_20Is_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1gen__seq.html">zeroerr::detail::gen_seq&lt; N, Is &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Agen_5Fseq_3C_200_2C_20Is_2E_2E_2E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Agen_5Fseq_3C_200_2C_20Is_2E_2E_2E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_01_4.html">zeroerr::detail::gen_seq&lt; 0, Is... &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fspecialization_3C_20Test_2C_20Ref_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fspecialization_3C_20Test_2C_20Ref_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__specialization.html">zeroerr::detail::is_specialization&lt; Test, Ref &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fspecialization_3C_20Ref_3C_20Args_2E_2E_2E_20_3E_2C_20Ref_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fspecialization_3C_20Ref_3C_20Args_2E_2E_2E_20_3E_2C_20Ref_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__specialization_3_01Ref_3_01Args_8_8_8_01_4_00_01Ref_01_4.html">zeroerr::detail::is_specialization&lt; Ref&lt; Args... &gt;, Ref &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fstreamable_3C_20S_2C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fstreamable_3C_20S_2C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__streamable.html">zeroerr::detail::is_streamable&lt; S, T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fstreamable_3C_20S_2C_20T_2C_20has_5Fstream_5Foperator_3C_20S_2C_20T_20_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fstreamable_3C_20S_2C_20T_2C_20has_5Fstream_5Foperator_3C_20S_2C_20T_20_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__streamable_3_01S_00_01T_00_01has__stream__operator_3_01S_00_01T_01_4_01_4.html">zeroerr::detail::is_streamable&lt; S, T, has_stream_operator&lt; S, T &gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fcontainer_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fcontainer_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__container.html">zeroerr::detail::is_container&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fcontainer_3C_20T_2C_20has_5Fbegin_5Fend_3C_20T_20_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fcontainer_3C_20T_2C_20has_5Fbegin_5Fend_3C_20T_20_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__container_3_01T_00_01has__begin__end_3_01T_01_4_01_4.html">zeroerr::detail::is_container&lt; T, has_begin_end&lt; T &gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fassociative_5Fcontainer_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fassociative_5Fcontainer_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__associative__container.html">zeroerr::detail::is_associative_container&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fassociative_5Fcontainer_3C_20T_2C_20has_5Fbegin_5Fend_5Ffind_5Finsert_3C_20T_20_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fassociative_5Fcontainer_3C_20T_2C_20has_5Fbegin_5Fend_5Ffind_5Finsert_3C_20T_20_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__associative__container_3_01T_00_01has__begin__end__find__insert_3_01T_01_4_01_4.html">zeroerr::detail::is_associative_container&lt; T, has_begin_end_find_insert&lt; T &gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fstring_5Flike_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fstring_5Flike_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__string__like.html">zeroerr::detail::is_string_like&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fstring_5Flike_3C_20T_2C_20void_5Ft_3C_20typename_20T_3A_3Atraits_5Ftype_3A_3Achar_5Ftype_2C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Edata_28_29_29_2C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Esize_28_29_29_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fstring_5Flike_3C_20T_2C_20void_5Ft_3C_20typename_20T_3A_3Atraits_5Ftype_3A_3Achar_5Ftype_2C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Edata_28_29_29_2C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Esize_28_29_29_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__string__like_3_01T_00_01void__t_3_01typename_01T_1_1traits__type_3318062da277d6dd2a884e22dc4f88ec.html">zeroerr::detail::is_string_like&lt; T, void_t&lt; typename T::traits_type::char_type, decltype(std::declval&lt; const T &amp; &gt;().data()), decltype(std::declval&lt; const T &amp; &gt;().size())&gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fstring_5Flike_3C_20zeroerr_3A_3AString_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fstring_5Flike_3C_20zeroerr_3A_3AString_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__string__like_3_01zeroerr_1_1String_01_4.html">zeroerr::detail::is_string_like&lt; zeroerr::String &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fstring_3C_20T_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fstring_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__string.html">zeroerr::detail::is_string&lt; T &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fcomplex_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fcomplex_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__complex.html">zeroerr::detail::is_complex&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fcomplex_3C_20T_2C_20void_5Ft_3C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Ereal_28_29_29_2C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Eimag_28_29_29_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fcomplex_3C_20T_2C_20void_5Ft_3C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Ereal_28_29_29_2C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Eimag_28_29_29_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__complex_3_01T_00_01void__t_3_01decltype_07std_1_1declval_3_01consec0d99a379a84f6898b4463f8d0bdb69.html">zeroerr::detail::is_complex&lt; T, void_t&lt; decltype(std::declval&lt; const T &amp; &gt;().real()), decltype(std::declval&lt; const T &amp; &gt;().imag())&gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fpointer_5Flike_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fpointer_5Flike_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__pointer__like.html">zeroerr::detail::is_pointer_like&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fpointer_5Flike_3C_20T_2C_20void_5Ft_3C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Eget_28_29_29_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fpointer_5Flike_3C_20T_2C_20void_5Ft_3C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Eget_28_29_29_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__pointer__like_3_01T_00_01void__t_3_01decltype_07std_1_1declval_3_19ca8985ea2ad6eee6cd88d70d654564.html">zeroerr::detail::is_pointer_like&lt; T, void_t&lt; decltype(std::declval&lt; const T &amp; &gt;().get())&gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fweak_5Fpointer_5Flike_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fweak_5Fpointer_5Flike_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__weak__pointer__like.html">zeroerr::detail::is_weak_pointer_like&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fweak_5Fpointer_5Flike_3C_20T_2C_20void_5Ft_3C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Elock_28_29_29_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fweak_5Fpointer_5Flike_3C_20T_2C_20void_5Ft_3C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_2Elock_28_29_29_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__weak__pointer__like_3_01T_00_01void__t_3_01decltype_07std_1_1decl86df6c9d54212d8b6bea8a021c132a76.html">zeroerr::detail::is_weak_pointer_like&lt; T, void_t&lt; decltype(std::declval&lt; const T &amp; &gt;().lock())&gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ahas_5Ftuple_5Fget_3C_20T_2C_20Sequence_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ahas_5Ftuple_5Fget_3C_20T_2C_20Sequence_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1has__tuple__get.html">zeroerr::detail::has_tuple_get&lt; T, Sequence, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ahas_5Ftuple_5Fget_3C_20T_2C_20seq_3C_20I_2E_2E_2E_20_3E_2C_20void_5Ft_3C_20decltype_28tuple_5Fget_3C_20I_20_3E_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_29_29_2E_2E_2E_20_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ahas_5Ftuple_5Fget_3C_20T_2C_20seq_3C_20I_2E_2E_2E_20_3E_2C_20void_5Ft_3C_20decltype_28tuple_5Fget_3C_20I_20_3E_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_29_29_2E_2E_2E_20_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1has__tuple__get_3_01T_00_01seq_3_01I_8_8_8_01_4_00_01void__t_3_01decl759427f4648a6f9cd0f3853ff8d1fa00.html">zeroerr::detail::has_tuple_get&lt; T, seq&lt; I... &gt;, void_t&lt; decltype(tuple_get&lt; I &gt;(std::declval&lt; const T &amp; &gt;()))... &gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Ftuple_5Flike_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Ftuple_5Flike_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__tuple__like.html">zeroerr::detail::is_tuple_like&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Ftuple_5Flike_3C_20T_2C_20void_5Ft_3C_20decltype_28std_3A_3Atuple_5Fsize_3C_20T_20_3E_3A_3Avalue_29_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Ftuple_5Flike_3C_20T_2C_20void_5Ft_3C_20decltype_28std_3A_3Atuple_5Fsize_3C_20T_20_3E_3A_3Avalue_29_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__tuple__like_3_01T_00_01void__t_3_01decltype_07std_1_1tuple__size_3_01T_01_4_1_1value_08_4_01_4.html">zeroerr::detail::is_tuple_like&lt; T, void_t&lt; decltype(std::tuple_size&lt; T &gt;::value)&gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fcomplete_5Ftype_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fcomplete_5Ftype_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__complete__type.html">zeroerr::detail::is_complete_type&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fcomplete_5Ftype_3C_20T_2C_20decltype_28void_28sizeof_28T_29_29_29_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fcomplete_5Ftype_3C_20T_2C_20decltype_28void_28sizeof_28T_29_29_29_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__complete__type_3_01T_00_01decltype_07void_07sizeof_07T_08_08_08_4.html">zeroerr::detail::is_complete_type&lt; T, decltype(void(sizeof(T)))&gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Findexable_5Fnon_5Fpointer_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Findexable_5Fnon_5Fpointer_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__indexable__non__pointer.html">zeroerr::detail::is_indexable_non_pointer&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Findexable_5Fnon_5Fpointer_3C_20T_2C_20void_5Ft_3C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_5B0_5D_29_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Findexable_5Fnon_5Fpointer_3C_20T_2C_20void_5Ft_3C_20decltype_28std_3A_3Adeclval_3C_20const_20T_20_26_20_3E_28_29_5B0_5D_29_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__indexable__non__pointer_3_01T_00_01void__t_3_01decltype_07std_1_199a2d7f954769ba9532ad54bc0886ca9.html">zeroerr::detail::is_indexable_non_pointer&lt; T, void_t&lt; decltype(std::declval&lt; const T &amp; &gt;()[0])&gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Farray_5Fdispatch_3C_20T_2C_20bool_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Farray_5Fdispatch_3C_20T_2C_20bool_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__array__dispatch.html">zeroerr::detail::is_array_dispatch&lt; T, bool &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Farray_5Fdispatch_3C_20T_2C_20true_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Farray_5Fdispatch_3C_20T_2C_20true_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__array__dispatch_3_01T_00_01true_01_4.html">zeroerr::detail::is_array_dispatch&lt; T, true &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Farray_3C_20T_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Farray_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__array.html">zeroerr::detail::is_array&lt; T &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fmodifiable_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fmodifiable_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__modifiable.html">zeroerr::detail::is_modifiable&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ais_5Fmodifiable_3C_20T_2C_20void_5Ft_3C_20decltype_28T_28_29_2Ebegin_28_29_2C_20T_28_29_2Eend_28_29_2C_20T_28_29_2Esize_28_29_2C_20T_28_29_2Einsert_28T_28_29_2Eend_28_29_2C_20std_3A_3Adeclval_3C_20typename_20T_3A_3Avalue_5Ftype_20_3E_28_29_29_2C_20T_28_29_2Eerase_28T_28_29_2Ebegin_28_29_29_2C_28void_29_200_29_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ais_5Fmodifiable_3C_20T_2C_20void_5Ft_3C_20decltype_28T_28_29_2Ebegin_28_29_2C_20T_28_29_2Eend_28_29_2C_20T_28_29_2Esize_28_29_2C_20T_28_29_2Einsert_28T_28_29_2Eend_28_29_2C_20std_3A_3Adeclval_3C_20typename_20T_3A_3Avalue_5Ftype_20_3E_28_29_29_2C_20T_28_29_2Eerase_28T_28_29_2Ebegin_28_29_29_2C_28void_29_200_29_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1is__modifiable_3_01T_00_01void__t_3_01decltype_07T_07_08_8begin_07_084a9132b1bbf63d0d93e4b818fa195fe0.html">zeroerr::detail::is_modifiable&lt; T, void_t&lt; decltype(T().begin(), T().end(), T().size(), T().insert(T().end(), std::declval&lt; typename T::value_type &gt;()), T().erase(T().begin()),(void) 0)&gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Aele_5Ftype_5Fis_5Fpair_3C_20T_2C_20typename_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Aele_5Ftype_5Fis_5Fpair_3C_20T_2C_20typename_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1ele__type__is__pair.html">zeroerr::detail::ele_type_is_pair&lt; T, typename &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Aele_5Ftype_5Fis_5Fpair_3C_20T_2C_20has_5Fpair_5Ftype_3C_20T_20_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Aele_5Ftype_5Fis_5Fpair_3C_20T_2C_20has_5Fpair_5Ftype_3C_20T_20_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1ele__type__is__pair_3_01T_00_01has__pair__type_3_01T_01_4_01_4.html">zeroerr::detail::ele_type_is_pair&lt; T, has_pair_type&lt; T &gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ato_5Fstore_5Ftype_3C_20T_2C_20V_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ato_5Fstore_5Ftype_3C_20T_2C_20V_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1to__store__type.html">zeroerr::detail::to_store_type&lt; T, V &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ato_5Fstore_5Ftype_3C_20const_20char_20_2A_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ato_5Fstore_5Ftype_3C_20const_20char_20_2A_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1to__store__type_3_01const_01char_01_5_01_4.html">zeroerr::detail::to_store_type&lt; const char * &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ato_5Fstore_5Ftype_3C_20const_20char_28_26_29_5B_5D_3E" id="r_zeroerr_3A_3Adetail_3A_3Ato_5Fstore_5Ftype_3C_20const_20char_28_26_29_5B_5D_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1to__store__type_3_01const_01char_07_6_08_0f_0e_4.html">zeroerr::detail::to_store_type&lt; const char(&amp;)[]&gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ato_5Fstore_5Ftype_3C_20T_20_26_2C_20is_5Fnot_5Farray_3C_20T_20_3E_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ato_5Fstore_5Ftype_3C_20T_20_26_2C_20is_5Fnot_5Farray_3C_20T_20_3E_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1to__store__type_3_01T_01_6_00_01is__not__array_3_01T_01_4_01_4.html">zeroerr::detail::to_store_type&lt; T &amp;, is_not_array&lt; T &gt; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Ato_5Fstore_5Ftype_3C_20T_20_26_26_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Ato_5Fstore_5Ftype_3C_20T_20_26_26_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1to__store__type_3_01T_01_6_6_01_4.html">zeroerr::detail::to_store_type&lt; T &amp;&amp; &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Avisit_5Fimpl_3C_20I_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Avisit_5Fimpl_3C_20I_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1visit__impl.html">zeroerr::detail::visit_impl&lt; I &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Avisit_5Fimpl_3C_200_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Avisit_5Fimpl_3C_200_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1visit__impl_3_010_01_4.html">zeroerr::detail::visit_impl&lt; 0 &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Avisit2_5Fimpl_3C_20I_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Avisit2_5Fimpl_3C_20I_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1visit2__impl.html">zeroerr::detail::visit2_impl&lt; I &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3Avisit2_5Fimpl_3C_200_20_3E" id="r_zeroerr_3A_3Adetail_3A_3Avisit2_5Fimpl_3C_200_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1visit2__impl_3_010_01_4.html">zeroerr::detail::visit2_impl&lt; 0 &gt;</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:zeroerr" id="r_zeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail" id="r_zeroerr_3A_3Adetail"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html">zeroerr::detail</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a85bc130fb2471b3852051b017960406f" id="r_a85bc130fb2471b3852051b017960406f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85bc130fb2471b3852051b017960406f">_LIBCPP_REMOVE_TRANSITIVE_INCLUDES</a></td></tr>
+<tr class="memitem:adca2082eda0b29e67dd3588186120d55" id="r_adca2082eda0b29e67dd3588186120d55"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adca2082eda0b29e67dd3588186120d55">ZEROERR_ENABLE_IF</a>(x)</td></tr>
+<tr class="memitem:a74931f8a27a626d536841cf3397f88b0" id="r_a74931f8a27a626d536841cf3397f88b0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74931f8a27a626d536841cf3397f88b0">ZEROERR_IS_INT</a>&#160;&#160;&#160;std::is_integral&lt;T&gt;::value</td></tr>
+<tr class="memitem:a529842b3aaa7966cafae8b6c64554a64" id="r_a529842b3aaa7966cafae8b6c64554a64"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a529842b3aaa7966cafae8b6c64554a64">ZEROERR_IS_FLOAT</a>&#160;&#160;&#160;std::is_floating_point&lt;T&gt;::value</td></tr>
+<tr class="memitem:a1c3246b06e4850d6cb20e89a9692a7c2" id="r_a1c3246b06e4850d6cb20e89a9692a7c2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c3246b06e4850d6cb20e89a9692a7c2">ZEROERR_IS_ENUM</a>&#160;&#160;&#160;std::is_enum&lt;T&gt;::value</td></tr>
+<tr class="memitem:a3f3860d50e195f0e4b6581ebadef21c1" id="r_a3f3860d50e195f0e4b6581ebadef21c1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f3860d50e195f0e4b6581ebadef21c1">ZEROERR_IS_CONTAINER</a>&#160;&#160;&#160;detail::is_container&lt;T&gt;::value</td></tr>
+<tr class="memitem:a8df4005aee6f7b0be253509bbd339111" id="r_a8df4005aee6f7b0be253509bbd339111"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8df4005aee6f7b0be253509bbd339111">ZEROERR_IS_STRING</a>&#160;&#160;&#160;detail::is_string&lt;T&gt;::value</td></tr>
+<tr class="memitem:a7bf1f3b985dede8bb51a79bda5dcb8fe" id="r_a7bf1f3b985dede8bb51a79bda5dcb8fe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7bf1f3b985dede8bb51a79bda5dcb8fe">ZEROERR_IS_POINTER</a>&#160;&#160;&#160;(std::is_pointer&lt;T&gt;::value || std::is_same&lt;T, std::nullptr_t&gt;::value)</td></tr>
+<tr class="memitem:a831591a2143838ccdb0095616cd5dbe7" id="r_a831591a2143838ccdb0095616cd5dbe7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a831591a2143838ccdb0095616cd5dbe7">ZEROERR_IS_CHAR</a>&#160;&#160;&#160;std::is_same&lt;T, char&gt;::value</td></tr>
+<tr class="memitem:a89e89592c433083bca540ba29979c70f" id="r_a89e89592c433083bca540ba29979c70f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89e89592c433083bca540ba29979c70f">ZEROERR_IS_WCHAR</a>&#160;&#160;&#160;std::is_same&lt;T, wchar_t&gt;::value</td></tr>
+<tr class="memitem:a7d8d6678574ae3dcf38859ac498f4736" id="r_a7d8d6678574ae3dcf38859ac498f4736"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d8d6678574ae3dcf38859ac498f4736">ZEROERR_IS_CLASS</a>&#160;&#160;&#160;std::is_class&lt;T&gt;::value</td></tr>
+<tr class="memitem:a818a1689215604187b3b96892ecd848e" id="r_a818a1689215604187b3b96892ecd848e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a818a1689215604187b3b96892ecd848e">ZEROERR_IS_STREAMABLE</a>&#160;&#160;&#160;detail::is_streamable&lt;<a class="el" href="classzeroerr_1_1StringBuffer.html">zeroerr::StringBuffer</a>, T&gt;::value</td></tr>
+<tr class="memitem:af473cad300ad31c72b1bf69e694d0b2b" id="r_af473cad300ad31c72b1bf69e694d0b2b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af473cad300ad31c72b1bf69e694d0b2b">ZEROERR_IS_ARRAY</a>&#160;&#160;&#160;detail::is_array&lt;T&gt;::value</td></tr>
+<tr class="memitem:acdb472951f9a2eb2e70a5a0206f76f2d" id="r_acdb472951f9a2eb2e70a5a0206f76f2d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdb472951f9a2eb2e70a5a0206f76f2d">ZEROERR_IS_COMPLEX</a>&#160;&#160;&#160;detail::is_complex&lt;T&gt;::value</td></tr>
+<tr class="memitem:acf9a8a8d3150a1b64372f5c02aac6d3b" id="r_acf9a8a8d3150a1b64372f5c02aac6d3b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf9a8a8d3150a1b64372f5c02aac6d3b">ZEROERR_IS_BOOL</a>&#160;&#160;&#160;std::is_same&lt;T, bool&gt;::value</td></tr>
+<tr class="memitem:ac8bbdb14b3aa25e5c404e0c23a46fbe3" id="r_ac8bbdb14b3aa25e5c404e0c23a46fbe3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8bbdb14b3aa25e5c404e0c23a46fbe3">ZEROERR_IS_AUTOPTR</a>&#160;&#160;&#160;detail::is_pointer_like&lt;T&gt;::value</td></tr>
+<tr class="memitem:a193cb5720732948b95a4346e59f3dd2c" id="r_a193cb5720732948b95a4346e59f3dd2c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a193cb5720732948b95a4346e59f3dd2c">ZEROERR_IS_MAP</a>&#160;&#160;&#160;detail::ele_type_is_pair&lt;T&gt;::value</td></tr>
+<tr class="memitem:a43647f99c224e02009c4cf486da0b112" id="r_a43647f99c224e02009c4cf486da0b112"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43647f99c224e02009c4cf486da0b112">ZEROERR_IS_POD</a>&#160;&#160;&#160;std::is_standard_layout&lt;T&gt;::value</td></tr>
+<tr class="memitem:aad2a009555148e09324ce0c9fcdfb0b8" id="r_aad2a009555148e09324ce0c9fcdfb0b8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad2a009555148e09324ce0c9fcdfb0b8">ZEROERR_IS_EXT</a>&#160;&#160;&#160;detail::has_extension&lt;T&gt;::value</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a3b4d4235faed81267b6256c1841b9e0c" id="r_a3b4d4235faed81267b6256c1841b9e0c"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
+<tr class="memitem:a3b4d4235faed81267b6256c1841b9e0c template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#a3b4d4235faed81267b6256c1841b9e0c">zeroerr::detail::void_t</a> = void</td></tr>
+<tr class="memitem:a78184aac2a63a9b05352790ff4b30fee" id="r_a78184aac2a63a9b05352790ff4b30fee"><td class="memTemplParams" colspan="2">template&lt;typename S, typename T&gt; </td></tr>
+<tr class="memitem:a78184aac2a63a9b05352790ff4b30fee template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#a78184aac2a63a9b05352790ff4b30fee">zeroerr::detail::has_stream_operator</a> = <a class="el" href="namespacezeroerr_1_1detail.html#a3b4d4235faed81267b6256c1841b9e0c">void_t</a>&lt;decltype(std::declval&lt;S&amp;&gt;() &lt;&lt; std::declval&lt;const T&amp;&gt;())&gt;</td></tr>
+<tr class="memitem:aa5f317dbff7666b1d6ca6a60eb6efe91" id="r_aa5f317dbff7666b1d6ca6a60eb6efe91"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:aa5f317dbff7666b1d6ca6a60eb6efe91 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#aa5f317dbff7666b1d6ca6a60eb6efe91">zeroerr::detail::has_begin_end</a></td></tr>
+<tr class="memitem:a8e16e7bfc6e64bc7c82a701c687bc90b" id="r_a8e16e7bfc6e64bc7c82a701c687bc90b"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a8e16e7bfc6e64bc7c82a701c687bc90b template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#a8e16e7bfc6e64bc7c82a701c687bc90b">zeroerr::detail::has_begin_end_find_insert</a></td></tr>
+<tr class="memitem:a5279880cf667884640318212fb59df3b" id="r_a5279880cf667884640318212fb59df3b"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a5279880cf667884640318212fb59df3b template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#a5279880cf667884640318212fb59df3b">zeroerr::detail::has_pair_type</a></td></tr>
+<tr class="memitem:aa78250d820c98c618c8ebedf9ffda6f5" id="r_aa78250d820c98c618c8ebedf9ffda6f5"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:aa78250d820c98c618c8ebedf9ffda6f5 template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#aa78250d820c98c618c8ebedf9ffda6f5">zeroerr::detail::is_not_array</a> = typename std::enable_if&lt;!std::is_array&lt;T&gt;::value&gt;::type</td></tr>
+<tr class="memitem:af8740c9d73a40014beef877259c6381c" id="r_af8740c9d73a40014beef877259c6381c"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:af8740c9d73a40014beef877259c6381c template"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#af8740c9d73a40014beef877259c6381c">zeroerr::detail::to_store_type_t</a> = typename <a class="el" href="structzeroerr_1_1detail_1_1to__store__type.html">to_store_type</a>&lt;T&gt;::type</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a20922c7252cef98e7e8e6c417d1348cb" id="r_a20922c7252cef98e7e8e6c417d1348cb"><td class="memTemplParams" colspan="2">template&lt;std::size_t I&gt; </td></tr>
+<tr class="memitem:a20922c7252cef98e7e8e6c417d1348cb template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#a20922c7252cef98e7e8e6c417d1348cb">zeroerr::detail::get</a> ()=delete</td></tr>
+<tr class="memitem:a0e609c626e2b3f6b75ef08cbb79f2c3c" id="r_a0e609c626e2b3f6b75ef08cbb79f2c3c"><td class="memTemplParams" colspan="2">template&lt;std::size_t I, typename T&gt; </td></tr>
+<tr class="memitem:a0e609c626e2b3f6b75ef08cbb79f2c3c template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#a0e609c626e2b3f6b75ef08cbb79f2c3c">zeroerr::detail::tuple_get</a> (T &amp;&amp;value) -&gt; decltype(<a class="el" href="namespacezeroerr_1_1detail.html#a20922c7252cef98e7e8e6c417d1348cb">get</a>&lt; I &gt;(std::forward&lt; T &gt;(value)))</td></tr>
+<tr class="memitem:abf7c6ffe77251c16db82687b19e34158" id="r_abf7c6ffe77251c16db82687b19e34158"><td class="memTemplParams" colspan="2">template&lt;typename F, typename T&gt; </td></tr>
+<tr class="memitem:abf7c6ffe77251c16db82687b19e34158 template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#abf7c6ffe77251c16db82687b19e34158">zeroerr::detail::visit_at</a> (T &amp;tup, size_t idx, F &amp;&amp;fun)</td></tr>
+<tr class="memitem:a72d3caaa11ae3dc26955a9981f52c60a" id="r_a72d3caaa11ae3dc26955a9981f52c60a"><td class="memTemplParams" colspan="2">template&lt;typename F, typename T1, typename T2&gt; </td></tr>
+<tr class="memitem:a72d3caaa11ae3dc26955a9981f52c60a template"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html#a72d3caaa11ae3dc26955a9981f52c60a">zeroerr::detail::visit2_at</a> (T1 &amp;tup1, T2 &amp;tup2, size_t idx, F &amp;&amp;fun)</td></tr>
+</table>
+<a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">Macro Definition Documentation</h2>
+<a id="a85bc130fb2471b3852051b017960406f" name="a85bc130fb2471b3852051b017960406f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85bc130fb2471b3852051b017960406f">&#9670;&#160;</a></span>_LIBCPP_REMOVE_TRANSITIVE_INCLUDES</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adca2082eda0b29e67dd3588186120d55" name="adca2082eda0b29e67dd3588186120d55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adca2082eda0b29e67dd3588186120d55">&#9670;&#160;</a></span>ZEROERR_ENABLE_IF</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_ENABLE_IF</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;    \</div>
+<div class="line">    <span class="keyword">typename</span> std::enable_if&lt;x, void&gt;::type</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="af473cad300ad31c72b1bf69e694d0b2b" name="af473cad300ad31c72b1bf69e694d0b2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af473cad300ad31c72b1bf69e694d0b2b">&#9670;&#160;</a></span>ZEROERR_IS_ARRAY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_ARRAY&#160;&#160;&#160;detail::is_array&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac8bbdb14b3aa25e5c404e0c23a46fbe3" name="ac8bbdb14b3aa25e5c404e0c23a46fbe3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8bbdb14b3aa25e5c404e0c23a46fbe3">&#9670;&#160;</a></span>ZEROERR_IS_AUTOPTR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_AUTOPTR&#160;&#160;&#160;detail::is_pointer_like&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acf9a8a8d3150a1b64372f5c02aac6d3b" name="acf9a8a8d3150a1b64372f5c02aac6d3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf9a8a8d3150a1b64372f5c02aac6d3b">&#9670;&#160;</a></span>ZEROERR_IS_BOOL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_BOOL&#160;&#160;&#160;std::is_same&lt;T, bool&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a831591a2143838ccdb0095616cd5dbe7" name="a831591a2143838ccdb0095616cd5dbe7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a831591a2143838ccdb0095616cd5dbe7">&#9670;&#160;</a></span>ZEROERR_IS_CHAR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_CHAR&#160;&#160;&#160;std::is_same&lt;T, char&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d8d6678574ae3dcf38859ac498f4736" name="a7d8d6678574ae3dcf38859ac498f4736"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d8d6678574ae3dcf38859ac498f4736">&#9670;&#160;</a></span>ZEROERR_IS_CLASS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_CLASS&#160;&#160;&#160;std::is_class&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acdb472951f9a2eb2e70a5a0206f76f2d" name="acdb472951f9a2eb2e70a5a0206f76f2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdb472951f9a2eb2e70a5a0206f76f2d">&#9670;&#160;</a></span>ZEROERR_IS_COMPLEX</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_COMPLEX&#160;&#160;&#160;detail::is_complex&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3f3860d50e195f0e4b6581ebadef21c1" name="a3f3860d50e195f0e4b6581ebadef21c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f3860d50e195f0e4b6581ebadef21c1">&#9670;&#160;</a></span>ZEROERR_IS_CONTAINER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_CONTAINER&#160;&#160;&#160;detail::is_container&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1c3246b06e4850d6cb20e89a9692a7c2" name="a1c3246b06e4850d6cb20e89a9692a7c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c3246b06e4850d6cb20e89a9692a7c2">&#9670;&#160;</a></span>ZEROERR_IS_ENUM</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_ENUM&#160;&#160;&#160;std::is_enum&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad2a009555148e09324ce0c9fcdfb0b8" name="aad2a009555148e09324ce0c9fcdfb0b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad2a009555148e09324ce0c9fcdfb0b8">&#9670;&#160;</a></span>ZEROERR_IS_EXT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_EXT&#160;&#160;&#160;detail::has_extension&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a529842b3aaa7966cafae8b6c64554a64" name="a529842b3aaa7966cafae8b6c64554a64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a529842b3aaa7966cafae8b6c64554a64">&#9670;&#160;</a></span>ZEROERR_IS_FLOAT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_FLOAT&#160;&#160;&#160;std::is_floating_point&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a74931f8a27a626d536841cf3397f88b0" name="a74931f8a27a626d536841cf3397f88b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74931f8a27a626d536841cf3397f88b0">&#9670;&#160;</a></span>ZEROERR_IS_INT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_INT&#160;&#160;&#160;std::is_integral&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a193cb5720732948b95a4346e59f3dd2c" name="a193cb5720732948b95a4346e59f3dd2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a193cb5720732948b95a4346e59f3dd2c">&#9670;&#160;</a></span>ZEROERR_IS_MAP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_MAP&#160;&#160;&#160;detail::ele_type_is_pair&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a43647f99c224e02009c4cf486da0b112" name="a43647f99c224e02009c4cf486da0b112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43647f99c224e02009c4cf486da0b112">&#9670;&#160;</a></span>ZEROERR_IS_POD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_POD&#160;&#160;&#160;std::is_standard_layout&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7bf1f3b985dede8bb51a79bda5dcb8fe" name="a7bf1f3b985dede8bb51a79bda5dcb8fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bf1f3b985dede8bb51a79bda5dcb8fe">&#9670;&#160;</a></span>ZEROERR_IS_POINTER</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_POINTER&#160;&#160;&#160;(std::is_pointer&lt;T&gt;::value || std::is_same&lt;T, std::nullptr_t&gt;::value)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a818a1689215604187b3b96892ecd848e" name="a818a1689215604187b3b96892ecd848e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a818a1689215604187b3b96892ecd848e">&#9670;&#160;</a></span>ZEROERR_IS_STREAMABLE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_STREAMABLE&#160;&#160;&#160;detail::is_streamable&lt;<a class="el" href="classzeroerr_1_1StringBuffer.html">zeroerr::StringBuffer</a>, T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8df4005aee6f7b0be253509bbd339111" name="a8df4005aee6f7b0be253509bbd339111"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8df4005aee6f7b0be253509bbd339111">&#9670;&#160;</a></span>ZEROERR_IS_STRING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_STRING&#160;&#160;&#160;detail::is_string&lt;T&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a89e89592c433083bca540ba29979c70f" name="a89e89592c433083bca540ba29979c70f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89e89592c433083bca540ba29979c70f">&#9670;&#160;</a></span>ZEROERR_IS_WCHAR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZEROERR_IS_WCHAR&#160;&#160;&#160;std::is_same&lt;T, wchar_t&gt;::value</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a href="dir_fe7eac5579a524367d6d162a6d748259.html">internal</a></li><li class="navelem"><a href="typetraits_8h.html">typetraits.h</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+<map id="zeroerr::Decorator" name="zeroerr::Decorator">
+<area shape="rect" id="Node000001" title=" " alt="" coords="226,5,365,33"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1FailureDecorator.html" title=" " alt="" coords="5,81,188,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="248,39,133,83,131,78,243,38"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1SkipDecorator.html" title=" " alt="" coords="212,81,379,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="297,47,297,82,293,79,293,51"/>
+<area shape="rect" id="Node000004" href="$classzeroerr_1_1TimeoutDecorator.html" title=" " alt="" coords="402,81,596,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="346,36,465,80,460,81,345,41"/>
+</map>

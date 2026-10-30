@@ -1,0 +1,17 @@
+<map id="zeroerr::LogIterator" name="zeroerr::LogIterator">
+<area shape="rect" id="Node000001" title="LogIterator is a class to iterate the log messages." alt="" coords="173,445,319,472"/>
+<area shape="rect" id="Node000002" href="$structzeroerr_1_1DataBlock.html" title=" " alt="" coords="5,344,148,372"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,377,226,443,221,445,111,382"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="163,349,174,358,166,366,149,369,147,364,164,361,169,358,163,354"/>
+<area shape="rect" id="Node000003" href="$structzeroerr_1_1LogMessage.html" title="LogMessage is a class to store the log message." alt="" coords="396,344,552,372"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="432,378,277,447,275,442,427,378"/>
+<area shape="rect" id="Node000004" href="$structzeroerr_1_1LogInfo.html" title="LogInfo is a struct to store the meta data of the log message." alt="" coords="412,234,536,261"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="476,274,476,345,472,342,472,278"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="342,106,489,151"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="434,162,470,234,465,233,432,167"/>
+<area shape="rect" id="Node000006" href="$classzeroerr_1_1String.html" title=" " alt="" coords="210,5,324,33"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="260,45,253,86,248,127,248,359,248,446,243,443,243,359,243,127,247,85,258,50"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="298,40,388,105,382,106,298,45"/>
+<area shape="rect" id="Node000007" href="$structzeroerr_1_1Timestamp.html" title=" " alt="" coords="559,234,708,261"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="605,269,495,346,492,341,600,271"/>
+</map>

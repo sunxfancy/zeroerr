@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.15.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: include/zeroerr/string.h 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.15.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','搜索',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('string_8h.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">string.h 文件参考</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;cstddef&gt;</code><br />
+<code>#include &lt;functional&gt;</code><br />
+<code>#include &lt;type_traits&gt;</code><br />
+<code>#include &lt;utility&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+string.h 的引用(Include)关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="string_8h__incl.png" border="0" usemap="#ainclude_2zeroerr_2string_8h" loading="lazy" alt=""/></div>
+<map name="ainclude_2zeroerr_2string_8h" id="ainclude_2zeroerr_2string_8h">
+<area shape="rect" title=" " alt="" coords="112,5,283,33"/>
+<area shape="rect" title=" " alt="" coords="5,81,75,109"/>
+<area shape="poly" title=" " alt="" coords="170,36,83,77,80,72,168,31"/>
+<area shape="rect" title=" " alt="" coords="98,81,184,109"/>
+<area shape="poly" title=" " alt="" coords="190,32,162,71,159,67,185,35"/>
+<area shape="rect" title=" " alt="" coords="209,81,300,109"/>
+<area shape="poly" title=" " alt="" coords="209,31,238,69,233,68,206,36"/>
+<area shape="rect" title=" " alt="" coords="325,81,384,109"/>
+<area shape="poly" title=" " alt="" coords="226,31,316,74,311,75,225,36"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+此图展示该文件被哪些文件直接或间接地引用了:</div>
+<div class="dyncontent">
+<div class="center"><img src="string_8h__dep__incl.png" border="0" usemap="#ainclude_2zeroerr_2string_8hdep" loading="lazy" alt=""/></div>
+<map name="ainclude_2zeroerr_2string_8hdep" id="ainclude_2zeroerr_2string_8hdep">
+<area shape="rect" title=" " alt="" coords="984,5,1156,33"/>
+<area shape="rect" href="benchmark_8h.html" title=" " alt="" coords="1957,81,2164,109"/>
+<area shape="poly" title=" " alt="" coords="1171,24,1512,46,1938,78,1960,82,1954,83,1938,84,1511,51,1172,29"/>
+<area shape="rect" href="buffer_8h.html" title=" " alt="" coords="1147,81,1318,109"/>
+<area shape="poly" title=" " alt="" coords="1113,37,1206,80,1201,81,1113,42"/>
+<area shape="rect" href="text_8h.html" title=" " alt="" coords="1340,157,1512,201"/>
+<area shape="poly" title=" " alt="" coords="1170,28,1252,46,1293,60,1331,79,1356,95,1378,115,1413,157,1408,156,1374,119,1353,100,1329,83,1291,65,1250,51,1171,33"/>
+<area shape="rect" href="unittest_8h.html" title=" " alt="" coords="815,628,999,656"/>
+<area shape="poly" title=" " alt="" coords="988,40,952,58,918,83,905,100,898,116,890,157,876,227,871,299,871,370,875,439,891,555,906,629,902,627,886,556,870,439,865,371,865,299,871,226,885,156,893,115,900,97,915,79,950,53,992,37"/>
+<area shape="rect" href="fuzztest_8h.html" title=" " alt="" coords="435,713,622,740"/>
+<area shape="poly" title=" " alt="" coords="967,26,707,43,549,56,390,73,243,93,122,118,75,131,40,146,19,162,11,178,11,551,10,614,16,638,36,663,63,680,104,693,153,704,209,712,327,721,438,726,433,727,327,726,208,717,152,709,102,699,61,685,32,667,11,641,4,615,6,551,6,177,14,159,38,142,74,126,121,112,242,88,389,67,548,51,707,38,971,24"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="931,443,1086,471"/>
+<area shape="poly" title=" " alt="" coords="1018,41,980,64,939,94,921,112,908,132,898,154,895,178,895,273,898,300,906,326,933,374,966,413,996,443,990,442,962,417,929,377,901,328,893,301,890,273,890,177,893,152,903,129,917,108,935,90,977,59,1022,38"/>
+<area shape="rect" href="table_8h.html" title=" " alt="" coords="1737,443,1904,471"/>
+<area shape="poly" title=" " alt="" coords="1170,18,1254,23,1353,33,1463,52,1578,80,1691,121,1746,147,1798,177,1848,211,1893,249,1935,292,1971,341,1979,364,1971,388,1954,408,1933,424,1886,445,1884,440,1930,420,1950,404,1966,385,1974,364,1966,343,1931,296,1890,253,1845,215,1795,181,1743,152,1689,126,1576,85,1462,57,1353,38,1254,28,1172,23"/>
+<area shape="rect" href="format_8h.html" title=" " alt="" coords="981,350,1159,378"/>
+<area shape="poly" title=" " alt="" coords="1072,46,1072,351,1067,349,1068,50"/>
+<area shape="rect" href="serialization_8h.html" title=" " alt="" coords="394,249,567,294"/>
+<area shape="poly" title=" " alt="" coords="967,37,877,57,780,84,697,115,621,159,556,206,505,251,501,247,553,202,618,154,695,110,778,78,875,52,971,34"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="632,157,804,201"/>
+<area shape="poly" title=" " alt="" coords="967,35,896,54,824,83,799,100,775,119,737,158,734,154,771,115,796,96,822,79,895,49,972,32"/>
+<area shape="rect" href="string_8cpp.html" title=" " alt="" coords="2188,81,2296,109"/>
+<area shape="poly" title=" " alt="" coords="1171,19,1359,23,1609,33,1892,50,2177,78,2190,82,2184,83,2176,84,1891,56,1609,38,1359,28,1172,24"/>
+<area shape="rect" href="benchmark_8cpp.html" title=" " alt="" coords="1866,536,2010,564"/>
+<area shape="poly" title=" " alt="" coords="2061,122,2058,270,2058,366,2055,394,2046,421,2019,470,1985,510,1955,538,1953,533,1981,506,2014,467,2041,419,2050,393,2053,366,2053,270,2057,126"/>
+<area shape="poly" title=" " alt="" coords="1278,112,1377,156,1372,156,1278,118"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="1257,258,1421,286"/>
+<area shape="poly" title=" " alt="" coords="1253,119,1279,155,1335,258,1330,257,1274,158,1251,124"/>
+<area shape="rect" href="buffer_8cpp.html" title=" " alt="" coords="1156,165,1264,193"/>
+<area shape="poly" title=" " alt="" coords="1227,122,1216,166,1211,163,1223,126"/>
+<area shape="poly" title=" " alt="" coords="1397,211,1353,259,1350,255,1393,214"/>
+<area shape="rect" href="text_8cpp.html" title=" " alt="" coords="1859,350,1956,378"/>
+<area shape="poly" title=" " alt="" coords="1436,214,1456,257,1469,276,1486,292,1530,318,1570,332,1608,338,1646,337,1727,332,1773,332,1826,339,1863,350,1857,350,1825,345,1773,338,1727,337,1646,343,1608,343,1569,337,1528,323,1483,296,1465,280,1451,259,1434,219"/>
+<area shape="rect" href="assert__text_8cpp.html" title=" " alt="" coords="1496,258,1641,286"/>
+<area shape="poly" title=" " alt="" coords="1473,207,1551,257,1545,257,1473,213"/>
+<area shape="rect" href="zeroerr_8h.html" title=" " alt="" coords="1197,713,1327,740"/>
+<area shape="poly" title=" " alt="" coords="1382,291,1414,312,1440,340,1456,370,1464,395,1466,456,1466,551,1466,613,1459,639,1440,666,1416,688,1387,703,1328,721,1327,716,1385,698,1413,683,1436,663,1454,637,1461,612,1461,551,1461,456,1459,396,1452,372,1436,344,1410,316,1381,296"/>
+<area shape="rect" href="assert_8h.html" title=" " alt="" coords="1175,536,1349,564"/>
+<area shape="poly" title=" " alt="" coords="1311,294,1286,318,1264,344,1238,387,1225,435,1221,457,1224,479,1238,509,1254,536,1249,535,1233,512,1219,480,1216,457,1219,434,1233,384,1260,340,1283,315,1307,296"/>
+<area shape="rect" href="dbg_8h.html" title=" " alt="" coords="1500,350,1658,378"/>
+<area shape="poly" title=" " alt="" coords="1389,289,1547,350,1542,350,1388,294"/>
+<area shape="rect" href="decomposition_8h.html" title=" " alt="" coords="1234,435,1407,479"/>
+<area shape="poly" title=" " alt="" coords="1311,294,1290,318,1275,343,1270,364,1275,386,1287,411,1303,435,1298,434,1283,414,1270,388,1265,364,1270,341,1286,315,1307,297"/>
+<area shape="poly" title=" " alt="" coords="1239,278,1163,287,1082,299,1013,318,988,330,971,344,964,355,962,367,968,394,983,420,999,443,994,442,978,423,963,396,957,367,959,353,967,340,985,325,1011,313,1081,294,1162,282,1244,277"/>
+<area shape="poly" title=" " alt="" coords="1414,286,1441,291,1521,297,1625,300,1678,304,1727,311,1767,323,1797,340,1814,364,1823,393,1824,444,1820,441,1817,394,1809,367,1793,344,1765,327,1726,316,1678,309,1625,306,1521,302,1440,297,1414,292"/>
+<area shape="poly" title=" " alt="" coords="1283,292,1110,352,1108,347,1288,290"/>
+<area shape="rect" href="std__adapter_8h.html" title=" " alt="" coords="1284,342,1426,387"/>
+<area shape="poly" title=" " alt="" coords="1346,299,1354,343,1349,340,1343,303"/>
+<area shape="rect" href="print_8cpp.html" title=" " alt="" coords="1682,350,1783,378"/>
+<area shape="poly" title=" " alt="" coords="1417,287,1671,339,1698,350,1693,350,1669,345,1418,292"/>
+<area shape="poly" title=" " alt="" coords="1413,286,1441,291,1553,306,1641,312,1728,320,1840,339,1872,350,1866,350,1839,345,1728,326,1640,318,1552,311,1440,297,1413,292"/>
+<area shape="poly" title=" " alt="" coords="1264,577,1264,714,1260,711,1260,581"/>
+<area shape="poly" title=" " alt="" coords="1198,567,959,630,958,625,1193,568"/>
+<area shape="rect" href="fuzztest_8cpp.html" title=" " alt="" coords="1026,788,1149,816"/>
+<area shape="poly" title=" " alt="" coords="1247,576,1098,790,1095,786,1242,578"/>
+<area shape="rect" href="unittest_8cpp.html" title=" " alt="" coords="847,713,968,740"/>
+<area shape="poly" title=" " alt="" coords="1224,570,1120,622,934,715,932,710,1118,618,1218,571"/>
+<area shape="rect" href="table_8cpp.html" title=" " alt="" coords="1322,628,1426,656"/>
+<area shape="poly" title=" " alt="" coords="1290,571,1360,628,1355,627,1289,576"/>
+<area shape="poly" title=" " alt="" coords="979,657,1208,712,1202,712,979,663"/>
+<area shape="poly" title=" " alt="" coords="834,659,590,715,589,709,829,660"/>
+<area shape="poly" title=" " alt="" coords="909,670,909,714,905,711,905,674"/>
+<area shape="poly" title=" " alt="" coords="637,739,1028,792,1022,793,637,745"/>
+<area shape="poly" title=" " alt="" coords="1580,392,1576,451,1561,524,1548,563,1532,600,1510,636,1484,667,1448,692,1408,709,1367,720,1327,726,1327,721,1366,715,1406,704,1446,687,1480,663,1506,632,1527,598,1543,561,1556,523,1570,450,1577,396"/>
+<area shape="poly" title=" " alt="" coords="1530,383,1384,437,1382,431,1525,384"/>
+<area shape="poly" title=" " alt="" coords="1482,381,1087,446,1086,441,1488,380"/>
+<area shape="poly" title=" " alt="" coords="1629,381,1788,443,1783,443,1628,387"/>
+<area shape="poly" title=" " alt="" coords="1301,491,1272,537,1269,533,1296,494"/>
+<area shape="poly" title=" " alt="" coords="1043,477,1076,499,1108,525,1155,576,1198,629,1256,713,1251,711,1194,632,1151,579,1104,529,1073,503,1043,482"/>
+<area shape="poly" title=" " alt="" coords="1033,480,1051,502,1064,526,1076,563,1085,602,1093,677,1094,743,1090,790,1087,786,1088,743,1088,678,1080,602,1071,565,1059,528,1047,505,1032,485"/>
+<area shape="poly" title=" " alt="" coords="967,477,925,503,880,535,838,574,820,597,806,621,799,643,806,663,817,679,832,691,867,713,862,712,829,696,813,682,801,666,794,643,801,619,816,594,834,570,876,530,922,499,962,479"/>
+<area shape="poly" title=" " alt="" coords="1101,468,1261,495,1327,510,1362,525,1377,551,1383,579,1379,630,1375,626,1377,580,1372,552,1359,529,1326,515,1260,500,1101,473"/>
+<area shape="rect" href="log_8cpp.html" title=" " alt="" coords="959,536,1050,564"/>
+<area shape="poly" title=" " alt="" coords="1009,484,1007,537,1003,534,1006,488"/>
+<area shape="poly" title=" " alt="" coords="1850,478,1923,536,1918,535,1849,483"/>
+<area shape="poly" title=" " alt="" coords="1777,477,1407,631,1405,625,1772,478"/>
+<area shape="poly" title=" " alt="" coords="1092,387,1180,477,1247,536,1242,535,1176,481,1090,392"/>
+<area shape="poly" title=" " alt="" coords="1055,389,1019,445,1016,441,1051,392"/>
+<area shape="rect" href="domain_8h.html" title=" " alt="" coords="313,435,491,479"/>
+<area shape="poly" title=" " alt="" coords="432,306,419,323,406,343,399,366,396,390,400,435,395,433,391,390,393,365,401,341,414,320,436,302"/>
+<area shape="rect" href="serialization_8cpp.html" title=" " alt="" coords="416,350,567,378"/>
+<area shape="poly" title=" " alt="" coords="486,307,492,351,487,349,484,312"/>
+<area shape="rect" href="aggregate__of_8h.html" title=" " alt="" coords="325,527,503,572"/>
+<area shape="poly" title=" " alt="" coords="408,492,414,528,409,526,406,497"/>
+<area shape="rect" href="arbitrary_8h.html" title=" " alt="" coords="502,620,680,665"/>
+<area shape="poly" title=" " alt="" coords="460,485,490,504,517,525,556,573,583,620,578,619,552,576,513,529,487,508,460,490"/>
+<area shape="rect" href="container__of_8h.html" title=" " alt="" coords="629,527,807,572"/>
+<area shape="poly" title=" " alt="" coords="492,481,645,526,640,528,492,487"/>
+<area shape="rect" href="element__of_8h.html" title=" " alt="" coords="249,620,427,665"/>
+<area shape="poly" title=" " alt="" coords="345,491,329,508,315,528,309,551,311,575,328,620,322,619,306,576,304,551,310,526,325,504,348,487"/>
+<area shape="rect" href="in__range_8h.html" title=" " alt="" coords="46,620,224,665"/>
+<area shape="poly" title=" " alt="" coords="356,490,302,530,168,622,165,617,299,525,360,486"/>
+<area shape="poly" title=" " alt="" coords="438,583,523,712,517,712,435,587"/>
+<area shape="poly" title=" " alt="" coords="470,577,552,619,546,620,469,582"/>
+<area shape="poly" title=" " alt="" coords="568,676,540,714,537,710,563,678"/>
+<area shape="poly" title=" " alt="" coords="720,586,714,628,707,648,695,666,677,683,656,696,611,715,609,709,653,692,673,679,691,663,702,646,709,627,717,590"/>
+<area shape="poly" title=" " alt="" coords="678,580,623,622,620,617,673,582"/>
+<area shape="poly" title=" " alt="" coords="403,669,501,712,495,712,402,674"/>
+<area shape="poly" title=" " alt="" coords="240,663,468,710,463,714,240,668"/>
+<area shape="poly" title=" " alt="" coords="819,192,1259,257,1254,260,819,198"/>
+<area shape="poly" title=" " alt="" coords="738,212,795,297,833,343,876,385,925,417,975,443,970,443,922,422,872,389,829,347,791,300,737,217"/>
+<area shape="poly" title=" " alt="" coords="645,209,539,251,536,247,649,206"/>
+<area shape="poly" title=" " alt="" coords="708,214,668,353,619,528,598,621,593,618,614,527,663,351,705,218"/>
+<area shape="poly" title=" " alt="" coords="720,215,720,528,715,526,716,219"/>
+</map>
+</div>
+</div>
+<p><a href="string_8h_source.html">浏览该文件的源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail_3A_3AStringLike_3C_20T_20_3E" id="r_zeroerr_3A_3Adetail_3A_3AStringLike_3C_20T_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">zeroerr::detail::StringLike&lt; T &gt;</a></td></tr>
+<tr class="memitem:zeroerr_3A_3AString" id="r_zeroerr_3A_3AString"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1String.html">zeroerr::String</a></td></tr>
+<tr class="memitem:std_3A_3Ahash_3C_20zeroerr_3A_3AString_20_3E" id="r_std_3A_3Ahash_3C_20zeroerr_3A_3AString_20_3E"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structstd_1_1hash_3_01zeroerr_1_1String_01_4.html">std::hash&lt; zeroerr::String &gt;</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
+命名空间</h2></td></tr>
+<tr class="memitem:zeroerr" id="r_zeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+<tr class="memitem:zeroerr_3A_3Adetail" id="r_zeroerr_3A_3Adetail"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr_1_1detail.html">zeroerr::detail</a></td></tr>
+<tr class="memitem:std" id="r_std"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestd.html">std</a></td></tr>
+<tr class="memdesc:namespacestd"><td class="mdescLeft">&#160;</td><td class="mdescRight">STL namespace <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+宏定义</h2></td></tr>
+<tr class="memitem:a85bc130fb2471b3852051b017960406f" id="r_a85bc130fb2471b3852051b017960406f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85bc130fb2471b3852051b017960406f">_LIBCPP_REMOVE_TRANSITIVE_INCLUDES</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:a2c17f83d2165cffaf9042647db35fe02" id="r_a2c17f83d2165cffaf9042647db35fe02"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a2c17f83d2165cffaf9042647db35fe02">zeroerr::operator==</a> (const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;a, const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;b) noexcept</td></tr>
+<tr class="memitem:a03b64b35d5b4930d2f3090c5c787424c" id="r_a03b64b35d5b4930d2f3090c5c787424c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a03b64b35d5b4930d2f3090c5c787424c">zeroerr::operator!=</a> (const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;a, const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;b) noexcept</td></tr>
+<tr class="memitem:ac6cf3e13f0b8a2425b4603f53a6eac04" id="r_ac6cf3e13f0b8a2425b4603f53a6eac04"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ac6cf3e13f0b8a2425b4603f53a6eac04">zeroerr::operator&lt;</a> (const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;a, const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;b) noexcept</td></tr>
+<tr class="memitem:aef0042429413394e15a47aad43524a86" id="r_aef0042429413394e15a47aad43524a86"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#aef0042429413394e15a47aad43524a86">zeroerr::operator&gt;</a> (const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;a, const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;b) noexcept</td></tr>
+<tr class="memitem:afb8457baf27732ea66ab0edccd10502d" id="r_afb8457baf27732ea66ab0edccd10502d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#afb8457baf27732ea66ab0edccd10502d">zeroerr::operator&lt;=</a> (const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;a, const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;b) noexcept</td></tr>
+<tr class="memitem:a761bf072f4e5ee30396a08f6af8e4695" id="r_a761bf072f4e5ee30396a08f6af8e4695"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a761bf072f4e5ee30396a08f6af8e4695">zeroerr::operator&gt;=</a> (const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;a, const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;b) noexcept</td></tr>
+<tr class="memitem:a173b01c6b1bd9e41fc4aa6f14c56ee28" id="r_a173b01c6b1bd9e41fc4aa6f14c56ee28"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzeroerr_1_1String.html">String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a173b01c6b1bd9e41fc4aa6f14c56ee28">zeroerr::operator+</a> (const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;a, const <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;b)</td></tr>
+<tr class="memitem:a9b321cab7dde5d5a3ddf5b454de71db3" id="r_a9b321cab7dde5d5a3ddf5b454de71db3"><td class="memTemplParams" colspan="2">template&lt;class Stream, class T, typename std::enable_if&lt; std::is_same&lt; typename std::decay&lt; T &gt;::type, <a class="el" href="classzeroerr_1_1String.html">String</a> &gt;::value &amp;&amp;!std::is_same&lt; Stream, <a class="el" href="classzeroerr_1_1StringBuffer.html">StringBuffer</a> &gt;::value, int &gt;::type = 0&gt; </td></tr>
+<tr class="memitem:a9b321cab7dde5d5a3ddf5b454de71db3 template"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a9b321cab7dde5d5a3ddf5b454de71db3">zeroerr::operator&lt;&lt;</a> (Stream &amp;stream, T &amp;&amp;text) -&gt; decltype(stream.write(text.data(), text.size()))</td></tr>
+<tr class="memitem:a96a107160b6a55e2c5bc1d7f34bb0fb0" id="r_a96a107160b6a55e2c5bc1d7f34bb0fb0"><td class="memTemplParams" colspan="2">template&lt;class Stream&gt; </td></tr>
+<tr class="memitem:a96a107160b6a55e2c5bc1d7f34bb0fb0 template"><td class="memItemLeft" align="right" valign="top">Stream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a96a107160b6a55e2c5bc1d7f34bb0fb0">zeroerr::operator&gt;&gt;</a> (Stream &amp;stream, <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;text)</td></tr>
+<tr class="memitem:ac57bf88d27c8e12bc848f07dee55b0d8" id="r_ac57bf88d27c8e12bc848f07dee55b0d8"><td class="memTemplParams" colspan="2">template&lt;class Stream&gt; </td></tr>
+<tr class="memitem:ac57bf88d27c8e12bc848f07dee55b0d8 template"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ac57bf88d27c8e12bc848f07dee55b0d8">zeroerr::getline</a> (Stream &amp;stream, <a class="el" href="classzeroerr_1_1String.html">String</a> &amp;text)</td></tr>
+</table>
+<a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">宏定义说明</h2>
+<a id="a85bc130fb2471b3852051b017960406f" name="a85bc130fb2471b3852051b017960406f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85bc130fb2471b3852051b017960406f">&#9670;&#160;</a></span>_LIBCPP_REMOVE_TRANSITIVE_INCLUDES</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define _LIBCPP_REMOVE_TRANSITIVE_INCLUDES</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a href="dir_292fa00f64564de7e9a3f77fe9ca80aa.html">zeroerr</a></li><li class="navelem"><a href="string_8h.html">string.h</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
+  </ul>
+</div>
+</body>
+</html>

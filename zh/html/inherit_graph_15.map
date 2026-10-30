@@ -1,0 +1,9 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="Node000000" href="$classzeroerr_1_1Decorator.html" title=" " alt="" coords="5,57,145,85"/>
+<area shape="rect" id="Node000001" href="$classzeroerr_1_1FailureDecorator.html" title=" " alt="" coords="198,5,380,33"/>
+<area shape="poly" id="edge72_Node000000_Node000001" title=" " alt="" coords="149,51,231,32,227,35,151,56"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1SkipDecorator.html" title=" " alt="" coords="206,57,373,85"/>
+<area shape="poly" id="edge73_Node000000_Node000002" title=" " alt="" coords="160,69,208,70,203,72,161,74"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1TimeoutDecorator.html" title=" " alt="" coords="193,109,386,137"/>
+<area shape="poly" id="edge74_Node000000_Node000003" title=" " alt="" coords="150,87,232,108,226,109,150,92"/>
+</map>

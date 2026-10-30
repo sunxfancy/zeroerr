@@ -1,0 +1,7 @@
+<map id="zeroerr::details::has_bool_conversion&lt; T, decltype(static_cast&lt; bool &gt;(std::declval&lt; T &gt;()), void())&gt;" name="zeroerr::details::has_bool_conversion&lt; T, decltype(static_cast&lt; bool &gt;(std::declval&lt; T &gt;()), void())&gt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="282,19,452,115"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="61,5,178,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,31,284,50,279,52,194,36"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,58,234,170"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,87,284,83,278,84,250,92"/>
+</map>

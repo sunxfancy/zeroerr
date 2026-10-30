@@ -1,0 +1,7 @@
+<map id="zeroerr::PerformanceCounter" name="zeroerr::PerformanceCounter">
+<area shape="rect" id="Node000001" title="PerformanceCounter is a class to measure the performance of a function." alt="" coords="73,123,282,151"/>
+<area shape="rect" id="Node000002" href="$structzeroerr_1_1PerfCountSet.html" title=" " alt="" coords="5,5,166,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,60,169,122,164,123,113,64"/>
+<area shape="rect" id="Node000003" href="$structzeroerr_1_1PerfCountSet.html" title=" " alt="" coords="189,5,350,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="244,61,190,125,187,121,238,63"/>
+</map>

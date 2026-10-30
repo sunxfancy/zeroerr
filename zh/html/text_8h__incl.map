@@ -1,0 +1,18 @@
+<map id="include/zeroerr/internal/text.h" name="include/zeroerr/internal/text.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="55,5,228,50"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,249,75,277"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,51,54,236,49,234,129,50"/>
+<area shape="rect" id="Node000003" href="$buffer_8h.html" title=" " alt="" coords="178,98,299,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,48,214,87,209,88,167,53"/>
+<area shape="rect" id="Node000005" href="$string_8h.html" title=" " alt="" coords="106,174,227,201"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="146,48,165,158,159,158,143,52"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="293,249,384,277"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="249,124,324,236,319,236,246,128"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="228,125,192,165,188,161,224,128"/>
+<area shape="poly" id="edge5_Node000005_Node000002" title=" " alt="" coords="146,203,77,244,74,239,142,201"/>
+<area shape="poly" id="edge7_Node000005_Node000004" title=" " alt="" coords="198,199,297,242,292,244,197,204"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="98,249,184,277"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="164,200,153,236,149,233,160,204"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="209,249,268,277"/>
+<area shape="poly" id="edge8_Node000005_Node000007" title=" " alt="" coords="181,199,218,238,213,238,179,204"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="zeroerr::Logger" name="zeroerr::Logger">
+<area shape="rect" id="Node000001" title=" " alt="" coords="221,5,340,33"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1DirectoryLogger.html" title=" " alt="" coords="5,81,185,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,39,129,83,127,78,231,39"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1FileLogger.html" title=" " alt="" coords="209,81,352,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="282,47,282,82,278,79,278,51"/>
+<area shape="rect" id="Node000004" href="$classzeroerr_1_1OStreamLogger.html" title=" " alt="" coords="376,81,552,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="328,37,434,80,429,81,327,42"/>
+</map>

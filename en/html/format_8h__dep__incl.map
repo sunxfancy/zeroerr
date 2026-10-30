@@ -1,0 +1,28 @@
+<map id="include/zeroerr/format.h" name="include/zeroerr/format.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="308,5,486,33"/>
+<area shape="rect" id="Node000002" href="$assert_8h.html" title=" " alt="" coords="248,81,423,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="378,43,348,82,345,79,374,47"/>
+<area shape="rect" id="Node000009" href="$log_8h.html" title=" " alt="" coords="466,157,621,184"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="421,42,533,156,528,156,419,47"/>
+<area shape="rect" id="Node000003" href="$zeroerr_8h.html" title=" " alt="" coords="26,232,155,260"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="264,115,219,134,173,159,130,197,101,234,97,231,126,193,170,154,217,129,268,112"/>
+<area shape="rect" id="Node000004" href="$unittest_8h.html" title=" " alt="" coords="183,157,368,184"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="317,119,288,158,284,154,313,123"/>
+<area shape="rect" id="Node000006" href="$fuzztest_8cpp.html" title=" " alt="" coords="210,308,333,336"/>
+<area shape="poly" id="edge8_Node000002_Node000006" title=" " alt="" coords="231,108,173,124,111,148,82,164,56,184,34,207,15,233,8,258,15,277,34,291,63,302,135,315,212,321,207,322,135,321,61,308,32,296,11,280,3,258,10,231,29,203,53,180,80,160,109,143,171,119,235,105"/>
+<area shape="rect" id="Node000007" href="$unittest_8cpp.html" title=" " alt="" coords="388,232,510,260"/>
+<area shape="poly" id="edge10_Node000002_Node000007" title=" " alt="" coords="356,119,442,232,436,232,353,123"/>
+<area shape="rect" id="Node000008" href="$table_8cpp.html" title=" " alt="" coords="699,232,804,260"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="438,103,535,121,586,136,634,154,666,171,695,192,741,232,736,231,692,196,663,176,632,159,584,141,534,127,438,108"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="227,192,124,234,122,229,230,188"/>
+<area shape="rect" id="Node000005" href="$fuzztest_8h.html" title=" " alt="" coords="178,232,365,260"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="276,198,275,233,270,231,272,202"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="321,188,421,231,415,232,320,193"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="273,274,274,309,269,306,270,278"/>
+<area shape="poly" id="edge12_Node000009_Node000003" title=" " alt="" coords="451,189,167,235,156,237,154,232,166,230,451,184"/>
+<area shape="poly" id="edge13_Node000009_Node000006" title=" " alt="" coords="546,198,541,232,534,248,524,262,492,280,443,295,334,316,333,310,442,290,490,276,520,258,530,245,536,231,542,202"/>
+<area shape="poly" id="edge16_Node000009_Node000007" title=" " alt="" coords="517,193,467,234,464,230,512,195"/>
+<area shape="poly" id="edge15_Node000009_Node000008" title=" " alt="" coords="595,187,717,232,712,232,594,192"/>
+<area shape="rect" id="Node000010" href="$log_8cpp.html" title=" " alt="" coords="585,232,676,260"/>
+<area shape="poly" id="edge14_Node000009_Node000010" title=" " alt="" coords="571,192,617,232,612,231,570,197"/>
+</map>

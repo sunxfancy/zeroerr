@@ -1,0 +1,22 @@
+<map id="include/zeroerr/internal/time.h" name="include/zeroerr/internal/time.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="316,5,489,50"/>
+<area shape="rect" id="Node000002" href="$log_8h.html" title=" " alt="" coords="436,98,590,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="444,57,498,97,493,97,443,62"/>
+<area shape="rect" id="Node000008" href="$unittest_8h.html" title=" " alt="" coords="214,98,399,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="368,59,324,100,320,95,363,62"/>
+<area shape="rect" id="Node000003" href="$zeroerr_8h.html" title=" " alt="" coords="215,174,344,201"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="455,131,322,176,321,171,460,130"/>
+<area shape="rect" id="Node000004" href="$fuzztest_8cpp.html" title=" " alt="" coords="252,249,375,277"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="519,139,518,173,513,189,505,203,477,227,444,244,409,255,375,261,375,256,408,250,442,240,474,223,500,200,508,187,513,172,515,143"/>
+<area shape="rect" id="Node000005" href="$log_8cpp.html" title=" " alt="" coords="565,174,656,201"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="543,133,596,174,591,173,542,138"/>
+<area shape="rect" id="Node000006" href="$table_8cpp.html" title=" " alt="" coords="680,174,784,201"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="567,128,695,173,690,173,566,134"/>
+<area shape="rect" id="Node000007" href="$unittest_8cpp.html" title=" " alt="" coords="368,174,490,201"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="489,135,445,176,443,171,484,137"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="299,139,287,175,283,171,295,142"/>
+<area shape="poly" id="edge11_Node000008_Node000007" title=" " alt="" coords="342,131,410,173,405,173,341,137"/>
+<area shape="rect" id="Node000009" href="$fuzztest_8h.html" title=" " alt="" coords="5,174,192,201"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="254,133,137,176,135,171,257,129"/>
+<area shape="poly" id="edge10_Node000009_Node000004" title=" " alt="" coords="152,204,277,247,272,250,151,209"/>
+</map>

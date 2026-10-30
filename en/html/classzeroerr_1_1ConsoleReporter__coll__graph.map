@@ -1,0 +1,16 @@
+<map id="zeroerr::ConsoleReporter" name="zeroerr::ConsoleReporter">
+<area shape="rect" id="Node000001" title=" " alt="" coords="128,560,312,588"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1IReporter.html" title="IReporter is an interface that is used to report the test results. You can create a new reporter by i..." alt="" coords="152,483,288,511"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,525,222,561,218,559,218,528"/>
+<area shape="rect" id="Node000003" href="$structzeroerr_1_1UnitTest.html" title="UnitTest is a class that holds the test configuration. There are several options that can be set to c..." alt="" coords="156,383,284,410"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="222,424,222,484,218,482,218,428"/>
+<area shape="rect" id="Node000004" href="$classzeroerr_1_1String.html" title=" " alt="" coords="66,5,179,33"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="100,47,65,97,45,130,27,165,14,202,9,239,12,275,27,308,52,337,85,358,121,373,158,384,153,387,119,378,82,363,49,341,22,311,7,276,3,238,9,200,22,163,40,127,60,94,102,42"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="154,219,305,264"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="136,45,222,218,216,219,135,50"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="227,276,224,334,223,383,218,382,219,334,225,281"/>
+<area shape="rect" id="Node000006" href="$structzeroerr_1_1Filters.html" title=" " alt="" coords="338,228,454,255"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="398,268,393,317,383,340,369,361,350,375,329,385,286,396,284,391,327,380,347,370,365,357,379,338,387,315,395,273"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="303,5,489,33"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="397,46,399,228,393,227,395,51"/>
+</map>

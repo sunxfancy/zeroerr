@@ -1,0 +1,13 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="Node000000" href="$classzeroerr_1_1Domain.html" title=" " alt="" coords="5,108,159,170"/>
+<area shape="rect" id="Node000001" href="$classzeroerr_1_1AggregateOf.html" title=" " alt="" coords="207,5,427,84"/>
+<area shape="poly" id="edge78_Node000000_Node000001" title=" " alt="" coords="171,101,220,83,215,86,174,105"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1AggregateOf.html" title=" " alt="" coords="222,108,412,170"/>
+<area shape="poly" id="edge80_Node000000_Node000003" title=" " alt="" coords="174,137,224,138,219,140,174,142"/>
+<area shape="rect" id="Node000005" href="$classzeroerr_1_1AggregateOf.html" title="AggregateOf is a domain that combines multiple inner domains into a tuple or aggregate type" alt="" coords="238,194,396,239"/>
+<area shape="poly" id="edge82_Node000000_Node000005" title=" " alt="" coords="173,168,208,179,245,194,240,194,206,185,173,173"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1Arbitrary_3_01std_1_1pair_3_01T_00_01U_01_4_00_011_01_4.html" title=" " alt="" coords="476,22,652,67"/>
+<area shape="poly" id="edge79_Node000001_Node000002" title=" " alt="" coords="442,42,478,44,473,45,443,47"/>
+<area shape="rect" id="Node000004" href="$classzeroerr_1_1Arbitrary_3_01std_1_1tuple_3_01T_8_8_8_01_4_00_011_01_4.html" title=" " alt="" coords="475,117,652,162"/>
+<area shape="poly" id="edge81_Node000003_Node000004" title=" " alt="" coords="427,137,477,139,472,140,428,142"/>
+</map>

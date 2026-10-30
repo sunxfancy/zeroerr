@@ -1,0 +1,15 @@
+<map id="src/color.cpp" name="src/color.cpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="186,5,288,33"/>
+<area shape="rect" id="Node000002" href="$color_8h.html" title=" " alt="" coords="5,81,120,109"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,36,109,77,106,72,207,31"/>
+<area shape="rect" id="Node000004" href="$console_8h.html" title=" " alt="" coords="144,81,331,109"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="239,31,240,66,235,64,236,36"/>
+<area shape="rect" id="Node000005" href="$threadsafe_8h.html" title=" " alt="" coords="355,81,562,109"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="277,31,407,75,402,76,276,36"/>
+<area shape="rect" id="Node000003" href="$config_8h.html" title=" " alt="" coords="149,157,325,184"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,107,194,149,190,152,93,112"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="239,107,239,142,235,140,235,111"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="422,109,292,154,290,149,416,110"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="425,157,492,184"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="460,107,461,143,456,139,457,111"/>
+</map>

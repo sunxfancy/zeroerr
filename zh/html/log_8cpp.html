@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.15.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: src/log.cpp 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.15.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','搜索',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('log_8cpp.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">log.cpp 文件参考</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;stdexcept&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;chrono&gt;</code><br />
+<code>#include &quot;<a class="el" href="log_8h_source.html">zeroerr/log.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="threadsafe_8h_source.html">zeroerr/internal/threadsafe.h</a>&quot;</code><br />
+<code>#include &lt;cstdio&gt;</code><br />
+<code>#include &lt;cstddef&gt;</code><br />
+<code>#include &lt;ctime&gt;</code><br />
+<code>#include &lt;iomanip&gt;</code><br />
+<code>#include &lt;unordered_set&gt;</code><br />
+<code>#include &lt;sys/stat.h&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+log.cpp 的引用(Include)关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="log_8cpp__incl.png" border="0" usemap="#asrc_2log_8cpp" loading="lazy" alt=""/></div>
+<map name="asrc_2log_8cpp" id="asrc_2log_8cpp">
+<area shape="rect" title=" " alt="" coords="469,5,560,33"/>
+<area shape="rect" title=" " alt="" coords="5,81,91,109"/>
+<area shape="poly" title=" " alt="" coords="467,28,312,50,107,83,104,78,312,44,471,24"/>
+<area shape="rect" title=" " alt="" coords="115,81,189,109"/>
+<area shape="poly" title=" " alt="" coords="467,31,206,83,204,78,470,26"/>
+<area shape="rect" title=" " alt="" coords="214,81,293,109"/>
+<area shape="poly" title=" " alt="" coords="467,35,309,81,307,76,470,32"/>
+<area shape="rect" title=" " alt="" coords="317,81,382,109"/>
+<area shape="poly" title=" " alt="" coords="483,35,394,77,391,72,487,32"/>
+<area shape="rect" href="log_8h.html" title=" " alt="" coords="508,81,612,109"/>
+<area shape="poly" title=" " alt="" coords="523,31,547,68,541,67,522,36"/>
+<area shape="rect" href="threadsafe_8h.html" title=" " alt="" coords="122,157,329,184"/>
+<area shape="poly" title=" " alt="" coords="509,31,482,73,463,93,440,111,386,138,330,155,327,150,384,133,437,106,459,89,478,69,505,35"/>
+<area shape="rect" title=" " alt="" coords="684,535,753,563"/>
+<area shape="poly" title=" " alt="" coords="497,35,447,78,396,111,353,124,314,128,243,122,211,120,178,123,146,134,111,159,95,178,88,196,87,245,87,399,91,419,105,438,127,454,155,469,230,494,320,513,418,527,514,536,671,546,666,547,514,541,417,532,319,519,229,500,153,474,124,459,101,441,86,421,81,399,81,245,83,195,90,175,108,155,143,130,177,117,211,114,244,117,314,123,352,119,394,106,444,74,501,32"/>
+<area shape="rect" title=" " alt="" coords="635,81,696,109"/>
+<area shape="poly" title=" " alt="" coords="541,31,627,73,622,74,542,36"/>
+<area shape="rect" title=" " alt="" coords="720,81,778,109"/>
+<area shape="poly" title=" " alt="" coords="556,31,708,79,703,81,557,36"/>
+<area shape="rect" title=" " alt="" coords="803,81,877,109"/>
+<area shape="poly" title=" " alt="" coords="560,27,790,79,785,81,561,33"/>
+<area shape="rect" title=" " alt="" coords="902,81,1016,109"/>
+<area shape="poly" title=" " alt="" coords="561,25,889,79,884,82,561,30"/>
+<area shape="rect" title=" " alt="" coords="1040,81,1125,109"/>
+<area shape="poly" title=" " alt="" coords="560,22,759,41,890,58,1028,80,1023,81,889,63,758,47,561,27"/>
+<area shape="rect" href="config_8h.html" title=" " alt="" coords="310,384,487,411"/>
+<area shape="poly" title=" " alt="" coords="518,111,484,130,451,158,435,183,422,210,406,268,400,324,399,369,394,367,395,323,401,267,417,208,430,180,447,155,481,126,522,108"/>
+<area shape="poly" title=" " alt="" coords="506,109,301,155,299,150,510,106"/>
+<area shape="rect" href="typetraits_8h.html" title=" " alt="" coords="705,308,906,336"/>
+<area shape="poly" title=" " alt="" coords="570,106,600,142,637,182,710,247,777,299,772,299,707,251,633,186,595,146,569,111"/>
+<area shape="rect" href="string_8h.html" title=" " alt="" coords="1185,459,1306,487"/>
+<area shape="poly" title=" " alt="" coords="588,107,684,154,708,169,733,182,785,198,836,207,884,212,931,213,1019,206,1102,197,1181,193,1220,197,1259,205,1297,218,1335,239,1373,268,1411,306,1429,332,1436,358,1432,385,1417,413,1398,433,1374,449,1322,467,1320,462,1372,444,1394,429,1413,410,1427,383,1431,359,1424,334,1407,310,1369,272,1332,244,1295,223,1257,210,1219,202,1181,199,1102,202,1019,212,931,218,884,217,835,213,784,203,731,187,706,174,681,159,587,112"/>
+<area shape="poly" title=" " alt="" coords="522,111,477,132,427,159,390,179,354,194,290,221,265,236,245,256,232,284,228,321,228,399,231,414,241,429,257,443,278,456,333,479,401,498,547,526,671,543,666,543,546,531,399,503,332,484,276,461,254,447,237,433,226,417,223,399,223,320,227,282,241,253,261,232,287,216,352,189,388,174,424,154,475,127,527,108"/>
+<area shape="rect" title=" " alt="" coords="1425,535,1484,563"/>
+<area shape="poly" title=" " alt="" coords="612,105,623,106,704,113,806,116,1042,119,1278,128,1378,138,1458,154,1515,166,1566,177,1587,185,1603,199,1614,218,1617,245,1617,399,1614,422,1606,444,1593,464,1576,481,1538,510,1499,532,1498,527,1535,506,1573,477,1588,460,1601,442,1609,421,1612,399,1612,245,1609,220,1599,202,1584,190,1564,182,1514,171,1457,159,1377,143,1277,133,1042,125,806,121,704,118,622,111,613,110"/>
+<area shape="rect" href="dbg_8h.html" title=" " alt="" coords="461,157,568,184"/>
+<area shape="poly" title=" " alt="" coords="554,107,533,145,529,142,550,111"/>
+<area shape="rect" href="print_8h.html" title=" " alt="" coords="838,232,951,260"/>
+<area shape="poly" title=" " alt="" coords="575,106,625,144,689,182,757,208,826,230,820,230,756,214,687,187,622,148,575,112"/>
+<area shape="rect" href="format_8h.html" title=" " alt="" coords="1318,157,1445,184"/>
+<area shape="poly" title=" " alt="" coords="612,104,623,106,760,121,949,136,1305,163,1300,165,948,142,760,126,622,111,613,110"/>
+<area shape="rect" href="time_8h.html" title=" " alt="" coords="744,157,912,184"/>
+<area shape="poly" title=" " alt="" coords="608,107,768,151,763,153,608,112"/>
+<area shape="rect" title=" " alt="" coords="936,157,1000,184"/>
+<area shape="poly" title=" " alt="" coords="612,104,623,106,771,128,837,137,924,156,918,157,836,143,770,133,622,111,613,109"/>
+<area shape="rect" title=" " alt="" coords="1024,157,1074,184"/>
+<area shape="poly" title=" " alt="" coords="612,104,623,106,730,120,815,126,901,134,1012,156,1007,157,900,140,815,131,730,125,622,111,613,109"/>
+<area shape="rect" title=" " alt="" coords="1098,157,1160,184"/>
+<area shape="poly" title=" " alt="" coords="612,104,623,106,751,121,852,127,954,134,1086,156,1080,157,954,140,852,132,750,126,622,111,613,110"/>
+<area shape="poly" title=" " alt="" coords="230,182,259,252,281,295,310,334,334,356,361,376,356,376,331,360,306,337,277,297,254,254,229,187"/>
+<area shape="rect" title=" " alt="" coords="122,232,188,260"/>
+<area shape="poly" title=" " alt="" coords="211,187,180,223,175,220,214,183"/>
+<area shape="poly" title=" " alt="" coords="730,337,487,383,486,378,735,335"/>
+<area shape="poly" title=" " alt="" coords="843,334,965,381,1022,409,1098,434,1173,455,1168,455,1097,439,1020,414,963,386,842,339"/>
+<area shape="poly" title=" " alt="" coords="803,335,731,522,727,519,798,337"/>
+<area shape="rect" title=" " alt="" coords="1200,535,1291,563"/>
+<area shape="poly" title=" " alt="" coords="812,334,829,366,853,407,887,450,928,485,974,503,1042,518,1187,541,1181,541,1041,523,973,508,925,489,883,453,849,410,824,369,810,338"/>
+<area shape="poly" title=" " alt="" coords="827,334,888,370,965,409,1068,452,1174,484,1302,516,1412,540,1407,540,1301,521,1173,490,1066,457,963,414,886,374,826,339"/>
+<area shape="rect" title=" " alt="" coords="534,384,588,411"/>
+<area shape="poly" title=" " alt="" coords="759,337,604,386,603,381,764,335"/>
+<area shape="rect" title=" " alt="" coords="1034,384,1110,411"/>
+<area shape="poly" title=" " alt="" coords="853,334,1022,382,1016,382,853,339"/>
+<area shape="poly" title=" " alt="" coords="1188,483,769,543,768,538,1182,483"/>
+<area shape="rect" title=" " alt="" coords="933,535,1019,563"/>
+<area shape="poly" title=" " alt="" coords="1200,487,1035,534,1034,529,1195,488"/>
+<area shape="poly" title=" " alt="" coords="1247,486,1247,521,1243,518,1243,489"/>
+<area shape="poly" title=" " alt="" coords="1283,485,1413,532,1408,532,1282,490"/>
+<area shape="poly" title=" " alt="" coords="498,183,473,207,450,234,433,268,420,304,405,370,400,367,415,303,428,266,446,231,469,203,494,186"/>
+<area shape="poly" title=" " alt="" coords="504,183,482,215,459,253,451,273,447,294,448,315,456,334,468,350,484,363,522,384,517,384,481,368,464,354,451,337,443,316,442,294,446,272,454,250,477,212,500,187"/>
+<area shape="rect" href="color_8h.html" title=" " alt="" coords="466,308,580,336"/>
+<area shape="poly" title=" " alt="" coords="517,182,524,294,519,292,514,187"/>
+<area shape="poly" title=" " alt="" coords="569,180,826,230,821,232,569,185"/>
+<area shape="poly" title=" " alt="" coords="503,335,435,378,433,373,498,337"/>
+<area shape="poly" title=" " alt="" coords="835,259,749,281,650,310,622,324,593,338,463,381,461,376,591,333,619,319,648,306,748,276,840,257"/>
+<area shape="poly" title=" " alt="" coords="881,259,834,300,832,296,876,262"/>
+<area shape="poly" title=" " alt="" coords="835,251,782,261,729,275,709,286,696,299,691,315,696,335,717,370,743,401,773,430,805,456,871,497,931,529,926,528,869,502,802,460,769,434,739,405,712,373,691,337,686,315,692,297,706,282,727,270,781,255,840,250"/>
+<area shape="poly" title=" " alt="" coords="952,250,1008,258,1067,269,1119,285,1138,295,1152,307,1158,326,1150,346,1133,363,1112,378,1110,373,1130,359,1145,343,1153,326,1147,309,1135,299,1117,290,1066,274,1007,263,952,256"/>
+<area shape="poly" title=" " alt="" coords="835,260,596,309,594,304,840,258"/>
+<area shape="rect" href="text_8h.html" title=" " alt="" coords="1212,308,1375,336"/>
+<area shape="poly" title=" " alt="" coords="952,255,1209,304,1204,305,952,261"/>
+<area shape="rect" href="buffer_8h.html" title=" " alt="" coords="1282,384,1403,411"/>
+<area shape="poly" title=" " alt="" coords="952,248,1068,255,1205,267,1325,284,1366,294,1389,306,1396,323,1393,341,1383,359,1369,375,1367,371,1379,356,1388,340,1391,324,1385,310,1364,299,1324,289,1205,272,1068,260,952,253"/>
+<area shape="rect" title=" " alt="" coords="929,308,1039,336"/>
+<area shape="poly" title=" " alt="" coords="911,258,959,298,954,298,910,263"/>
+<area shape="rect" title=" " alt="" coords="1062,308,1138,336"/>
+<area shape="poly" title=" " alt="" coords="932,258,1052,302,1046,302,931,263"/>
+<area shape="poly" title=" " alt="" coords="1290,334,1273,385,1254,446,1251,442,1268,383,1286,338"/>
+<area shape="poly" title=" " alt="" coords="1273,335,1206,374,1124,414,1027,452,929,486,769,536,768,531,927,481,1025,447,1122,409,1204,370,1268,337"/>
+<area shape="poly" title=" " alt="" coords="1303,334,1328,372,1323,370,1301,339"/>
+<area shape="poly" title=" " alt="" coords="1328,411,1275,453,1273,448,1323,413"/>
+<area shape="poly" title=" " alt="" coords="1343,410,1337,448,1320,488,1302,510,1280,528,1278,523,1298,506,1315,486,1332,446,1339,414"/>
+<area shape="poly" title=" " alt="" coords="1396,182,1435,224,1477,283,1492,316,1501,349,1499,382,1483,413,1458,431,1418,446,1322,465,1321,460,1416,440,1455,426,1479,410,1493,381,1495,350,1487,317,1472,285,1431,227,1394,187"/>
+<area shape="poly" title=" " alt="" coords="1423,182,1469,202,1515,231,1535,249,1552,270,1563,294,1567,320,1567,399,1559,438,1539,474,1513,504,1487,527,1485,523,1510,500,1535,470,1554,436,1561,399,1561,321,1558,295,1547,273,1532,253,1512,235,1466,207,1423,188"/>
+<area shape="poly" title=" " alt="" coords="1315,182,967,237,966,231,1320,181"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:zeroerr_3A_3ADataBlock" id="r_zeroerr_3A_3ADataBlock"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1DataBlock.html">zeroerr::DataBlock</a></td></tr>
+<tr class="memitem:zeroerr_3A_3AFileLogger" id="r_zeroerr_3A_3AFileLogger"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1FileLogger.html">zeroerr::FileLogger</a></td></tr>
+<tr class="memitem:zeroerr_3A_3AFileCache" id="r_zeroerr_3A_3AFileCache"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1FileCache.html">zeroerr::FileCache</a></td></tr>
+<tr class="memitem:zeroerr_3A_3ADirectoryLogger" id="r_zeroerr_3A_3ADirectoryLogger"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1DirectoryLogger.html">zeroerr::DirectoryLogger</a></td></tr>
+<tr class="memitem:zeroerr_3A_3AOStreamLogger" id="r_zeroerr_3A_3AOStreamLogger"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzeroerr_1_1OStreamLogger.html">zeroerr::OStreamLogger</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-namespaces" class="groupheader"><a id="namespaces" name="namespaces"></a>
+命名空间</h2></td></tr>
+<tr class="memitem:zeroerr" id="r_zeroerr"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html">zeroerr</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-define-members" class="groupheader"><a id="define-members" name="define-members"></a>
+宏定义</h2></td></tr>
+<tr class="memitem:aff08a481bc628905a68f9ea74476bba3" id="r_aff08a481bc628905a68f9ea74476bba3"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff08a481bc628905a68f9ea74476bba3">zeroerr_color</a>(x)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:a2d6917eb83cbeef9133338bc8908a149" id="r_a2d6917eb83cbeef9133338bc8908a149"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a2d6917eb83cbeef9133338bc8908a149">zeroerr::setLogCustomCallback</a> (<a class="el" href="namespacezeroerr.html#a38c8e65096b3c53b6ef1b1d170a775bd">LogCustomCallback</a> callback)</td></tr>
+<tr class="memdesc:a2d6917eb83cbeef9133338bc8908a149"><td class="mdescLeft">&#160;</td><td class="mdescRight">set the log custom callback, this can support custom format of the log message  <br /></td></tr>
+<tr class="memitem:a77de1f22a200a0be1a6ad1d8af3afa74" id="r_a77de1f22a200a0be1a6ad1d8af3afa74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a77de1f22a200a0be1a6ad1d8af3afa74">zeroerr::setLogLevel</a> (<a class="el" href="namespacezeroerr.html#a445924814c521a8119707bc5c16bfff0">LogSeverity</a> level)</td></tr>
+<tr class="memdesc:a77de1f22a200a0be1a6ad1d8af3afa74"><td class="mdescLeft">&#160;</td><td class="mdescRight">set the log level  <br /></td></tr>
+<tr class="memitem:ac76d2ec77e9aac5c572987cd1e9d7eb3" id="r_ac76d2ec77e9aac5c572987cd1e9d7eb3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#ac76d2ec77e9aac5c572987cd1e9d7eb3">zeroerr::setLogCategory</a> (const char *categories)</td></tr>
+<tr class="memdesc:ac76d2ec77e9aac5c572987cd1e9d7eb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">set the log category  <br /></td></tr>
+<tr class="memitem:a15bfbcb4e56dee3848f8ae3b6099649b" id="r_a15bfbcb4e56dee3848f8ae3b6099649b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a15bfbcb4e56dee3848f8ae3b6099649b">zeroerr::suspendLog</a> ()</td></tr>
+<tr class="memdesc:a15bfbcb4e56dee3848f8ae3b6099649b"><td class="mdescLeft">&#160;</td><td class="mdescRight">suspend the log to flush to the file  <br /></td></tr>
+<tr class="memitem:a6b5f6bde6d7218373c3db5958458c4a2" id="r_a6b5f6bde6d7218373c3db5958458c4a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a6b5f6bde6d7218373c3db5958458c4a2">zeroerr::resumeLog</a> ()</td></tr>
+<tr class="memdesc:a6b5f6bde6d7218373c3db5958458c4a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">resume the log to flush to the file  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+变量</h2></td></tr>
+<tr class="memitem:a38cec62d0128292d02e1d2c8b3f361e0" id="r_a38cec62d0128292d02e1d2c8b3f361e0"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38cec62d0128292d02e1d2c8b3f361e0">ZEROERR_LOG_CATEGORY</a> = &quot;default&quot;</td></tr>
+<tr class="memitem:adc564b9faf535057cc6ef95556074e7d" id="r_adc564b9faf535057cc6ef95556074e7d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#adc564b9faf535057cc6ef95556074e7d">zeroerr::_ZEROERR_G_VERBOSE</a> = 0</td></tr>
+<tr class="memitem:a28364f099d3b14b7592873c40b360c67" id="r_a28364f099d3b14b7592873c40b360c67"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classzeroerr_1_1IContextScope.html">IContextScope</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a28364f099d3b14b7592873c40b360c67">zeroerr::_ZEROERR_G_CONTEXT_SCOPE_VECTOR</a></td></tr>
+<tr class="memitem:a9a57ad7b56796dd230324de45fbd62a4" id="r_a9a57ad7b56796dd230324de45fbd62a4"><td class="memItemLeft" align="right" valign="top">constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezeroerr.html#a9a57ad7b56796dd230324de45fbd62a4">zeroerr::LogStreamMaxSize</a> = 64 * 1024 - 16</td></tr>
+</table>
+<a name="doc-define-members" id="doc-define-members"></a><h2 id="header-doc-define-members" class="groupheader">宏定义说明</h2>
+<a id="aff08a481bc628905a68f9ea74476bba3" name="aff08a481bc628905a68f9ea74476bba3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff08a481bc628905a68f9ea74476bba3">&#9670;&#160;</a></span>zeroerr_color</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define zeroerr_color</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>值:</b><div class="fragment"><div class="line">(colorful ? x : <span class="stringliteral">&quot;&quot;</span>)</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a name="doc-var-members" id="doc-var-members"></a><h2 id="header-doc-var-members" class="groupheader">变量说明</h2>
+<a id="a38cec62d0128292d02e1d2c8b3f361e0" name="a38cec62d0128292d02e1d2c8b3f361e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38cec62d0128292d02e1d2c8b3f361e0">&#9670;&#160;</a></span>ZEROERR_LOG_CATEGORY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* ZEROERR_LOG_CATEGORY = &quot;default&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="log_8cpp.html">log.cpp</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
+  </ul>
+</div>
+</body>
+</html>

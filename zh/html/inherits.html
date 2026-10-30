@@ -1,0 +1,837 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.15.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: 类继承关系</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.15.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','搜索',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('hierarchy.html','',''); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">类继承关系</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock">
+<p><a href="hierarchy.html">浏览类继承关系表</a></p>
+</div><table border="0" cellspacing="10" cellpadding="0">
+<tr><td><img src="inherit_graph_0.png" border="0" usemap="#aBase" loading="lazy" alt=""/>
+<map name="aBase" id="aBase">
+<area shape="rect" title=" " alt="" coords="5,91,59,119"/>
+<area shape="rect" href="structzeroerr_1_1FuzzTestWithDomain.html" title=" " alt="" coords="107,5,318,101"/>
+<area shape="poly" title=" " alt="" coords="72,91,108,82,104,86,75,96"/>
+<area shape="rect" href="structzeroerr_1_1FuzzTestWithDomain.html" title="FuzzTestWithDomain implements the Base class with the domain passed into." alt="" coords="107,125,318,187"/>
+<area shape="poly" title=" " alt="" coords="74,114,108,125,104,127,74,119"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_1.png" border="0" usemap="#astd_1_1exception" loading="lazy" alt=""/>
+<map name="astd_1_1exception" id="astd_1_1exception">
+<area shape="rect" title=" " alt="" coords="5,32,119,60"/>
+<area shape="rect" href="structzeroerr_1_1AssertionData.html" title="AssertionData is a struct that contains all the information of an assertion. It will be thrown as an ..." alt="" coords="194,5,362,33"/>
+<area shape="poly" title=" " alt="" coords="133,34,196,29,191,30,134,40"/>
+<area shape="rect" href="classzeroerr_1_1FuzzFinishedException.html" title=" " alt="" coords="167,57,389,85"/>
+<area shape="poly" title=" " alt="" coords="134,52,169,58,164,58,134,57"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_2.png" border="0" usemap="#astd_1_1false__type" loading="lazy" alt=""/>
+<map name="astd_1_1false__type" id="astd_1_1false__type">
+<area shape="rect" title=" " alt="" coords="28,1649,145,1677"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1ele__type__is__pair_3_01T_00_01has__pair__type_3_01T_01_4_01_4.html" title=" " alt="" coords="254,723,415,784"/>
+<area shape="poly" title=" " alt="" coords="90,1633,123,1443,165,1180,170,1094,174,981,178,925,185,872,196,828,214,795,231,778,255,767,252,771,234,783,218,798,201,829,190,873,183,925,179,982,176,1094,170,1180,129,1444,96,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1has__extension_3_01T_00_01has__printer__ext_3_01T_01_4_01_4.html" title=" " alt="" coords="236,808,432,870"/>
+<area shape="poly" title=" " alt="" coords="90,1633,165,1180,171,1113,177,1025,189,940,199,905,214,880,237,862,235,866,218,883,204,908,194,941,182,1026,176,1113,170,1181,95,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1has__tuple__get.html" title=" " alt="" coords="247,1734,422,1813"/>
+<area shape="poly" title=" " alt="" coords="132,1681,249,1733,244,1736,135,1686"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__tuple__like_3_01T_00_01void__t_3_01decltype_07std_1_1tuple__size_3_01T_01_4_1_1value_08_4_01_4.html" title=" " alt="" coords="501,1696,671,1774"/>
+<area shape="poly" title=" " alt="" coords="160,1671,503,1721,499,1725,162,1676"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1has__tuple__get_3_01T_00_01seq_3_01I_8_8_8_01_4_00_01void__t_3_01decl759427f4648a6f9cd0f3853ff8d1fa00.html" title=" " alt="" coords="228,894,441,989"/>
+<area shape="poly" title=" " alt="" coords="90,1633,152,1279,188,1092,203,1029,213,999,228,985,226,990,218,1002,208,1030,194,1093,157,1280,95,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__associative__container_3_01T_00_01has__begin__end__find__insert_3_01T_01_4_01_4.html" title=" " alt="" coords="244,1013,424,1092"/>
+<area shape="poly" title=" " alt="" coords="88,1633,103,1518,129,1360,146,1279,166,1206,189,1144,214,1101,245,1077,243,1082,218,1105,193,1146,171,1207,152,1281,134,1361,108,1519,94,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__complete__type.html" title=" " alt="" coords="237,1992,432,2104"/>
+<area shape="poly" title=" " alt="" coords="93,1689,109,1749,133,1825,168,1905,191,1943,218,1978,239,1999,234,2001,214,1982,187,1946,164,1908,128,1827,104,1751,93,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__complete__type_3_01T_00_01decltype_07void_07sizeof_07T_08_08_08_4.html" title=" " alt="" coords="228,5,440,67"/>
+<area shape="poly" title=" " alt="" coords="91,1634,127,1444,148,1313,165,1180,168,1102,168,971,167,621,169,439,177,275,191,149,201,105,213,77,229,64,227,69,218,80,206,107,196,150,182,276,175,439,172,621,173,971,173,1102,170,1180,153,1314,132,1445,96,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__complex_3_01T_00_01void__t_3_01decltype_07std_1_1declval_3_01consec0d99a379a84f6898b4463f8d0bdb69.html" title=" " alt="" coords="234,2869,434,2982"/>
+<area shape="poly" title=" " alt="" coords="88,1689,91,1915,96,2079,105,2260,120,2443,143,2613,158,2689,175,2756,195,2812,218,2856,236,2878,231,2879,213,2859,190,2814,170,2757,153,2690,138,2614,115,2444,99,2261,90,2079,86,1915,87,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__container_3_01T_00_01has__begin__end_3_01T_01_4_01_4.html" title=" " alt="" coords="241,91,428,152"/>
+<area shape="poly" title=" " alt="" coords="91,1634,127,1444,148,1313,165,1180,168,987,168,664,172,496,179,345,192,229,202,188,214,163,242,140,240,145,218,166,207,190,197,230,184,346,177,496,174,664,173,987,170,1180,153,1314,132,1445,96,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__indexable__non__pointer_3_01T_00_01void__t_3_01decltype_07std_1_199a2d7f954769ba9532ad54bc0886ca9.html" title=" " alt="" coords="246,176,422,272"/>
+<area shape="poly" title=" " alt="" coords="91,1634,127,1444,148,1313,165,1180,169,1010,173,726,177,578,184,445,196,342,204,306,213,283,227,266,247,253,244,258,231,270,218,286,209,308,201,343,189,446,182,578,178,726,175,1010,170,1180,153,1314,132,1445,96,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__modifiable_3_01T_00_01void__t_3_01decltype_07T_07_08_8begin_07_084a9132b1bbf63d0d93e4b818fa195fe0.html" title=" " alt="" coords="230,296,438,443"/>
+<area shape="poly" title=" " alt="" coords="91,1634,126,1444,147,1313,165,1180,169,1109,169,1019,167,810,168,704,175,605,189,519,200,484,213,454,231,432,229,437,218,456,205,485,195,521,181,606,174,704,172,810,175,1019,175,1109,170,1180,152,1314,131,1445,96,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__pointer__like.html" title=" " alt="" coords="247,1889,422,1968"/>
+<area shape="poly" title=" " alt="" coords="99,1689,145,1776,178,1824,217,1868,249,1891,244,1893,214,1871,174,1827,141,1778,100,1694"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__weak__pointer__like_3_01T_00_01void__t_3_01decltype_07std_1_1decl86df6c9d54212d8b6bea8a021c132a76.html" title=" " alt="" coords="504,1842,668,1937"/>
+<area shape="poly" title=" " alt="" coords="101,1688,122,1721,148,1758,179,1794,217,1823,268,1842,343,1858,506,1881,502,1884,342,1864,267,1848,214,1828,176,1798,143,1761,118,1724,102,1693"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__pointer__like_3_01T_00_01void__t_3_01decltype_07std_1_1declval_3_19ca8985ea2ad6eee6cd88d70d654564.html" title=" " alt="" coords="240,1116,428,1194"/>
+<area shape="poly" title=" " alt="" coords="85,1633,90,1552,108,1438,124,1377,146,1316,176,1258,214,1205,241,1184,239,1189,218,1209,180,1260,151,1318,129,1379,113,1440,95,1552,91,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__specialization_3_01Ref_3_01Args_8_8_8_01_4_00_01Ref_01_4.html" title=" " alt="" coords="257,467,412,528"/>
+<area shape="poly" title=" " alt="" coords="91,1634,126,1444,165,1180,170,1058,176,855,189,654,199,581,206,555,214,539,232,521,258,509,255,513,236,525,218,542,211,557,204,582,194,654,181,855,175,1058,170,1180,131,1445,96,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__streamable_3_01S_00_01T_00_01has__stream__operator_3_01S_00_01T_01_4_01_4.html" title=" " alt="" coords="232,552,437,614"/>
+<area shape="poly" title=" " alt="" coords="91,1634,125,1444,165,1180,168,1125,168,1056,167,894,169,812,176,736,190,672,201,645,214,624,233,608,230,613,218,627,205,648,195,673,181,737,174,812,172,894,174,1056,174,1125,170,1180,130,1444,96,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__string__like_3_01T_00_01void__t_3_01typename_01T_1_1traits__type_3318062da277d6dd2a884e22dc4f88ec.html" title=" " alt="" coords="223,3006,446,3136"/>
+<area shape="poly" title=" " alt="" coords="89,1689,105,1957,132,2369,150,2579,170,2767,193,2911,205,2961,218,2992,227,3005,221,3006,213,2995,200,2963,188,2913,165,2768,145,2580,127,2369,100,1957,89,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__string__like_3_01zeroerr_1_1String_01_4.html" title=" " alt="" coords="256,637,412,699"/>
+<area shape="poly" title=" " alt="" coords="91,1633,124,1443,165,1180,169,1075,170,937,173,868,180,804,193,750,214,709,232,692,257,680,254,685,235,696,218,712,198,751,186,805,178,868,175,938,175,1075,170,1180,130,1444,96,1634"/>
+<area shape="rect" href="structzeroerr_1_1details_1_1has__bool__conversion_3_01T_00_01decltype_07static__cast_3_01bool_014b2af63a9bd103f3f62b3ea0eeedf605.html" title=" " alt="" coords="249,3160,420,3256"/>
+<area shape="poly" title=" " alt="" coords="89,1689,102,1985,125,2447,143,2684,164,2895,189,3057,203,3112,218,3147,232,3163,252,3179,246,3179,229,3167,213,3150,198,3114,184,3058,158,2896,137,2684,120,2447,96,1985,89,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1ele__type__is__pair.html" title=" " alt="" coords="225,2128,444,2173"/>
+<area shape="poly" title=" " alt="" coords="87,1690,93,1775,99,1829,109,1888,125,1949,148,2009,178,2065,218,2114,233,2127,228,2129,214,2118,174,2068,143,2011,120,1951,104,1889,93,1830,87,1775,87,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1has__extension.html" title="has_extension is a type trait to check if user defined PrinterExt for a type" alt="" coords="232,2198,436,2242"/>
+<area shape="poly" title=" " alt="" coords="91,1689,108,1800,134,1948,151,2023,171,2091,193,2146,218,2184,235,2198,230,2200,214,2187,188,2149,166,2092,146,2024,129,1949,103,1801,91,1694"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1has__tuple__get.html" title=" " alt="" coords="241,2267,428,2328"/>
+<area shape="poly" title=" " alt="" coords="90,1689,106,1812,131,1981,148,2066,168,2145,191,2209,218,2253,243,2273,238,2275,214,2257,187,2211,163,2146,143,2067,126,1981,101,1813,90,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__associative__container.html" title=" " alt="" coords="249,2352,420,2414"/>
+<area shape="poly" title=" " alt="" coords="90,1689,103,1828,126,2021,143,2121,163,2212,188,2287,203,2316,218,2338,232,2352,251,2363,246,2365,229,2356,214,2342,198,2319,184,2289,158,2213,138,2122,121,2022,98,1828,90,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__complete__type.html" title=" " alt="" coords="216,2438,453,2482"/>
+<area shape="poly" title=" " alt="" coords="89,1689,99,1844,119,2064,136,2177,157,2281,184,2366,200,2399,218,2424,231,2436,226,2438,214,2427,196,2402,179,2368,152,2282,130,2178,114,2064,94,1844,89,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__complex.html" title=" " alt="" coords="236,2507,432,2552"/>
+<area shape="poly" title=" " alt="" coords="88,1689,97,1856,115,2097,131,2221,153,2335,182,2429,199,2466,218,2493,238,2510,233,2512,214,2497,194,2468,177,2431,148,2337,126,2222,110,2097,91,1856,88,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__container.html" title=" " alt="" coords="234,2576,435,2621"/>
+<area shape="poly" title=" " alt="" coords="88,1690,94,1868,101,1994,111,2130,127,2265,149,2390,163,2445,179,2493,197,2532,218,2562,236,2578,231,2580,214,2566,193,2535,174,2495,158,2446,144,2391,122,2266,106,2130,95,1994,89,1869,88,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__indexable__non__pointer.html" title=" " alt="" coords="246,2645,422,2707"/>
+<area shape="poly" title=" " alt="" coords="88,1690,93,1880,99,2015,109,2161,125,2308,147,2443,162,2503,178,2555,197,2599,218,2632,231,2645,248,2656,243,2658,228,2649,214,2635,192,2601,173,2557,157,2504,142,2444,120,2309,104,2162,94,2015,88,1880,88,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__modifiable.html" title=" " alt="" coords="230,2731,439,2776"/>
+<area shape="poly" title=" " alt="" coords="90,1690,106,1910,133,2236,151,2401,171,2547,194,2658,206,2695,218,2717,232,2730,227,2732,214,2720,201,2697,188,2659,166,2548,146,2402,128,2237,101,1911,89,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__pointer__like.html" title=" " alt="" coords="226,2800,442,2845"/>
+<area shape="poly" title=" " alt="" coords="89,1689,105,1922,131,2270,149,2447,169,2603,192,2722,205,2762,218,2787,231,2800,226,2801,214,2790,200,2764,187,2724,164,2604,143,2448,126,2271,100,1922,89,1695"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__specialization.html" title=" " alt="" coords="253,1219,416,1280"/>
+<area shape="poly" title=" " alt="" coords="87,1633,96,1564,116,1473,132,1424,154,1376,181,1331,214,1290,231,1276,254,1266,251,1270,234,1281,218,1294,185,1334,159,1378,137,1426,121,1474,101,1565,92,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__streamable.html" title=" " alt="" coords="219,1304,450,1349"/>
+<area shape="poly" title=" " alt="" coords="89,1633,101,1575,124,1502,140,1463,160,1425,185,1390,214,1359,234,1347,231,1352,217,1364,189,1394,165,1428,145,1465,129,1504,106,1576,95,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__string__like.html" title=" " alt="" coords="231,1374,438,1418"/>
+<area shape="poly" title=" " alt="" coords="93,1633,109,1588,134,1533,169,1477,190,1451,214,1429,235,1417,233,1421,217,1433,194,1455,173,1480,139,1535,114,1590,99,1634"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__tuple__like.html" title=" " alt="" coords="233,1443,436,1488"/>
+<area shape="poly" title=" " alt="" coords="100,1634,145,1566,177,1529,214,1498,239,1486,236,1490,217,1502,181,1533,149,1569,105,1636"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__weak__pointer__like.html" title=" " alt="" coords="256,1512,413,1574"/>
+<area shape="poly" title=" " alt="" coords="119,1639,164,1610,215,1583,257,1567,254,1571,217,1588,167,1615,124,1642"/>
+<area shape="rect" href="structzeroerr_1_1details_1_1has__bool__conversion.html" title=" " alt="" coords="254,1597,415,1659"/>
+<area shape="poly" title=" " alt="" coords="158,1651,255,1637,251,1641,162,1655"/>
+<area shape="poly" title=" " alt="" coords="436,1756,503,1746,499,1750,439,1760"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__array__dispatch_3_01T_00_01true_01_4.html" title=" " alt="" coords="510,2288,662,2350"/>
+<area shape="poly" title=" " alt="" coords="443,2105,455,2114,493,2157,526,2204,573,2287,568,2288,522,2206,489,2160,451,2118,444,2110"/>
+<area shape="poly" title=" " alt="" coords="436,1910,506,1900,502,1904,439,1914"/>
+<area shape="poly" title=" " alt="" coords="434,2645,451,2632,480,2599,504,2563,525,2524,542,2484,565,2409,579,2352,581,2347,570,2410,547,2486,530,2526,509,2566,484,2603,455,2635,438,2648"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__array__dispatch.html" title=" " alt="" coords="510,2645,662,2707"/>
+<area shape="poly" title=" " alt="" coords="437,2674,512,2675,508,2678,439,2679"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__array.html" title=" " alt="" coords="719,2654,851,2698"/>
+<area shape="poly" title=" " alt="" coords="676,2674,721,2675,716,2677,678,2679"/>
+<area shape="rect" title=" " alt="" coords="5,3125,168,3153"/>
+<area shape="poly" title=" " alt="" coords="105,3111,152,3053,214,2991,236,2978,232,2982,217,2996,156,3057,109,3114"/>
+<area shape="poly" title=" " alt="" coords="153,3118,224,3100,220,3103,156,3123"/>
+<area shape="poly" title=" " alt="" coords="153,3155,251,3183,247,3186,153,3160"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1is__string.html" title=" " alt="" coords="269,3280,400,3325"/>
+<area shape="poly" title=" " alt="" coords="108,3163,155,3216,185,3243,217,3266,242,3278,271,3290,266,3290,240,3283,214,3270,181,3247,151,3219,106,3168"/>
+<area shape="rect" title=" " alt="" coords="16,1141,157,1169"/>
+<area shape="poly" title=" " alt="" coords="170,1153,242,1153,238,1157,173,1157"/>
+<area shape="rect" title=" " alt="" coords="31,569,142,597"/>
+<area shape="poly" title=" " alt="" coords="107,606,156,658,185,685,217,709,255,729,251,731,214,713,182,689,152,662,109,611"/>
+<area shape="poly" title=" " alt="" coords="97,608,117,651,142,700,176,750,217,794,238,809,233,811,214,798,172,754,138,703,112,653,98,614"/>
+<area shape="poly" title=" " alt="" coords="93,609,110,667,134,737,169,812,192,848,218,880,231,892,226,894,214,883,187,851,164,815,129,739,105,668,94,615"/>
+<area shape="poly" title=" " alt="" coords="89,610,98,688,117,791,133,846,155,901,183,953,218,1000,246,1023,242,1025,214,1003,178,956,150,903,128,848,112,792,93,688,89,615"/>
+<area shape="poly" title=" " alt="" coords="89,554,105,449,131,307,149,235,168,169,190,115,214,77,229,65,227,70,218,81,195,117,173,171,154,236,137,308,110,450,94,554"/>
+<area shape="poly" title=" " alt="" coords="86,553,92,477,110,373,126,317,148,261,177,209,214,162,242,143,239,148,218,166,182,212,153,263,131,318,115,374,97,477,91,554"/>
+<area shape="poly" title=" " alt="" coords="91,553,105,497,129,426,164,351,187,315,214,282,247,257,245,262,218,286,192,318,169,353,134,428,110,499,96,554"/>
+<area shape="poly" title=" " alt="" coords="108,557,156,507,214,453,231,441,229,445,217,457,160,511,113,559"/>
+<area shape="poly" title=" " alt="" coords="142,562,258,522,255,526,146,565"/>
+<area shape="poly" title=" " alt="" coords="155,581,233,581,229,585,159,585"/>
+<area shape="poly" title=" " alt="" coords="142,600,258,640,254,643,145,604"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_3.png" border="0" usemap="#astd_1_1hash_3_01zeroerr_1_1String_01_4" loading="lazy" alt=""/>
+<map name="astd_1_1hash_3_01zeroerr_1_1String_01_4" id="astd_1_1hash_3_01zeroerr_1_1String_01_4">
+<area shape="rect" href="structstd_1_1hash_3_01zeroerr_1_1String_01_4.html" title=" " alt="" coords="5,5,147,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_4.png" border="0" usemap="#azeroerr_1_1AggregateOf_3_01T_00_01Inner_01_4_1_1GetTupleDomainMapValue" loading="lazy" alt=""/>
+<map name="azeroerr_1_1AggregateOf_3_01T_00_01Inner_01_4_1_1GetTupleDomainMapValue" id="azeroerr_1_1AggregateOf_3_01T_00_01Inner_01_4_1_1GetTupleDomainMapValue">
+<area shape="rect" href="structzeroerr_1_1AggregateOf_1_1GetTupleDomainMapValue.html" title=" " alt="" coords="5,5,222,67"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_5.png" border="0" usemap="#azeroerr_1_1Arbitrary_3_01T_00_010_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Arbitrary_3_01T_00_010_01_4" id="azeroerr_1_1Arbitrary_3_01T_00_010_01_4">
+<area shape="rect" href="structzeroerr_1_1Arbitrary_3_01T_00_010_01_4.html" title=" " alt="" coords="5,5,138,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_6.png" border="0" usemap="#azeroerr_1_1Arbitrary_3_01T_00_01N_00_01typename_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Arbitrary_3_01T_00_01N_00_01typename_01_4" id="azeroerr_1_1Arbitrary_3_01T_00_01N_00_01typename_01_4">
+<area shape="rect" href="classzeroerr_1_1Arbitrary.html" title="Arbitrary is a domain that generates random values of a given type" alt="" coords="5,5,157,50"/>
+<area shape="rect" href="classzeroerr_1_1Arbitrary_3_01const_01T_00_012_01_4.html" title=" " alt="" coords="205,5,337,50"/>
+<area shape="poly" title=" " alt="" coords="172,25,207,27,202,28,172,30"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_7.png" border="0" usemap="#azeroerr_1_1assert__info" loading="lazy" alt=""/>
+<map name="azeroerr_1_1assert__info" id="azeroerr_1_1assert__info">
+<area shape="rect" href="structzeroerr_1_1assert__info.html" title="This is a one&#45;byte assert info struct, which is used to collect the meta info of an assertion" alt="" coords="5,5,153,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_8.png" border="0" usemap="#azeroerr_1_1Benchmark" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Benchmark" id="azeroerr_1_1Benchmark">
+<area shape="rect" href="structzeroerr_1_1Benchmark.html" title="Benchmark create a core object for configuration of a benchmark. This class is a driver to run multip..." alt="" coords="5,5,155,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_9.png" border="0" usemap="#azeroerr_1_1BenchResult" loading="lazy" alt=""/>
+<map name="azeroerr_1_1BenchResult" id="azeroerr_1_1BenchResult">
+<area shape="rect" href="structzeroerr_1_1BenchResult.html" title="BenchResult is a result of running the benchmark." alt="" coords="5,5,162,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_10.png" border="0" usemap="#azeroerr_1_1BenchState" loading="lazy" alt=""/>
+<map name="azeroerr_1_1BenchState" id="azeroerr_1_1BenchState">
+<area shape="rect" href="structzeroerr_1_1BenchState.html" title=" " alt="" coords="5,5,155,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_11.png" border="0" usemap="#azeroerr_1_1Card" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Card" id="azeroerr_1_1Card">
+<area shape="rect" href="structzeroerr_1_1Card.html" title="Card defines a display range in the console." alt="" coords="5,5,111,33"/>
+<area shape="rect" href="classzeroerr_1_1Table.html" title="Table is used to generate a table with configurable style." alt="" coords="159,5,268,33"/>
+<area shape="poly" title=" " alt="" coords="126,17,161,19,156,19,126,22"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_12.png" border="0" usemap="#azeroerr_1_1CombinationalTest" loading="lazy" alt=""/>
+<map name="azeroerr_1_1CombinationalTest" id="azeroerr_1_1CombinationalTest">
+<area shape="rect" href="classzeroerr_1_1CombinationalTest.html" title="CombinationalTest is a class that is used to cross test a few lists of arguments. One example" alt="" coords="5,5,202,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_13.png" border="0" usemap="#azeroerr_1_1ContainerOfBase" loading="lazy" alt=""/>
+<map name="azeroerr_1_1ContainerOfBase" id="azeroerr_1_1ContainerOfBase">
+<area shape="rect" href="structzeroerr_1_1ContainerOfBase.html" title="ContainerOf is a domain that generates random containers filled with elements from an inner domain" alt="" coords="38,100,224,127"/>
+<area shape="rect" href="classzeroerr_1_1SequenceContainerOf.html" title=" " alt="" coords="311,5,512,67"/>
+<area shape="poly" title=" " alt="" coords="198,93,313,63,308,65,200,98"/>
+<area shape="rect" href="classzeroerr_1_1AssociativeContainerOf.html" title=" " alt="" coords="305,160,518,205"/>
+<area shape="poly" title=" " alt="" coords="218,129,257,138,334,160,328,160,256,143,218,134"/>
+<area shape="rect" href="classzeroerr_1_1SequenceContainerOf.html" title=" " alt="" coords="311,91,512,136"/>
+<area shape="poly" title=" " alt="" coords="239,111,313,113,308,114,240,116"/>
+<area shape="rect" href="classzeroerr_1_1Arbitrary_3_01T_00_011_00_01is__modifiable_3_01T_01_4_01_4.html" title=" " alt="" coords="566,5,721,67"/>
+<area shape="poly" title=" " alt="" coords="527,34,568,36,563,37,528,39"/>
+<area shape="rect" href="classzeroerr_1_1Domain.html" title=" " alt="" coords="5,5,257,67"/>
+<area shape="poly" title=" " alt="" coords="271,34,313,35,308,37,273,39"/>
+<area shape="rect" href="classzeroerr_1_1Domain.html" title=" " alt="" coords="34,152,228,214"/>
+<area shape="poly" title=" " alt="" coords="243,180,307,183,301,183,244,185"/>
+<area shape="poly" title=" " alt="" coords="242,153,316,137,321,136,243,158"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_14.png" border="0" usemap="#azeroerr_1_1DataBlock" loading="lazy" alt=""/>
+<map name="azeroerr_1_1DataBlock" id="azeroerr_1_1DataBlock">
+<area shape="rect" href="structzeroerr_1_1DataBlock.html" title=" " alt="" coords="5,5,148,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_15.png" border="0" usemap="#azeroerr_1_1Decorator" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Decorator" id="azeroerr_1_1Decorator">
+<area shape="rect" href="classzeroerr_1_1Decorator.html" title=" " alt="" coords="5,57,145,85"/>
+<area shape="rect" href="classzeroerr_1_1FailureDecorator.html" title=" " alt="" coords="198,5,380,33"/>
+<area shape="poly" title=" " alt="" coords="149,51,231,32,227,35,151,56"/>
+<area shape="rect" href="classzeroerr_1_1SkipDecorator.html" title=" " alt="" coords="206,57,373,85"/>
+<area shape="poly" title=" " alt="" coords="160,69,208,70,203,72,161,74"/>
+<area shape="rect" href="classzeroerr_1_1TimeoutDecorator.html" title=" " alt="" coords="193,109,386,137"/>
+<area shape="poly" title=" " alt="" coords="150,87,232,108,226,109,150,92"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_16.png" border="0" usemap="#azeroerr_1_1deferred__false_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1deferred__false_3_01T_01_4" id="azeroerr_1_1deferred__false_3_01T_01_4">
+<area shape="rect" href="structzeroerr_1_1deferred__false.html" title=" " alt="" coords="5,5,213,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_17.png" border="0" usemap="#azeroerr_1_1detail_1_1always__false_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1always__false_3_01T_01_4" id="azeroerr_1_1detail_1_1always__false_3_01T_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1always__false.html" title=" " alt="" coords="5,5,172,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_18.png" border="0" usemap="#azeroerr_1_1detail_1_1always__true_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1always__true_3_01T_01_4" id="azeroerr_1_1detail_1_1always__true_3_01T_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1always__true.html" title=" " alt="" coords="5,5,172,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_19.png" border="0" usemap="#azeroerr_1_1detail_1_1ComparisonLhs_3_01L_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1ComparisonLhs_3_01L_01_4" id="azeroerr_1_1detail_1_1ComparisonLhs_3_01L_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1ComparisonLhs.html" title=" " alt="" coords="5,5,204,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_20.png" border="0" usemap="#azeroerr_1_1detail_1_1context__helper_3_01T_00_01bool_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1context__helper_3_01T_00_01bool_01_4" id="azeroerr_1_1detail_1_1context__helper_3_01T_00_01bool_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1context__helper.html" title=" " alt="" coords="5,5,175,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_21.png" border="0" usemap="#azeroerr_1_1detail_1_1context__helper_3_01T_00_01false_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1context__helper_3_01T_00_01false_01_4" id="azeroerr_1_1detail_1_1context__helper_3_01T_00_01false_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01false_01_4.html" title=" " alt="" coords="5,5,175,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_22.png" border="0" usemap="#azeroerr_1_1detail_1_1context__helper_3_01T_00_01true_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1context__helper_3_01T_00_01true_01_4" id="azeroerr_1_1detail_1_1context__helper_3_01T_00_01true_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1context__helper_3_01T_00_01true_01_4.html" title=" " alt="" coords="5,5,175,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_23.png" border="0" usemap="#azeroerr_1_1detail_1_1DiagnosticValue" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1DiagnosticValue" id="azeroerr_1_1detail_1_1DiagnosticValue">
+<area shape="rect" href="structzeroerr_1_1detail_1_1DiagnosticValue.html" title=" " alt="" coords="5,5,195,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_24.png" border="0" usemap="#azeroerr_1_1detail_1_1FunctionDecomposition_3_01Args_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1FunctionDecomposition_3_01Args_01_4" id="azeroerr_1_1detail_1_1FunctionDecomposition_3_01Args_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1FunctionDecomposition.html" title="FunctionDecomposition is a meta function to decompose the function type. The ValueType and numOfArgs ..." alt="" coords="5,5,184,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_25.png" border="0" usemap="#azeroerr_1_1detail_1_1gen__seq_3_01N_00_01Is_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1gen__seq_3_01N_00_01Is_01_4" id="azeroerr_1_1detail_1_1gen__seq_3_01N_00_01Is_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1gen__seq.html" title=" " alt="" coords="5,5,150,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_26.png" border="0" usemap="#azeroerr_1_1detail_1_1LockGuard" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1LockGuard" id="azeroerr_1_1detail_1_1LockGuard">
+<area shape="rect" href="classzeroerr_1_1detail_1_1LockGuard.html" title=" " alt="" coords="5,5,195,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_27.png" border="0" usemap="#azeroerr_1_1detail_1_1memfun__type_3_01Ret_07Class_1_1_5_08_07Args_8_8_8_08_01const_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1memfun__type_3_01Ret_07Class_1_1_5_08_07Args_8_8_8_08_01const_01_4" id="azeroerr_1_1detail_1_1memfun__type_3_01Ret_07Class_1_1_5_08_07Args_8_8_8_08_01const_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1memfun__type_3_01Ret_07Class_1_1_5_08_07Args_8_8_8_08_01const_01_4.html" title=" " alt="" coords="5,5,211,67"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_28.png" border="0" usemap="#azeroerr_1_1detail_1_1memfun__type_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1memfun__type_3_01T_01_4" id="azeroerr_1_1detail_1_1memfun__type_3_01T_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1memfun__type.html" title=" " alt="" coords="5,5,181,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_29.png" border="0" usemap="#azeroerr_1_1detail_1_1MessageBuilder" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1MessageBuilder" id="azeroerr_1_1detail_1_1MessageBuilder">
+<area shape="rect" href="classzeroerr_1_1detail_1_1MessageBuilder.html" title=" " alt="" coords="5,5,184,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_30.png" border="0" usemap="#azeroerr_1_1detail_1_1Mutex" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1Mutex" id="azeroerr_1_1detail_1_1Mutex">
+<area shape="rect" href="classzeroerr_1_1detail_1_1Mutex.html" title=" " alt="" coords="5,5,167,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_31.png" border="0" usemap="#azeroerr_1_1detail_1_1regReporter" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1regReporter" id="azeroerr_1_1detail_1_1regReporter">
+<area shape="rect" href="structzeroerr_1_1detail_1_1regReporter.html" title="regReporter is a class that is used to register the reporter. It will be used as global variables and..." alt="" coords="5,5,203,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_32.png" border="0" usemap="#azeroerr_1_1detail_1_1regTest" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1regTest" id="azeroerr_1_1detail_1_1regTest">
+<area shape="rect" href="structzeroerr_1_1detail_1_1regTest.html" title="regTest is a class that is used to register the test case. It will be used as global variables and th..." alt="" coords="5,5,173,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_33.png" border="0" usemap="#azeroerr_1_1detail_1_1seq_3_01Is_8_8_8_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1seq_3_01Is_8_8_8_01_4" id="azeroerr_1_1detail_1_1seq_3_01Is_8_8_8_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1seq.html" title=" " alt="" coords="5,5,149,50"/>
+<area shape="rect" href="structzeroerr_1_1detail_1_1gen__seq_3_010_00_01Is_8_8_8_01_4.html" title=" " alt="" coords="197,5,341,50"/>
+<area shape="poly" title=" " alt="" coords="164,25,199,27,193,28,165,30"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_34.png" border="0" usemap="#azeroerr_1_1detail_1_1seq_3_8_8_8_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1seq_3_8_8_8_01_4" id="azeroerr_1_1detail_1_1seq_3_8_8_8_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1seq.html" title=" " alt="" coords="5,5,149,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_35.png" border="0" usemap="#azeroerr_1_1detail_1_1StringLike_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1StringLike_3_01T_01_4" id="azeroerr_1_1detail_1_1StringLike_3_01T_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1StringLike.html" title=" " alt="" coords="5,5,228,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_36.png" border="0" usemap="#azeroerr_1_1detail_1_1TextBuffer" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1TextBuffer" id="azeroerr_1_1detail_1_1TextBuffer">
+<area shape="rect" href="classzeroerr_1_1detail_1_1TextBuffer.html" title=" " alt="" coords="5,5,192,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_37.png" border="0" usemap="#azeroerr_1_1detail_1_1TextStream" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1TextStream" id="azeroerr_1_1detail_1_1TextStream">
+<area shape="rect" href="classzeroerr_1_1detail_1_1TextStream.html" title=" " alt="" coords="5,5,200,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_38.png" border="0" usemap="#azeroerr_1_1detail_1_1to__store__type_3_01const_01char_01_5_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1to__store__type_3_01const_01char_01_5_01_4" id="azeroerr_1_1detail_1_1to__store__type_3_01const_01char_01_5_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1to__store__type_3_01const_01char_01_5_01_4.html" title=" " alt="" coords="5,5,211,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_39.png" border="0" usemap="#azeroerr_1_1detail_1_1to__store__type_3_01const_01char_07_6_08_0f_0e_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1to__store__type_3_01const_01char_07_6_08_0f_0e_4" id="azeroerr_1_1detail_1_1to__store__type_3_01const_01char_07_6_08_0f_0e_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1to__store__type_3_01const_01char_07_6_08_0f_0e_4.html" title=" " alt="" coords="5,5,226,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_40.png" border="0" usemap="#azeroerr_1_1detail_1_1to__store__type_3_01T_01_6_6_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1to__store__type_3_01T_01_6_6_01_4" id="azeroerr_1_1detail_1_1to__store__type_3_01T_01_6_6_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1to__store__type_3_01T_01_6_6_01_4.html" title=" " alt="" coords="5,5,165,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_41.png" border="0" usemap="#azeroerr_1_1detail_1_1to__store__type_3_01T_01_6_00_01is__not__array_3_01T_01_4_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1to__store__type_3_01T_01_6_00_01is__not__array_3_01T_01_4_01_4" id="azeroerr_1_1detail_1_1to__store__type_3_01T_01_6_00_01is__not__array_3_01T_01_4_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1to__store__type_3_01T_01_6_00_01is__not__array_3_01T_01_4_01_4.html" title=" " alt="" coords="5,5,159,67"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_42.png" border="0" usemap="#azeroerr_1_1detail_1_1to__store__type_3_01T_00_01V_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1to__store__type_3_01T_00_01V_01_4" id="azeroerr_1_1detail_1_1to__store__type_3_01T_00_01V_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1to__store__type.html" title=" " alt="" coords="5,5,158,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_43.png" border="0" usemap="#azeroerr_1_1detail_1_1visit2__impl_3_010_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1visit2__impl_3_010_01_4" id="azeroerr_1_1detail_1_1visit2__impl_3_010_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1visit2__impl_3_010_01_4.html" title=" " alt="" coords="5,5,162,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_44.png" border="0" usemap="#azeroerr_1_1detail_1_1visit2__impl_3_01I_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1visit2__impl_3_01I_01_4" id="azeroerr_1_1detail_1_1visit2__impl_3_01I_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1visit2__impl.html" title=" " alt="" coords="5,5,162,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_45.png" border="0" usemap="#azeroerr_1_1detail_1_1visit__impl_3_010_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1visit__impl_3_010_01_4" id="azeroerr_1_1detail_1_1visit__impl_3_010_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1visit__impl_3_010_01_4.html" title=" " alt="" coords="5,5,154,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_46.png" border="0" usemap="#azeroerr_1_1detail_1_1visit__impl_3_01I_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1visit__impl_3_01I_01_4" id="azeroerr_1_1detail_1_1visit__impl_3_01I_01_4">
+<area shape="rect" href="structzeroerr_1_1detail_1_1visit__impl.html" title=" " alt="" coords="5,5,154,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_47.png" border="0" usemap="#azeroerr_1_1detail_1_1XmlEncode" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1XmlEncode" id="azeroerr_1_1detail_1_1XmlEncode">
+<area shape="rect" href="classzeroerr_1_1detail_1_1XmlEncode.html" title=" " alt="" coords="5,5,199,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_48.png" border="0" usemap="#azeroerr_1_1detail_1_1XmlWriter" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1XmlWriter" id="azeroerr_1_1detail_1_1XmlWriter">
+<area shape="rect" href="classzeroerr_1_1detail_1_1XmlWriter.html" title=" " alt="" coords="5,5,192,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_49.png" border="0" usemap="#azeroerr_1_1detail_1_1XmlWriter_1_1ScopedElement" loading="lazy" alt=""/>
+<map name="azeroerr_1_1detail_1_1XmlWriter_1_1ScopedElement" id="azeroerr_1_1detail_1_1XmlWriter_1_1ScopedElement">
+<area shape="rect" href="classzeroerr_1_1detail_1_1XmlWriter_1_1ScopedElement.html" title=" " alt="" coords="5,5,192,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_50.png" border="0" usemap="#azeroerr_1_1Domain_3_01bool_00_01bool_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Domain_3_01bool_00_01bool_01_4" id="azeroerr_1_1Domain_3_01bool_00_01bool_01_4">
+<area shape="rect" href="classzeroerr_1_1Domain.html" title=" " alt="" coords="5,5,179,50"/>
+<area shape="rect" href="classzeroerr_1_1DomainConvertable.html" title=" " alt="" coords="227,5,432,50"/>
+<area shape="poly" title=" " alt="" coords="194,25,229,27,224,28,194,30"/>
+<area shape="rect" href="classzeroerr_1_1Arbitrary_3_01bool_01_4.html" title=" " alt="" coords="480,5,612,50"/>
+<area shape="poly" title=" " alt="" coords="447,25,482,28,477,28,447,30"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_51.png" border="0" usemap="#azeroerr_1_1Domain_3_01T_00_01std_1_1tuple_3_01Inner_1_1CorpusType_8_8_8_01_4_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Domain_3_01T_00_01std_1_1tuple_3_01Inner_1_1CorpusType_8_8_8_01_4_01_4" id="azeroerr_1_1Domain_3_01T_00_01std_1_1tuple_3_01Inner_1_1CorpusType_8_8_8_01_4_01_4">
+<area shape="rect" href="classzeroerr_1_1Domain.html" title=" " alt="" coords="5,108,159,170"/>
+<area shape="rect" href="classzeroerr_1_1AggregateOf.html" title=" " alt="" coords="207,5,427,84"/>
+<area shape="poly" title=" " alt="" coords="171,101,220,83,215,86,174,105"/>
+<area shape="rect" href="classzeroerr_1_1AggregateOf.html" title=" " alt="" coords="222,108,412,170"/>
+<area shape="poly" title=" " alt="" coords="174,137,224,138,219,140,174,142"/>
+<area shape="rect" href="classzeroerr_1_1AggregateOf.html" title="AggregateOf is a domain that combines multiple inner domains into a tuple or aggregate type" alt="" coords="238,194,396,239"/>
+<area shape="poly" title=" " alt="" coords="173,168,208,179,245,194,240,194,206,185,173,173"/>
+<area shape="rect" href="classzeroerr_1_1Arbitrary_3_01std_1_1pair_3_01T_00_01U_01_4_00_011_01_4.html" title=" " alt="" coords="476,22,652,67"/>
+<area shape="poly" title=" " alt="" coords="442,42,478,44,473,45,443,47"/>
+<area shape="rect" href="classzeroerr_1_1Arbitrary_3_01std_1_1tuple_3_01T_8_8_8_01_4_00_011_01_4.html" title=" " alt="" coords="475,117,652,162"/>
+<area shape="poly" title=" " alt="" coords="427,137,477,139,472,140,428,142"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_52.png" border="0" usemap="#azeroerr_1_1Domain_3_01T_00_01std_1_1vector_3_01T_1_1value__type_01_4_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Domain_3_01T_00_01std_1_1vector_3_01T_1_1value__type_01_4_01_4" id="azeroerr_1_1Domain_3_01T_00_01std_1_1vector_3_01T_1_1value__type_01_4_01_4">
+<area shape="rect" href="classzeroerr_1_1Domain.html" title=" " alt="" coords="5,5,166,67"/>
+<area shape="rect" href="classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__string_3_01T_01_4_01_4.html" title=" " alt="" coords="214,14,390,58"/>
+<area shape="poly" title=" " alt="" coords="181,34,216,36,211,36,181,39"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_53.png" border="0" usemap="#azeroerr_1_1Domain_3_01T_00_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Domain_3_01T_00_01T_01_4" id="azeroerr_1_1Domain_3_01T_00_01T_01_4">
+<area shape="rect" href="classzeroerr_1_1Domain.html" title=" " alt="" coords="5,150,186,178"/>
+<area shape="rect" href="classzeroerr_1_1DomainConvertable.html" title=" " alt="" coords="234,150,477,178"/>
+<area shape="poly" title=" " alt="" coords="201,162,236,163,231,165,202,167"/>
+<area shape="rect" href="classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__float__point_3_01T_01_4_01_4.html" title=" " alt="" coords="530,5,686,67"/>
+<area shape="poly" title=" " alt="" coords="397,141,543,69,548,67,399,145"/>
+<area shape="rect" href="classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__signed__int_3_01T_01_4_01_4.html" title=" " alt="" coords="532,91,685,152"/>
+<area shape="poly" title=" " alt="" coords="456,145,534,134,528,135,457,150"/>
+<area shape="rect" href="classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__unsigned__int_3_01T_01_4_01_4.html" title=" " alt="" coords="536,176,681,238"/>
+<area shape="poly" title=" " alt="" coords="456,178,538,194,532,195,456,184"/>
+<area shape="rect" href="classzeroerr_1_1InRange.html" title="InRange is a domain that generates random values within a specified range" alt="" coords="525,262,691,290"/>
+<area shape="poly" title=" " alt="" coords="396,183,457,215,526,247,561,262,556,261,524,252,454,220,395,188"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_54.png" border="0" usemap="#azeroerr_1_1Domain_3_01T_00_01uint64__t_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Domain_3_01T_00_01uint64__t_01_4" id="azeroerr_1_1Domain_3_01T_00_01uint64__t_01_4">
+<area shape="rect" href="classzeroerr_1_1Domain.html" title=" " alt="" coords="5,5,159,50"/>
+<area shape="rect" href="classzeroerr_1_1ElementOf.html" title="ElementOf is a domain that generates random values from a fixed set of elements" alt="" coords="207,14,389,42"/>
+<area shape="poly" title=" " alt="" coords="174,25,209,27,203,28,174,30"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_55.png" border="0" usemap="#azeroerr_1_1Domain_3_01ValueType_00_01CorpusType_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Domain_3_01ValueType_00_01CorpusType_01_4" id="azeroerr_1_1Domain_3_01ValueType_00_01CorpusType_01_4">
+<area shape="rect" href="classzeroerr_1_1Domain.html" title="Domain class for generating random values of a specific type." alt="" coords="5,5,217,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_56.png" border="0" usemap="#azeroerr_1_1Domain_3_01ValueType_00_01ValueType_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Domain_3_01ValueType_00_01ValueType_01_4" id="azeroerr_1_1Domain_3_01ValueType_00_01ValueType_01_4">
+<area shape="rect" href="classzeroerr_1_1Domain.html" title=" " alt="" coords="5,5,217,50"/>
+<area shape="rect" href="classzeroerr_1_1DomainConvertable.html" title="DomainConvertable is a base class for domains that can be converted to and from a ValueType" alt="" coords="265,5,470,50"/>
+<area shape="poly" title=" " alt="" coords="232,25,267,28,261,28,232,30"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_57.png" border="0" usemap="#azeroerr_1_1Duration" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Duration" id="azeroerr_1_1Duration">
+<area shape="rect" href="structzeroerr_1_1Duration.html" title=" " alt="" coords="5,5,137,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_58.png" border="0" usemap="#azeroerr_1_1Expression_3_01L_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Expression_3_01L_01_4" id="azeroerr_1_1Expression_3_01L_01_4">
+<area shape="rect" href="structzeroerr_1_1Expression.html" title=" " alt="" coords="5,5,189,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_59.png" border="0" usemap="#azeroerr_1_1ExpressionDecomposer" loading="lazy" alt=""/>
+<map name="azeroerr_1_1ExpressionDecomposer" id="azeroerr_1_1ExpressionDecomposer">
+<area shape="rect" href="structzeroerr_1_1ExpressionDecomposer.html" title=" " alt="" coords="5,5,234,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_60.png" border="0" usemap="#azeroerr_1_1ExprResult" loading="lazy" alt=""/>
+<map name="azeroerr_1_1ExprResult" id="azeroerr_1_1ExprResult">
+<area shape="rect" href="structzeroerr_1_1ExprResult.html" title=" " alt="" coords="5,5,151,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_61.png" border="0" usemap="#azeroerr_1_1FileCache" loading="lazy" alt=""/>
+<map name="azeroerr_1_1FileCache" id="azeroerr_1_1FileCache">
+<area shape="rect" href="structzeroerr_1_1FileCache.html" title=" " alt="" coords="5,5,144,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_62.png" border="0" usemap="#azeroerr_1_1Filters" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Filters" id="azeroerr_1_1Filters">
+<area shape="rect" href="structzeroerr_1_1Filters.html" title=" " alt="" coords="5,5,121,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_63.png" border="0" usemap="#azeroerr_1_1IContextScope" loading="lazy" alt=""/>
+<map name="azeroerr_1_1IContextScope" id="azeroerr_1_1IContextScope">
+<area shape="rect" href="classzeroerr_1_1IContextScope.html" title="ContextScope is a helper class created in each basic block where you use INFO(). The context scope ca..." alt="" coords="5,5,175,33"/>
+<area shape="rect" href="classzeroerr_1_1ContextScope.html" title="Template implementation of context scope" alt="" coords="223,5,426,33"/>
+<area shape="poly" title=" " alt="" coords="190,17,225,19,219,19,190,22"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_64.png" border="0" usemap="#azeroerr_1_1IFuzzTest" loading="lazy" alt=""/>
+<map name="azeroerr_1_1IFuzzTest" id="azeroerr_1_1IFuzzTest">
+<area shape="rect" href="structzeroerr_1_1IFuzzTest.html" title=" " alt="" coords="5,14,140,42"/>
+<area shape="rect" href="structzeroerr_1_1FuzzTest.html" title="FuzzTest is a template class to create a fuzz test for the target function." alt="" coords="188,5,391,50"/>
+<area shape="poly" title=" " alt="" coords="155,25,190,27,185,28,155,30"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_65.png" border="0" usemap="#azeroerr_1_1IMatcher_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1IMatcher_3_01T_01_4" id="azeroerr_1_1IMatcher_3_01T_01_4">
+<area shape="rect" href="classzeroerr_1_1IMatcher.html" title=" " alt="" coords="5,57,176,85"/>
+<area shape="rect" href="classzeroerr_1_1CombinedMatcher.html" title=" " alt="" coords="224,5,456,33"/>
+<area shape="poly" title=" " alt="" coords="175,51,272,32,267,35,176,56"/>
+<area shape="rect" href="classzeroerr_1_1NotMatcher.html" title=" " alt="" coords="245,57,434,85"/>
+<area shape="poly" title=" " alt="" coords="191,69,247,71,242,72,192,74"/>
+<area shape="rect" href="structzeroerr_1_1StartWithMatcher.html" title=" " alt="" coords="226,109,454,137"/>
+<area shape="poly" title=" " alt="" coords="176,86,272,108,267,109,175,91"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_66.png" border="0" usemap="#azeroerr_1_1IMatcherRef_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1IMatcherRef_3_01T_01_4" id="azeroerr_1_1IMatcherRef_3_01T_01_4">
+<area shape="rect" href="classzeroerr_1_1IMatcherRef.html" title=" " alt="" coords="5,5,198,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_67.png" border="0" usemap="#azeroerr_1_1IReporter" loading="lazy" alt=""/>
+<map name="azeroerr_1_1IReporter" id="azeroerr_1_1IReporter">
+<area shape="rect" href="classzeroerr_1_1IReporter.html" title="IReporter is an interface that is used to report the test results. You can create a new reporter by i..." alt="" coords="5,32,141,60"/>
+<area shape="rect" href="classzeroerr_1_1ConsoleReporter.html" title=" " alt="" coords="189,5,372,33"/>
+<area shape="poly" title=" " alt="" coords="155,33,191,30,186,32,156,38"/>
+<area shape="rect" href="classzeroerr_1_1XmlReporter.html" title=" " alt="" coords="202,57,359,85"/>
+<area shape="poly" title=" " alt="" coords="156,53,204,61,198,62,156,59"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_68.png" border="0" usemap="#azeroerr_1_1IRObject" loading="lazy" alt=""/>
+<map name="azeroerr_1_1IRObject" id="azeroerr_1_1IRObject">
+<area shape="rect" href="structzeroerr_1_1IRObject.html" title="Interface for serializable objects" alt="" coords="5,5,136,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_69.png" border="0" usemap="#azeroerr_1_1IRObject_1_1Childrens" loading="lazy" alt=""/>
+<map name="azeroerr_1_1IRObject_1_1Childrens" id="azeroerr_1_1IRObject_1_1Childrens">
+<area shape="rect" href="structzeroerr_1_1IRObject_1_1Childrens.html" title=" " alt="" coords="5,5,144,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_70.png" border="0" usemap="#azeroerr_1_1last_3_01T1_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1last_3_01T1_01_4" id="azeroerr_1_1last_3_01T1_01_4">
+<area shape="rect" href="structzeroerr_1_1last_3_01T1_01_4.html" title=" " alt="" coords="5,5,151,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_71.png" border="0" usemap="#azeroerr_1_1last_3_01T1_00_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1last_3_01T1_00_01T_01_4" id="azeroerr_1_1last_3_01T1_00_01T_01_4">
+<area shape="rect" href="structzeroerr_1_1last.html" title=" " alt="" coords="5,5,167,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_72.png" border="0" usemap="#azeroerr_1_1Logger" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Logger" id="azeroerr_1_1Logger">
+<area shape="rect" href="classzeroerr_1_1Logger.html" title=" " alt="" coords="5,57,125,85"/>
+<area shape="rect" href="classzeroerr_1_1DirectoryLogger.html" title=" " alt="" coords="173,5,352,33"/>
+<area shape="poly" title=" " alt="" coords="134,50,209,32,204,35,136,55"/>
+<area shape="rect" href="classzeroerr_1_1FileLogger.html" title=" " alt="" coords="191,57,334,85"/>
+<area shape="poly" title=" " alt="" coords="140,69,193,70,188,72,140,74"/>
+<area shape="rect" href="classzeroerr_1_1OStreamLogger.html" title=" " alt="" coords="174,109,350,137"/>
+<area shape="poly" title=" " alt="" coords="135,87,209,108,204,109,135,92"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_73.png" border="0" usemap="#azeroerr_1_1LogInfo" loading="lazy" alt=""/>
+<map name="azeroerr_1_1LogInfo" id="azeroerr_1_1LogInfo">
+<area shape="rect" href="structzeroerr_1_1LogInfo.html" title="LogInfo is a struct to store the meta data of the log message." alt="" coords="5,5,129,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_74.png" border="0" usemap="#azeroerr_1_1LogIterator" loading="lazy" alt=""/>
+<map name="azeroerr_1_1LogIterator" id="azeroerr_1_1LogIterator">
+<area shape="rect" href="classzeroerr_1_1LogIterator.html" title="LogIterator is a class to iterate the log messages." alt="" coords="5,5,152,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_75.png" border="0" usemap="#azeroerr_1_1LogMessage" loading="lazy" alt=""/>
+<map name="azeroerr_1_1LogMessage" id="azeroerr_1_1LogMessage">
+<area shape="rect" href="structzeroerr_1_1LogMessage.html" title="LogMessage is a class to store the log message." alt="" coords="5,57,162,85"/>
+<area shape="rect" href="structzeroerr_1_1LogMessageImpl.html" title=" " alt="" coords="229,5,414,67"/>
+<area shape="poly" title=" " alt="" coords="176,55,231,49,226,50,178,60"/>
+<area shape="rect" href="structzeroerr_1_1LogMessageImpl.html" title="LogMessageImpl is the implementation of the LogMessage." alt="" coords="210,92,433,119"/>
+<area shape="poly" title=" " alt="" coords="177,82,224,91,219,91,177,87"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_76.png" border="0" usemap="#azeroerr_1_1LogMessageImpl_3_01T_01_4_1_1GetTuplePtr" loading="lazy" alt=""/>
+<map name="azeroerr_1_1LogMessageImpl_3_01T_01_4_1_1GetTuplePtr" id="azeroerr_1_1LogMessageImpl_3_01T_01_4_1_1GetTuplePtr">
+<area shape="rect" href="structzeroerr_1_1LogMessageImpl_1_1GetTuplePtr.html" title=" " alt="" coords="5,5,191,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_77.png" border="0" usemap="#azeroerr_1_1LogMessageImpl_3_01T_01_4_1_1PrintTupleData" loading="lazy" alt=""/>
+<map name="azeroerr_1_1LogMessageImpl_3_01T_01_4_1_1PrintTupleData" id="azeroerr_1_1LogMessageImpl_3_01T_01_4_1_1PrintTupleData">
+<area shape="rect" href="structzeroerr_1_1LogMessageImpl_1_1PrintTupleData.html" title=" " alt="" coords="5,5,191,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_78.png" border="0" usemap="#azeroerr_1_1LogRecord_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1LogRecord_3_01T_01_4" id="azeroerr_1_1LogRecord_3_01T_01_4">
+<area shape="rect" href="structzeroerr_1_1LogRecord.html" title=" " alt="" coords="5,5,187,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_79.png" border="0" usemap="#azeroerr_1_1LogStream" loading="lazy" alt=""/>
+<map name="azeroerr_1_1LogStream" id="azeroerr_1_1LogStream">
+<area shape="rect" href="classzeroerr_1_1LogStream.html" title="LogStream is a class to manage the log messages." alt="" coords="5,5,151,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_80.png" border="0" usemap="#azeroerr_1_1PerfCountSet_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1PerfCountSet_3_01T_01_4" id="azeroerr_1_1PerfCountSet_3_01T_01_4">
+<area shape="rect" href="structzeroerr_1_1PerfCountSet.html" title="PerfCountSet is a set of performance counters." alt="" coords="5,5,204,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_81.png" border="0" usemap="#azeroerr_1_1PerformanceCounter" loading="lazy" alt=""/>
+<map name="azeroerr_1_1PerformanceCounter" id="azeroerr_1_1PerformanceCounter">
+<area shape="rect" href="structzeroerr_1_1PerformanceCounter.html" title="PerformanceCounter is a class to measure the performance of a function." alt="" coords="5,5,215,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_82.png" border="0" usemap="#azeroerr_1_1Printer" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Printer" id="azeroerr_1_1Printer">
+<area shape="rect" href="structzeroerr_1_1Printer.html" title="A functor class Printer for printing a value of any type." alt="" coords="5,5,124,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_83.png" border="0" usemap="#azeroerr_1_1PushResult" loading="lazy" alt=""/>
+<map name="azeroerr_1_1PushResult" id="azeroerr_1_1PushResult">
+<area shape="rect" href="structzeroerr_1_1PushResult.html" title=" " alt="" coords="5,5,153,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_84.png" border="0" usemap="#azeroerr_1_1rank_3_010_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1rank_3_010_01_4" id="azeroerr_1_1rank_3_010_01_4">
+<area shape="rect" href="structzeroerr_1_1rank_3_010_01_4.html" title=" " alt="" coords="5,5,148,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_85.png" border="0" usemap="#azeroerr_1_1rank_3_01N_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1rank_3_01N_01_4" id="azeroerr_1_1rank_3_01N_01_4">
+<area shape="rect" href="structzeroerr_1_1rank.html" title="rank is a helper class for Printer to define the priority of overloaded functions." alt="" coords="5,5,150,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_86.png" border="0" usemap="#azeroerr_1_1Rng" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Rng" id="azeroerr_1_1Rng">
+<area shape="rect" href="classzeroerr_1_1Rng.html" title=" " alt="" coords="5,5,106,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_87.png" border="0" usemap="#azeroerr_1_1String" loading="lazy" alt=""/>
+<map name="azeroerr_1_1String" id="azeroerr_1_1String">
+<area shape="rect" href="classzeroerr_1_1String.html" title=" " alt="" coords="5,5,119,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_88.png" border="0" usemap="#azeroerr_1_1StringBuffer" loading="lazy" alt=""/>
+<map name="azeroerr_1_1StringBuffer" id="azeroerr_1_1StringBuffer">
+<area shape="rect" href="classzeroerr_1_1StringBuffer.html" title=" " alt="" coords="5,5,158,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_89.png" border="0" usemap="#azeroerr_1_1StringBuffer_1_1Format" loading="lazy" alt=""/>
+<map name="azeroerr_1_1StringBuffer_1_1Format" id="azeroerr_1_1StringBuffer_1_1Format">
+<area shape="rect" href="structzeroerr_1_1StringBuffer_1_1Format.html" title=" " alt="" coords="5,5,158,50"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_90.png" border="0" usemap="#azeroerr_1_1StyleManager" loading="lazy" alt=""/>
+<map name="azeroerr_1_1StyleManager" id="azeroerr_1_1StyleManager">
+<area shape="rect" href="structzeroerr_1_1StyleManager.html" title=" " alt="" coords="5,5,171,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_91.png" border="0" usemap="#azeroerr_1_1Table_1_1Config" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Table_1_1Config" id="azeroerr_1_1Table_1_1Config">
+<area shape="rect" href="structzeroerr_1_1Table_1_1Config.html" title="Config is used to configure the table style how it is displayed." alt="" coords="5,5,164,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_92.png" border="0" usemap="#azeroerr_1_1Table_1_1Style" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Table_1_1Style" id="azeroerr_1_1Table_1_1Style">
+<area shape="rect" href="structzeroerr_1_1Table_1_1Style.html" title="Style is used to define the border style of the table." alt="" coords="5,5,156,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_93.png" border="0" usemap="#azeroerr_1_1TerminalSize" loading="lazy" alt=""/>
+<map name="azeroerr_1_1TerminalSize" id="azeroerr_1_1TerminalSize">
+<area shape="rect" href="structzeroerr_1_1TerminalSize.html" title=" " alt="" coords="5,5,164,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_94.png" border="0" usemap="#azeroerr_1_1TestArgs_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1TestArgs_3_01T_01_4" id="azeroerr_1_1TestArgs_3_01T_01_4">
+<area shape="rect" href="classzeroerr_1_1TestArgs.html" title="TestArgs is a class that is used to store the test arguments." alt="" coords="5,5,174,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_95.png" border="0" usemap="#azeroerr_1_1TestCase" loading="lazy" alt=""/>
+<map name="azeroerr_1_1TestCase" id="azeroerr_1_1TestCase">
+<area shape="rect" href="structzeroerr_1_1TestCase.html" title="TestCase is a class that holds the test case information. There are several fields that are used to s..." alt="" coords="5,5,139,33"/>
+<area shape="rect" href="structzeroerr_1_1SubCase.html" title="SubCase is a class that holds the subcase information." alt="" coords="187,5,318,33"/>
+<area shape="poly" title=" " alt="" coords="154,17,189,19,184,19,154,22"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_96.png" border="0" usemap="#azeroerr_1_1TestContext" loading="lazy" alt=""/>
+<map name="azeroerr_1_1TestContext" id="azeroerr_1_1TestContext">
+<area shape="rect" href="classzeroerr_1_1TestContext.html" title="TestContext is a class that holds the test results and reporter context. There are 8 different matric..." alt="" coords="5,5,158,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_97.png" border="0" usemap="#azeroerr_1_1TestedObjects_3_01T_01_4" loading="lazy" alt=""/>
+<map name="azeroerr_1_1TestedObjects_3_01T_01_4" id="azeroerr_1_1TestedObjects_3_01T_01_4">
+<area shape="rect" href="structzeroerr_1_1TestedObjects.html" title=" " alt="" coords="5,5,210,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_98.png" border="0" usemap="#azeroerr_1_1Timestamp" loading="lazy" alt=""/>
+<map name="azeroerr_1_1Timestamp" id="azeroerr_1_1Timestamp">
+<area shape="rect" href="structzeroerr_1_1Timestamp.html" title=" " alt="" coords="5,5,155,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_99.png" border="0" usemap="#azeroerr_1_1UnitTest" loading="lazy" alt=""/>
+<map name="azeroerr_1_1UnitTest" id="azeroerr_1_1UnitTest">
+<area shape="rect" href="structzeroerr_1_1UnitTest.html" title="UnitTest is a class that holds the test configuration. There are several options that can be set to c..." alt="" coords="5,5,134,33"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_100.png" border="0" usemap="#azeroerr_1_1XmlReporter_1_1TestCaseTemp" loading="lazy" alt=""/>
+<map name="azeroerr_1_1XmlReporter_1_1TestCaseTemp" id="azeroerr_1_1XmlReporter_1_1TestCaseTemp">
+<area shape="rect" href="structzeroerr_1_1XmlReporter_1_1TestCaseTemp.html" title=" " alt="" coords="5,5,163,50"/>
+</map>
+</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
+  </ul>
+</div>
+</body>
+</html>

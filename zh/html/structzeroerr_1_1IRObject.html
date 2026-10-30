@@ -1,0 +1,1346 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.15.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>ZeroErr: zeroerr::IRObject结构体 参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.drawio.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/sunxfancy/zeroerr" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">ZeroErr
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+<div class="languageSwitch"><button onclick="switch_language()">中/En</button></div>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.15.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','搜索',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('structzeroerr_1_1IRObject.html','','structzeroerr_1_1IRObject-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">zeroerr::IRObject结构体 参考</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Interface for serializable objects  
+ <a href="#details">更多...</a></p>
+
+<p><code>#include &lt;<a class="el" href="serialization_8h_source.html">serialization.h</a>&gt;</code></p>
+<div class="dynheader">
+zeroerr::IRObject 的协作图:</div>
+<div class="dyncontent">
+<div class="center"><img src="structzeroerr_1_1IRObject__coll__graph.png" border="0" usemap="#azeroerr_1_1IRObject_coll__map" loading="lazy" alt="Collaboration graph"/></div>
+<map name="azeroerr_1_1IRObject_coll__map" id="azeroerr_1_1IRObject_coll__map">
+<area shape="rect" title="Interface for serializable objects" alt="" coords="5,5,136,33"/>
+<area shape="poly" title=" " alt="" coords="152,13,162,19,154,25,136,27,136,22,152,20,157,19,151,18"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">图例</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:Childrens" id="r_Childrens"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structzeroerr_1_1IRObject_1_1Childrens.html">Childrens</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public 类型</h2></td></tr>
+<tr class="memitem:af7df698c185ed10e2a38c80ba6e128f9" id="r_af7df698c185ed10e2a38c80ba6e128f9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7df698c185ed10e2a38c80ba6e128f9">Type</a> { <br />
+&#160;&#160;<a class="el" href="#af7df698c185ed10e2a38c80ba6e128f9a1e4647ff5c17489dcb4379bcdd1754fc">Undefined</a> = 0
+, <a class="el" href="#af7df698c185ed10e2a38c80ba6e128f9a511655870547aebbec8ec6b6266f7b73">Int</a>
+, <a class="el" href="#af7df698c185ed10e2a38c80ba6e128f9a755bdd5ddd14d0736d010d34a401e8fd">Float</a>
+, <a class="el" href="#af7df698c185ed10e2a38c80ba6e128f9a6213668d024446473b4a598d265716c8">String</a>
+, <br />
+&#160;&#160;<a class="el" href="#af7df698c185ed10e2a38c80ba6e128f9a39e07517ca5937d1655b2d3379047502">ShortString</a>
+, <a class="el" href="#af7df698c185ed10e2a38c80ba6e128f9a822fdfa8c93ca2460ebaa2184068a5de">Object</a>
+<br />
+ }</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public 成员函数</h2></td></tr>
+<tr class="memitem:a06f72383bb412fee22caabe6e9d7b880" id="r_a06f72383bb412fee22caabe6e9d7b880"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> () noexcept</td></tr>
+<tr class="memitem:abdb9ff7633bd9b60e95b8b59026547a9" id="r_abdb9ff7633bd9b60e95b8b59026547a9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdb9ff7633bd9b60e95b8b59026547a9">~IRObject</a> ()</td></tr>
+<tr class="memitem:ac813b1e38a05bb1bdd4f679d7e462419" id="r_ac813b1e38a05bb1bdd4f679d7e462419"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac813b1e38a05bb1bdd4f679d7e462419">IRObject</a> (const IRObject &amp;other)</td></tr>
+<tr class="memitem:a8ec5bbb42849b10c1c8eee4105727e17" id="r_a8ec5bbb42849b10c1c8eee4105727e17"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8ec5bbb42849b10c1c8eee4105727e17">IRObject</a> (IRObject &amp;&amp;other) noexcept</td></tr>
+<tr class="memitem:ad8183206eb80aef49e99f9eab730bb05" id="r_ad8183206eb80aef49e99f9eab730bb05"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8183206eb80aef49e99f9eab730bb05">operator=</a> (const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;other)</td></tr>
+<tr class="memitem:ad14024b548df82cdb714ec59e7355f5a" id="r_ad14024b548df82cdb714ec59e7355f5a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad14024b548df82cdb714ec59e7355f5a">operator=</a> (<a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;&amp;other) noexcept</td></tr>
+<tr class="memitem:a1a4f1008deef521cea1751b1b2fba90d" id="r_a1a4f1008deef521cea1751b1b2fba90d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a4f1008deef521cea1751b1b2fba90d">Reset</a> () noexcept</td></tr>
+<tr class="memitem:a9166b7fc9cb915f7a55de087a94778c4" id="r_a9166b7fc9cb915f7a55de087a94778c4"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a9166b7fc9cb915f7a55de087a94778c4 template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt; std::is_integral&lt; T &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9166b7fc9cb915f7a55de087a94778c4">GetScalar</a> () const</td></tr>
+<tr class="memitem:a3b0d64f1c80f3762f75e02d3efa188f8" id="r_a3b0d64f1c80f3762f75e02d3efa188f8"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a3b0d64f1c80f3762f75e02d3efa188f8 template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt; std::is_floating_point&lt; T &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b0d64f1c80f3762f75e02d3efa188f8">GetScalar</a> () const</td></tr>
+<tr class="memitem:a19c3277c3210cf4b2cb6c5d5902ac97f" id="r_a19c3277c3210cf4b2cb6c5d5902ac97f"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a19c3277c3210cf4b2cb6c5d5902ac97f template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt; std::is_enum&lt; T &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a19c3277c3210cf4b2cb6c5d5902ac97f">GetScalar</a> () const</td></tr>
+<tr class="memitem:a2531d464ce8dfea22af04c075733d4ef" id="r_a2531d464ce8dfea22af04c075733d4ef"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a2531d464ce8dfea22af04c075733d4ef template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2531d464ce8dfea22af04c075733d4ef">GetScalar</a> () const</td></tr>
+<tr class="memitem:a725c40a8107047f0a827760010bf6b72" id="r_a725c40a8107047f0a827760010bf6b72"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a725c40a8107047f0a827760010bf6b72 template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt; std::is_integral&lt; T &gt;::value, void &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a725c40a8107047f0a827760010bf6b72">SetScalar</a> (T val)</td></tr>
+<tr class="memitem:aafc0454bf0c78b50d16c1f60f5011224" id="r_aafc0454bf0c78b50d16c1f60f5011224"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:aafc0454bf0c78b50d16c1f60f5011224 template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt; std::is_floating_point&lt; T &gt;::value, void &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafc0454bf0c78b50d16c1f60f5011224">SetScalar</a> (T val)</td></tr>
+<tr class="memitem:a2f46f3608c89803398e41359d8cd3155" id="r_a2f46f3608c89803398e41359d8cd3155"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a2f46f3608c89803398e41359d8cd3155 template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt; std::is_enum&lt; T &gt;::value, void &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f46f3608c89803398e41359d8cd3155">SetScalar</a> (T val)</td></tr>
+<tr class="memitem:af3f6faee69b0aa6328a251c0ef29958c" id="r_af3f6faee69b0aa6328a251c0ef29958c"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:af3f6faee69b0aa6328a251c0ef29958c template"><td class="memItemLeft" align="right" valign="top">std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning, void &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3f6faee69b0aa6328a251c0ef29958c">SetScalar</a> (T val)</td></tr>
+<tr class="memitem:a4531015a80f001c7f2b4ced8c34d736d" id="r_a4531015a80f001c7f2b4ced8c34d736d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4531015a80f001c7f2b4ced8c34d736d">SetScalar</a> (const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;obj)</td></tr>
+<tr class="memitem:a35ad2b5367b5e4a828f75ed54bbd5e11" id="r_a35ad2b5367b5e4a828f75ed54bbd5e11"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structzeroerr_1_1IRObject_1_1Childrens.html">Childrens</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35ad2b5367b5e4a828f75ed54bbd5e11">GetChildren</a> () const</td></tr>
+<tr class="memitem:a235b9bd23b3bb902d487485475569c6d" id="r_a235b9bd23b3bb902d487485475569c6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a235b9bd23b3bb902d487485475569c6d">SetChildren</a> (<a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> *children)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+静态 Public 成员函数</h2></td></tr>
+<tr class="memitem:a184cb8e526fff2a590540fcc66b14536" id="r_a184cb8e526fff2a590540fcc66b14536"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a184cb8e526fff2a590540fcc66b14536 template"><td class="memItemLeft" align="right" valign="top">static std::enable_if&lt; std::is_integral&lt; T &gt;::value||std::is_floating_point&lt; T &gt;::value||<a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning||std::is_enum&lt; T &gt;::value, <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a184cb8e526fff2a590540fcc66b14536">FromCorpus</a> (T val)</td></tr>
+<tr class="memitem:a7c0492a876012a7ab1fea71794002915" id="r_a7c0492a876012a7ab1fea71794002915"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a7c0492a876012a7ab1fea71794002915 template"><td class="memItemLeft" align="right" valign="top">static std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1is__container.html">detail::is_container</a>&lt; T &gt;::value &amp;&amp;!<a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning, <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c0492a876012a7ab1fea71794002915">FromCorpus</a> (const T &amp;val)</td></tr>
+<tr class="memitem:a1721408315593ffea3858f7e72c68ada" id="r_a1721408315593ffea3858f7e72c68ada"><td class="memTemplParams" colspan="2">template&lt;class TupType, unsigned... I&gt; </td></tr>
+<tr class="memitem:a1721408315593ffea3858f7e72c68ada template"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1721408315593ffea3858f7e72c68ada">handle_tuple</a> (const TupType &amp;_tup, <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> *children, <a class="el" href="structzeroerr_1_1detail_1_1seq.html">detail::seq</a>&lt; I... &gt;)</td></tr>
+<tr class="memitem:aee5e5bb03733a7881c387298d10e0d3c" id="r_aee5e5bb03733a7881c387298d10e0d3c"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:aee5e5bb03733a7881c387298d10e0d3c template"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee5e5bb03733a7881c387298d10e0d3c">FromCorpus</a> (const std::tuple&lt; Args... &gt; &amp;val)</td></tr>
+<tr class="memitem:a2430b03f006a76d6c53ca8013ba47825" id="r_a2430b03f006a76d6c53ca8013ba47825"><td class="memTemplParams" colspan="2">template&lt;typename T1, typename T2&gt; </td></tr>
+<tr class="memitem:a2430b03f006a76d6c53ca8013ba47825 template"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2430b03f006a76d6c53ca8013ba47825">FromCorpus</a> (const std::pair&lt; T1, T2 &gt; &amp;val)</td></tr>
+<tr class="memitem:ad2fbd99b0da7c1748fc9bc5364b3369a" id="r_ad2fbd99b0da7c1748fc9bc5364b3369a"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:ad2fbd99b0da7c1748fc9bc5364b3369a template"><td class="memItemLeft" align="right" valign="top">static std::enable_if&lt; std::is_integral&lt; T &gt;::value||std::is_enum&lt; T &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2fbd99b0da7c1748fc9bc5364b3369a">ToCorpus</a> (const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;obj)</td></tr>
+<tr class="memitem:ac5d23d5f8375fc3ac5f06d67346d9f3c" id="r_ac5d23d5f8375fc3ac5f06d67346d9f3c"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:ac5d23d5f8375fc3ac5f06d67346d9f3c template"><td class="memItemLeft" align="right" valign="top">static std::enable_if&lt; std::is_floating_point&lt; T &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5d23d5f8375fc3ac5f06d67346d9f3c">ToCorpus</a> (const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;obj)</td></tr>
+<tr class="memitem:a12427778be006c898a18e6413ccddd49" id="r_a12427778be006c898a18e6413ccddd49"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a12427778be006c898a18e6413ccddd49 template"><td class="memItemLeft" align="right" valign="top">static std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12427778be006c898a18e6413ccddd49">ToCorpus</a> (const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;obj)</td></tr>
+<tr class="memitem:a36cc35fcf63c9aa3283ac1f4cee6a854" id="r_a36cc35fcf63c9aa3283ac1f4cee6a854"><td class="memTemplParams" colspan="2">template&lt;typename TupType, unsigned... I&gt; </td></tr>
+<tr class="memitem:a36cc35fcf63c9aa3283ac1f4cee6a854 template"><td class="memItemLeft" align="right" valign="top">static TupType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36cc35fcf63c9aa3283ac1f4cee6a854">parse_tuple</a> (<a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> *children, <a class="el" href="structzeroerr_1_1detail_1_1seq.html">detail::seq</a>&lt; I... &gt;)</td></tr>
+<tr class="memitem:af13b98420ef1f2de290fc1fee2ee4d5b" id="r_af13b98420ef1f2de290fc1fee2ee4d5b"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:af13b98420ef1f2de290fc1fee2ee4d5b template"><td class="memItemLeft" align="right" valign="top">static std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1is__container.html">detail::is_container</a>&lt; T &gt;::value &amp;&amp;!<a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af13b98420ef1f2de290fc1fee2ee4d5b">ToCorpus</a> (const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;obj)</td></tr>
+<tr class="memitem:a15fd8ae23097056e847ee4d128441d2c" id="r_a15fd8ae23097056e847ee4d128441d2c"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:a15fd8ae23097056e847ee4d128441d2c template"><td class="memItemLeft" align="right" valign="top">static std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1is__specialization.html">detail::is_specialization</a>&lt; T, std::tuple &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15fd8ae23097056e847ee4d128441d2c">ToCorpus</a> (const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;obj)</td></tr>
+<tr class="memitem:adfb0bcdff8d1911541602d29e489c892" id="r_adfb0bcdff8d1911541602d29e489c892"><td class="memTemplParams" colspan="2">template&lt;typename T&gt; </td></tr>
+<tr class="memitem:adfb0bcdff8d1911541602d29e489c892 template"><td class="memItemLeft" align="right" valign="top">static std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1is__specialization.html">detail::is_specialization</a>&lt; T, std::pair &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adfb0bcdff8d1911541602d29e489c892">ToCorpus</a> (const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;obj)</td></tr>
+<tr class="memitem:ab8d5bcf56883c29973075301254fe2b9" id="r_ab8d5bcf56883c29973075301254fe2b9"><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8d5bcf56883c29973075301254fe2b9">alloc_str</a> (size_t size)</td></tr>
+<tr class="memitem:a6e22b3a85a27e24de381a6b68f472975" id="r_a6e22b3a85a27e24de381a6b68f472975"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e22b3a85a27e24de381a6b68f472975">alloc</a> (size_t size)</td></tr>
+<tr class="memitem:a12aa78af5da2b48711ecc5e74a7a2d27" id="r_a12aa78af5da2b48711ecc5e74a7a2d27"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classzeroerr_1_1String.html">zeroerr::String</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12aa78af5da2b48711ecc5e74a7a2d27">ToString</a> (const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;obj)</td></tr>
+<tr class="memitem:ab71e20c657f547c5a1eb0b3526f6f372" id="r_ab71e20c657f547c5a1eb0b3526f6f372"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab71e20c657f547c5a1eb0b3526f6f372">FromString</a> (<a class="el" href="classzeroerr_1_1String.html">zeroerr::String</a> str)</td></tr>
+<tr class="memitem:a4901b38f98abd706a49fca25c94ac389" id="r_a4901b38f98abd706a49fca25c94ac389"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4901b38f98abd706a49fca25c94ac389">ToBinary</a> (<a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> obj)</td></tr>
+<tr class="memitem:a0f5a5565672f506db09037598471aa39" id="r_a0f5a5565672f506db09037598471aa39"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f5a5565672f506db09037598471aa39">FromBinary</a> (std::vector&lt; uint8_t &gt; bin)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public 属性</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft anon">union {&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memitem:a73b043dc1b28be5132f4c0a1df6b5d70" id="r_a73b043dc1b28be5132f4c0a1df6b5d70"><td class="memItemLeft anon">&#160;&#160;&#160;int64_t&#160;&#160;&#160;<a class="el" href="#ad8ade4830cd4fe40608a8a5ac7a14bdd">i</a>&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memitem:ae5649f1e65495f1012171a45dffd7499" id="r_ae5649f1e65495f1012171a45dffd7499"><td class="memItemLeft anon">&#160;&#160;&#160;double&#160;&#160;&#160;<a class="el" href="#ac3f83125b569c54e261a1112c0ecdb33">f</a>&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memitem:a437240d7ef3b0e64da9e2c08eeb2913c" id="r_a437240d7ef3b0e64da9e2c08eeb2913c"><td class="memItemLeft anon">&#160;&#160;&#160;char *&#160;&#160;&#160;<a class="el" href="#ac0350aad6cca39c2def9b5f3fb4703e1">s</a>&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memitem:ad39dd72c82290e583433cf71eb0d338c" id="r_ad39dd72c82290e583433cf71eb0d338c"><td class="memItemLeft anon">&#160;&#160;&#160;char&#160;&#160;&#160;<a class="el" href="#ad48c5458d98a0e1f6650fbb2bcbadb70">ss</a> [8]&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memitem:a8774188fa4260e3416d91f80aa34624a" id="r_a8774188fa4260e3416d91f80aa34624a"><td class="memItemLeft anon">&#160;&#160;&#160;<a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> *&#160;&#160;&#160;<a class="el" href="#a6d06b5c8ebde982c5952855e770d0b78">o</a>&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memitem:a40e97c5c67257a23ac40c9f1806c1f4d" id="r_a40e97c5c67257a23ac40c9f1806c1f4d"><td class="memItemLeft anonEnd" valign="top">};&#160;</td><td class="memItemRight" valign="bottom"></td></tr>
+<tr class="memitem:a871ed5aa978c815cb1080e4eaab886b2" id="r_a871ed5aa978c815cb1080e4eaab886b2"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a871ed5aa978c815cb1080e4eaab886b2">others</a> [7]</td></tr>
+<tr class="memitem:a1c50d89ae60303d910fe46ac14cac243" id="r_a1c50d89ae60303d910fe46ac14cac243"><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">type</a></td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">详细描述</h2>
+<div class="textblock"><p>Interface for serializable objects </p>
+<p><a class="el" href="structzeroerr_1_1IRObject.html" title="Interface for serializable objects">IRObject</a> (Intermediate Representation Object) provides a low-level interface for serializing data types into a common format. It uses a union to store different data types and provides type-safe access through templated getter methods.</p>
+<p>The object can store:</p><ul>
+<li>Integers (int64_t)</li>
+<li>Floating point numbers (double)</li>
+<li>Strings (char* for long strings, char[8] for short strings)</li>
+<li>Nested objects (IRObject*)</li>
+</ul>
+<p>Memory management:</p><ul>
+<li>The object takes ownership of allocated strings and nested objects</li>
+<li>Copy/move operations perform deep copies/moves</li>
+<li>The destructor frees any owned memory</li>
+</ul>
+<p>Usage example: </p><div class="fragment"><div class="line"><a class="code hl_function" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> obj;</div>
+<div class="line">obj.<a class="code hl_variable" href="#a1c50d89ae60303d910fe46ac14cac243">type</a> = <a class="code hl_enumvalue" href="#af7df698c185ed10e2a38c80ba6e128f9a511655870547aebbec8ec6b6266f7b73">IRObject::Int</a>;</div>
+<div class="line">obj.<a class="code hl_variable" href="#ad8ade4830cd4fe40608a8a5ac7a14bdd">i</a> = 42;</div>
+<div class="line"><span class="keywordtype">int</span> value = obj.<a class="code hl_function" href="#a9166b7fc9cb915f7a55de087a94778c4">GetScalar</a>&lt;<span class="keywordtype">int</span>&gt;(); <span class="comment">// value = 42</span></div>
+<div class="ttc" id="astructzeroerr_1_1IRObject_html_a06f72383bb412fee22caabe6e9d7b880"><div class="ttname"><a href="#a06f72383bb412fee22caabe6e9d7b880">zeroerr::IRObject::IRObject</a></div><div class="ttdeci">IRObject() noexcept</div><div class="ttdef"><b>定义</b> serialization.h:46</div></div>
+<div class="ttc" id="astructzeroerr_1_1IRObject_html_a1c50d89ae60303d910fe46ac14cac243"><div class="ttname"><a href="#a1c50d89ae60303d910fe46ac14cac243">zeroerr::IRObject::type</a></div><div class="ttdeci">unsigned char type</div><div class="ttdef"><b>定义</b> serialization.h:64</div></div>
+<div class="ttc" id="astructzeroerr_1_1IRObject_html_a9166b7fc9cb915f7a55de087a94778c4"><div class="ttname"><a href="#a9166b7fc9cb915f7a55de087a94778c4">zeroerr::IRObject::GetScalar</a></div><div class="ttdeci">std::enable_if&lt; std::is_integral&lt; T &gt;::value, T &gt;::type GetScalar() const</div><div class="ttdef"><b>定义</b> serialization.h:67</div></div>
+<div class="ttc" id="astructzeroerr_1_1IRObject_html_ad8ade4830cd4fe40608a8a5ac7a14bdd"><div class="ttname"><a href="#ad8ade4830cd4fe40608a8a5ac7a14bdd">zeroerr::IRObject::i</a></div><div class="ttdeci">int64_t i</div><div class="ttdef"><b>定义</b> serialization.h:57</div></div>
+<div class="ttc" id="astructzeroerr_1_1IRObject_html_af7df698c185ed10e2a38c80ba6e128f9a511655870547aebbec8ec6b6266f7b73"><div class="ttname"><a href="#af7df698c185ed10e2a38c80ba6e128f9a511655870547aebbec8ec6b6266f7b73">zeroerr::IRObject::Int</a></div><div class="ttdeci">@ Int</div><div class="ttdef"><b>定义</b> serialization.h:54</div></div>
+</div><!-- fragment --> </div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">成员枚举类型说明</h2>
+<a id="af7df698c185ed10e2a38c80ba6e128f9" name="af7df698c185ed10e2a38c80ba6e128f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7df698c185ed10e2a38c80ba6e128f9">&#9670;&#160;</a></span>Type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#af7df698c185ed10e2a38c80ba6e128f9">zeroerr::IRObject::Type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">枚举值</th></tr><tr><td class="fieldname"><a id="af7df698c185ed10e2a38c80ba6e128f9a1e4647ff5c17489dcb4379bcdd1754fc" name="af7df698c185ed10e2a38c80ba6e128f9a1e4647ff5c17489dcb4379bcdd1754fc"></a>Undefined&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af7df698c185ed10e2a38c80ba6e128f9a511655870547aebbec8ec6b6266f7b73" name="af7df698c185ed10e2a38c80ba6e128f9a511655870547aebbec8ec6b6266f7b73"></a>Int&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af7df698c185ed10e2a38c80ba6e128f9a755bdd5ddd14d0736d010d34a401e8fd" name="af7df698c185ed10e2a38c80ba6e128f9a755bdd5ddd14d0736d010d34a401e8fd"></a>Float&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af7df698c185ed10e2a38c80ba6e128f9a6213668d024446473b4a598d265716c8" name="af7df698c185ed10e2a38c80ba6e128f9a6213668d024446473b4a598d265716c8"></a>String&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af7df698c185ed10e2a38c80ba6e128f9a39e07517ca5937d1655b2d3379047502" name="af7df698c185ed10e2a38c80ba6e128f9a39e07517ca5937d1655b2d3379047502"></a>ShortString&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="af7df698c185ed10e2a38c80ba6e128f9a822fdfa8c93ca2460ebaa2184068a5de" name="af7df698c185ed10e2a38c80ba6e128f9a822fdfa8c93ca2460ebaa2184068a5de"></a>Object&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">构造及析构函数说明</h2>
+<a id="a06f72383bb412fee22caabe6e9d7b880" name="a06f72383bb412fee22caabe6e9d7b880"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06f72383bb412fee22caabe6e9d7b880">&#9670;&#160;</a></span>IRObject() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">zeroerr::IRObject::IRObject </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abdb9ff7633bd9b60e95b8b59026547a9" name="abdb9ff7633bd9b60e95b8b59026547a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdb9ff7633bd9b60e95b8b59026547a9">&#9670;&#160;</a></span>~IRObject()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">zeroerr::IRObject::~IRObject </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac813b1e38a05bb1bdd4f679d7e462419" name="ac813b1e38a05bb1bdd4f679d7e462419"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac813b1e38a05bb1bdd4f679d7e462419">&#9670;&#160;</a></span>IRObject() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">zeroerr::IRObject::IRObject </td>
+          <td>(</td>
+          <td class="paramtype">const IRObject &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8ec5bbb42849b10c1c8eee4105727e17" name="a8ec5bbb42849b10c1c8eee4105727e17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ec5bbb42849b10c1c8eee4105727e17">&#9670;&#160;</a></span>IRObject() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">zeroerr::IRObject::IRObject </td>
+          <td>(</td>
+          <td class="paramtype">IRObject &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">成员函数说明</h2>
+<a id="a6e22b3a85a27e24de381a6b68f472975" name="a6e22b3a85a27e24de381a6b68f472975"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e22b3a85a27e24de381a6b68f472975">&#9670;&#160;</a></span>alloc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> * zeroerr::IRObject::alloc </td>
+          <td>(</td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>size</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab8d5bcf56883c29973075301254fe2b9" name="ab8d5bcf56883c29973075301254fe2b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8d5bcf56883c29973075301254fe2b9">&#9670;&#160;</a></span>alloc_str()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">char * zeroerr::IRObject::alloc_str </td>
+          <td>(</td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>size</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0f5a5565672f506db09037598471aa39" name="a0f5a5565672f506db09037598471aa39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f5a5565672f506db09037598471aa39">&#9670;&#160;</a></span>FromBinary()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> zeroerr::IRObject::FromBinary </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; uint8_t &gt;</td>          <td class="paramname"><span class="paramname"><em>bin</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2430b03f006a76d6c53ca8013ba47825" name="a2430b03f006a76d6c53ca8013ba47825"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2430b03f006a76d6c53ca8013ba47825">&#9670;&#160;</a></span>FromCorpus() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T1, typename T2&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> zeroerr::IRObject::FromCorpus </td>
+          <td>(</td>
+          <td class="paramtype">const std::pair&lt; T1, T2 &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee5e5bb03733a7881c387298d10e0d3c" name="aee5e5bb03733a7881c387298d10e0d3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee5e5bb03733a7881c387298d10e0d3c">&#9670;&#160;</a></span>FromCorpus() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> zeroerr::IRObject::FromCorpus </td>
+          <td>(</td>
+          <td class="paramtype">const std::tuple&lt; Args... &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7c0492a876012a7ab1fea71794002915" name="a7c0492a876012a7ab1fea71794002915"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c0492a876012a7ab1fea71794002915">&#9670;&#160;</a></span>FromCorpus() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1is__container.html">detail::is_container</a>&lt; T &gt;::value &amp;&amp;!<a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning, <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::FromCorpus </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a184cb8e526fff2a590540fcc66b14536" name="a184cb8e526fff2a590540fcc66b14536"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a184cb8e526fff2a590540fcc66b14536">&#9670;&#160;</a></span>FromCorpus() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; std::is_integral&lt; T &gt;::value||std::is_floating_point&lt; T &gt;::value||<a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning||std::is_enum&lt; T &gt;::value, <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::FromCorpus </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab71e20c657f547c5a1eb0b3526f6f372" name="ab71e20c657f547c5a1eb0b3526f6f372"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab71e20c657f547c5a1eb0b3526f6f372">&#9670;&#160;</a></span>FromString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> zeroerr::IRObject::FromString </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classzeroerr_1_1String.html">zeroerr::String</a></td>          <td class="paramname"><span class="paramname"><em>str</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a35ad2b5367b5e4a828f75ed54bbd5e11" name="a35ad2b5367b5e4a828f75ed54bbd5e11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35ad2b5367b5e4a828f75ed54bbd5e11">&#9670;&#160;</a></span>GetChildren()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structzeroerr_1_1IRObject_1_1Childrens.html">Childrens</a> zeroerr::IRObject::GetChildren </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2531d464ce8dfea22af04c075733d4ef" name="a2531d464ce8dfea22af04c075733d4ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2531d464ce8dfea22af04c075733d4ef">&#9670;&#160;</a></span>GetScalar() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::GetScalar </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a19c3277c3210cf4b2cb6c5d5902ac97f" name="a19c3277c3210cf4b2cb6c5d5902ac97f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19c3277c3210cf4b2cb6c5d5902ac97f">&#9670;&#160;</a></span>GetScalar() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; std::is_enum&lt; T &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::GetScalar </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3b0d64f1c80f3762f75e02d3efa188f8" name="a3b0d64f1c80f3762f75e02d3efa188f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b0d64f1c80f3762f75e02d3efa188f8">&#9670;&#160;</a></span>GetScalar() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; std::is_floating_point&lt; T &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::GetScalar </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9166b7fc9cb915f7a55de087a94778c4" name="a9166b7fc9cb915f7a55de087a94778c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9166b7fc9cb915f7a55de087a94778c4">&#9670;&#160;</a></span>GetScalar() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; std::is_integral&lt; T &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::GetScalar </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1721408315593ffea3858f7e72c68ada" name="a1721408315593ffea3858f7e72c68ada"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1721408315593ffea3858f7e72c68ada">&#9670;&#160;</a></span>handle_tuple()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class TupType, unsigned... I&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::IRObject::handle_tuple </td>
+          <td>(</td>
+          <td class="paramtype">const TupType &amp;</td>          <td class="paramname"><span class="paramname"><em>_tup</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> *</td>          <td class="paramname"><span class="paramname"><em>children</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structzeroerr_1_1detail_1_1seq.html">detail::seq</a>&lt; I... &gt;</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad8183206eb80aef49e99f9eab730bb05" name="ad8183206eb80aef49e99f9eab730bb05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8183206eb80aef49e99f9eab730bb05">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp; zeroerr::IRObject::operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad14024b548df82cdb714ec59e7355f5a" name="ad14024b548df82cdb714ec59e7355f5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad14024b548df82cdb714ec59e7355f5a">&#9670;&#160;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp; zeroerr::IRObject::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a36cc35fcf63c9aa3283ac1f4cee6a854" name="a36cc35fcf63c9aa3283ac1f4cee6a854"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36cc35fcf63c9aa3283ac1f4cee6a854">&#9670;&#160;</a></span>parse_tuple()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename TupType, unsigned... I&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">TupType zeroerr::IRObject::parse_tuple </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> *</td>          <td class="paramname"><span class="paramname"><em>children</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structzeroerr_1_1detail_1_1seq.html">detail::seq</a>&lt; I... &gt;</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1a4f1008deef521cea1751b1b2fba90d" name="a1a4f1008deef521cea1751b1b2fba90d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a4f1008deef521cea1751b1b2fba90d">&#9670;&#160;</a></span>Reset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::IRObject::Reset </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel noexcept">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a235b9bd23b3bb902d487485475569c6d" name="a235b9bd23b3bb902d487485475569c6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a235b9bd23b3bb902d487485475569c6d">&#9670;&#160;</a></span>SetChildren()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::IRObject::SetChildren </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> *</td>          <td class="paramname"><span class="paramname"><em>children</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4531015a80f001c7f2b4ced8c34d736d" name="a4531015a80f001c7f2b4ced8c34d736d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4531015a80f001c7f2b4ced8c34d736d">&#9670;&#160;</a></span>SetScalar() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void zeroerr::IRObject::SetScalar </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af3f6faee69b0aa6328a251c0ef29958c" name="af3f6faee69b0aa6328a251c0ef29958c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3f6faee69b0aa6328a251c0ef29958c">&#9670;&#160;</a></span>SetScalar() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning, void &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::SetScalar </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2f46f3608c89803398e41359d8cd3155" name="a2f46f3608c89803398e41359d8cd3155"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f46f3608c89803398e41359d8cd3155">&#9670;&#160;</a></span>SetScalar() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; std::is_enum&lt; T &gt;::value, void &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::SetScalar </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aafc0454bf0c78b50d16c1f60f5011224" name="aafc0454bf0c78b50d16c1f60f5011224"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafc0454bf0c78b50d16c1f60f5011224">&#9670;&#160;</a></span>SetScalar() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; std::is_floating_point&lt; T &gt;::value, void &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::SetScalar </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a725c40a8107047f0a827760010bf6b72" name="a725c40a8107047f0a827760010bf6b72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a725c40a8107047f0a827760010bf6b72">&#9670;&#160;</a></span>SetScalar() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; std::is_integral&lt; T &gt;::value, void &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::SetScalar </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>val</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4901b38f98abd706a49fca25c94ac389" name="a4901b38f98abd706a49fca25c94ac389"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4901b38f98abd706a49fca25c94ac389">&#9670;&#160;</a></span>ToBinary()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; uint8_t &gt; zeroerr::IRObject::ToBinary </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a></td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adfb0bcdff8d1911541602d29e489c892" name="adfb0bcdff8d1911541602d29e489c892"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfb0bcdff8d1911541602d29e489c892">&#9670;&#160;</a></span>ToCorpus() <span class="overload">[1/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1is__specialization.html">detail::is_specialization</a>&lt; T, std::pair &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::ToCorpus </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a15fd8ae23097056e847ee4d128441d2c" name="a15fd8ae23097056e847ee4d128441d2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15fd8ae23097056e847ee4d128441d2c">&#9670;&#160;</a></span>ToCorpus() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1is__specialization.html">detail::is_specialization</a>&lt; T, std::tuple &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::ToCorpus </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af13b98420ef1f2de290fc1fee2ee4d5b" name="af13b98420ef1f2de290fc1fee2ee4d5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af13b98420ef1f2de290fc1fee2ee4d5b">&#9670;&#160;</a></span>ToCorpus() <span class="overload">[3/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1is__container.html">detail::is_container</a>&lt; T &gt;::value &amp;&amp;!<a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::ToCorpus </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a12427778be006c898a18e6413ccddd49" name="a12427778be006c898a18e6413ccddd49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12427778be006c898a18e6413ccddd49">&#9670;&#160;</a></span>ToCorpus() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; <a class="el" href="structzeroerr_1_1detail_1_1StringLike.html">detail::StringLike</a>&lt; T &gt;::owning, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::ToCorpus </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac5d23d5f8375fc3ac5f06d67346d9f3c" name="ac5d23d5f8375fc3ac5f06d67346d9f3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5d23d5f8375fc3ac5f06d67346d9f3c">&#9670;&#160;</a></span>ToCorpus() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; std::is_floating_point&lt; T &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::ToCorpus </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad2fbd99b0da7c1748fc9bc5364b3369a" name="ad2fbd99b0da7c1748fc9bc5364b3369a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2fbd99b0da7c1748fc9bc5364b3369a">&#9670;&#160;</a></span>ToCorpus() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::enable_if&lt; std::is_integral&lt; T &gt;::value||std::is_enum&lt; T &gt;::value, T &gt;<a class="el" href="#a1c50d89ae60303d910fe46ac14cac243">::type</a> zeroerr::IRObject::ToCorpus </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a12aa78af5da2b48711ecc5e74a7a2d27" name="a12aa78af5da2b48711ecc5e74a7a2d27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12aa78af5da2b48711ecc5e74a7a2d27">&#9670;&#160;</a></span>ToString()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classzeroerr_1_1String.html">zeroerr::String</a> zeroerr::IRObject::ToString </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>obj</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">类成员变量说明</h2>
+<a id="a40e97c5c67257a23ac40c9f1806c1f4d" name="a40e97c5c67257a23ac40c9f1806c1f4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40e97c5c67257a23ac40c9f1806c1f4d">&#9670;&#160;</a></span>[union]</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">union  { ... }  <a class="el" href="structzeroerr_1_1IRObject.html">zeroerr::IRObject</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac3f83125b569c54e261a1112c0ecdb33" name="ac3f83125b569c54e261a1112c0ecdb33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3f83125b569c54e261a1112c0ecdb33">&#9670;&#160;</a></span>f</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double zeroerr::IRObject::f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad8ade4830cd4fe40608a8a5ac7a14bdd" name="ad8ade4830cd4fe40608a8a5ac7a14bdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8ade4830cd4fe40608a8a5ac7a14bdd">&#9670;&#160;</a></span>i</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t zeroerr::IRObject::i</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6d06b5c8ebde982c5952855e770d0b78" name="a6d06b5c8ebde982c5952855e770d0b78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d06b5c8ebde982c5952855e770d0b78">&#9670;&#160;</a></span>o</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a06f72383bb412fee22caabe6e9d7b880">IRObject</a>* zeroerr::IRObject::o</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a871ed5aa978c815cb1080e4eaab886b2" name="a871ed5aa978c815cb1080e4eaab886b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a871ed5aa978c815cb1080e4eaab886b2">&#9670;&#160;</a></span>others</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char zeroerr::IRObject::others[7]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac0350aad6cca39c2def9b5f3fb4703e1" name="ac0350aad6cca39c2def9b5f3fb4703e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0350aad6cca39c2def9b5f3fb4703e1">&#9670;&#160;</a></span>s</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* zeroerr::IRObject::s</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad48c5458d98a0e1f6650fbb2bcbadb70" name="ad48c5458d98a0e1f6650fbb2bcbadb70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad48c5458d98a0e1f6650fbb2bcbadb70">&#9670;&#160;</a></span>ss</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char zeroerr::IRObject::ss[8]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1c50d89ae60303d910fe46ac14cac243" name="a1c50d89ae60303d910fe46ac14cac243"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c50d89ae60303d910fe46ac14cac243">&#9670;&#160;</a></span>type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned char zeroerr::IRObject::type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<hr/>该结构体的文档由以下文件生成:<ul>
+<li>include/zeroerr/internal/<a class="el" href="serialization_8h_source.html">serialization.h</a></li>
+<li>src/<a class="el" href="serialization_8cpp.html">serialization.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespacezeroerr.html">zeroerr</a></li><li class="navelem"><a href="structzeroerr_1_1IRObject.html">IRObject</a></li>
+    <li class="footer">制作者 <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.15.0 </li>
+  </ul>
+</div>
+</body>
+</html>

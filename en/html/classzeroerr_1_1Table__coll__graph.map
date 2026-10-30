@@ -1,0 +1,15 @@
+<map id="zeroerr::Table" name="zeroerr::Table">
+<area shape="rect" id="Node000001" title="Table is used to generate a table with configurable style." alt="" coords="838,108,947,136"/>
+<area shape="rect" id="Node000002" href="$structzeroerr_1_1Card.html" title="Card defines a display range in the console." alt="" coords="411,5,516,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="531,19,622,26,720,42,769,56,815,77,870,108,864,107,812,82,767,61,719,47,621,31,532,24"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1String.html" title=" " alt="" coords="5,47,119,74"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="134,51,412,22,410,27,135,56"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="236,76,387,120"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="117,77,143,83,238,95,233,98,142,88,118,82"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="540,215,720,242"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="735,209,774,197,812,182,848,159,875,137,880,135,851,163,815,187,776,202,736,214"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="402,98,814,114,840,118,835,118,814,119,402,103"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="543,146,717,191"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="371,124,412,139,478,153,545,164,540,164,477,158,410,144,370,130"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="732,153,813,139,834,137,840,136,814,144,733,158"/>
+</map>

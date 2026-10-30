@@ -1,0 +1,15 @@
+<map id="zeroerr::PushResult" name="zeroerr::PushResult">
+<area shape="rect" id="Node000001" title=" " alt="" coords="173,425,321,453"/>
+<area shape="rect" id="Node000002" href="$structzeroerr_1_1LogMessage.html" title="LogMessage is a class to store the log message." alt="" coords="81,324,237,352"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,361,238,424,233,424,180,366"/>
+<area shape="rect" id="Node000003" href="$structzeroerr_1_1LogInfo.html" title="LogInfo is a struct to store the meta data of the log message." alt="" coords="17,224,141,251"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,260,151,323,146,324,98,266"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,106,153,151"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="80,164,82,224,76,223,78,169"/>
+<area shape="rect" id="Node000005" href="$classzeroerr_1_1String.html" title=" " alt="" coords="22,5,136,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="79,46,82,106,76,105,79,51"/>
+<area shape="rect" id="Node000006" href="$structzeroerr_1_1Timestamp.html" title=" " alt="" coords="164,224,314,251"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="221,261,172,326,168,322,217,265"/>
+<area shape="rect" id="Node000007" href="$classzeroerr_1_1LogStream.html" title="LogStream is a class to manage the log messages." alt="" coords="261,324,406,352"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="315,363,260,427,257,422,310,365"/>
+</map>

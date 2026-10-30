@@ -1,0 +1,13 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="Node000000" href="$classzeroerr_1_1Domain.html" title=" " alt="" coords="5,150,186,178"/>
+<area shape="rect" id="Node000001" href="$classzeroerr_1_1DomainConvertable.html" title=" " alt="" coords="234,150,477,178"/>
+<area shape="poly" id="edge84_Node000000_Node000001" title=" " alt="" coords="201,162,236,163,231,165,202,167"/>
+<area shape="rect" id="Node000002" href="$classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__float__point_3_01T_01_4_01_4.html" title=" " alt="" coords="530,5,686,67"/>
+<area shape="poly" id="edge85_Node000001_Node000002" title=" " alt="" coords="397,141,543,69,548,67,399,145"/>
+<area shape="rect" id="Node000003" href="$classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__signed__int_3_01T_01_4_01_4.html" title=" " alt="" coords="532,91,685,152"/>
+<area shape="poly" id="edge86_Node000001_Node000003" title=" " alt="" coords="456,145,534,134,528,135,457,150"/>
+<area shape="rect" id="Node000004" href="$classzeroerr_1_1Arbitrary_3_01T_00_012_00_01is__unsigned__int_3_01T_01_4_01_4.html" title=" " alt="" coords="536,176,681,238"/>
+<area shape="poly" id="edge87_Node000001_Node000004" title=" " alt="" coords="456,178,538,194,532,195,456,184"/>
+<area shape="rect" id="Node000005" href="$classzeroerr_1_1InRange.html" title="InRange is a domain that generates random values within a specified range" alt="" coords="525,262,691,290"/>
+<area shape="poly" id="edge88_Node000001_Node000005" title=" " alt="" coords="396,183,457,215,526,247,561,262,556,261,524,252,454,220,395,188"/>
+</map>
