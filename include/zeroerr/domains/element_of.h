@@ -32,9 +32,11 @@ public:
 
     std::vector<T> elements;
 
-    ElementOf(std::vector<T> elements) : elements(elements) {}
+    ElementOf(std::vector<T> elements) : elements(std::move(elements)) {
+        if (this->elements.empty()) throw std::invalid_argument("ElementOf requires elements");
+    }
 
-    CorpusType GetRandomCorpus(Rng& rng) override { return rng.bounded(elements.size()); }
+    CorpusType GetRandomCorpus(Rng& rng) const override { return rng.bounded(elements.size()); }
 
     ValueType GetValue(const CorpusType& v) const override { return elements[v]; }
 

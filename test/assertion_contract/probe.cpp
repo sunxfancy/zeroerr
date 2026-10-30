@@ -1,6 +1,7 @@
 #include <zeroerr/assert.h>
 #include <zeroerr/unittest.h>
 #include <stdexcept>
+#include <memory>
 #include <string>
 
 namespace {
@@ -20,6 +21,18 @@ TEST_CASE("assertion.singleEvaluation") {
     CHECK_LE(left, right);
     CHECK_GT(left + 1, right);
     CHECK_GE(left, right);
+    const int& reference = left;
+    CHECK_EQ(reference, 1);
+    std::unique_ptr<int> pointer(new int(7));
+    CHECK_EQ(std::move(pointer), pointer);
+    REQUIRE(pointer != nullptr);
+    CHECK_EQ("value", std::string("value"));
+    // The right operand must be typed in the caller's scope.
+    double zeroerr_lhs = 1.5;
+    CHECK_LT(1, zeroerr_lhs);
+    CHECK_EQ([] { return 3; }(), 3);
+    CHECK_EQ(0, 0);
+    CHECK_EQ(false, false);
 }
 TEST_CASE("assertion.check") { CHECK(false); }
 TEST_CASE("assertion.comparison") { CHECK_EQ(1, 2); }

@@ -131,13 +131,14 @@ public:
     ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
     print(const T& value, unsigned level, const char* lb, rank<0>) { os << tab(level) << magic_enum::enum_name(value) << lb; }
 #else
-    ZEROERR_ENABLE_IF(ZEROERR_IS_ENUM)
+    ZEROERR_ENABLE_IF((ZEROERR_IS_ENUM && detail::is_streamable<std::ostream, T>::value))
     print(const T& value, unsigned level, const char* lb, rank<0>) {
-        if constexpr (detail::is_streamable<std::ostream, T>::value) {
-            os << tab(level) << value << lb;
-        } else {
-            os << tab(level) << "<unprintable enum " << type(value) << ">" << lb;
-        }
+        os << tab(level) << value << lb;
+    }
+
+    ZEROERR_ENABLE_IF((ZEROERR_IS_ENUM && !detail::is_streamable<std::ostream, T>::value))
+    print(const T& value, unsigned level, const char* lb, rank<0>) {
+        os << tab(level) << "<unprintable enum " << type(value) << ">" << lb;
     }
 #endif
 

@@ -93,10 +93,7 @@ ZEROERR_CLANG_SUPPRESS_WARNING_POP
         zeroerr::AssertionData assertion_data(__FILE__, __LINE__, #lhs " " #op " " #rhs, info);  \
         try {                                                                                    \
             ZEROERR_SUPPRESS_COMPARE                                                           \
-            [&](const auto& zeroerr_lhs, const auto& zeroerr_rhs) {                            \
-                assertion_data.setResult(                                                      \
-                    {zeroerr_lhs op zeroerr_rhs, print(zeroerr_lhs, #op, zeroerr_rhs)});        \
-            }((lhs), (rhs));                                                                  \
+            assertion_data.setResult(zeroerr::detail::makeComparisonLhs((lhs), print) op (rhs)); \
             ZEROERR_SUPPRESS_COMPARE_POP                                                       \
         } catch (const std::exception& e) {                                                      \
             assertion_data.setException(e);                                                      \

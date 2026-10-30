@@ -9,6 +9,9 @@
 #endif
 
 namespace capabilities {
+enum PlainEnum { PlainValue = 7 };
+enum class ScopedEnum { Value };
+
 struct Complex {
     double real() const { return 2; }
     double imag() const { return 3; }
@@ -85,6 +88,9 @@ int main() {
     };
     p(1, true, 'x'); expect("1 true 'x'");
     p(nullptr); expect("nullptr");
+    p(capabilities::PlainValue); expect("7");
+    p(capabilities::ScopedEnum::Value);
+    if (p.str().find("<unprintable enum ") != 0) ++failures;
     p("hello"); expect("\"hello\"");
     p(std::string("a\0b", 3)); expect(std::string("\"a\0b\"", 5));
 #if ZEROERR_CXX_STANDARD >= 17

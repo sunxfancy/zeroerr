@@ -109,3 +109,14 @@ endforeach()
 
 add_subdirectory(native_fixture_identity)
 add_subdirectory(assertion_contract)
+
+# Use ordinary exit failures so regression checks do not depend on CHECK severity.
+add_executable(domain_regression domain_regression.cpp)
+target_link_libraries(domain_regression PRIVATE zeroerr)
+add_test(NAME DomainRegression COMMAND domain_regression)
+
+add_executable(domain_regression_single domain_regression.cpp)
+add_dependencies(domain_regression_single assemble_single_header)
+target_compile_definitions(domain_regression_single PRIVATE ZEROERR_REGRESSION_SINGLE_HEADER)
+target_include_directories(domain_regression_single BEFORE PRIVATE ${CMAKE_BINARY_DIR})
+add_test(NAME DomainRegressionSingleHeader COMMAND domain_regression_single)
